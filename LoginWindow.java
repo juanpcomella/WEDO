@@ -1,5 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 public class LoginWindow extends JFrame {
 
@@ -46,12 +49,34 @@ public class LoginWindow extends JFrame {
         panel.add(passwordTF);
 
         // Crear el enter button
-        JButton login = new JButton("Login");
-        login.setFont(new Font("Monospaced", Font.PLAIN, 16));
-        login.setSize(100, 50);
-        login.setLocation(350 - login.getWidth()/2, 250);
+        JButton loginButton = new JButton("Login");
+        loginButton.setFont(new Font("Monospaced", Font.PLAIN, 16));
+        loginButton.setSize(100, 50);
+        loginButton.setLocation(350 - loginButton.getWidth()/2, 250);
 
-        panel.add(login);
+        panel.add(loginButton);
+
+        // Temporal hashmap for user/password
+        HashMap<String, String> users = new HashMap<>();
+        users.put("juanpcomella", "password");
+        users.put("adrianbaz", "12345");
+        users.put("anderorma", "contraseña");
+        users.put("ikergamboa", "98765");
+
+        // Login authentication logic
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = usernameTF.getText();
+                String password = new String(passwordTF.getPassword());
+
+                if (users.containsKey(username) && users.get(username).equals(password)) {
+                    JOptionPane.showMessageDialog(null, "Bienvenido a WEDO!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Usuario o Contraseña equivocado.");
+                }
+            }
+        });
 
 
     }
