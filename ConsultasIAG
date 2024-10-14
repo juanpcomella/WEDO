@@ -17,3 +17,12 @@ This will prevent the user from resizing the window.
 
 ---------------------------------------------------------------------------------------
 Q:
+How can I position a JButton? Can I use setbounds?
+
+A:
+Yes, you can position a JButton using the setBounds method if you're using a null layout.
+When using setBounds, you manually specify the exact position (x, y) and size (width, height)
+of the button within the panel or container.
+
+---------------------------------------------------------------------------------------
+Q:
