@@ -1,3 +1,3 @@
-# tempus
+# WEDO
 
-Agregamos esto al github (prueba) aaa
+Aplicación de organización para tus tareas, horarios y objetivos.
