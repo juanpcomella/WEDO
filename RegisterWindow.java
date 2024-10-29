@@ -8,7 +8,7 @@ public class RegisterWindow extends JFrame {
 
     public RegisterWindow() {
 
-        setTitle("Inserta tu Usuario");
+        setTitle("WEDO - Registrate");
         setSize(700, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

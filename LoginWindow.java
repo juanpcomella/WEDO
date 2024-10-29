@@ -8,7 +8,7 @@ public class LoginWindow extends JFrame {
 
     public LoginWindow() {
 
-        setTitle("Inserta tu Usuario");
+        setTitle("WEDO - Login");
         setSize(700, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
