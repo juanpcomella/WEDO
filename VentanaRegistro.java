@@ -43,15 +43,16 @@ public class VentanaRegistro extends JFrame{
 		JPanel filaNombre = new JPanel(new FlowLayout());
 		filaNombre.setBackground(new Color(0,0,0,0));
 		JLabel nombre = new JLabel("Nombre: ");
-		JTextField nombrePersonal = new JTextField(20);
+		JTextField nombrePersonal = new JTextField(26);
 		filaNombre.add(nombre);
+		filaNombre.add(Box.createHorizontalGlue());
 		filaNombre.add(nombrePersonal);
 		datos.add(filaNombre);
 				
 		JPanel filaUsuario = new JPanel(new FlowLayout());
 		filaUsuario.setBackground(new Color(0,0,0,0));
 		JLabel usuario = new JLabel("Usuario: ");
-		JTextField usuarioPersonal = new JTextField(20);
+		JTextField usuarioPersonal = new JTextField(26);
 		filaUsuario.add(usuario);
 		filaUsuario.add(usuarioPersonal);
 		datos.add(filaUsuario);
@@ -67,7 +68,7 @@ public class VentanaRegistro extends JFrame{
 		JPanel filaContraseña = new JPanel(new FlowLayout());
 		filaContraseña.setBackground(new Color(0,0,0,0));
 		JLabel contraseña = new JLabel("Contraseña: ");
-		JTextField contraseñaPersonal = new JTextField(20);
+		JTextField contraseñaPersonal = new JTextField(24);
 		filaContraseña.add(contraseña);
 		filaContraseña.add(contraseñaPersonal);
 		datos.add(filaContraseña);
@@ -75,7 +76,7 @@ public class VentanaRegistro extends JFrame{
 		JPanel filaConfirmarContraseña = new JPanel(new FlowLayout());
 		filaConfirmarContraseña.setBackground(new Color(0,0,0,0));
 		JLabel confirmarContraseña = new JLabel("Confirmar contraseña: ");
-		JTextField confirmarContraseñaPersonal = new JTextField(20);
+		JTextField confirmarContraseñaPersonal = new JTextField(18);
 		filaConfirmarContraseña.add(confirmarContraseña);
 		filaConfirmarContraseña.add(confirmarContraseñaPersonal);
 		datos.add(filaConfirmarContraseña);
