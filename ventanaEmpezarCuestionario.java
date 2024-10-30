@@ -24,9 +24,7 @@ public class ventanaEmpezarCuestionario extends JFrame {
         
         //Texto de Bienvenido a WEDO
         JLabel bienvenidoL = new JLabel(" Bienvenido a WEDO!");
-        bienvenidoL.setFont(new Font("Arial",Font.PLAIN,20
-        		
-        		));
+        bienvenidoL.setFont(new Font("Arial",Font.PLAIN,50));
         gbc.gridy = 0;
         gbc.insets = new java.awt.Insets(0, 0, 20, 0); // Espacio debajo del Label
         panel.add(bienvenidoL,gbc);
