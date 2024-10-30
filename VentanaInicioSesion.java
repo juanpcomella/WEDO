@@ -1,4 +1,5 @@
-import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.*;
 
 import javax.swing.*;
@@ -17,11 +18,23 @@ public class VentanaInicioSesion extends JFrame{
 		//Volver a la anterior ventana
 		JPanel panelAtras = new JPanel(new BorderLayout());
 		JButton atras = new JButton("<-");
+		atras.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {	
+				VentanaBienvenida nuevaVentana = new VentanaBienvenida();
+				nuevaVentana.setVisible(true);
+				dispose();
+			}			
+		});
 		panelAtras.add(atras,BorderLayout.WEST);
 
 		//Parte superior (logo)
 		JPanel panelSuperior = new JPanel(new BorderLayout());
-		JLabel logo = new JLabel("LOGO", SwingConstants.CENTER);
+		ImageIcon imagen = new ImageIcon("C:\\Users\\iker.gamboa\\OneDrive - Universidad de Deusto\\Escritorio\\PROYECTO PROGRAMACIÓN RECURSOS\\LOGO WEDO 1.png");
+        Image imagenEscalada = imagen.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        ImageIcon imagenRedimensionada = new ImageIcon(imagenEscalada);
+		JLabel logo = new JLabel(imagenRedimensionada);
 		panelSuperior.add(logo,BorderLayout.CENTER);
 		panelSuperior.add(panelAtras,BorderLayout.NORTH);
 		
@@ -31,15 +44,13 @@ public class VentanaInicioSesion extends JFrame{
 		
 			//Usuario
 		JPanel usuarioPanel = new JPanel(new FlowLayout());
-				//Color transparente
-		usuarioPanel.setBackground(new Color(0,0,0,0));
+		usuarioPanel.setBackground(new Color(0,0,0,0));//color transparente (el panel)
 		JLabel usuario = new JLabel("Usuario: ");
 		JTextField usuarioPersonal = new JTextField(20);
 		usuarioPanel.add(usuario);
 		usuarioPanel.add(usuarioPersonal);
 		usuarioPanel.setAlignmentX(CENTER_ALIGNMENT);
 		panelInferior.add(usuarioPanel);
-		panelInferior.add(Box.createVerticalStrut(-60));
 		
 			//Contraseña
 		JPanel contraseñaPanel = new JPanel(new FlowLayout());
@@ -55,12 +66,13 @@ public class VentanaInicioSesion extends JFrame{
 		JButton olvidado = new JButton("¿Has olvidado tu usuario o contraseña?");
 		olvidado.setAlignmentX(CENTER_ALIGNMENT);
 		panelInferior.add(olvidado);
-		panelInferior.add(Box.createVerticalStrut(20));
+		panelInferior.add(Box.createVerticalStrut(30));
 		
 			//Log In
 		JButton login = new JButton("Entrar");
 		login.setAlignmentX(CENTER_ALIGNMENT);
 		panelInferior.add(login);
+		panelInferior.add(Box.createVerticalStrut(50));
 		
 		
 		panel.add(panelSuperior);

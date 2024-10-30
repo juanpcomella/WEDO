@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
@@ -16,6 +18,16 @@ public class VentanaRegistro extends JFrame{
 		//Volver a la anterior ventana
 		JPanel panelAtras = new JPanel(new BorderLayout());
 		JButton atras = new JButton("<-");
+		atras.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {	
+				VentanaBienvenida nuevaVentana = new VentanaBienvenida();
+				nuevaVentana.setVisible(true);
+				dispose();
+			}			
+		});
+		
 		panelAtras.add(atras,BorderLayout.WEST);
 		panel.add(panelAtras,BorderLayout.NORTH);
 		
@@ -24,13 +36,12 @@ public class VentanaRegistro extends JFrame{
 		
 		//Elementos
 		JLabel introducirDatos = new JLabel("Introduce tus datos",SwingConstants.CENTER);
-		datos.add(Box.createVerticalStrut(40));
-		datos.add(introducirDatos);
 		datos.add(Box.createVerticalStrut(10));
+		datos.add(introducirDatos);
+		datos.add(Box.createVerticalStrut(20));
 		
 		JPanel filaNombre = new JPanel(new FlowLayout());
 		filaNombre.setBackground(new Color(0,0,0,0));
-		filaNombre.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		JLabel nombre = new JLabel("Nombre: ");
 		JTextField nombrePersonal = new JTextField(20);
 		filaNombre.add(nombre);
@@ -39,7 +50,6 @@ public class VentanaRegistro extends JFrame{
 				
 		JPanel filaUsuario = new JPanel(new FlowLayout());
 		filaUsuario.setBackground(new Color(0,0,0,0));
-		filaUsuario.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		JLabel usuario = new JLabel("Usuario: ");
 		JTextField usuarioPersonal = new JTextField(20);
 		filaUsuario.add(usuario);
@@ -48,7 +58,6 @@ public class VentanaRegistro extends JFrame{
 
 		JPanel filaCorreo = new JPanel(new FlowLayout());
 		filaCorreo.setBackground(new Color(0,0,0,0));
-		filaCorreo.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		JLabel correo = new JLabel("Correo electrónico: ");
 		JTextField correoPersonal = new JTextField(20);
 		filaCorreo.add(correo);
@@ -57,7 +66,6 @@ public class VentanaRegistro extends JFrame{
 
 		JPanel filaContraseña = new JPanel(new FlowLayout());
 		filaContraseña.setBackground(new Color(0,0,0,0));
-		filaContraseña.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		JLabel contraseña = new JLabel("Contraseña: ");
 		JTextField contraseñaPersonal = new JTextField(20);
 		filaContraseña.add(contraseña);
@@ -66,15 +74,16 @@ public class VentanaRegistro extends JFrame{
 
 		JPanel filaConfirmarContraseña = new JPanel(new FlowLayout());
 		filaConfirmarContraseña.setBackground(new Color(0,0,0,0));
-		filaConfirmarContraseña.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		JLabel confirmarContraseña = new JLabel("Confirmar contraseña: ");
 		JTextField confirmarContraseñaPersonal = new JTextField(20);
 		filaConfirmarContraseña.add(confirmarContraseña);
 		filaConfirmarContraseña.add(confirmarContraseñaPersonal);
 		datos.add(filaConfirmarContraseña);
+		datos.add(Box.createVerticalStrut(20));
 		
 		JButton crearCuenta = new JButton("Crear cuenta");
 		datos.add(crearCuenta);
+		datos.add(Box.createVerticalStrut(50));
 		
 		panel.add(datos,BorderLayout.CENTER);
 		
