@@ -3,9 +3,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class primeraVentana extends JFrame {
+public class PrimeraVentana extends JFrame {
 
-    public primeraVentana() {
+    public PrimeraVentana() {
 
         setTitle("WEDO");
         setSize(700, 500);
@@ -32,6 +32,17 @@ public class primeraVentana extends JFrame {
         registerButton.setSize(100, 50);
         registerButton.setLocation(330 - registerButton.getWidth(), 270);
 
+        registerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                RegisterWindow registerWindow = new RegisterWindow();
+                registerWindow.setLocationRelativeTo(null);
+                registerWindow.setVisible(true);
+
+                dispose();
+            }
+        });
+
         panel.add(registerButton);
 
         JButton loginButton = new JButton("Login");
@@ -39,11 +50,24 @@ public class primeraVentana extends JFrame {
         loginButton.setSize(100, 50);
         loginButton.setLocation(370, 270);
 
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LoginWindow loginWindow = new LoginWindow();
+                loginWindow.setLocationRelativeTo(null);
+                loginWindow.setVisible(true);
+
+                dispose();
+            }
+        });
+
         panel.add(loginButton);
+
+
     }
 
     public static void main(String[] args) {
-        primeraVentana window = new primeraVentana();
+        PrimeraVentana window = new PrimeraVentana();
 
         window.setResizable(false);
         window.setLocationRelativeTo(null);

@@ -48,11 +48,17 @@ public class LoginWindow extends JFrame {
         panel.add(password);
         panel.add(passwordTF);
 
+        // Recuerdame
+        JCheckBox recuerdame = new JCheckBox("Recuerdame?");
+        recuerdame.setBounds(175, 240, 200, 20);
+        recuerdame.setFont(new Font("Monospaced", Font.PLAIN, 10));
+        panel.add(recuerdame);
+
         // Crear el enter button
         JButton loginButton = new JButton("Login");
         loginButton.setFont(new Font("Monospaced", Font.PLAIN, 16));
         loginButton.setSize(100, 50);
-        loginButton.setLocation(350 - loginButton.getWidth()/2, 250);
+        loginButton.setLocation(350 - loginButton.getWidth()/2, 260);
 
         panel.add(loginButton);
 
@@ -78,6 +84,27 @@ public class LoginWindow extends JFrame {
             }
         });
 
+        JButton volverButton = new JButton("<< Volver");
+        volverButton.setFont(new Font("Monospaced", Font.PLAIN, 10));
+        volverButton.setSize(100, 30);
+        volverButton.setLocation(70 - volverButton.getWidth()/2, 15);
+
+        volverButton.setContentAreaFilled(false);
+        volverButton.setBorderPainted(false);
+        volverButton.setFocusable(false);
+
+        volverButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PrimeraVentana primeraVentana = new PrimeraVentana();
+                primeraVentana.setLocationRelativeTo(null);
+                primeraVentana.setVisible(true);
+
+                dispose();
+            }
+        });
+
+        panel.add(volverButton);
 
     }
 
