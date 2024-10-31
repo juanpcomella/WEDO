@@ -37,6 +37,7 @@ public class PrimeraVentana extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 RegisterWindow registerWindow = new RegisterWindow();
                 registerWindow.setLocationRelativeTo(null);
+                registerWindow.setResizable(false);
                 registerWindow.setVisible(true);
 
                 dispose();
@@ -55,6 +56,7 @@ public class PrimeraVentana extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 LoginWindow loginWindow = new LoginWindow();
                 loginWindow.setLocationRelativeTo(null);
+                loginWindow.setResizable(false);
                 loginWindow.setVisible(true);
 
                 dispose();
@@ -67,10 +69,6 @@ public class PrimeraVentana extends JFrame {
     }
 
     public static void main(String[] args) {
-        PrimeraVentana window = new PrimeraVentana();
-
-        window.setResizable(false);
-        window.setLocationRelativeTo(null);
-        window.setVisible(true);
+        Main.main(new String[0]);
     }
 }

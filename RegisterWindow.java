@@ -108,6 +108,7 @@ public class RegisterWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 PrimeraVentana primeraVentana = new PrimeraVentana();
                 primeraVentana.setLocationRelativeTo(null);
+                primeraVentana.setResizable(false);
                 primeraVentana.setVisible(true);
 
                 dispose();
