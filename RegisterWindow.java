@@ -93,6 +93,29 @@ public class RegisterWindow extends JFrame {
             }
         });
 
+        JButton volverButton = new JButton("<< Volver");
+        volverButton.setFont(new Font("Monospaced", Font.PLAIN, 10));
+        volverButton.setSize(100, 30);
+        volverButton.setLocation(70 - volverButton.getWidth()/2, 15);
+
+        volverButton.setContentAreaFilled(false);
+        volverButton.setBorderPainted(false);
+        volverButton.setFocusable(false);
+
+
+        volverButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PrimeraVentana primeraVentana = new PrimeraVentana();
+                primeraVentana.setLocationRelativeTo(null);
+                primeraVentana.setVisible(true);
+
+                dispose();
+            }
+        });
+
+        panel.add(volverButton);
+
 
     }
 
