@@ -7,6 +7,11 @@ import javax.swing.*;
 
 public class VentanaBienvenida extends JFrame {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public VentanaBienvenida() {
 		setSize(800,400);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

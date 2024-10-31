@@ -6,6 +6,11 @@ import javax.swing.*;
 
 public class VentanaRegistro extends JFrame{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public VentanaRegistro() {
 		setSize(800,400);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -83,6 +88,15 @@ public class VentanaRegistro extends JFrame{
 		datos.add(Box.createVerticalStrut(20));
 		
 		JButton crearCuenta = new JButton("Crear cuenta");
+		crearCuenta.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {	
+				ventanaEmpezarCuestionario nuevaVentana = new ventanaEmpezarCuestionario();
+				nuevaVentana.setVisible(true);
+				dispose();
+			}			
+		});
 		datos.add(crearCuenta);
 		datos.add(Box.createVerticalStrut(50));
 		
