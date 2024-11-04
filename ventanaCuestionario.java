@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -20,6 +21,7 @@ public class ventanaCuestionario extends JFrame {
         setTitle("WEDO");
 
         // Creamos varios paneles con FlowLayout centrado
+        JPanel borderPanel = new JPanel (new BorderLayout());
         JPanel panelFinal = new JPanel (new GridLayout(10,1));
         JPanel panelEdad = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel panelSexo = new JPanel (new FlowLayout(FlowLayout.CENTER));
@@ -27,7 +29,6 @@ public class ventanaCuestionario extends JFrame {
         JPanel panelAltura = new JPanel (new FlowLayout(FlowLayout.CENTER));
         JPanel panelDeporte = new JPanel (new FlowLayout(FlowLayout.CENTER));
         JPanel panelTrabajo = new JPanel (new FlowLayout(FlowLayout.CENTER));
-        
         
         // Creamos las listas de años y meses
         int añoInicio = 1925;
@@ -160,9 +161,11 @@ public class ventanaCuestionario extends JFrame {
         
         
         // Añadimos el panel al JFrame
-        add(panelFinal);
+        
+        borderPanel.add(panelFinal, BorderLayout.CENTER);
+        add(borderPanel);
     }
-
+    
     public static void main(String[] args) {
         ventanaCuestionario ventana = new ventanaCuestionario();
         ventana.setVisible(true);
