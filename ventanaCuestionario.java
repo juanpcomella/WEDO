@@ -25,6 +25,8 @@ public class ventanaCuestionario extends JFrame {
         JPanel panelSexo = new JPanel (new FlowLayout(FlowLayout.CENTER));
         JPanel panelPeso = new JPanel (new FlowLayout(FlowLayout.CENTER));
         JPanel panelAltura = new JPanel (new FlowLayout(FlowLayout.CENTER));
+        JPanel panelDeporte = new JPanel (new FlowLayout(FlowLayout.CENTER));
+        JPanel panelTrabajo = new JPanel (new FlowLayout(FlowLayout.CENTER));
         
         
         // Creamos las listas de años y meses
@@ -38,7 +40,7 @@ public class ventanaCuestionario extends JFrame {
         
         ArrayList<String> dias = new ArrayList<>();
         
-        for (int dia = 0; dia<=31; dia++) {
+        for (int dia = 1; dia<=31; dia++) {
         	dias.add(String.valueOf(dia));
         }
         
@@ -46,7 +48,15 @@ public class ventanaCuestionario extends JFrame {
         String[] meses = {"enero", "febrero", "marzo", "abril", "mayo", "junio", 
                           "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"};
         String[] diasS = dias.toArray(new String[0]);
+        
+        //creamos el String en el que van a ir las opciones del deporte
+        String [] deporteS = {"deportes relajados (yoga, tiro con arco, meditar, Taichi, caminar, golf, bolos, pesca, etc.)", "deportes moderados (futting, natación de manera relajada, baile, etc.) ", 
+        						"deportes intensos (cualquier deporte elaborado de manera competitiva)","sedentario (no hago deporte)" };
 
+        //creamos el String en el que van a ir las opciones del trabajo o estudio
+        String [] trabajoS = {"Todo el día de pie, en bici, etc. (repartidor en bicicleta, guía turístico, policía,obrero etc.) ",
+        						"Medio (profesor, entrenador, secretario,etc.)","sedentario (oficinista, teletrabajo, programador, dependiente de tienda, etc.)"};
+        
         // Creamos los JComboBox
         JComboBox<String> selectAños = new JComboBox<>(años);
         JComboBox<String> selectMes = new JComboBox<>(meses);
@@ -56,9 +66,17 @@ public class ventanaCuestionario extends JFrame {
         JCheckBox hombreC = new JCheckBox("Hombre");
         JCheckBox mujerC = new JCheckBox("Mujer");
         
+        // JComboBox de las opciones de deporte
+        JComboBox <String> selectDeporte = new JComboBox<>(deporteS);
+        
+        //JComboBox de las opciones de trabajo
+        JComboBox <String> selectTrabajo = new JComboBox<>(trabajoS);        
         
         //Creamos el JLabel en el que aparece "fecha de nacimiento"
         JLabel fechaNacL = new JLabel("Fecha de nacimiento: ");
+        
+        // Creamos el JLabel en el que aparece deporte:
+        JLabel deporteL = new JLabel ("Deporte: ");
         
         // Creamos el JLabel en el que aparece "sexo"
         JLabel sexoL = new JLabel("Sexo: ");
@@ -75,6 +93,8 @@ public class ventanaCuestionario extends JFrame {
         //JTextField para que el usuario introduzca el Peso
         JTextField alturaTF = new JTextField(3);
         
+        //JLabel que va a indicar la opcion de trabajo o estudio
+        JLabel trabajoL = new JLabel("Estudio o trabajo: ");
         
         
 
@@ -122,11 +142,21 @@ public class ventanaCuestionario extends JFrame {
         panelAltura.add(alturaL);
         panelAltura.add(alturaTF);
         
+        //añadimos los elementos al panelDeporte
+        panelDeporte.add(deporteL);
+        panelDeporte.add(selectDeporte);
+        
+        //añadimos los elementos la panelTrabajo
+        panelTrabajo.add(trabajoL);
+        panelTrabajo.add(selectTrabajo);
+        
         // Añadimos los paneles al panel final    
         panelFinal.add(panelEdad);
         panelFinal.add(panelSexo);
         panelFinal.add(panelPeso);
         panelFinal.add(panelAltura);
+        panelFinal.add(panelDeporte);
+        panelFinal.add(panelTrabajo);
         
         
         // Añadimos el panel al JFrame
