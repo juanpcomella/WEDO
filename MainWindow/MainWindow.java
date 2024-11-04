@@ -59,10 +59,25 @@ public class MainWindow extends JFrame {
 //            }
 //        });
         
+          
+        JPopupMenu popupMenu = new JPopupMenu();
+        JMenuItem opcion1 = new JMenuItem("Añadir Evento Personal");
+        JMenuItem opcion2 = new JMenuItem("Añadir Evento Grupal");
+      
+        popupMenu.add(opcion1);
+        popupMenu.add(opcion2);
+
         JButton botonMas = new JButton("+");
         botonMas.setFont(new Font("Times New Roman", Font.PLAIN, 10));
         panelOeste.add(botonMas);
-        botonMas.setPreferredSize(new Dimension(40, 30));        
+        botonMas.setPreferredSize(new Dimension(40, 30)); 
+        
+        botonMas.addActionListener(new ActionListener() {
+        	@Override
+            public void actionPerformed(ActionEvent e) {
+                popupMenu.show(botonMas, botonMas.getWidth() / 2, botonMas.getHeight() / 2);
+            }
+        });	
           
         calendar = new JCalendar();
         calendar.setWeekOfYearVisible(false);
