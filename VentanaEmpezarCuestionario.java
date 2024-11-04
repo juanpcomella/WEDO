@@ -15,9 +15,14 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 public class VentanaEmpezarCuestionario extends JFrame {
-    public VentanaEmpezarCuestionario() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public VentanaEmpezarCuestionario() {
         setTitle("WEDO");
-        setSize(800, 400);
+        setSize(700, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         // Panel principal con GridBagLayout para centrar
