@@ -6,7 +6,9 @@ import java.util.HashMap;
 
 public class VentanaLoginDef extends JFrame {
 
-    public VentanaLoginDef() {
+    private static final long serialVersionUID = 1L;
+
+	public VentanaLoginDef() {
         setTitle("WEDO - Inicia Sesión");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700, 500);
