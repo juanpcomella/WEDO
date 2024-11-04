@@ -25,4 +25,24 @@ When using setBounds, you manually specify the exact position (x, y) and size (w
 of the button within the panel or container.
 
 ---------------------------------------------------------------------------------------
-Q:
+Q: when uploading an image to a project in java. Where do I put it inside my project, and how do I call it?
+
+A:
+import javax.swing.*;
+import java.awt.*;
+
+public class ImageExample {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Image Example");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(500, 500);
+
+        // Load image using getResource
+        ImageIcon icon = new ImageIcon(ImageExample.class.getResource("/images/example.png"));
+
+        JLabel label = new JLabel(icon);
+        frame.add(label);
+
+        frame.setVisible(true);
+    }
+}
