@@ -11,6 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class ventanaCuestionario extends JFrame {
     public ventanaCuestionario() {
@@ -22,6 +23,9 @@ public class ventanaCuestionario extends JFrame {
         JPanel panelFinal = new JPanel (new GridLayout(10,1));
         JPanel panelEdad = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel panelSexo = new JPanel (new FlowLayout(FlowLayout.CENTER));
+        JPanel panelPeso = new JPanel (new FlowLayout(FlowLayout.CENTER));
+        JPanel panelAltura = new JPanel (new FlowLayout(FlowLayout.CENTER));
+        
         
         // Creamos las listas de años y meses
         int añoInicio = 1925;
@@ -58,7 +62,23 @@ public class ventanaCuestionario extends JFrame {
         
         // Creamos el JLabel en el que aparece "sexo"
         JLabel sexoL = new JLabel("Sexo: ");
+        
+        //Altura en cm
+        JLabel alturaL = new JLabel("Altura(cm): ");
+        
+        //Peso en kg
+        JLabel pesoL = new JLabel ("Peso(kg): ");
+        
+        //JTextField para que el usuario introduzca el Peso
+        JTextField pesoTF = new JTextField(2);
+        
+        //JTextField para que el usuario introduzca el Peso
+        JTextField alturaTF = new JTextField(3);
+        
+        
+        
 
+        
         hombreC.addActionListener(new ActionListener() {
 			
 			@Override
@@ -94,9 +114,21 @@ public class ventanaCuestionario extends JFrame {
         panelSexo.add(hombreC);
         panelSexo.add(mujerC);
         
+        //añadimos los elementos al panelPeso
+        panelPeso.add(pesoL);
+        panelPeso.add(pesoTF);
+        
+        //añadimos los elementos al panelAltura
+        panelAltura.add(alturaL);
+        panelAltura.add(alturaTF);
+        
         // Añadimos los paneles al panel final    
         panelFinal.add(panelEdad);
         panelFinal.add(panelSexo);
+        panelFinal.add(panelPeso);
+        panelFinal.add(panelAltura);
+        
+        
         // Añadimos el panel al JFrame
         add(panelFinal);
     }
