@@ -1,6 +1,10 @@
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hello World");
+
+        VentanaBienvenida pv = new VentanaBienvenida();
+        pv.setResizable(false);
+        pv.setLocationRelativeTo(null);
+        pv.setVisible(true);
     }
 }
