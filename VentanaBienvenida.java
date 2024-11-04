@@ -50,7 +50,7 @@ public class VentanaBienvenida extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {	
-				VentanaInicioSesion nuevaVentana = new VentanaInicioSesion();
+				VentanaLoginDef nuevaVentana = new VentanaLoginDef();
 				nuevaVentana.setVisible(true);
 				dispose();
 			}			
@@ -67,7 +67,7 @@ public class VentanaBienvenida extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {	
-				VentanaRegistro nuevaVentana = new VentanaRegistro();
+				VentanaRegistroDef nuevaVentana = new VentanaRegistroDef();
 				nuevaVentana.setVisible(true);
 				dispose();
 			}			

@@ -16,6 +16,17 @@ public class VentanaLoginDef extends JFrame {
 
         JPanel panelVolver = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton volverButton = new JButton("<< Volver");
+        volverButton.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				VentanaBienvenida nuevaVentana = new VentanaBienvenida();
+				nuevaVentana.setVisible(true);
+				dispose();		
+			}
+        	
+        });
+        
         volverButton.setFont(new Font("Monospaced", Font.PLAIN, 10));
         volverButton.setContentAreaFilled(false);
         volverButton.setBorderPainted(false);
