@@ -1,4 +1,7 @@
 import javax.swing.*;
+
+import MainWindow.MainWindow;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -108,10 +111,20 @@ public class VentanaLoginDef extends JFrame {
         gbc.insets = new Insets(0, 10, 5, 10);
         datos.add(olvidado, gbc);
 
-        JButton loginButton = new JButton("Inicia Sesión");
+        JButton loginButton = new JButton("Iniciar Sesión");
         loginButton.setFont(new Font("Monospaced", Font.PLAIN, 16));
         loginButton.setPreferredSize(new Dimension(150, 50));
         loginButton.setMaximumSize(new Dimension(150, 50));
+        loginButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MainWindow nuevaVentana = new MainWindow();
+				nuevaVentana.setVisible(true);
+				dispose();
+				
+			}
+		});
         gbc.gridx = 0;
         gbc.gridy = 9;
         gbc.gridwidth = 2;

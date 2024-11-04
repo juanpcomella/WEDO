@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 
 public class MainWindow extends JFrame {
 	
+	private static final long serialVersionUID = 1L;
 	private JCalendar calendar;
     
     public MainWindow() {

@@ -28,7 +28,7 @@ public class VentanaBienvenida extends JFrame {
 		textoBienvenida.setAlignmentX(CENTER_ALIGNMENT);
 		
 			//Logo
-		ImageIcon imagen = new ImageIcon("C:\\Users\\iker.gamboa\\OneDrive - Universidad de Deusto\\Escritorio\\PROYECTO PROGRAMACIÓN RECURSOS\\LOGO WEDO 1.png");
+		ImageIcon imagen = new ImageIcon(VentanaBienvenida.class.getResource("/imagenes/LOGO WEDO 1.png"));
         Image imagenEscalada = imagen.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         ImageIcon imagenRedimensionada = new ImageIcon(imagenEscalada);
 		JLabel logo = new JLabel(imagenRedimensionada);
