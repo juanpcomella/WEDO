@@ -14,8 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-public class ventanaEmpezarCuestionario extends JFrame {
-    public ventanaEmpezarCuestionario() {
+public class VentanaEmpezarCuestionario extends JFrame {
+    public VentanaEmpezarCuestionario() {
         setTitle("WEDO");
         setSize(800, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -101,7 +101,7 @@ public class ventanaEmpezarCuestionario extends JFrame {
     }
 
     public static void main(String[] args) {
-        new ventanaEmpezarCuestionario();
+        new VentanaEmpezarCuestionario();
     }
 }
 

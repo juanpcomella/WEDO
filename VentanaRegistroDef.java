@@ -117,6 +117,16 @@ public class VentanaRegistroDef extends JFrame {
         registerButton.setFont(new Font("Monospaced", Font.PLAIN, 16));
         registerButton.setPreferredSize(new Dimension(150, 50));
         registerButton.setMaximumSize(new Dimension(150, 50));
+        registerButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				VentanaEmpezarCuestionario nuevaVentana = new VentanaEmpezarCuestionario();
+				nuevaVentana.setVisible(true);
+				dispose();
+				
+			}
+		});
         gbc.gridx = 0;
         gbc.gridy = 11;
         gbc.gridwidth = 2;
