@@ -14,7 +14,7 @@ public class MainWindow extends JFrame {
     
     public MainWindow() {
         setTitle("WEDO");
-        setSize(600, 400);
+        setSize(700, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout());
 
