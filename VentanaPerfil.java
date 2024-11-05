@@ -17,20 +17,15 @@ public class VentanaPerfil extends JFrame{
 		panel.setBackground(new Color(173, 216, 230));
 		add(panel);
 		
-			//Parte izquierda		
-		JPanel panelIzquierdo = new JPanel();
-		panelIzquierdo.setLayout(new BoxLayout(panelIzquierdo, BoxLayout.Y_AXIS));
-		panelIzquierdo.setOpaque(false);
-		panel.add(panelIzquierdo);
-		
+			//Parte izquierda		                                           		
 		ImageIcon imagen = new ImageIcon(VentanaBienvenida.class.getResource("/imagenes/PERFIL.png"));
         Image imagenEscalada = imagen.getImage().getScaledInstance(175, 150, Image.SCALE_SMOOTH);// MANTENER PROPORCIÓN ESCALA PARA QUE SEA REDONDO
         ImageIcon imagenRedimensionada = new ImageIcon(imagenEscalada);
-		JLabel logo = new JLabel(imagenRedimensionada);
-		logo.setHorizontalAlignment(JLabel.CENTER);
-		logo.setVerticalAlignment(JLabel.CENTER);
-//		logo.setAlignmentX(CENTER_ALIGNMENT);
-		panelIzquierdo.add(logo);
+		JLabel logo = new JLabel(imagenRedimensionada);                                 
+//		logo.setHorizontalAlignment(JLabel.CENTER);
+//		logo.setVerticalAlignment(JLabel.CENTER);                                                                                                                                                                     
+//		logo.setAlignmentY(CENTER_ALIGNMENT);
+		panel.add(logo);                                                  
    
         //Menu
 //        JMenuBar menuBar = new JMenuBar();
