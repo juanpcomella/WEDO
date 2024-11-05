@@ -33,7 +33,7 @@ public class VentanaEmpezarCuestionario extends JFrame {
         
         //Texto de Bienvenido a WEDO
         JLabel bienvenidoL = new JLabel(" Bienvenido (usuario)!");
-        bienvenidoL.setFont(new Font("Sans", Font.PLAIN, 35));
+        bienvenidoL.setFont(new Font("Bauhaus 93", Font.PLAIN, 35));
 		bienvenidoL.setForeground(new Color(50, 70, 90));
         gbc.gridy = 0;
         gbc.insets = new java.awt.Insets(0, 0, 20, 0); // Espacio debajo del Label
@@ -41,7 +41,7 @@ public class VentanaEmpezarCuestionario extends JFrame {
 
         
         // Texto de descripción en la parte superior
-        JLabel empezarL = new JLabel("Para personalizar la aplicación acorde a ti, te recomendamos hacer el cuestionario inicial");
+        JLabel empezarL = new JLabel("Para disfrutar de una experiencia más personalizada, se recomienda completar el siguiente formulario.");
 		empezarL.setForeground(new Color(50, 70, 90));
         gbc.gridx = 0;
         gbc.gridy = 1;
