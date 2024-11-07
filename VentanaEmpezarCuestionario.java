@@ -17,6 +17,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import MainWindow.MainWindow;
+
 public class VentanaEmpezarCuestionario extends JFrame {
     /**
 	 * 
@@ -75,15 +77,15 @@ public class VentanaEmpezarCuestionario extends JFrame {
 
         // Botón "Omitir" debajo del botón "Empezar Cuestionario"
         JButton botonOmitir = new JButton("Omitir");
-//        botonEmpezar.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				VentanaCuestionario nuevaVentana = new VentanaCuestionario();
-//				nuevaVentana.setVisible(true);
-//				dispose();			
-//			}
-//        });
+        botonOmitir.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MainWindow nuevaVentana = new MainWindow();
+				nuevaVentana.setVisible(true);
+				dispose();			
+			}
+        });
         botonOmitir.setForeground(new Color(255,255,255));
         botonOmitir.setBackground(new Color(50,70,90));
         botonOmitir.setBorderPainted(false);
