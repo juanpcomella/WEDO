@@ -8,6 +8,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -52,6 +54,16 @@ public class VentanaEmpezarCuestionario extends JFrame {
 
         // Botón "Empezar Cuestionario" centrado
         JButton botonEmpezar = new JButton("Empezar cuestionario");
+        botonEmpezar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				VentanaCuestionario nuevaVentana = new VentanaCuestionario();
+				nuevaVentana.setVisible(true);
+				dispose();			
+			}
+        	
+        });
         botonEmpezar.setForeground(new Color(255,255,255));
         botonEmpezar.setBackground(new Color(50,70,90));
         botonEmpezar.setBorderPainted(false);
@@ -63,6 +75,15 @@ public class VentanaEmpezarCuestionario extends JFrame {
 
         // Botón "Omitir" debajo del botón "Empezar Cuestionario"
         JButton botonOmitir = new JButton("Omitir");
+//        botonEmpezar.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				VentanaCuestionario nuevaVentana = new VentanaCuestionario();
+//				nuevaVentana.setVisible(true);
+//				dispose();			
+//			}
+//        });
         botonOmitir.setForeground(new Color(255,255,255));
         botonOmitir.setBackground(new Color(50,70,90));
         botonOmitir.setBorderPainted(false);
