@@ -2,16 +2,19 @@ package MainWindow;
 import javax.swing.*;
 
 import com.toedter.calendar.JCalendar;
+import com.toedter.calendar.JDateChooser;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 public class MainWindow extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 	private JCalendar calendar;
-    
+	private JDateChooser dateChooser;
+	
     public MainWindow() {
         setTitle("WEDO");
         setSize(700, 500);
@@ -79,7 +82,14 @@ public class MainWindow extends JFrame {
                 popupMenu.show(botonMas, botonMas.getWidth() / 2, botonMas.getHeight() / 2);
             }
         });	
-          
+        
+        opcion1.addActionListener(new ActionListener() {
+        	@Override
+            public void actionPerformed(ActionEvent e) {
+                crearVentanaEvento();
+            }
+        });
+        
         calendar = new JCalendar();
         calendar.setWeekOfYearVisible(false);
         calendar.setMaxDayCharacters(3);
@@ -89,8 +99,60 @@ public class MainWindow extends JFrame {
         JComboBox<Opciones> opciones = new JComboBox<>(Opciones.values());
         calendar.getYearChooser().add(opciones, BorderLayout.WEST);
         opciones.setPreferredSize(new Dimension(100, 25));
-        
     }
+    
+    private void crearVentanaEvento() {
+		
+		JDialog dialog = new JDialog(this, "Añadir Evento Personal", true);
+		dialog.setSize(400, 300);
+		dialog.setLayout(new BorderLayout());
+		dialog.setLocationRelativeTo(this);
+
+		JPanel panelContenido = new JPanel();
+		panelContenido.setLayout(new GridLayout(4, 2, 10, 10));
+
+		JLabel etiquetaNombre = new JLabel("Nombre del evento:");
+		JTextField campoNombre = new JTextField();
+
+		JLabel etiquetaFecha = new JLabel("Fecha:");
+		dateChooser = new JDateChooser();
+		
+		JLabel etiquetaInvitar = new JLabel("Invitar a");
+		JTextField campoInvitar = new JTextField();
+		//Aqui faltaria añadir el codigo para que comprobase que el usuario al que quiere invitar este en nuestra BBDD
+		
+		JLabel etiquetaCategorias = new JLabel("Categoria");
+		JComboBox<Categorias> categorias = new JComboBox<>(Categorias.values());
+
+		panelContenido.add(etiquetaNombre);
+		panelContenido.add(campoNombre);
+		panelContenido.add(etiquetaFecha);
+		panelContenido.add(dateChooser);
+		panelContenido.add(etiquetaInvitar);
+		panelContenido.add(campoInvitar);
+		panelContenido.add(etiquetaCategorias);
+		panelContenido.add(categorias);
+
+		JButton botonGuardar = new JButton("Guardar");
+		botonGuardar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String nombreEvento = campoNombre.getText();
+				Date fechaEvento = dateChooser.getDate();
+				if (nombreEvento.isEmpty() || fechaEvento == null) {
+					JOptionPane.showMessageDialog(dialog, "Evento vacio, te falta por añadir el nombre del evento o la fecha");
+					dialog.dispose();
+				} else {
+					JOptionPane.showMessageDialog(dialog, "Evento '" + nombreEvento + "' añadido con fecha: " + fechaEvento);
+					dialog.dispose();
+				}
+			}
+		});
+
+		dialog.add(panelContenido, BorderLayout.CENTER);
+		dialog.add(botonGuardar, BorderLayout.SOUTH);
+		dialog.setVisible(true);
+	}
 
     public static void main(String[] args) {
     	MainWindow window = new MainWindow();
