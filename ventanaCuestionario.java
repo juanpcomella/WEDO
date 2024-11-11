@@ -19,6 +19,78 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 public class ventanaCuestionario extends JFrame {
+	private double peso;
+	public double getPeso() {
+		return peso;
+	}
+
+	public void setPeso(double peso) {
+		this.peso = peso;
+	}
+
+	public double getAltura() {
+		return altura;
+	}
+
+	public void setAltura(double altura) {
+		this.altura = altura;
+	}
+
+	public int getOpcionDeporte() {
+		return opcionDeporte;
+	}
+
+	public void setOpcionDeporte(int opcionDeporte) {
+		this.opcionDeporte = opcionDeporte;
+	}
+
+	public int getOpcionTrabajo() {
+		return opcionTrabajo;
+	}
+
+	public void setOpcionTrabajo(int opcionTrabajo) {
+		this.opcionTrabajo = opcionTrabajo;
+	}
+
+	public int getOpcionNutricion() {
+		return opcionNutricion;
+	}
+
+	public void setOpcionNutricion(int opcionNutricion) {
+		this.opcionNutricion = opcionNutricion;
+	}
+
+	public int getOpcionAlc() {
+		return opcionAlc;
+	}
+
+	public void setOpcionAlc(int opcionAlc) {
+		this.opcionAlc = opcionAlc;
+	}
+
+	public int getOpcionFum() {
+		return opcionFum;
+	}
+
+	public void setOpcionFum(int opcionFum) {
+		this.opcionFum = opcionFum;
+	}
+
+	public int getOpcionSue() {
+		return opcionSue;
+	}
+
+	public void setOpcionSue(int opcionSue) {
+		this.opcionSue = opcionSue;
+	}
+
+	private double altura;
+	private int opcionDeporte;
+	private int opcionTrabajo;
+	private int opcionNutricion;
+	private int opcionAlc;
+	private int opcionFum;
+	private int opcionSue;
     public ventanaCuestionario() {
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -289,6 +361,8 @@ public class ventanaCuestionario extends JFrame {
      //calculo de rango segun los datos
      //recogemos todos los datos y segun estos el usuario entrara en un rango u otro
      
+
+     
      pesoTF.addActionListener(new ActionListener() {
 			
 			@Override
@@ -302,7 +376,7 @@ public class ventanaCuestionario extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				int altura = Integer.parseInt(alturaTF.getText());
+				int altura = (Integer.parseInt(alturaTF.getText())/100);
 			}
 		});
      selectDeporte.addActionListener(new ActionListener() {
@@ -349,6 +423,18 @@ public class ventanaCuestionario extends JFrame {
 			int opcionSue = selectSue.getSelectedIndex();
 		}
 	});
+    
+    selectFum.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			int opcionFum = selectFum.getSelectedIndex();
+		}
+	});
+    
+    
+    //calculamos el indice de masa corporal
      
     }
     
