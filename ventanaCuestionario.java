@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
@@ -128,8 +129,13 @@ public class ventanaCuestionario extends JFrame {
         //JTextField para que el usuario introduzca el Peso
         JTextField pesoTF = new JTextField(2);
         
+
+			
+        
+        
         //JTextField para que el usuario introduzca el Peso
         JTextField alturaTF = new JTextField(3);
+        
         
         //JLabel que va a indicar la opcion de trabajo o estudio
         JLabel trabajoL = new JLabel("Estudio o trabajo: ");
@@ -279,7 +285,71 @@ public class ventanaCuestionario extends JFrame {
 
      // Añadir el JScrollPane al JFrame
      add(scrollPane, BorderLayout.CENTER);
-
+     
+     //calculo de rango segun los datos
+     //recogemos todos los datos y segun estos el usuario entrara en un rango u otro
+     
+     pesoTF.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int peso = Integer.parseInt(pesoTF.getText());
+			}
+		});
+     alturaTF.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int altura = Integer.parseInt(alturaTF.getText());
+			}
+		});
+     selectDeporte.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			int opcionDeporte = selectDeporte.getSelectedIndex();
+		}
+	});
+    
+     selectTrabajo.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			int opcionTrabajo = selectTrabajo.getSelectedIndex();
+		}
+	});
+     
+    selectNutricion.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			int opcionNutri = selectNutricion.getSelectedIndex();
+		}
+	});
+    
+    selectAlc.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			int opcionAlc = selectAlc.getSelectedIndex();
+		}
+	});
+    
+    selectSue.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			int opcionSue = selectSue.getSelectedIndex();
+		}
+	});
+     
     }
     
     public static void main(String[] args) {
