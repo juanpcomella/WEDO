@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import MainWindow.MainWindow;
+
 public class VentanaCuestionario extends JFrame {
     public VentanaCuestionario() {
         setSize(800, 600);
@@ -40,7 +42,27 @@ public class VentanaCuestionario extends JFrame {
         JPanel panelLogo = new JPanel(new FlowLayout(FlowLayout.CENTER));
         //JButtons para darle a omitir o a enviar
         JButton omitir = new JButton ("omitir");
+        omitir.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MainWindow nuevaVentana = new MainWindow();
+				nuevaVentana.setVisible(true);
+				dispose();
+			}
+		});
+        ;
         JButton enviar = new JButton ("enviar");
+        enviar.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					MainWindow nuevaVentana = new MainWindow();
+					nuevaVentana.setVisible(true);
+					dispose();
+				}
+			});
+	
         panelOE.add(enviar);
         panelOE.add(omitir);
         

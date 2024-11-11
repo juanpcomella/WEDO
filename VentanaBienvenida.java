@@ -109,10 +109,6 @@ public class VentanaBienvenida extends JFrame {
 		panel.add(panelInferior);
 	}
 
-	public VentanaBienvenida(String string) {
-		// TODO Auto-generated constructor stub
-	}
-
 	public static void main(String[] args) {
 		
 		VentanaBienvenida ventana = new VentanaBienvenida();
