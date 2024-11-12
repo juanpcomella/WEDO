@@ -1,136 +1,114 @@
 package MainWindow;
-import javax.swing.*;
 
-import com.toedter.calendar.JCalendar;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Date;
 import com.toedter.calendar.JDateChooser;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Date;
-
-public class MainWindow extends JFrame {
+public class MainWindow extends JFrame{
 	
-	private JCalendar calendar;
 	private JDateChooser dateChooser;
 	
-    public MainWindow() {
-        setTitle("WEDO");
-        setSize(600, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new BorderLayout());
-
-        JPanel panelNorte = new JPanel();
-        JPanel panelSur = new JPanel();
-        JPanel panelOeste = new JPanel();
-        JPanel panelCentro = new JPanel(); 
-        JPanel panelEste = new JPanel();
-        
-        getContentPane().add(panelNorte, BorderLayout.NORTH);
-        getContentPane().add(panelSur, BorderLayout.SOUTH);
-        getContentPane().add(panelOeste, BorderLayout.WEST);
-        getContentPane().add(panelCentro, BorderLayout.CENTER);
-        getContentPane().add(panelEste, BorderLayout.EAST);
-        
-//        ImageIcon imagen = new ImageIcon("src/tresRayas.jpg");
-//        Image imageEscalada = imagen.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-//        ImageIcon imageRedimensionada = new ImageIcon(imageEscalada);
-//        JButton tresRayas = new JButton(imageRedimensionada);
-//        tresRayas.setOpaque(false);
-//        tresRayas.setContentAreaFilled(false);
-//        tresRayas.setBorderPainted(false);
-//        panelNorte.add(tresRayas);
-//        
-//        
-//        ImageIcon imageTienda = new ImageIcon("src/tiendaLogo.jpg");
-//        Image imagenEscalada = imageTienda.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-//        ImageIcon imagenRedimensionada = new ImageIcon(imagenEscalada);
-//        JButton tienda = new JButton(imagenRedimensionada);
-//        tienda.setOpaque(false);
-//        tienda.setContentAreaFilled(false);
-//        tienda.setBorderPainted(false);
-//        panelNorte.add(tienda);
-        
-//        tienda.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                tiendaWindow tiendaWindow = new tiendaWindow();
-//                tiendaWindow.setLocationRelativeTo(null);
-//				tiendaWindow.setVisible(true);
-//
-//                dispose();
-//            }
-//        });
-        
-          
-        JPopupMenu popupMenu = new JPopupMenu();
-        JMenuItem opcion1 = new JMenuItem("Añadir Evento Personal");
-        JMenuItem opcion2 = new JMenuItem("Añadir Evento Grupal");
-      
-        popupMenu.add(opcion1);
-        popupMenu.add(opcion2);
-
-        JButton botonMas = new JButton("+");
-        botonMas.setFont(new Font("Times New Roman", Font.PLAIN, 10));
-        panelOeste.add(botonMas);
-        botonMas.setPreferredSize(new Dimension(40, 30)); 
-        
-        botonMas.addActionListener(new ActionListener() {
-        	@Override
-            public void actionPerformed(ActionEvent e) {
-                popupMenu.show(botonMas, botonMas.getWidth() / 2, botonMas.getHeight() / 2);
-            }
-        });	
-        
-        opcion1.addActionListener(new ActionListener() {
-        	@Override
-            public void actionPerformed(ActionEvent e) {
-                crearVentanaEvento();
-            }
-        });
-        
-        calendar = new JCalendar();
-        calendar.setWeekOfYearVisible(false);
-        calendar.setMaxDayCharacters(3);
-        calendar.setPreferredSize(new Dimension(300,300));
-        panelCentro.add(calendar);
-        
-        JComboBox<Opciones> opciones = new JComboBox<>(Opciones.values());
-        calendar.getYearChooser().add(opciones, BorderLayout.WEST);
-        opciones.setPreferredSize(new Dimension(100, 25));
-    }
-    
-    private void crearVentanaEvento() {
+	public MainWindow() {
+		setTitle("WEDO");
+		setSize(800,500);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JPanel panel = new JPanel();
+		add(panel);
 		
-		JDialog dialog = new JDialog(this, "Añadir Evento Personal", true);
-		dialog.setSize(400, 300);
-		dialog.setLayout(new BorderLayout());
-		dialog.setLocationRelativeTo(this);
-
-		JPanel panelContenido = new JPanel();
-		panelContenido.setLayout(new GridLayout(4, 2, 10, 10));
-
+		
+		//APARTADO BOTON MAS, IZQUIERDA DE LA PANTALLA
+		JButton botonMas = new JButton("+");
+		JPopupMenu menuEventos = new JPopupMenu();
+		JMenuItem opcion1 = new JMenuItem("Añadir evento personal");
+		JMenuItem opcion2 = new JMenuItem("Añadir evento grupal");
+		menuEventos.add(opcion1);
+		menuEventos.add(opcion2);
+		
+		botonMas.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				menuEventos.show(botonMas, botonMas.getWidth() / 2, botonMas.getHeight() / 2);
+			}
+		});
+		
+		opcion1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				ventanaEventoPersonal();
+			}
+		});
+		opcion2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				ventanaEventoGrupal();
+			}
+		});	
+	}
+	
+	private void ventanaEventoPersonal() {
+		JDialog ventanaEmergente = new JDialog();
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(6, 2, 10, 10));
+		JPanel panel1 = new JPanel();
+		panel1.setLayout(new GridLayout(1,3));
+		JPanel panel2 = new JPanel();
+		panel2.setLayout(new GridLayout(1,3));
+		
 		JLabel etiquetaNombre = new JLabel("Nombre del evento:");
 		JTextField campoNombre = new JTextField();
 
 		JLabel etiquetaFecha = new JLabel("Fecha:");
 		dateChooser = new JDateChooser();
 		
-		JLabel etiquetaInvitar = new JLabel("Invitar a");
-		JTextField campoInvitar = new JTextField();
-		//Aqui faltaria añadir el codigo para que comprobase que el usuario al que quiere invitar este en nuestra BBDD
+		JLabel fechaInicio = new JLabel("Hora de inicio");
+		Integer[] horasArray = new Integer[25];
+        for (int i = 0; i < 25; i++) {
+            horasArray[i] = i;
+        }
+        Integer[] minutosArray = new Integer[61];
+        for (int i = 0; i < 61; i++) {
+            minutosArray[i] = i;
+        }
+		JComboBox<Integer> horas = new JComboBox<Integer>(horasArray);
+		JComboBox<Integer> minutos = new JComboBox<Integer>(minutosArray);
+		JComboBox<Integer> segundos = new JComboBox<Integer>(minutosArray);		
+		panel1.add(horas);
+		panel1.add(minutos);
+		panel1.add(segundos);
+		
+		JLabel fechafinal = new JLabel("Hora de finalización");
+		JComboBox<Integer> horasFinal = new JComboBox<Integer>(horasArray);
+		JComboBox<Integer> minutosFinal = new JComboBox<Integer>(minutosArray);
+		JComboBox<Integer> segundosFinal = new JComboBox<Integer>(minutosArray);
+		panel2.add(horasFinal);
+		panel2.add(minutosFinal);
+		panel2.add(segundosFinal);
+		
+		JLabel descripcion = new JLabel("Breve descripción");
+		JTextField texto = new JTextField();
 		
 		JLabel etiquetaCategorias = new JLabel("Categoria");
 		JComboBox<Categorias> categorias = new JComboBox<>(Categorias.values());
-
-		panelContenido.add(etiquetaNombre);
-		panelContenido.add(campoNombre);
-		panelContenido.add(etiquetaFecha);
-		panelContenido.add(dateChooser);
-		panelContenido.add(etiquetaInvitar);
-		panelContenido.add(campoInvitar);
-		panelContenido.add(etiquetaCategorias);
-		panelContenido.add(categorias);
+		
+		panel.add(etiquetaNombre);
+		panel.add(campoNombre);
+		panel.add(etiquetaFecha);
+		panel.add(dateChooser);
+		panel.add(fechaInicio);
+		panel.add(panel1);
+		panel.add(fechafinal);
+		panel.add(panel2);
+		panel.add(descripcion);
+		panel.add(texto);
+		panel.add(etiquetaCategorias);
+		panel.add(categorias);
 
 		JButton botonGuardar = new JButton("Guardar");
 		botonGuardar.addActionListener(new ActionListener() {
@@ -139,24 +117,100 @@ public class MainWindow extends JFrame {
 				String nombreEvento = campoNombre.getText();
 				Date fechaEvento = dateChooser.getDate();
 				if (nombreEvento.isEmpty() || fechaEvento == null) {
-					JOptionPane.showMessageDialog(dialog, "Evento vacio, te falta por añadir el nombre del evento o la fecha");
-					dialog.dispose();
+					JOptionPane.showMessageDialog(ventanaEmergente, "Evento vacio, te falta por añadir el nombre del evento o la fecha");
+					ventanaEmergente.dispose();
 				} else {
-					JOptionPane.showMessageDialog(dialog, "Evento '" + nombreEvento + "' añadido con fecha: " + fechaEvento);
-					dialog.dispose();
+					JOptionPane.showMessageDialog(ventanaEmergente, "Evento '" + nombreEvento + "' añadido con fecha: " + fechaEvento);
+					ventanaEmergente.dispose();
 				}
 			}
 		});
-
-		dialog.add(panelContenido, BorderLayout.CENTER);
-		dialog.add(botonGuardar, BorderLayout.SOUTH);
-		dialog.setVisible(true);
 	}
+	
+	private void ventanaEventoGrupal() {
+		JDialog ventanaEmergente = new JDialog();
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(7, 2, 10, 10));
+		JPanel panel1 = new JPanel();
+		panel1.setLayout(new GridLayout(1,3));
+		JPanel panel2 = new JPanel();
+		panel2.setLayout(new GridLayout(1,3));
+		
+		JLabel etiquetaNombre = new JLabel("Nombre del evento:");
+		JTextField campoNombre = new JTextField();
 
-    public static void main(String[] args) {
-    	MainWindow window = new MainWindow();
+		JLabel etiquetaFecha = new JLabel("Fecha:");
+		dateChooser = new JDateChooser();
+		
+		JLabel fechaInicio = new JLabel("Hora de inicio");
+		Integer[] horasArray = new Integer[25];
+        for (int i = 0; i < 25; i++) {
+            horasArray[i] = i;
+        }
+        Integer[] minutosArray = new Integer[61];
+        for (int i = 0; i < 61; i++) {
+            minutosArray[i] = i;
+        }
+		JComboBox<Integer> horas = new JComboBox<Integer>(horasArray);
+		JComboBox<Integer> minutos = new JComboBox<Integer>(minutosArray);
+		JComboBox<Integer> segundos = new JComboBox<Integer>(minutosArray);		
+		panel1.add(horas);
+		panel1.add(minutos);
+		panel1.add(segundos);
+		
+		JLabel fechafinal = new JLabel("Hora de finalización");
+		JComboBox<Integer> horasFinal = new JComboBox<Integer>(horasArray);
+		JComboBox<Integer> minutosFinal = new JComboBox<Integer>(minutosArray);
+		JComboBox<Integer> segundosFinal = new JComboBox<Integer>(minutosArray);
+		panel2.add(horasFinal);
+		panel2.add(minutosFinal);
+		panel2.add(segundosFinal);
+		
+		JLabel descripcion = new JLabel("Breve descripción");
+		JTextField texto = new JTextField();
+		
+		JLabel invitar = new JLabel("Invitar a");
+		JTextField campoInvitar = new JTextField();
+		
+		JLabel etiquetaCategorias = new JLabel("Categoria");
+		JComboBox<Categorias> categorias = new JComboBox<>(Categorias.values());
+		
+		panel.add(etiquetaNombre);
+		panel.add(campoNombre);
+		panel.add(etiquetaFecha);
+		panel.add(dateChooser);
+		panel.add(fechaInicio);
+		panel.add(panel1);
+		panel.add(fechafinal);
+		panel.add(panel2);
+		panel.add(descripcion);
+		panel.add(texto);
+		panel.add(invitar);
+		panel.add(campoInvitar);
+		panel.add(etiquetaCategorias);
+		panel.add(categorias);
 
-        window.setLocationRelativeTo(null);
-        window.setVisible(true);
-    }
+		JButton botonGuardar = new JButton("Guardar");
+		botonGuardar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String nombreEvento = campoNombre.getText();
+				Date fechaEvento = dateChooser.getDate();
+				if (nombreEvento.isEmpty() || fechaEvento == null) {
+					JOptionPane.showMessageDialog(ventanaEmergente, "Evento vacio, te falta por añadir el nombre del evento o la fecha");
+					ventanaEmergente.dispose();
+				} else {
+					JOptionPane.showMessageDialog(ventanaEmergente, "Evento '" + nombreEvento + "' añadido con fecha: " + fechaEvento);
+					ventanaEmergente.dispose();
+				}
+			}
+		});
+		
+	}
+	
+	public static void main(String[] args) {
+		MainWindow window = new MainWindow();
+		window.setVisible(true);
+	}
 }
