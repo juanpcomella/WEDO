@@ -49,10 +49,52 @@ public class MainWindow extends JFrame{
 				ventanaEventoGrupal();
 			}
 		});	
+		
+		//APARTADO PRINCIPAL (CALENDARIO)
+		
+		//APARTADO TIENDA, ARRIBA DE LA PANTALLA
+		
+		JButton botonTienda = new JButton();
+		botonTienda.setSize(200,100);
+		JPopupMenu menuTienda = new JPopupMenu();
+		menuTienda.setLayout(new GridLayout(2,1));
+		JPanel panelMonedas = new JPanel();
+		panelMonedas.setLayout(new GridLayout(1,2));
+		JMenuItem monedas =  new JMenuItem("Monedas disponibles: ");
+		JMenuItem monedasUsuario = new JMenuItem("XX MONEDAS");
+		panelMonedas.add(monedas);
+		panelMonedas.add(monedasUsuario);
+		menuTienda.add(panelMonedas);
+		JMenuItem verTienda = new JMenuItem("Ver tienda completa");
+		menuTienda.add(verTienda);
+				
+		verTienda.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				ventanaTienda();
+			}
+		});
+		
+		botonTienda.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				menuTienda.show(botonTienda, botonTienda.getHeight()/2, botonTienda.getWidth()/2);
+			}
+		});
+		
+		panel.add(botonTienda);
+		panel.add(botonMas);
 	}
 	
 	private void ventanaEventoPersonal() {
 		JDialog ventanaEmergente = new JDialog();
+		ventanaEmergente.setTitle("Nuevo Evento");
+	    ventanaEmergente.setSize(400, 300);
+	    ventanaEmergente.setVisible(true);
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(6, 2, 10, 10));
@@ -97,19 +139,6 @@ public class MainWindow extends JFrame{
 		JLabel etiquetaCategorias = new JLabel("Categoria");
 		JComboBox<Categorias> categorias = new JComboBox<>(Categorias.values());
 		
-		panel.add(etiquetaNombre);
-		panel.add(campoNombre);
-		panel.add(etiquetaFecha);
-		panel.add(dateChooser);
-		panel.add(fechaInicio);
-		panel.add(panel1);
-		panel.add(fechafinal);
-		panel.add(panel2);
-		panel.add(descripcion);
-		panel.add(texto);
-		panel.add(etiquetaCategorias);
-		panel.add(categorias);
-
 		JButton botonGuardar = new JButton("Guardar");
 		botonGuardar.addActionListener(new ActionListener() {
 			@Override
@@ -125,10 +154,31 @@ public class MainWindow extends JFrame{
 				}
 			}
 		});
+
+		JPanel panelGuardar = new JPanel();
+		botonGuardar.setBackground(Color.BLACK);
+		panelGuardar.add(botonGuardar, CENTER_ALIGNMENT);
+		
+		panel.add(etiquetaNombre);
+		panel.add(campoNombre);
+		panel.add(etiquetaFecha);
+		panel.add(dateChooser);
+		panel.add(fechaInicio);
+		panel.add(panel1);
+		panel.add(fechafinal);
+		panel.add(panel2);
+		panel.add(descripcion);
+		panel.add(texto);
+		panel.add(etiquetaCategorias);
+		panel.add(categorias);
+		
+		ventanaEmergente.add(panel);
 	}
 	
 	private void ventanaEventoGrupal() {
 		JDialog ventanaEmergente = new JDialog();
+		ventanaEmergente.setSize(400, 300);
+	    ventanaEmergente.setVisible(true);
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(7, 2, 10, 10));
@@ -176,21 +226,6 @@ public class MainWindow extends JFrame{
 		JLabel etiquetaCategorias = new JLabel("Categoria");
 		JComboBox<Categorias> categorias = new JComboBox<>(Categorias.values());
 		
-		panel.add(etiquetaNombre);
-		panel.add(campoNombre);
-		panel.add(etiquetaFecha);
-		panel.add(dateChooser);
-		panel.add(fechaInicio);
-		panel.add(panel1);
-		panel.add(fechafinal);
-		panel.add(panel2);
-		panel.add(descripcion);
-		panel.add(texto);
-		panel.add(invitar);
-		panel.add(campoInvitar);
-		panel.add(etiquetaCategorias);
-		panel.add(categorias);
-
 		JButton botonGuardar = new JButton("Guardar");
 		botonGuardar.addActionListener(new ActionListener() {
 			@Override
@@ -207,6 +242,27 @@ public class MainWindow extends JFrame{
 			}
 		});
 		
+		
+		panel.add(etiquetaNombre);
+		panel.add(campoNombre);
+		panel.add(etiquetaFecha);
+		panel.add(dateChooser);
+		panel.add(fechaInicio);
+		panel.add(panel1);
+		panel.add(fechafinal);
+		panel.add(panel2);
+		panel.add(descripcion);
+		panel.add(texto);
+		panel.add(invitar);
+		panel.add(campoInvitar);
+		panel.add(etiquetaCategorias);
+		panel.add(categorias);
+		
+		ventanaEmergente.add(panel);
+	}
+
+	private void ventanaTienda() {
+		JPanel panel = new JPanel();
 	}
 	
 	public static void main(String[] args) {
