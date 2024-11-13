@@ -62,12 +62,6 @@ public class VentanaRegistroDef extends JFrame {
         gbc.insets = new Insets(5, 10, 20, 10);
         datos.add(introducirDatos, gbc);
 
-        // Espacio entre texto e inputs, aquí va el logo.
-        gbc.gridy = 2;
-        gbc.insets = new Insets(20, 10, 20, 10);
-        gbc.gridheight = 1;
-        datos.add(Box.createVerticalStrut(0), gbc);
-
         gbc.gridwidth = 1;
 
         JLabel username = new JLabel("Usuario");
