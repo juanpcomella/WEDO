@@ -517,6 +517,9 @@ public class ventanaCuestionario extends JFrame {
 				System.out.println("Tu rango es: " + rango);
 				System.out.println("Has obtenido " + puntos+ " puntos");
 				
+				JOptionPane.showMessageDialog(null, "Cuestionario realizado con exito"
+						,"Gracias por la informacion",JOptionPane.INFORMATION_MESSAGE);
+				
 			} catch (NumberFormatException o) {
 				JOptionPane.showMessageDialog(null, "Faltan campos por rellenar o el formato no es correcto",
 						"Error", JOptionPane.ERROR_MESSAGE);
@@ -527,6 +530,20 @@ public class ventanaCuestionario extends JFrame {
     	
     });
      
+    
+    //listener de omitir
+    omitir.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			int respuesta = JOptionPane.showConfirmDialog(null, "¿Desea omitir el cuestionario?","Omitir",
+					JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE );
+			if (respuesta == JOptionPane.YES_OPTION) {
+				dispose();
+			}
+		}
+	});
     }
     
     public static void main(String[] args) {
