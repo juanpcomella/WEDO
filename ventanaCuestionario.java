@@ -14,6 +14,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -319,7 +320,7 @@ public class ventanaCuestionario extends JFrame {
         //ajustamos el tamaño
         Font largeFont = new Font("Georgia", Font.PLAIN, 18);  // Fuente grande
 
-     // Configura fuentes más grandes para los componentes
+     //configura fuentes más grandes para los componentes
      logoL.setFont(new Font("Serif", Font.BOLD, 24));
      fechaNacL.setFont(largeFont);
      sexoL.setFont(largeFont);
@@ -334,7 +335,7 @@ public class ventanaCuestionario extends JFrame {
      omitir.setFont(largeFont);
      enviar.setFont(largeFont);
 
-     // Aplica la fuente a los JComboBox y JTextFields
+     //aplica la fuente a los JComboBox y JTextFields
      selectAños.setFont(largeFont);
      selectMes.setFont(largeFont);
      selectDia.setFont(largeFont);
@@ -347,95 +348,25 @@ public class ventanaCuestionario extends JFrame {
      pesoTF.setFont(largeFont);
      alturaTF.setFont(largeFont);
 
-     // Aplica la fuente a los JCheckBox
+     //aplica la fuente a los JCheckBox
      hombreC.setFont(largeFont);
      mujerC.setFont(largeFont);
 
-     // Envolver el panel final en un JScrollPane
+     //envolver el panel final en un JScrollPane
      JScrollPane scrollPane = new JScrollPane(panelFinal);
      scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-     // Añadir el JScrollPane al JFrame
+     //añadir el JScrollPane al JFrame
      add(scrollPane, BorderLayout.CENTER);
+   
+
+    
      
      //calculo de rango segun los datos
      //recogemos todos los datos y segun estos el usuario entrara en un rango u otro
      
 
-     
-     pesoTF.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				int peso = Integer.parseInt(pesoTF.getText());
-			}
-		});
-     alturaTF.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				int altura = (Integer.parseInt(alturaTF.getText())/100);
-			}
-		});
-     selectDeporte.addActionListener(new ActionListener() {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			int opcionDeporte = selectDeporte.getSelectedIndex();
-		}
-	});
-    
-     selectTrabajo.addActionListener(new ActionListener() {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			int opcionTrabajo = selectTrabajo.getSelectedIndex();
-		}
-	});
-     
-    selectNutricion.addActionListener(new ActionListener() {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			int opcionNutricion = selectNutricion.getSelectedIndex();
-		}
-	});
-    
-    selectAlc.addActionListener(new ActionListener() {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			int opcionAlc = selectAlc.getSelectedIndex();
-		}
-	});
-    
-    selectSue.addActionListener(new ActionListener() {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			int opcionSue = selectSue.getSelectedIndex();
-		}
-	});
-    
-    selectFum.addActionListener(new ActionListener() {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			String opcionFum = (String) selectFum.getSelectedItem();
-		}
-	});
-    
-    //estos dos dan error dentro del actionListener
-	//int peso = Integer.parseInt(pesoTF.getText());
-	//double altura = (Double.parseDouble(alturaTF.getText())/100);
+
     
     //calculamos el indice de masa corporal
     enviar.addActionListener(new ActionListener() {
@@ -452,18 +383,145 @@ public class ventanaCuestionario extends JFrame {
 				int opcionSue = selectSue.getSelectedIndex();
 			    int opcionFum = selectFum.getSelectedIndex();
 				int opcionAlc = selectAlc.getSelectedIndex();
+				int edad = añoActual-(Integer.parseInt((String) selectAños.getSelectedItem()));
+				
+				//calculamos el indice de masa corporal
 				double Imc = peso/(altura*altura);
 				
-				System.out.println(altura);
+				//ahora realizaremos el conteo de los puntos:
+				double puntos =0;
 				
-			    // Realiza las operaciones necesarias con peso y altura
-			} catch (NumberFormatException o) {
-			    System.out.println("Error: Asegúrate de ingresar números válidos en ambos campos y de rellenar los campos.");
-			}
-			//calculamos el indice de masa corporal
-			double Imc = peso/(altura*altura);
+				//caso del imc:
+				//cabe recalcar que hay casos en los que el sobrepeso no es peligroso o malo
+				if (Imc<18.5) {
+					//infrapeso
+					puntos-=1;
+				} else if (Imc>18.5 && Imc<24.9) {
+					//peso normal
+					puntos+=0;
+				} else if (Imc>24.9 && Imc<29.9) {
+					//sobrepeso
+					puntos-=1.5;
+				} else if (Imc>29.9 && Imc<34.9) {
+					//obesidad leve
+					puntos-=2;
+				} else {
+					//obesidad
+					puntos-=3;
+				}
+				
+				//ahora caso de deporte
+				if (opcionDeporte==0) {
+					//deportes relajados
+					puntos+=0;
+				} else if (opcionDeporte==1) {
+					puntos+=1;
+				} else if (opcionDeporte==2) {
+					puntos+=2;
+				} else {
+					puntos-=1;
+				}
+				
+				//caso de estudio o trabajo:
+				if (opcionTrabajo==0) {
+					//todo el dia en bici, etc. muchas calorias quemadas aunque no se haga deporte
+					puntos+=2;
+				} else if (opcionTrabajo==1) {
+					//medio
+					puntos+=0;
+				} else {
+					//trabajo de estar sentado, apenas nada quemado
+					puntos-=1;
+				}
+				
+				//caso alimentacion
+				if (opcionNutricion==0) {
+					//todo casero
+					puntos+=2;
+				} else if (opcionNutricion==1) {
+					puntos+=1;
+				} else if (opcionNutricion==2) {
+					puntos+=0;
+				} else {
+					//como chatarra, -2 porque la alimentacion es un factor muy a tener en cuenta
+					puntos-=2;
+				}
+				
+				//caso alcohol
+				//cierto que los casos "excesivo","moderado" pueden ser muy relativos, pero es a considerar
+				//por el usuario
+				if (opcionAlc==0) {
+					puntos-=2;
+				} else if (opcionAlc==1) {
+					puntos-=1;
+				} else if (opcionAlc==2) {
+					puntos+=0;
+				} else {
+					puntos+=1;
+				}
+				
+				//caso fumar
+				if (opcionFum==0) {
+					//diariamente
+					puntos-=2;
+				} else if (opcionFum==1) {
+					puntos-=1;
+				} else {
+					puntos+=1;
+				}
+				
+				//caso dormir:
+				if (opcionSue==0) {
+					puntos+=2;
+				} else if (opcionSue==1) {
+					puntos+=1;
+				} else if (opcionSue==2) {
+					puntos+=0;
+				} else {
+					puntos-=1;
+				}
+				
+				//caso edad
+				if (edad<16) {
+					puntos+=0;
+				} else if (edad>16 && edad<20) {
+					puntos+=1;
+				} else if (edad>20 && edad<30) {
+					puntos+=2;
+				} else if (edad>30 && edad<40) {
+					puntos+=1;
+				} else if (edad>40 && edad<50) {
+					puntos+=0;
+				} else if (edad>50 && edad<65) {
+					puntos-=1;
+				} else {
+					puntos-=2;
+				}
+				
+				
+				//ahora dependiendo de los puntos que tenga el usuario, estara en un rango o en otro
+				String rango;
 
-			System.out.println(altura);
+				if (puntos < -5) {
+				    rango = "Principiante";
+				} else if (puntos >= -5 && puntos <= 0) {
+				    rango = "Seminovato";
+				} else if (puntos >= 1 && puntos <= 5) {
+				    rango = "Normal";
+				} else if (puntos >= 6 && puntos <= 8) {
+				    rango = "Avanzado";
+				} else {
+				    rango = "Ultraavanzado";
+				}
+
+				System.out.println("Tu rango es: " + rango);
+				System.out.println("Has obtenido " + puntos+ " puntos");
+				
+			} catch (NumberFormatException o) {
+				JOptionPane.showMessageDialog(null, "Faltan campos por rellenar o el formato no es correcto",
+						"Error", JOptionPane.ERROR_MESSAGE);
+			}
+
 			
 		}
     	
