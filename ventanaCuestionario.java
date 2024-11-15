@@ -402,7 +402,7 @@ public class ventanaCuestionario extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			int opcionNutri = selectNutricion.getSelectedIndex();
+			int opcionNutricion = selectNutricion.getSelectedIndex();
 		}
 	});
     
@@ -429,12 +429,45 @@ public class ventanaCuestionario extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			int opcionFum = selectFum.getSelectedIndex();
+			String opcionFum = (String) selectFum.getSelectedItem();
 		}
 	});
     
+    //estos dos dan error dentro del actionListener
+	//int peso = Integer.parseInt(pesoTF.getText());
+	//double altura = (Double.parseDouble(alturaTF.getText())/100);
     
     //calculamos el indice de masa corporal
+    enviar.addActionListener(new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			try {
+			    int peso = Integer.parseInt(pesoTF.getText());
+			    double altura = Double.parseDouble(alturaTF.getText()) / 100;
+			    int opcionDeporte = selectDeporte.getSelectedIndex();
+				int opcionTrabajo = selectTrabajo.getSelectedIndex();
+				int opcionNutricion = selectNutricion.getSelectedIndex();
+				int opcionSue = selectSue.getSelectedIndex();
+			    int opcionFum = selectFum.getSelectedIndex();
+				int opcionAlc = selectAlc.getSelectedIndex();
+				double Imc = peso/(altura*altura);
+				
+				System.out.println(altura);
+				
+			    // Realiza las operaciones necesarias con peso y altura
+			} catch (NumberFormatException o) {
+			    System.out.println("Error: Asegúrate de ingresar números válidos en ambos campos y de rellenar los campos.");
+			}
+			//calculamos el indice de masa corporal
+			double Imc = peso/(altura*altura);
+
+			System.out.println(altura);
+			
+		}
+    	
+    });
      
     }
     
