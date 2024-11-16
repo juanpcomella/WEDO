@@ -9,90 +9,108 @@ public class ProfileWindow extends JFrame {
         setTitle("WEDO - Profile");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 500);
+        setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
-        add(panel);
+        JPanel mainPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.BOTH;
 
-        // Left Panel
+        // Left Panel Configuration
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0.5;
         gbc.weighty = 1.0;
-        gbc.gridwidth = 1;
+        JPanel leftPanel = new JPanel(new GridBagLayout());
+        leftPanel.setBackground(Color.WHITE);
 
-        JPanel panelIzquierda = new JPanel();
-        panelIzquierda.setLayout(new GridBagLayout());
+        // Left Panel - Profile Picture
         GridBagConstraints leftGBC = new GridBagConstraints();
-
         leftGBC.insets = new Insets(5, 5, 5, 5);
         leftGBC.fill = GridBagConstraints.BOTH;
-
-        panelIzquierda.setBackground(Color.BLUE);
-        panelIzquierda.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-        // Temporary JPanel for profile picture
         leftGBC.gridx = 0;
         leftGBC.gridy = 0;
-        leftGBC.gridwidth = 2;
-        leftGBC.weightx = 0.9;
-        leftGBC.weighty = 0.5;
-        JPanel profilePicture = new JPanel();
-        profilePicture.setBackground(Color.YELLOW);
-        panelIzquierda.add(profilePicture, leftGBC);
+        leftGBC.weightx = 1.0;
+        leftGBC.weighty = 0.4;
 
-        // Username JLabel
-        leftGBC.gridx = 0;
+        JPanel profilePicturePanel = new JPanel();
+        profilePicturePanel.setBackground(Color.BLUE);
+        profilePicturePanel.setPreferredSize(new Dimension(200, 200));
+        profilePicturePanel.setLayout(new BorderLayout());
+
+        JLabel profilePictureLabel = new JLabel("Foto de Perfil", SwingConstants.CENTER);
+        profilePicturePanel.add(profilePictureLabel, BorderLayout.CENTER);
+        leftPanel.add(profilePicturePanel, leftGBC);
+
+        // Left Panel - Username and Button Row
         leftGBC.gridy = 1;
-        leftGBC.gridwidth = 2;
-        leftGBC.weightx = 0.9;
         leftGBC.weighty = 0.2;
-        JLabel username = new JLabel("Nombre Usuario", SwingConstants.CENTER);
-        username.setOpaque(true);
-        username.setBackground(Color.YELLOW);
-        panelIzquierda.add(username, leftGBC);
 
-        panel.add(panelIzquierda, gbc);
+        JPanel usernamePanel = new JPanel(new GridBagLayout());
+        usernamePanel.setBackground(Color.WHITE);
+        JLabel usernameLabel = new JLabel("Nombre Usuario", SwingConstants.CENTER);
+        usernameLabel.setFont(new Font("Serif", Font.BOLD, 18));
+        usernamePanel.add(usernameLabel);
+        leftPanel.add(usernamePanel, leftGBC);
 
-        // Right Panel
+        // Left Panel - Description Row
+        leftGBC.gridy = 2;
+        leftGBC.weighty = 0.4;
+
+        JPanel descriptionPanel = new JPanel();
+        descriptionPanel.setBackground(Color.WHITE);
+        JLabel descriptionLabel = new JLabel("Alguna descripción o algún dato noc");
+        descriptionPanel.add(descriptionLabel);
+        leftPanel.add(descriptionPanel, leftGBC);
+
+        mainPanel.add(leftPanel, gbc);
+
+        // Right Panel Configuration
         gbc.gridx = 1;
         gbc.gridy = 0;
-        gbc.weightx = 0.5; // Equal weight for right panel
+        gbc.weightx = 0.5;
         gbc.weighty = 1.0;
-        gbc.gridwidth = 1;
+        JPanel rightPanel = new JPanel(new GridBagLayout());
+        rightPanel.setBackground(Color.WHITE);
 
-        JPanel panelDerecha = new JPanel();
-        panelDerecha.setLayout(new GridBagLayout());
         GridBagConstraints rightGBC = new GridBagConstraints();
-
         rightGBC.insets = new Insets(5, 5, 5, 5);
         rightGBC.fill = GridBagConstraints.BOTH;
-
-        panelDerecha.setBackground(Color.RED);
-        panelDerecha.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
         rightGBC.gridx = 0;
+        rightGBC.weightx = 1.0;
+
+        // Right Panel - Daily Streaks Panel
         rightGBC.gridy = 0;
-        rightGBC.gridwidth = 2;
-        rightGBC.weightx = 0.9;
-        rightGBC.weighty = 0.5;
+        rightGBC.weighty = 0.3;
+        JPanel dailyStreakPanel = new JPanel();
+        dailyStreakPanel.setBackground(Color.BLUE);
+        dailyStreakPanel.add(new JLabel("Racha de objetivos diarios"));
+        rightPanel.add(dailyStreakPanel, rightGBC);
 
-        JLabel rachaLabel = new JLabel("Racha de objetivos diarios");
-        rachaLabel.setOpaque(true);
-        rachaLabel.setBackground(Color.YELLOW);
-        panelDerecha.add(rachaLabel, rightGBC);
+        // Right Panel - Progress Panel
+        rightGBC.gridy = 1;
+        rightGBC.weighty = 0.3;
+        JPanel progressPanel = new JPanel();
+        progressPanel.setBackground(Color.BLUE);
+        progressPanel.add(new JLabel("Progreso de algún objetivo"));
+        rightPanel.add(progressPanel, rightGBC);
 
-        panel.add(panelDerecha, gbc);
+        // Right Panel - Calendar Panel
+        rightGBC.gridy = 2;
+        rightGBC.weighty = 0.4;
+        JPanel calendarPanel = new JPanel();
+        calendarPanel.setBackground(Color.BLUE);
+        calendarPanel.add(new JLabel("Calendario con eventos públicos"));
+        rightPanel.add(calendarPanel, rightGBC);
+
+        mainPanel.add(rightPanel, gbc);
+
+        // Add main panel to frame
+        add(mainPanel);
     }
 
     public static void main(String[] args) {
         ProfileWindow window = new ProfileWindow();
-        window.setLocationRelativeTo(null);
         window.setVisible(true);
     }
 }
-
-// test
