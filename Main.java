@@ -2,7 +2,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        PrimeraVentana pv = new PrimeraVentana();
+        VentanaBienvenida pv = new VentanaBienvenida();
         pv.setResizable(false);
         pv.setLocationRelativeTo(null);
         pv.setVisible(true);
