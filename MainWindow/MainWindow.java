@@ -9,10 +9,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+
 import com.toedter.calendar.JDateChooser;
 
 public class MainWindow extends JFrame{
+	
     private JDateChooser dateChooser;
+    
     public MainWindow() {
         setTitle("WEDO");
         setSize(800,500);
