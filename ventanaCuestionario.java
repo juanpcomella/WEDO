@@ -544,7 +544,7 @@ public class ventanaCuestionario extends JFrame {
 			}
 		}
 	});
-    }
+    }//udue
     
     public static void main(String[] args) {
         ventanaCuestionario ventana = new ventanaCuestionario();
