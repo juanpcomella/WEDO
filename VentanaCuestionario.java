@@ -110,7 +110,7 @@ public class VentanaCuestionario extends JFrame {
         JPanel panelNutricion = new JPanel (new FlowLayout(FlowLayout.CENTER));
         JPanel panelAlc = new JPanel (new FlowLayout(FlowLayout.CENTER));
         JPanel panelFumar = new JPanel (new FlowLayout(FlowLayout.CENTER));
-        JPanel panelSueño = new JPanel (new FlowLayout(FlowLayout.CENTER));
+        JPanel panelSueno = new JPanel (new FlowLayout(FlowLayout.CENTER));
         JPanel panelOE = new JPanel (new FlowLayout());
         JPanel panelLogo = new JPanel(new FlowLayout(FlowLayout.CENTER));
         //JButtons para darle a omitir o a enviar
@@ -126,12 +126,12 @@ public class VentanaCuestionario extends JFrame {
         //JScrollPane
         JScrollPane p = new JScrollPane(panelFinal);
         // Creamos las listas de años y meses
-        int añoInicio = 1925;
-        int añoActual = LocalDate.now().getYear();
+        int anoInicio = 1925;
+        int anoActual = LocalDate.now().getYear();
 
-        ArrayList<String> listaAños = new ArrayList<>();
-        for (int año = añoInicio; año <= añoActual; año++) {
-            listaAños.add(String.valueOf(año));
+        ArrayList<String> listaAnos = new ArrayList<>();
+        for (int ano = anoInicio; ano <= anoActual; ano++) {
+            listaAnos.add(String.valueOf(ano));
         }
 
         ArrayList<String> dias = new ArrayList<>();
@@ -140,7 +140,7 @@ public class VentanaCuestionario extends JFrame {
             dias.add(String.valueOf(dia));
         }
 
-        String[] años = listaAños.toArray(new String[0]);
+        String[] anos = listaAnos.toArray(new String[0]);
         String[] meses = {"enero", "febrero", "marzo", "abril", "mayo", "junio",
                 "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"};
         String[] diasS = dias.toArray(new String[0]);
@@ -167,7 +167,7 @@ public class VentanaCuestionario extends JFrame {
         String [] suenoS = {"duermo 8 horas o más al día","duermo entre 7 y 8 horas al día","duermo entre 6 y 7 horas al día","duermo menos de 6 horas al día"};
 
         // Creamos los JComboBox
-        JComboBox<String> selectAños = new JComboBox<>(años);
+        JComboBox<String> selectAnos = new JComboBox<>(anos);
         JComboBox<String> selectMes = new JComboBox<>(meses);
         JComboBox<String> selectDia = new JComboBox<>(diasS);
         JComboBox<String> selectNutricion = new JComboBox<>(nutricionS);
@@ -224,7 +224,7 @@ public class VentanaCuestionario extends JFrame {
         JLabel fumarL = new JLabel ("Consumo de tabaco");
 
         //JLabel que va a indicar la opcion de sueño
-        JLabel sueñoL = new JLabel ("Horas de sueño: ");
+        JLabel suenoL = new JLabel ("Horas de sueño: ");
 
 
         hombreC.addActionListener(new ActionListener() {
@@ -252,7 +252,7 @@ public class VentanaCuestionario extends JFrame {
 
         // Añadimos los elementos al panelEdad
         panelEdad.add(fechaNacL);
-        panelEdad.add(selectAños);
+        panelEdad.add(selectAnos);
         panelEdad.add(selectMes);
         panelEdad.add(selectDia);
 
@@ -291,8 +291,8 @@ public class VentanaCuestionario extends JFrame {
         panelFumar.add(selectFum);
 
         //añadimos los elementos al panelSueño
-        panelSueño.add(sueñoL);
-        panelSueño.add(selectSue);
+        panelSueno.add(suenoL);
+        panelSueno.add(selectSue);
 
         //panelLogo añadir el logo
         panelLogo.add(logoL);
@@ -308,7 +308,7 @@ public class VentanaCuestionario extends JFrame {
         panelFinal.add(panelNutricion);
         panelFinal.add(panelAlc);
         panelFinal.add(panelFumar);
-        panelFinal.add(panelSueño);
+        panelFinal.add(panelSueno);
         panelFinal.add(panelOE);
 
 
@@ -332,12 +332,12 @@ public class VentanaCuestionario extends JFrame {
         nutricionL.setFont(largeFont);
         alcoL.setFont(largeFont);
         fumarL.setFont(largeFont);
-        sueñoL.setFont(largeFont);
+        suenoL.setFont(largeFont);
         omitir.setFont(largeFont);
         enviar.setFont(largeFont);
 
         //aplica la fuente a los JComboBox y JTextFields
-        selectAños.setFont(largeFont);
+        selectAnos.setFont(largeFont);
         selectMes.setFont(largeFont);
         selectDia.setFont(largeFont);
         selectNutricion.setFont(largeFont);
@@ -384,7 +384,7 @@ public class VentanaCuestionario extends JFrame {
                     int opcionSue = selectSue.getSelectedIndex();
                     int opcionFum = selectFum.getSelectedIndex();
                     int opcionAlc = selectAlc.getSelectedIndex();
-                    int edad = añoActual-(Integer.parseInt((String) selectAños.getSelectedItem()));
+                    int edad = anoActual-(Integer.parseInt((String) selectAnos.getSelectedItem()));
 
 //calculamos el indice de masa corporal
                     double Imc = peso/(altura*altura);
