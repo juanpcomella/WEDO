@@ -52,6 +52,8 @@ public class MainWindow extends JFrame{
 		
 		//APARTADO PRINCIPAL (CALENDARIO)
 		
+		
+		
 		//APARTADO TIENDA, ARRIBA DE LA PANTALLA
 		
 		JButton botonTienda = new JButton();
