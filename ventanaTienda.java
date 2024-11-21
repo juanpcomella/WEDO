@@ -1,13 +1,11 @@
-package out.production;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-public class ventanaTtienda extends JFrame {
+public class ventanaTienda extends JFrame {
 
-    public ventanaTtienda() {
+    public ventanaTienda() {
         // Configuración de la ventana principal
         setTitle("Tienda");
         setSize(800, 600);
@@ -103,7 +101,7 @@ public class ventanaTtienda extends JFrame {
 
     public static void main(String[] args) {
         // Crear e iniciar la ventana
-        ventanaTtienda ventana = new ventanaTtienda();
+        ventanaTienda ventana = new ventanaTienda();
         ventana.setVisible(true);
     }
 }
