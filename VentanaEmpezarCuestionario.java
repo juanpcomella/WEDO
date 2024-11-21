@@ -1,13 +1,13 @@
 
 
+import MainWindow.MainWindow;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,9 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
-
-import MainWindow.MainWindow;
 
 public class VentanaEmpezarCuestionario extends JFrame {
     /**
@@ -81,9 +78,9 @@ public class VentanaEmpezarCuestionario extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainWindow nuevaVentana = new MainWindow();
-				nuevaVentana.setVisible(true);
-				dispose();			
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.setVisible(true);
+                dispose();
 			}
         });
         botonOmitir.setForeground(new Color(255,255,255));

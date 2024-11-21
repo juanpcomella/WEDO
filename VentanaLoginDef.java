@@ -1,7 +1,7 @@
+import MainWindow.MainWindow;
+
 import javax.swing.*;
 import javax.swing.border.Border;
-
-import MainWindow.MainWindow;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -132,10 +132,9 @@ public class VentanaLoginDef extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainWindow nuevaVentana = new MainWindow();
-				nuevaVentana.setVisible(true);
-				dispose();
-				
+                MainWindow mw = new MainWindow();
+                mw.setVisible(true);
+                dispose();
 			}
 		});
         gbc.gridx = 0;

@@ -1,3 +1,5 @@
+import MainWindow.MainWindow;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -6,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.concurrent.Flow;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -16,8 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-
-import MainWindow.MainWindow;
 
 public class VentanaCuestionario extends JFrame {
     public VentanaCuestionario() {
@@ -46,9 +45,9 @@ public class VentanaCuestionario extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainWindow nuevaVentana = new MainWindow();
-				nuevaVentana.setVisible(true);
-				dispose();
+				MainWindow mw = new MainWindow();
+                mw.setVisible(true);
+                dispose();
 			}
 		});
         ;
@@ -57,9 +56,9 @@ public class VentanaCuestionario extends JFrame {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					MainWindow nuevaVentana = new MainWindow();
-					nuevaVentana.setVisible(true);
-					dispose();
+					MainWindow mw = new MainWindow();
+                    mw.setVisible(true);
+                    dispose();
 				}
 			});
 	
