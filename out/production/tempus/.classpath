@@ -6,6 +6,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path=""/>
-	<classpathentry kind="lib" path="C:/Users/ander.ormazabal/Downloads/jcalendar-1.4.jar"/>
+	<classpathentry kind="lib" path="Libraries/jcalendar-1.4.jar"/>
 	<classpathentry kind="output" path="out/production/tempus"/>
 </classpath>
