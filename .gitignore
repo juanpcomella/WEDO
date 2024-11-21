@@ -11,4 +11,3 @@ build/
 # Ignore JARs and compiled classes
 *.class
 *.jar
-
