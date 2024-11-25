@@ -142,8 +142,11 @@ public class ventanaTienda extends JFrame {
         
 		iconoT.setDefaultEditor(Object.class, new DefaultCellEditor(new JTextField()) {
 		    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
 		    if (column == hoveredColumn && row == hoveredRow) {
 		    	JButton comprarB = new JButton("Comprar");
+		    	panel.add(comprarB);
 		    	comprarB.addActionListener(new ActionListener() {
 					
 					@Override
