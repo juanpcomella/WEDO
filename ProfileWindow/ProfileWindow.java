@@ -1,7 +1,22 @@
 package ProfileWindow;
 
+import jdk.jfr.Percentage;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
+import javax.swing.event.*;
 
 public class ProfileWindow extends JFrame {
 
@@ -33,13 +48,19 @@ public class ProfileWindow extends JFrame {
         leftGBC.weightx = 1.0;
         leftGBC.weighty = 0.4;
 
-        JPanel profilePicturePanel = new JPanel();
-        profilePicturePanel.setBackground(Color.BLUE);
-        profilePicturePanel.setPreferredSize(new Dimension(200, 200));
-        profilePicturePanel.setLayout(new BorderLayout());
+        JPanel profilePicturePanel = new JPanel(new BorderLayout());
+        profilePicturePanel.setBackground(Color.WHITE);
 
-        JLabel profilePictureLabel = new JLabel("Foto de Perfil", SwingConstants.CENTER);
-        profilePicturePanel.add(profilePictureLabel, BorderLayout.CENTER);
+        try {
+            // Load the image and convert to a circular format
+            BufferedImage profileImage = ImageIO.read(new File("imagenes/PERFIL.png")); // Update with your image path
+            JLabel profilePictureLabel = new JLabel(new ImageIcon(getCircularImage(profileImage, 200)));
+            profilePicturePanel.add(profilePictureLabel, BorderLayout.CENTER);
+        } catch (IOException e) {
+            e.printStackTrace();
+            profilePicturePanel.add(new JLabel("Image not found"), BorderLayout.CENTER);
+        }
+
         leftPanel.add(profilePicturePanel, leftGBC);
 
         // Left Panel - Username and Button Row
@@ -90,9 +111,37 @@ public class ProfileWindow extends JFrame {
         // Right Panel - Progress Panel
         rightGBC.gridy = 1;
         rightGBC.weighty = 0.3;
-        JPanel progressPanel = new JPanel();
+        JPanel progressPanel = new JPanel(new BorderLayout());
+        progressPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); // Top, Left, Bottom, Right padding
+
         progressPanel.setBackground(Color.BLUE);
-        progressPanel.add(new JLabel("Progreso de algún objetivo"));
+
+        JLabel progressLabel = new JLabel("Titulo Objetivo", SwingConstants.CENTER);
+        progressLabel.setForeground(Color.WHITE);
+        progressPanel.add(progressLabel, BorderLayout.NORTH);
+
+        JPanel componentPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        componentPanel.setBackground(Color.LIGHT_GRAY);
+
+        JLabel percentageLabel = new JLabel("0%", JLabel.CENTER);
+        percentageLabel.setForeground(Color.WHITE);
+        componentPanel.add(percentageLabel, BorderLayout.CENTER);
+
+        JProgressBar progressBar = new JProgressBar(0, 100);
+        progressBar.setValue(60);
+        progressBar.setStringPainted(false);
+
+        progressBar.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                int progress = progressBar.getValue(); // Get the current value of the progress bar
+                percentageLabel.setText(progress + "%"); // Update the percentage label
+            }
+        });
+
+        componentPanel.add(progressBar);
+
+        progressPanel.add(componentPanel, BorderLayout.CENTER);
         rightPanel.add(progressPanel, rightGBC);
 
         // Right Panel - Calendar Panel
@@ -107,6 +156,25 @@ public class ProfileWindow extends JFrame {
 
         // Add main panel to frame
         add(mainPanel);
+    }
+
+    // Method to create a circular image
+    private BufferedImage getCircularImage(BufferedImage image, int diameter) {
+        BufferedImage output = new BufferedImage(diameter, diameter, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = output.createGraphics();
+
+        // Enable anti-aliasing for smoother edges
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // Create a circular clip
+        Ellipse2D.Double circle = new Ellipse2D.Double(0, 0, diameter, diameter);
+        g2d.setClip(circle);
+
+        // Draw the image scaled to fit within the circle
+        g2d.drawImage(image, 0, 0, diameter, diameter, null);
+
+        g2d.dispose();
+        return output;
     }
 
     public static void main(String[] args) {
