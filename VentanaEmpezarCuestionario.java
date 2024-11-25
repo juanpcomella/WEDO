@@ -57,7 +57,7 @@ public class VentanaEmpezarCuestionario extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				VentanaCuestionario nuevaVentana = new VentanaCuestionario();
+				ventanaCuestionario nuevaVentana = new ventanaCuestionario();
 				nuevaVentana.setVisible(true);
 				dispose();			
 			}
