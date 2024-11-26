@@ -45,22 +45,28 @@ public class Calendario extends JPanel {
      }
 
     private void Calendar() {
-    	setLayout(new BorderLayout());
+        setLayout(new BorderLayout());
 
         JPanel panelArriba = new JPanel(new BorderLayout());
         tituloLabel = new JLabel(getMonthYearString(), SwingConstants.CENTER);
         tituloLabel.setFont(new Font("Arial", Font.BOLD, 16));
         panelArriba.add(tituloLabel, BorderLayout.CENTER);
 
-        JButton prevButton = new JButton("<");
-        JButton nextButton = new JButton(">");
-        prevButton.addActionListener(e -> actualizarMes(-1));
-        nextButton.addActionListener(e -> actualizarMes(1));
+        JButton botonPrevio = new JButton("<");
+        JButton botonSiguiente = new JButton(">");
+        JButton botonMesActual = new JButton("Mes Actual");
 
-        JPanel monthPanel = new JPanel();
-        monthPanel.add(prevButton);
-        monthPanel.add(nextButton);
-        panelArriba.add(monthPanel, BorderLayout.WEST);
+        botonPrevio.addActionListener(e -> actualizarMes(-1));
+        botonSiguiente.addActionListener(e -> actualizarMes(1));
+        botonMesActual.addActionListener(e -> irMesActual());
+        
+        botonMesActual.setBackground(Color.LIGHT_GRAY);
+
+        JPanel mesPanel = new JPanel();
+        mesPanel.add(botonPrevio);
+        mesPanel.add(botonSiguiente);
+        mesPanel.add(botonMesActual);
+        panelArriba.add(mesPanel, BorderLayout.WEST);
 
         add(panelArriba, BorderLayout.NORTH);
 
@@ -73,6 +79,16 @@ public class Calendario extends JPanel {
     private String getMonthYearString() {
         return String.format("%d - %02d", año, mes);
     }
+    
+    private void irMesActual() {
+        LocalDate hoy = LocalDate.now();
+        this.año = hoy.getYear();
+        this.mes = hoy.getMonthValue();
+        this.seleccionado = hoy;
+        tituloLabel.setText(getMonthYearString());
+        actualizarVista();
+    }
+
 
     private void actualizarVista() {
         diasPanel.removeAll();
@@ -104,6 +120,7 @@ public class Calendario extends JPanel {
         int primeroSemana = primeroMes.getDayOfWeek().getValue();
         primeroSemana = (primeroSemana == 7) ? 6 : primeroSemana - 1;
         LocalDate hoy = LocalDate.now();
+        
 
         for (int i = 0; i < primeroSemana; i++) {
             diasPanel.add(new JLabel(""));
@@ -237,6 +254,7 @@ public class Calendario extends JPanel {
         frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        
     }
 
     public static void main(String[] args) {

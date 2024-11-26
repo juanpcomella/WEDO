@@ -1,26 +1,25 @@
 package MainWindow;
 
-import java.time.LocalDate;
-
-public class Evento {
-    private LocalDate fecha;
+class Evento {
+    private String nombre;
     private String descripcion;
+    private Categorias categoria;
 
-    public Evento(LocalDate fecha, String descripcion) {
-        this.fecha = fecha;
+    public Evento(String nombre, String descripcion, Categorias categoria) {
+        this.nombre = nombre;
         this.descripcion = descripcion;
+        this.categoria = categoria;
     }
 
-    public LocalDate getFecha() {
-        return fecha;
+    public String getNombre() {
+        return nombre;
     }
 
     public String getDescripcion() {
         return descripcion;
     }
 
-    @Override
-    public String toString() {
-        return descripcion;
+    public Categorias getCategoria() {
+        return categoria;
     }
 }
