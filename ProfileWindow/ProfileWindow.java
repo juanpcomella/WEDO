@@ -1,22 +1,12 @@
 package ProfileWindow;
 
-import jdk.jfr.Percentage;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.*;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.geom.Ellipse2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-
-import javax.swing.event.*;
 
 public class ProfileWindow extends JFrame {
 
@@ -52,8 +42,7 @@ public class ProfileWindow extends JFrame {
         profilePicturePanel.setBackground(Color.WHITE);
 
         try {
-            // Load the image and convert to a circular format
-            BufferedImage profileImage = ImageIO.read(new File("imagenes/PERFIL.png")); // Update with your image path
+            BufferedImage profileImage = ImageIO.read(new File("imagenes/PERFIL.png"));
             JLabel profilePictureLabel = new JLabel(new ImageIcon(getCircularImage(profileImage, 200)));
             profilePicturePanel.add(profilePictureLabel, BorderLayout.CENTER);
         } catch (IOException e) {
@@ -102,53 +91,106 @@ public class ProfileWindow extends JFrame {
 
         // Right Panel - Daily Streaks Panel
         rightGBC.gridy = 0;
-        rightGBC.weighty = 0.3;
-        JPanel dailyStreakPanel = new JPanel();
-        dailyStreakPanel.setBackground(Color.BLUE);
-        dailyStreakPanel.add(new JLabel("Racha de objetivos diarios"));
+        rightGBC.weighty = 0.2;
+        JPanel dailyStreakPanel = new JPanel(new BorderLayout());
+        dailyStreakPanel.setBackground(new Color(58, 92, 181));
+
+        JLabel streakTitleLabel = new JLabel("Racha de Objetivos Diarios", SwingConstants.CENTER);
+        streakTitleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        streakTitleLabel.setForeground(Color.WHITE);
+        streakTitleLabel.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
+        dailyStreakPanel.add(streakTitleLabel, BorderLayout.NORTH);
+
+        JPanel contentPanel = new JPanel(new GridBagLayout());
+        contentPanel.setBackground(new Color(58, 92, 181));
+        GridBagConstraints streakGBC = new GridBagConstraints();
+        streakGBC.insets = new Insets(5, 5, 5, 5);
+
+        streakGBC.gridx = 0;
+        streakGBC.gridy = 0;
+        streakGBC.anchor = GridBagConstraints.CENTER;
+        JLabel flameIcon = new JLabel("🔥");
+        flameIcon.setFont(new Font("Arial", Font.PLAIN, 48));
+        contentPanel.add(flameIcon, streakGBC);
+
+        streakGBC.gridx = 1;
+        streakGBC.gridy = 0;
+        streakGBC.anchor = GridBagConstraints.WEST;
+        int streakCount = 0;
+        JLabel streakCountLabel = new JLabel(streakCount + "");
+        streakCountLabel.setFont(new Font("Arial", Font.BOLD, 48));
+        streakCountLabel.setForeground(new Color(255, 165, 0));
+        contentPanel.add(streakCountLabel, streakGBC);
+
+        streakGBC.gridx = 2;
+        streakGBC.gridy = 0;
+
+        contentPanel.add(Box.createHorizontalStrut(20), streakGBC);
+
+        streakGBC.gridx = 3;
+        streakGBC.gridy = 0;
+
+        streakGBC.anchor = GridBagConstraints.CENTER;
+        JPanel gridPanel = new JPanel(new GridLayout(2, 2, 10, 10));
+        gridPanel.setBackground(new Color(58, 92, 181));
+
+        for (int i = 0; i < 4; i++) {
+            JPanel box = new JPanel();
+            box.setPreferredSize(new Dimension(40, 40));
+            box.setBackground(new Color(173, 216, 230));
+            gridPanel.add(box);
+        }
+
+        contentPanel.add(gridPanel, streakGBC);
+
+        dailyStreakPanel.add(contentPanel, BorderLayout.CENTER);
+
         rightPanel.add(dailyStreakPanel, rightGBC);
 
         // Right Panel - Progress Panel
         rightGBC.gridy = 1;
-        rightGBC.weighty = 0.3;
-        JPanel progressPanel = new JPanel(new BorderLayout());
-        progressPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); // Top, Left, Bottom, Right padding
+        rightGBC.weighty = 0.2;
 
-        progressPanel.setBackground(Color.BLUE);
+        JPanel progressPanel = new JPanel();
+        progressPanel.setBackground(new Color(58, 92, 181));
+        progressPanel.setLayout(new BoxLayout(progressPanel, BoxLayout.Y_AXIS));
 
-        JLabel progressLabel = new JLabel("Titulo Objetivo", SwingConstants.CENTER);
+        progressPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JLabel progressLabel = new JLabel("Titulo del objetivo", SwingConstants.CENTER);
+        progressLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         progressLabel.setForeground(Color.WHITE);
-        progressPanel.add(progressLabel, BorderLayout.NORTH);
+        progressLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        progressPanel.add(progressLabel);
 
-        JPanel componentPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        componentPanel.setBackground(Color.LIGHT_GRAY);
+        progressPanel.add(Box.createVerticalGlue());
 
-        JLabel percentageLabel = new JLabel("0%", JLabel.CENTER);
+        JLabel percentageLabel = new JLabel("0%", SwingConstants.CENTER);
+        percentageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         percentageLabel.setForeground(Color.WHITE);
-        componentPanel.add(percentageLabel, BorderLayout.CENTER);
+        percentageLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        progressPanel.add(percentageLabel);
+
+        progressPanel.add(Box.createVerticalStrut(5));
 
         JProgressBar progressBar = new JProgressBar(0, 100);
-        progressBar.setValue(60);
+        progressBar.setValue(15);
         progressBar.setStringPainted(false);
+        progressBar.setPreferredSize(new Dimension(150, 10));
+        progressBar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        progressPanel.add(progressBar);
 
-        progressBar.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                int progress = progressBar.getValue(); // Get the current value of the progress bar
-                percentageLabel.setText(progress + "%"); // Update the percentage label
-            }
-        });
+        percentageLabel.setText(progressBar.getValue() + "%");
 
-        componentPanel.add(progressBar);
+        progressPanel.add(Box.createVerticalGlue());
 
-        progressPanel.add(componentPanel, BorderLayout.CENTER);
         rightPanel.add(progressPanel, rightGBC);
 
         // Right Panel - Calendar Panel
         rightGBC.gridy = 2;
         rightGBC.weighty = 0.4;
         JPanel calendarPanel = new JPanel();
-        calendarPanel.setBackground(Color.BLUE);
+        calendarPanel.setBackground(new Color(58, 92, 181));
         calendarPanel.add(new JLabel("Calendario con eventos públicos"));
         rightPanel.add(calendarPanel, rightGBC);
 
@@ -158,19 +200,14 @@ public class ProfileWindow extends JFrame {
         add(mainPanel);
     }
 
-    // Method to create a circular image
     private BufferedImage getCircularImage(BufferedImage image, int diameter) {
         BufferedImage output = new BufferedImage(diameter, diameter, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = output.createGraphics();
 
-        // Enable anti-aliasing for smoother edges
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Create a circular clip
         Ellipse2D.Double circle = new Ellipse2D.Double(0, 0, diameter, diameter);
         g2d.setClip(circle);
-
-        // Draw the image scaled to fit within the circle
         g2d.drawImage(image, 0, 0, diameter, diameter, null);
 
         g2d.dispose();
