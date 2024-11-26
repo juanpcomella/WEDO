@@ -147,7 +147,7 @@ public class VentanaLoginDef extends JFrame {
                     mw.setVisible(true);
                     dispose();
                 }
-                
+                //FALTA AÑADIR LA POSIBILIDAD DE INICIAR SESION CON EL EMAIL
 			}
 		});
         gbc.gridx = 0;
