@@ -160,6 +160,12 @@ public class VentanaRegistroDef extends JFrame {
                 	for (int i = 0; i < BDs.usuarioExistente().size(); i++) {
     		            System.out.println(BDs.usuarioExistente().get(i));
     				}
+                	for (int i = 0; i < BDs.contraseñaExistente().size(); i++) {
+    		            System.out.println(BDs.contraseñaExistente().get(i));
+    				}
+                	for (int i = 0; i < BDs.emailExistente().size(); i++) {
+    		            System.out.println(BDs.emailExistente().get(i));
+    				}
     				System.out.println(BDs.usuarioExistente().size());
                     JOptionPane.showMessageDialog(null, "Cuenta Creada! \nBienvenido a WEDO!");
                     VentanaEmpezarCuestionario nuevaVentana = new VentanaEmpezarCuestionario();

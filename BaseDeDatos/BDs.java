@@ -148,5 +148,39 @@ public class BDs {
 	return contraseñaExistente;
 	}
 	
+	public static ArrayList<String> emailExistente() {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+		}
+		Connection connection = null;
+		ArrayList<String> emailExistente = new ArrayList<>();
+
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuario2");//a partir de los ultimo : es donde quieres que se guarden
+			// Crear gestores de sentencias
+			Statement statement = connection.createStatement();//crear consultas
+			statement.setQueryTimeout(30);  // poner timeout 30 msg
+			
+			ResultSet rs = statement.executeQuery("select * from usuarios");
+			while(rs.next()) {
+				emailExistente.add(rs.getString("email"));
+			}
+
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+	return emailExistente;
+	}
 
 }

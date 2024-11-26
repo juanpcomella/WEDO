@@ -138,7 +138,7 @@ public class VentanaLoginDef extends JFrame {
 				String usernameUser = usernameTF.getText();
                 String passwordUser = new String(passwordTF.getPassword());
                 if(!BDs.usuarioExistente().contains(usernameUser)) {
-                	JOptionPane.showMessageDialog(null,"Nombre de usuario o contraseña incorrectos.");
+                    	JOptionPane.showMessageDialog(null,"Nombre de usuario o contraseña incorrectos.");
                 }else if(!BDs.contraseñaExistente().contains(passwordUser)) {
                 	JOptionPane.showMessageDialog(null,"Nombre de usuario o ontraseña incorrectos.");
                 }else {
