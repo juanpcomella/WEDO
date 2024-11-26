@@ -16,9 +16,6 @@ import java.util.HashMap;
 public class VentanaRegistroDef extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    String passwordBD;
-    String usernameBD;
-    String emailBD;
 
 	public VentanaRegistroDef() {
         setTitle("WEDO - Registro");
@@ -152,19 +149,14 @@ public class VentanaRegistroDef extends JFrame {
                 }else if (!passwordUser.equals(passwordConfUser)) {
                     JOptionPane.showMessageDialog(null,"Las contraseñas no son iguales.");
                 }
-//                else if(BDs.usuarioExistente().contains(usernameUser)){
-//                	JOptionPane.showMessageDialog(null,"Nombre de usuario existente");
-//                }else if(BDs.contraseñaExistente().contains(passwordUser)){
-//                	JOptionPane.showMessageDialog(null,"Nombre de usuario existente");
-//                }
-                else {
-                	passwordBD = passwordUser;
-    				usernameBD = usernameUser;
-    				emailBD = emailUser;
-    				
-                	
+                else if(BDs.usuarioExistente().contains(usernameUser)){
+                	JOptionPane.showMessageDialog(null,"Nombre de usuario existente.");
+                }else if(BDs.contraseñaExistente().contains(passwordUser)){
+                	JOptionPane.showMessageDialog(null,"Nombre de usuario existente.");
+                }
+                else {                	
                 	BDs.crearTabla();
-                	BDs.insertarElementos(usernameBD, passwordBD, emailBD);
+                	BDs.insertarElementos(usernameUser, passwordUser, emailUser);
                 	for (int i = 0; i < BDs.usuarioExistente().size(); i++) {
     		            System.out.println(BDs.usuarioExistente().get(i));
     				}

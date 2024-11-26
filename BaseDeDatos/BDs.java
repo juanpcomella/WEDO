@@ -52,7 +52,7 @@ public class BDs {
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
 			
-			String sql = "INSERT INTO usuarios (username, password, email) VALUES (?, ?, ?)";
+			String sql = "insert into usuarios (username, password, email) VALUES (?, ?, ?)";
 
             // Preparar la consulta
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -61,6 +61,8 @@ public class BDs {
             preparedStatement.setString(1, usuario);     
             preparedStatement.setString(2, contraseña);  
             preparedStatement.setString(3, email);
+            
+            preparedStatement.executeUpdate();
 
 		} catch(SQLException e) {
 			System.err.println(e.getMessage());
