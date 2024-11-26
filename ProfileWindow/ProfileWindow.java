@@ -2,6 +2,11 @@ package ProfileWindow;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.*;
+
+import java.awt.geom.Ellipse2D;
 
 public class ProfileWindow extends JFrame {
 
@@ -33,13 +38,18 @@ public class ProfileWindow extends JFrame {
         leftGBC.weightx = 1.0;
         leftGBC.weighty = 0.4;
 
-        JPanel profilePicturePanel = new JPanel();
-        profilePicturePanel.setBackground(Color.BLUE);
-        profilePicturePanel.setPreferredSize(new Dimension(200, 200));
-        profilePicturePanel.setLayout(new BorderLayout());
+        JPanel profilePicturePanel = new JPanel(new BorderLayout());
+        profilePicturePanel.setBackground(Color.WHITE);
 
-        JLabel profilePictureLabel = new JLabel("Foto de Perfil", SwingConstants.CENTER);
-        profilePicturePanel.add(profilePictureLabel, BorderLayout.CENTER);
+        try {
+            BufferedImage profileImage = ImageIO.read(new File("imagenes/PERFIL.png"));
+            JLabel profilePictureLabel = new JLabel(new ImageIcon(getCircularImage(profileImage, 200)));
+            profilePicturePanel.add(profilePictureLabel, BorderLayout.CENTER);
+        } catch (IOException e) {
+            e.printStackTrace();
+            profilePicturePanel.add(new JLabel("Image not found"), BorderLayout.CENTER);
+        }
+
         leftPanel.add(profilePicturePanel, leftGBC);
 
         // Left Panel - Username and Button Row
@@ -81,25 +91,106 @@ public class ProfileWindow extends JFrame {
 
         // Right Panel - Daily Streaks Panel
         rightGBC.gridy = 0;
-        rightGBC.weighty = 0.3;
-        JPanel dailyStreakPanel = new JPanel();
-        dailyStreakPanel.setBackground(Color.BLUE);
-        dailyStreakPanel.add(new JLabel("Racha de objetivos diarios"));
+        rightGBC.weighty = 0.2;
+        JPanel dailyStreakPanel = new JPanel(new BorderLayout());
+        dailyStreakPanel.setBackground(new Color(58, 92, 181));
+
+        JLabel streakTitleLabel = new JLabel("Racha de Objetivos Diarios", SwingConstants.CENTER);
+        streakTitleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        streakTitleLabel.setForeground(Color.WHITE);
+        streakTitleLabel.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
+        dailyStreakPanel.add(streakTitleLabel, BorderLayout.NORTH);
+
+        JPanel contentPanel = new JPanel(new GridBagLayout());
+        contentPanel.setBackground(new Color(58, 92, 181));
+        GridBagConstraints streakGBC = new GridBagConstraints();
+        streakGBC.insets = new Insets(5, 5, 5, 5);
+
+        streakGBC.gridx = 0;
+        streakGBC.gridy = 0;
+        streakGBC.anchor = GridBagConstraints.CENTER;
+        JLabel flameIcon = new JLabel("🔥");
+        flameIcon.setFont(new Font("Arial", Font.PLAIN, 48));
+        contentPanel.add(flameIcon, streakGBC);
+
+        streakGBC.gridx = 1;
+        streakGBC.gridy = 0;
+        streakGBC.anchor = GridBagConstraints.WEST;
+        int streakCount = 0;
+        JLabel streakCountLabel = new JLabel(streakCount + "");
+        streakCountLabel.setFont(new Font("Arial", Font.BOLD, 48));
+        streakCountLabel.setForeground(new Color(255, 165, 0));
+        contentPanel.add(streakCountLabel, streakGBC);
+
+        streakGBC.gridx = 2;
+        streakGBC.gridy = 0;
+
+        contentPanel.add(Box.createHorizontalStrut(20), streakGBC);
+
+        streakGBC.gridx = 3;
+        streakGBC.gridy = 0;
+
+        streakGBC.anchor = GridBagConstraints.CENTER;
+        JPanel gridPanel = new JPanel(new GridLayout(2, 2, 10, 10));
+        gridPanel.setBackground(new Color(58, 92, 181));
+
+        for (int i = 0; i < 4; i++) {
+            JPanel box = new JPanel();
+            box.setPreferredSize(new Dimension(40, 40));
+            box.setBackground(new Color(173, 216, 230));
+            gridPanel.add(box);
+        }
+
+        contentPanel.add(gridPanel, streakGBC);
+
+        dailyStreakPanel.add(contentPanel, BorderLayout.CENTER);
+
         rightPanel.add(dailyStreakPanel, rightGBC);
 
         // Right Panel - Progress Panel
         rightGBC.gridy = 1;
-        rightGBC.weighty = 0.3;
+        rightGBC.weighty = 0.2;
+
         JPanel progressPanel = new JPanel();
-        progressPanel.setBackground(Color.BLUE);
-        progressPanel.add(new JLabel("Progreso de algún objetivo"));
+        progressPanel.setBackground(new Color(58, 92, 181));
+        progressPanel.setLayout(new BoxLayout(progressPanel, BoxLayout.Y_AXIS));
+
+        progressPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JLabel progressLabel = new JLabel("Titulo del objetivo", SwingConstants.CENTER);
+        progressLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        progressLabel.setForeground(Color.WHITE);
+        progressLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        progressPanel.add(progressLabel);
+
+        progressPanel.add(Box.createVerticalGlue());
+
+        JLabel percentageLabel = new JLabel("0%", SwingConstants.CENTER);
+        percentageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        percentageLabel.setForeground(Color.WHITE);
+        percentageLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        progressPanel.add(percentageLabel);
+
+        progressPanel.add(Box.createVerticalStrut(5));
+
+        JProgressBar progressBar = new JProgressBar(0, 100);
+        progressBar.setValue(15);
+        progressBar.setStringPainted(false);
+        progressBar.setPreferredSize(new Dimension(150, 10));
+        progressBar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        progressPanel.add(progressBar);
+
+        percentageLabel.setText(progressBar.getValue() + "%");
+
+        progressPanel.add(Box.createVerticalGlue());
+
         rightPanel.add(progressPanel, rightGBC);
 
         // Right Panel - Calendar Panel
         rightGBC.gridy = 2;
         rightGBC.weighty = 0.4;
         JPanel calendarPanel = new JPanel();
-        calendarPanel.setBackground(Color.BLUE);
+        calendarPanel.setBackground(new Color(58, 92, 181));
         calendarPanel.add(new JLabel("Calendario con eventos públicos"));
         rightPanel.add(calendarPanel, rightGBC);
 
@@ -107,6 +198,20 @@ public class ProfileWindow extends JFrame {
 
         // Add main panel to frame
         add(mainPanel);
+    }
+
+    private BufferedImage getCircularImage(BufferedImage image, int diameter) {
+        BufferedImage output = new BufferedImage(diameter, diameter, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = output.createGraphics();
+
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        Ellipse2D.Double circle = new Ellipse2D.Double(0, 0, diameter, diameter);
+        g2d.setClip(circle);
+        g2d.drawImage(image, 0, 0, diameter, diameter, null);
+
+        g2d.dispose();
+        return output;
     }
 
     public static void main(String[] args) {

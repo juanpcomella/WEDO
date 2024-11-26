@@ -16,6 +16,7 @@ import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -102,6 +103,7 @@ public class Calendario extends JPanel {
         int diasMes = yearMonth.lengthOfMonth();
         int primeroSemana = primeroMes.getDayOfWeek().getValue();
         primeroSemana = (primeroSemana == 7) ? 6 : primeroSemana - 1;
+        LocalDate hoy = LocalDate.now();
 
         for (int i = 0; i < primeroSemana; i++) {
             diasPanel.add(new JLabel(""));
@@ -113,6 +115,13 @@ public class Calendario extends JPanel {
             diaLabel.setFont(new Font("Arial", Font.PLAIN, 12));
             diaLabel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
             diaLabel.setOpaque(true);
+            
+            if (date.equals(hoy)) {
+                diaLabel.setBackground(Color.LIGHT_GRAY);
+            } else {
+                diaLabel.setBackground(Color.WHITE);
+            }
+            
             diasPanel.add(diaLabel);
             
             diaLabel.addMouseListener(new MouseAdapter() {
@@ -132,7 +141,7 @@ public class Calendario extends JPanel {
     private void mostrarDialogo(LocalDate date) {
         JDialog dialog = new JDialog();
         dialog.setTitle("Evento para el " + date.toString());
-        dialog.setSize(400, 300);
+        dialog.setSize(400, 350);
         dialog.setLocationRelativeTo(this);
 
         JPanel panel = new JPanel();
@@ -142,6 +151,11 @@ public class Calendario extends JPanel {
         JTextField campoNombre = new JTextField();
         panel.add(etiquetaNombre);
         panel.add(campoNombre);
+        
+        panel.add(new JLabel());
+        JCheckBox todoElDiaCheckBox = new JCheckBox("Todo el día");
+        panel.add(todoElDiaCheckBox);
+        
 
         JLabel fechaInicio = new JLabel("Hora de inicio:");
         Integer[] horasArray = new Integer[25];
@@ -183,6 +197,17 @@ public class Calendario extends JPanel {
         JComboBox<Categorias> categorias = new JComboBox<>(Categorias.values());
         panel.add(etiquetaCategorias);
         panel.add(categorias);
+        
+        todoElDiaCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean seleccionado = todoElDiaCheckBox.isSelected();
+                horas.setEnabled(!seleccionado);
+                minutos.setEnabled(!seleccionado);
+                horasFinal.setEnabled(!seleccionado);
+                minutosFinal.setEnabled(!seleccionado);
+            }
+        });
 
         JButton botonGuardar = new JButton("Guardar");
         botonGuardar.addActionListener(new ActionListener() {

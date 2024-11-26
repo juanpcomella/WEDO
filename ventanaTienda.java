@@ -31,7 +31,11 @@ public class ventanaTienda extends JFrame {
         // Modelo de la tabla de iconos
         DefaultTableModel modeloIcono = new DefaultTableModel(new Object[]{"Icono", "Precio"}, 0) {
         	public boolean isCellEditable (int row, int column) {
-        		return false;
+        		if (column ==0) {
+        			return false;
+        		} else {
+        			return true;
+        		}
         	}
         };
         JTable iconoT = new JTable(modeloIcono);
@@ -140,64 +144,49 @@ public class ventanaTienda extends JFrame {
             }
         });
         
-		iconoT.setDefaultEditor(Object.class, new DefaultCellEditor(new JTextField()) {
-		    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-		    if (column == hoveredColumn && row == hoveredRow) {
-		    	JButton comprarB = new JButton("Comprar");
-		    	panel.add(comprarB);
-		    	comprarB.addActionListener(new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						int respuesta = JOptionPane.showConfirmDialog(null, "¿Desea comprar?","Comprar",JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE );
-						
-						// TODO Auto-generated method stub
-						
-					}
-				});
-		    }
-		    
-		    	
-		 
-		    	return table;
-
-        };
-		});
+		
 		class ButtonCellEditor extends AbstractCellEditor implements TableCellEditor {
+		    private JPanel panel;
 		    private JButton button;
 
 		    public ButtonCellEditor() {
-		    	
+		        //crear el botón y configurarlo
 		        button = new JButton("Comprar");
-
-		        // Acción del botón
 		        button.addActionListener(e -> {
-		            // Aquí defines la lógica del botón
-		            System.out.println("¡Botón presionado en la tabla!");
-		            fireEditingStopped(); // Finaliza la edición al hacer clic
+		            // Acción del botón (mostrar diálogo, etc.)
+		            int respuesta = JOptionPane.showConfirmDialog(null, "¿Desea comprar?", "Comprar", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+		            
+		            if (respuesta == JOptionPane.YES_OPTION) {
+		                System.out.println("Compra realizada.");
+		                panel.remove(button);
+		                panel.add(new JLabel("comprado"));
+		                
+		            } else {
+		                System.out.println("Compra cancelada.");
+		                
+		            }
+
+		            fireEditingStopped(); // Finalizar edición después del clic
 		        });
+
+		        // Crear el panel y agregar el botón
+		        panel = new JPanel();
+		        panel.add(button);
 		    }
 
-			@Override
-			public Object getCellEditorValue() {
-				// TODO Auto-generated method stub
-				return button;
-			}
-
-			@Override
-			public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
-					int column) {
-				// TODO Auto-generated method stub
-				if (column == hoveredColumn && row == hoveredRow) {
-					value = button;
-				}
-				return button;
-			}}
+		    @Override
+		    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+		    	button.setText("Comprar"); 
+		    
+				return panel;
+		    }
+		    @Override
+		    public Object getCellEditorValue() {
+		        return "Botón clicado"; // Devuelve un valor si es necesario
+		    }
+		}
 		iconoT.getColumnModel().getColumn(1).setCellEditor(new ButtonCellEditor());
 
-		
 		
 		
 		
