@@ -193,7 +193,7 @@ public class ventanaTienda extends JFrame {
 		}
 		iconoT.getColumnModel().getColumn(1).setCellEditor(new ButtonCellEditor());
 
-		
+		//d
 		
 		
         //panel para los apodos
