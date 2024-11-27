@@ -142,8 +142,14 @@ public class VentanaLoginDef extends JFrame {
                 }else if(!BDs.contraseñaExistente(passwordUser)) {
                 	JOptionPane.showMessageDialog(null,"Nombre de usuario o contraseña incorrectos.");
                 }else {
-                	JOptionPane.showMessageDialog(null,"Bienvenido "+usernameUser+"!");
-                	MainWindow mw = new MainWindow();
+                	String nombreUsuario = null;
+                	if(usernameUser.contains("@") & usernameUser.contains(".")) {
+                		nombreUsuario = BDs.pasarDeEmailAUsername(usernameUser);
+                    	JOptionPane.showMessageDialog(null,"Bienvenido "+nombreUsuario+"!");
+                	}else {
+                    	JOptionPane.showMessageDialog(null,"Bienvenido "+usernameUser+"!");
+                	}
+                  	MainWindow mw = new MainWindow();
                     mw.setVisible(true);
                     dispose();
                 }
