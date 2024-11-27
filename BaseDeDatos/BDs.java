@@ -76,15 +76,14 @@ public class BDs {
 			}
 	}
 	}
-	public static ArrayList<String> usuarioExistente() {
+	public static Boolean usuarioExistente(String nombreBuscado) {
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
 			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
 		}
 		Connection connection = null;
-		ArrayList<String> nombresUsuario = new ArrayList<>();
-
+		Boolean existe = null;
 		try {
 			// Crear una conexión de BD
 			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuario2");//a partir de los ultimo : es donde quieres que se guarden
@@ -92,12 +91,15 @@ public class BDs {
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
 			
-			String sql = "SELECT username FROM usuarios";
-            ResultSet resultSet = statement.executeQuery(sql);
+			String sql = "SELECT username FROM usuarios WHERE username = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setString(1, nombreBuscado);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-            // Recorrer los resultados y añadirlos al ArrayList
-            while (resultSet.next()) {
-                nombresUsuario.add(resultSet.getString("username"));
+            if (resultSet.next()) {
+                existe = true;
+            } else {
+                existe = false;
             }
 
 		} catch(SQLException e) {
@@ -111,17 +113,16 @@ public class BDs {
 				System.err.println(e);
 			}
 	}
-	return nombresUsuario;
+		return existe;
 	}
-	public static ArrayList<String> contraseñaExistente() {
+	public static Boolean contraseñaExistente(String contraseñaBuscada) {
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
 			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
 		}
 		Connection connection = null;
-		ArrayList<String> contraseñaExistente = new ArrayList<>();
-
+		Boolean existe = null;
 		try {
 			// Crear una conexión de BD
 			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuario2");//a partir de los ultimo : es donde quieres que se guarden
@@ -129,10 +130,16 @@ public class BDs {
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
 			
-			ResultSet rs = statement.executeQuery("select * from usuarios");
-			while(rs.next()) {
-				contraseñaExistente.add(rs.getString("password"));
-			}
+			String sql = "SELECT password FROM usuarios WHERE password = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setString(1, contraseñaBuscada);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                existe = true;
+            } else {
+                existe = false;
+            }
 
 		} catch(SQLException e) {
 			System.err.println(e.getMessage());
@@ -145,18 +152,17 @@ public class BDs {
 				System.err.println(e);
 			}
 	}
-	return contraseñaExistente;
+		return existe;
 	}
 	
-	public static ArrayList<String> emailExistente() {
+	public static Boolean emailExistente(String emailBuscado) {
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
 			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
 		}
 		Connection connection = null;
-		ArrayList<String> emailExistente = new ArrayList<>();
-
+		Boolean existe = null;
 		try {
 			// Crear una conexión de BD
 			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuario2");//a partir de los ultimo : es donde quieres que se guarden
@@ -164,10 +170,16 @@ public class BDs {
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
 			
-			ResultSet rs = statement.executeQuery("select * from usuarios");
-			while(rs.next()) {
-				emailExistente.add(rs.getString("email"));
-			}
+			String sql = "SELECT email FROM usuarios WHERE email = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setString(1, emailBuscado);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                existe = true;
+            } else {
+                existe = false;
+            }
 
 		} catch(SQLException e) {
 			System.err.println(e.getMessage());
@@ -180,7 +192,7 @@ public class BDs {
 				System.err.println(e);
 			}
 	}
-	return emailExistente;
+		return existe;
 	}
 
 }
