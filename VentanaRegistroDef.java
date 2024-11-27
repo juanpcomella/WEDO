@@ -149,24 +149,24 @@ public class VentanaRegistroDef extends JFrame {
                 }else if (!passwordUser.equals(passwordConfUser)) {
                     JOptionPane.showMessageDialog(null,"Las contraseñas no son iguales.");
                 }
-                else if(BDs.usuarioExistente().contains(usernameUser)){
+                else if(BDs.usuarioExistente(usernameUser)){
                 	JOptionPane.showMessageDialog(null,"Nombre de usuario existente.");
-                }else if(BDs.contraseñaExistente().contains(passwordUser)){
-                	JOptionPane.showMessageDialog(null,"Nombre de usuario existente.");
+                }else if(BDs.contraseñaExistente(passwordUser)){
+                	JOptionPane.showMessageDialog(null,"Contraseña existente.");
                 }
                 else {                	
                 	BDs.crearTabla();
                 	BDs.insertarElementos(usernameUser, passwordUser, emailUser);
-                	for (int i = 0; i < BDs.usuarioExistente().size(); i++) {
-    		            System.out.println(BDs.usuarioExistente().get(i));
-    				}
-                	for (int i = 0; i < BDs.contraseñaExistente().size(); i++) {
-    		            System.out.println(BDs.contraseñaExistente().get(i));
-    				}
-                	for (int i = 0; i < BDs.emailExistente().size(); i++) {
-    		            System.out.println(BDs.emailExistente().get(i));
-    				}
-    				System.out.println(BDs.usuarioExistente().size());
+//                	for (int i = 0; i < BDs.usuarioExistente().size(); i++) {
+//    		            System.out.println(BDs.usuarioExistente().get(i));
+//    				}
+//                	for (int i = 0; i < BDs.contraseñaExistente().size(); i++) {
+//    		            System.out.println(BDs.contraseñaExistente().get(i));
+//    				}
+//                	for (int i = 0; i < BDs.emailExistente().size(); i++) {
+//    		            System.out.println(BDs.emailExistente().get(i));
+//    				}
+//    				System.out.println(BDs.usuarioExistente().size());
                     JOptionPane.showMessageDialog(null, "Cuenta Creada! \nBienvenido a WEDO!");
                     VentanaEmpezarCuestionario nuevaVentana = new VentanaEmpezarCuestionario();
     				nuevaVentana.setVisible(true);

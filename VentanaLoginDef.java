@@ -137,17 +137,22 @@ public class VentanaLoginDef extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String usernameUser = usernameTF.getText();
                 String passwordUser = new String(passwordTF.getPassword());
-                if(!BDs.usuarioExistente().contains(usernameUser)) {
+                if(!BDs.usuarioExistente(usernameUser) & !BDs.emailExistente(usernameUser)) {
                     	JOptionPane.showMessageDialog(null,"Nombre de usuario o contraseña incorrectos.");
-                }else if(!BDs.contraseñaExistente().contains(passwordUser)) {
-                	JOptionPane.showMessageDialog(null,"Nombre de usuario o ontraseña incorrectos.");
+                }else if(!BDs.contraseñaExistente(passwordUser)) {
+                	JOptionPane.showMessageDialog(null,"Nombre de usuario o contraseña incorrectos.");
                 }else {
-                	JOptionPane.showMessageDialog(null,"Bienvenido "+usernameUser+"!");
-                	MainWindow mw = new MainWindow();
+                	String nombreUsuario = null;
+                	if(usernameUser.contains("@") & usernameUser.contains(".")) {
+                		nombreUsuario = BDs.pasarDeEmailAUsername(usernameUser);
+                    	JOptionPane.showMessageDialog(null,"Bienvenido "+nombreUsuario+"!");
+                	}else {
+                    	JOptionPane.showMessageDialog(null,"Bienvenido "+usernameUser+"!");
+                	}
+                  	MainWindow mw = new MainWindow();
                     mw.setVisible(true);
                     dispose();
                 }
-                //FALTA AÑADIR LA POSIBILIDAD DE INICIAR SESION CON EL EMAIL
 			}
 		});
         gbc.gridx = 0;

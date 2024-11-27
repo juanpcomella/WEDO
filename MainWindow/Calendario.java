@@ -2,9 +2,8 @@ package MainWindow;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,7 +11,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -35,6 +37,7 @@ public class Calendario extends JPanel {
     private LocalDate seleccionado;
     private JPanel diasPanel;
     JLabel tituloLabel = new JLabel(getMonthYearString(), SwingConstants.CENTER);
+    ArrayList<Evento> listaEventos = new ArrayList<Evento>();
 
     public Calendario(int año, int mes) {
         this.año = año;
@@ -54,25 +57,24 @@ public class Calendario extends JPanel {
 
         JButton botonPrevio = new JButton("<");
         JButton botonSiguiente = new JButton(">");
-        JButton botonMesActual = new JButton("Mes Actual");
 
         botonPrevio.addActionListener(e -> actualizarMes(-1));
         botonSiguiente.addActionListener(e -> actualizarMes(1));
-        botonMesActual.addActionListener(e -> irMesActual());
-        
-        botonMesActual.setBackground(Color.LIGHT_GRAY);
 
         JPanel mesPanel = new JPanel();
         mesPanel.add(botonPrevio);
         mesPanel.add(botonSiguiente);
-        mesPanel.add(botonMesActual);
         panelArriba.add(mesPanel, BorderLayout.WEST);
 
         add(panelArriba, BorderLayout.NORTH);
+        JButton botonMesActual = new JButton("Hoy");
+        panelArriba.add(botonMesActual, BorderLayout.EAST);
+        botonMesActual.addActionListener(e -> irMesActual());      
+        botonMesActual.setBackground(Color.LIGHT_GRAY);
 
         diasPanel.setLayout(new GridLayout(0, 7));
         add(diasPanel, BorderLayout.CENTER);
-
+        
         actualizarVista();
     }
 
@@ -120,7 +122,6 @@ public class Calendario extends JPanel {
         int primeroSemana = primeroMes.getDayOfWeek().getValue();
         primeroSemana = (primeroSemana == 7) ? 6 : primeroSemana - 1;
         LocalDate hoy = LocalDate.now();
-        
 
         for (int i = 0; i < primeroSemana; i++) {
             diasPanel.add(new JLabel(""));
@@ -128,32 +129,76 @@ public class Calendario extends JPanel {
 
         for (int dia = 1; dia <= diasMes; dia++) {
             LocalDate date = LocalDate.of(año, mes, dia);
+
+            JPanel diaPanel = new JPanel(new BorderLayout());
+            diaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+
             JLabel diaLabel = new JLabel(String.valueOf(dia), SwingConstants.CENTER);
-            diaLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-            diaLabel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-            diaLabel.setOpaque(true);
-            
+            diaLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+
             if (date.equals(hoy)) {
-                diaLabel.setBackground(Color.LIGHT_GRAY);
+                diaPanel.setBackground(Color.LIGHT_GRAY);
             } else {
-                diaLabel.setBackground(Color.WHITE);
+                diaPanel.setBackground(Color.WHITE);
             }
-            
-            diasPanel.add(diaLabel);
-            
-            diaLabel.addMouseListener(new MouseAdapter() {
+
+            diaPanel.add(diaLabel, BorderLayout.NORTH);
+
+            JPanel eventosPanel = new JPanel();
+            eventosPanel.setLayout(new GridLayout(8, 0));
+            eventosPanel.setOpaque(false);
+
+            for (Evento evento : listaEventos) {
+                if (evento.getFecha().equals(date)) {
+                    JLabel eventoLabel = new JLabel(evento.getNombre());
+                    eventoLabel.setOpaque(true);
+                    
+                    if (evento.getCategoria().equals(Categorias.Estudios)) {
+                    	eventoLabel.setBackground(Color.MAGENTA);
+					}else if (evento.getCategoria().equals(Categorias.Trabajo)) {
+						eventoLabel.setBackground(Color.GREEN);
+					}else if (evento.getCategoria().equals(Categorias.Deporte)) {
+						eventoLabel.setBackground(Color.CYAN);
+					}else if (evento.getCategoria().equals(Categorias.Ocio)) {
+						eventoLabel.setBackground(Color.ORANGE);
+					}
+
+                    eventoLabel.setPreferredSize(new java.awt.Dimension(8, 8));
+                    eventoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                    eventoLabel.setFont(new Font("Arial", Font.BOLD, 8));
+                    
+                    eventoLabel.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            mostrarEvento(evento, date);
+                        }
+                    });
+
+                    eventosPanel.add(eventoLabel);
+                }
+            }
+
+            diaPanel.add(eventosPanel, BorderLayout.CENTER);
+
+            diaPanel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     mostrarDialogo(date);
                 }
             });
+
+            diasPanel.add(diaPanel);
         }
+
         int sitios = 42;
         int utilizados = primeroSemana + diasMes;
         for (int i = utilizados; i < sitios; i++) {
             diasPanel.add(new JLabel(""));
         }
     }
+
+
+       
 
     private void mostrarDialogo(LocalDate date) {
         JDialog dialog = new JDialog();
@@ -225,33 +270,69 @@ public class Calendario extends JPanel {
                 minutosFinal.setEnabled(!seleccionado);
             }
         });
-
+        
         JButton botonGuardar = new JButton("Guardar");
         botonGuardar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String nombreEvento = campoNombre.getText();
+                String descripcionEvento = texto.getText();
+                Categorias categoriaSeleccionada = (Categorias) categorias.getSelectedItem();
                 if (nombreEvento.isEmpty()) {
                     JOptionPane.showMessageDialog(dialog, "Por favor, ingresa un nombre para el evento.");
                 } else {
-                    JOptionPane.showMessageDialog(dialog, "Evento guardado para el " + date.toString() + ".");
+                	Evento evento = new Evento(nombreEvento, descripcionEvento, categoriaSeleccionada, date);
+                    listaEventos.add(evento);
+                    JOptionPane.showMessageDialog(dialog, "Evento guardado.");
+                    actualizarVista();
                     dialog.dispose();
                 }
+                     	        		
             }
         });
 
         panel.add(new JLabel());
         panel.add(botonGuardar);
 
-        dialog.add(panel);
+        dialog.getContentPane().add(panel);
         dialog.setVisible(true);
+    }
+    
+    private void mostrarEvento(Evento evento, LocalDate date) {
+    	JDialog dialog = new JDialog();
+        dialog.setTitle("Evento para el " + date.toString());
+        dialog.setSize(300, 150);
+        dialog.setLocationRelativeTo(this);
+        
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(3, 1, 10, 10));
+        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+               
+        JLabel labelNombre = new JLabel("Nombre evento:");
+        JLabel labelNombreEvento = new JLabel(evento.getNombre());
+        panel.add(labelNombre);
+        panel.add(labelNombreEvento);
+        JLabel labelDescripcion = new JLabel("Descripción del evento:");
+        JLabel labelDescripcionEvento = new JLabel(evento.getDescripcion());
+        panel.add(labelDescripcion);
+        panel.add(labelDescripcionEvento);
+        JLabel labelFecha = new JLabel("Fecha del evento:");
+        JLabel labelFechaEvento = new JLabel(evento.getFecha().format(formatter));
+        panel.add(labelFecha);
+        panel.add(labelFechaEvento);
+        
+        dialog.getContentPane().add(panel);
+        dialog.setVisible(true);
+        
+    	
     }
     
     public static void interfaz() {
         JFrame frame = new JFrame("Calendario de Eventos");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new Calendario(LocalDate.now().getYear(), LocalDate.now().getMonthValue()));
-        frame.setSize(600, 400);
+        frame.getContentPane().add(new Calendario(LocalDate.now().getYear(), LocalDate.now().getMonthValue()));
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         
@@ -259,5 +340,5 @@ public class Calendario extends JPanel {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Calendario::interfaz);
-    }
+        }
 }
