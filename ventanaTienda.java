@@ -149,6 +149,7 @@ public class ventanaTienda extends JFrame {
 		class ButtonCellEditor extends AbstractCellEditor implements TableCellEditor {
 		    private JPanel panel;
 		    private JButton button;
+		    private Object valorOriginal;
 
 		    public ButtonCellEditor() {
 		        //crear el botón y configurarlo
@@ -182,11 +183,12 @@ public class ventanaTienda extends JFrame {
 		    @Override
 		    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		    	button.setText("Comprar"); 
+		    	valorOriginal = value;
 				return panel;
 		    }
 		    @Override
 		    public Object getCellEditorValue() {
-		        return "Botón clicado"; // Devuelve un valor si es necesario
+		        return valorOriginal; // Devuelve un valor si es necesario
 		    }
 		}
 		iconoT.getColumnModel().getColumn(1).setCellEditor(new ButtonCellEditor());
