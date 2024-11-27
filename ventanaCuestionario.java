@@ -316,7 +316,7 @@ hombreC.setSelected(false);
         add(borderPanel);
        
         //ajustamos el tamaño
-        Font largeFont = new Font("Georgia", Font.PLAIN, 18);  // Fuente grande
+        Font largeFont = new Font("Georgia", Font.PLAIN, 16);  // Fuente grande
 
      //configura fuentes más grandes para los componentes
      logoL.setFont(new Font("Serif", Font.BOLD, 24));
