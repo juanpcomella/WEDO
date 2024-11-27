@@ -25,6 +25,7 @@ public class VentanaEmpezarCuestionario extends JFrame {
 	public VentanaEmpezarCuestionario() {
         setTitle("WEDO");
         setSize(700, 500);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         // Panel principal con GridBagLayout para centrar
@@ -139,6 +140,7 @@ public class VentanaEmpezarCuestionario extends JFrame {
 
     public static void main(String[] args) {
         new VentanaEmpezarCuestionario();
+        
     }
 }
 

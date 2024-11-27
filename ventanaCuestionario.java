@@ -667,5 +667,6 @@ dispose();
     public static void main(String[] args) {
         ventanaCuestionario ventana = new ventanaCuestionario();
         ventana.setVisible(true);
+        ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 }

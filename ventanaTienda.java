@@ -22,6 +22,7 @@ public class ventanaTienda extends JFrame {
         // Configuración de la ventana principal
         setTitle("Tienda");
         setSize(800, 600);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         
         //marcar el estado de las celdas

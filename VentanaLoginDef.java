@@ -18,6 +18,7 @@ public class VentanaLoginDef extends JFrame {
 	public VentanaLoginDef() {
         setTitle("WEDO - Inicio de sesión");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setSize(700, 500);
 
         JPanel panel = new JPanel(new BorderLayout());

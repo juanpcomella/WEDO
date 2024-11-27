@@ -20,6 +20,7 @@ public class VentanaRegistroDef extends JFrame {
 	public VentanaRegistroDef() {
         setTitle("WEDO - Registro");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setSize(700, 500);
 
         JPanel panel = new JPanel(new BorderLayout());
