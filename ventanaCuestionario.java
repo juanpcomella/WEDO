@@ -1,13 +1,19 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -16,7 +22,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class ventanaCuestionario extends JFrame {
 private double peso;
@@ -91,6 +100,8 @@ private int opcionNutricion;
 private int opcionAlc;
 private int opcionFum;
 private int opcionSue;
+private String puntosAlc;
+private String puntosTab;
     public ventanaCuestionario() {
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -99,7 +110,8 @@ private int opcionSue;
         // Creamos varios paneles con FlowLayout centrado
         JPanel borderPanel = new JPanel (new BorderLayout());
 		borderPanel.setBackground(new Color(173, 216, 230));
-        JPanel panelFinal = new JPanel (new GridLayout(14,1));
+        JPanel panelFinal = new JPanel ();
+        panelFinal.setLayout(new BoxLayout(panelFinal, BoxLayout.Y_AXIS));
 		panelFinal.setBackground(new Color(173, 216, 230));
         JPanel panelEdad = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		panelEdad.setBackground(new Color(173, 216, 230));
@@ -132,8 +144,11 @@ private int opcionSue;
         panelOE.add(omitir);
        
         //JLabel Logo
-        JLabel logoL = new JLabel("WEDO");
-        logoL.setFont(new Font("Serif",Font.PLAIN, 20));
+        ImageIcon imagen = new ImageIcon(VentanaBienvenida.class.getResource("/imagenes/LOGO WEDO 1.png"));
+        Image imagenEscalada = imagen.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
+        ImageIcon imagenRedimensionada = new ImageIcon(imagenEscalada);
+		JLabel logo = new JLabel(imagenRedimensionada);
+		logo.setAlignmentX(CENTER_ALIGNMENT);
        
         //JScrollPane
         JScrollPane p = new JScrollPane(panelFinal);
@@ -170,10 +185,10 @@ private int opcionSue;
         "como en casa normalmente, pero algunas cosas ultraprocesadas.", "como chatarra."};
        
         //creamos el string que va a indicar las opciones de alcohol
-        String [] alcoS = {"excesivo. ", "moderado.", "casi nulo.", "abstemio."};
+//        String [] alcoS = {"excesivo. ", "moderado.", "casi nulo.", "abstemio."};
        
         //creamos el string que va a indicar las opciones de fumar+
-        String [] fumarS = {"diariamente.","ocasionalmente.","no fumo."};
+//        String [] fumarS = {"diariamente.","ocasionalmente.","no fumo."};
        
         //creamos el string que va a indicar las opciones de sueño
         String [] suenoS = {"8 o más.","entre 7 y 8.","entre 6 y 7.","menos de 6."};
@@ -183,8 +198,6 @@ private int opcionSue;
         JComboBox<String> selectMes = new JComboBox<>(meses);
         JComboBox<String> selectDia = new JComboBox<>(diasS);
         JComboBox<String> selectNutricion = new JComboBox<>(nutricionS);
-        JComboBox<String> selectAlc = new JComboBox<>(alcoS);
-        JComboBox<String> selectFum = new JComboBox<>(fumarS);
         JComboBox<String> selectSue = new JComboBox<>(suenoS);
          
         // creamos los CheckBox que van a ir al panelSexo
@@ -233,36 +246,80 @@ private int opcionSue;
        
         //JLabel que va a indicar la opcion de alcohol
         JLabel alcoL = new JLabel ("Consumo de alcohol:");
-       
+        JSlider sliderAlc = new JSlider(JSlider.HORIZONTAL, 0, 4, 2);
+        sliderAlc.setMajorTickSpacing(20); // Espaciado principal (marcas grandes)
+        sliderAlc.setMinorTickSpacing(5);  // Espaciado menor (marcas pequeñas)
+        sliderAlc.setPaintTicks(true);     // Mostrar las marcas
+        sliderAlc.setPaintLabels(true);    // Mostrar las etiquetas de los valores
+        sliderAlc.setOpaque(false);
+        sliderAlc.setPreferredSize(new Dimension(550, 50));
+        JLabel espacioAlc = new JLabel("  ");
+        espacioAlc.setOpaque(false);
+        
+        Hashtable<Integer, JLabel> labelTableAlc = new Hashtable<>();
+        labelTableAlc.put(0, new JLabel("Abstemio"));
+        labelTableAlc.put(1, new JLabel("Bajo"));
+        labelTableAlc.put(2, new JLabel("Medio"));
+        labelTableAlc.put(3, new JLabel("Alto"));
+        labelTableAlc.put(4, new JLabel("Muy alto"));
+
+        sliderAlc.setLabelTable(labelTableAlc);
+        sliderAlc.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                puntosAlc = (labelTableAlc.get(sliderAlc.getValue())).getText();
+            }
+        });
+        
         //JLabel que va a indicar la opcion de fumar
-        JLabel fumarL = new JLabel ("Consumo de tabaco");
+        JLabel fumarL = new JLabel ("Consumo de tabaco: ");
+        JSlider sliderTab = new JSlider(JSlider.HORIZONTAL, 0, 4, 2);
+        sliderTab.setMajorTickSpacing(20); // Espaciado principal (marcas grandes)
+        sliderTab.setMinorTickSpacing(5);  // Espaciado menor (marcas pequeñas)
+        sliderTab.setPaintTicks(true);     // Mostrar las marcas
+        sliderTab.setPaintLabels(true);    // Mostrar las etiquetas de los valores
+        sliderTab.setOpaque(false);
+        sliderTab.setPreferredSize(new Dimension(550, 50));
+        JLabel espacioTab = new JLabel("  ");
+        espacioTab.setOpaque(false);
+        
+        Hashtable<Integer, JLabel> labelTableTab = new Hashtable<>();
+        labelTableTab.put(0, new JLabel("Abstemio"));
+        labelTableTab.put(1, new JLabel("Bajo"));
+        labelTableTab.put(2, new JLabel("Medio"));
+        labelTableTab.put(3, new JLabel("Alto"));
+        labelTableTab.put(4, new JLabel("Muy alto"));
+
+        sliderTab.setLabelTable(labelTableTab);
+        sliderAlc.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                puntosTab = (labelTableTab.get(sliderTab.getValue())).getText();
+            }
+        });
        
         //JLabel que va a indicar la opcion de sueño
         JLabel sueñoL = new JLabel ("Horas de sueño: ");
        
        
         hombreC.addActionListener(new ActionListener() {
-
-@Override
-public void actionPerformed(ActionEvent e) {
-// TODO Auto-generated method stub
-if (hombreC.isSelected()) {
-mujerC.setSelected(false);
-}
-}
-});
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (hombreC.isSelected()) {
+			mujerC.setSelected(false);
+			}
+		}
+		});
        
         mujerC.addActionListener(new ActionListener() {
-
-@Override
-public void actionPerformed(ActionEvent e) {
-// TODO Auto-generated method stub
-if (mujerC.isSelected()) {
-hombreC.setSelected(false);
-}
-}
-});
-       
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (mujerC.isSelected()) {
+			hombreC.setSelected(false);
+			}
+		}
+		});
+		       
        
         // Añadimos los elementos al panelEdad
         panelEdad.add(fechaNacL);
@@ -298,32 +355,47 @@ hombreC.setSelected(false);
        
         //añadimos los elementos al panelAlc
         panelAlc.add(alcoL);
-        panelAlc.add(selectAlc);
+        panelAlc.add(espacioAlc);
+        panelAlc.add(sliderAlc);
        
         //añadimos los elementos al panelFumar
         panelFumar.add(fumarL);
-        panelFumar.add(selectFum);
+        panelAlc.add(espacioTab);
+        panelFumar.add(sliderTab);
        
         //añadimos los elementos al panelSueño
         panelSueño.add(sueñoL);
         panelSueño.add(selectSue);
        
         //panelLogo añadir el logo
-        panelLogo.add(logoL);
+        panelLogo.add(logo);
        
         // Añadimos los paneles al panel final
+        panelFinal.add(Box.createVerticalStrut(20));
         panelFinal.add(panelLogo);
+        panelFinal.add(Box.createVerticalStrut(20));
         panelFinal.add(panelEdad);
+        panelFinal.add(Box.createVerticalStrut(20));
         panelFinal.add(panelSexo);
+        panelFinal.add(Box.createVerticalStrut(20));
         panelFinal.add(panelPeso);
+        panelFinal.add(Box.createVerticalStrut(20));
         panelFinal.add(panelAltura);
+        panelFinal.add(Box.createVerticalStrut(20));
         panelFinal.add(panelDeporte);
+        panelFinal.add(Box.createVerticalStrut(20));
         panelFinal.add(panelTrabajo);
+        panelFinal.add(Box.createVerticalStrut(20));
         panelFinal.add(panelNutricion);
+        panelFinal.add(Box.createVerticalStrut(20));
         panelFinal.add(panelAlc);
+        panelFinal.add(Box.createVerticalStrut(20));
         panelFinal.add(panelFumar);
+        panelFinal.add(Box.createVerticalStrut(20));
         panelFinal.add(panelSueño);
+        panelFinal.add(Box.createVerticalStrut(60));
         panelFinal.add(panelOE);
+        panelFinal.add(Box.createVerticalStrut(20));
        
        
         // Añadimos el panel al JFrame
@@ -333,39 +405,62 @@ hombreC.setSelected(false);
         add(borderPanel);
        
         //ajustamos el tamaño
-        Font largeFont = new Font("Georgia", Font.PLAIN, 14);  // Fuente grande
+//        Font largeFont = new Font("Georgia", Font.PLAIN, 14);  // Fuente grande
 
      //configura fuentes más grandes para los componentes
-     logoL.setFont(new Font("Serif", Font.BOLD, 24));
-     fechaNacL.setFont(largeFont);
-     sexoL.setFont(largeFont);
-     pesoL.setFont(largeFont);
-     alturaL.setFont(largeFont);
-     deporteL.setFont(largeFont);
-     trabajoL.setFont(largeFont);
-     nutricionL.setFont(largeFont);
-     alcoL.setFont(largeFont);
-     fumarL.setFont(largeFont);
-     sueñoL.setFont(largeFont);
-     omitir.setFont(largeFont);
-     enviar.setFont(largeFont);
+	 fechaNacL.setForeground(new Color(50,70,90));
+	 sexoL.setForeground(new Color(50,70,90));
+	 pesoL.setForeground(new Color(50,70,90));
+	 alturaL.setForeground(new Color(50,70,90));
+	 deporteL.setForeground(new Color(50,70,90));
+	 trabajoL.setForeground(new Color(50,70,90));
+	 nutricionL.setForeground(new Color(50,70,90));
+	 alcoL.setForeground(new Color(50,70,90));
+	 fumarL.setForeground(new Color(50,70,90));
+	 sueñoL.setForeground(new Color(50,70,90));
+	 omitir.setForeground(new Color(50,70,90));
+	 enviar.setForeground(new Color(50,70,90));
+
+//     fechaNacL.setFont(largeFont);
+//     sexoL.setFont(largeFont);
+//     pesoL.setFont(largeFont);
+//     alturaL.setFont(largeFont);
+//     deporteL.setFont(largeFont);
+//     trabajoL.setFont(largeFont);
+//     nutricionL.setFont(largeFont);
+//     alcoL.setFont(largeFont);
+//     fumarL.setFont(largeFont);
+//     sueñoL.setFont(largeFont);
+//     omitir.setFont(largeFont);
+//     enviar.setFont(largeFont);
 
      //aplica la fuente a los JComboBox y JTextFields
-     selectAños.setFont(largeFont);
-     selectMes.setFont(largeFont);
-     selectDia.setFont(largeFont);
-     selectNutricion.setFont(largeFont);
-     selectAlc.setFont(largeFont);
-     selectFum.setFont(largeFont);
-     selectSue.setFont(largeFont);
-     selectDeporte.setFont(largeFont);
-     selectTrabajo.setFont(largeFont);
-     pesoTF.setFont(largeFont);
-     alturaTF.setFont(largeFont);
+	 selectAños.setForeground(new Color(50,70,90));
+	 selectMes.setForeground(new Color(50,70,90));
+	 selectDia.setForeground(new Color(50,70,90));
+	 selectNutricion.setForeground(new Color(50,70,90));
+	 selectSue.setForeground(new Color(50,70,90));
+	 selectDeporte.setForeground(new Color(50,70,90));
+	 selectTrabajo.setForeground(new Color(50,70,90));
+	 pesoTF.setForeground(new Color(50,70,90));
+	 alturaTF.setForeground(new Color(50,70,90));
+
+//     selectAños.setFont(largeFont);
+//     selectMes.setFont(largeFont);
+//     selectDia.setFont(largeFont);
+//     selectNutricion.setFont(largeFont);
+//     selectSue.setFont(largeFont);
+//     selectDeporte.setFont(largeFont);
+//     selectTrabajo.setFont(largeFont);
+//     pesoTF.setFont(largeFont);
+//     alturaTF.setFont(largeFont);
 
      //aplica la fuente a los JCheckBox
-     hombreC.setFont(largeFont);
-     mujerC.setFont(largeFont);
+	 hombreC.setForeground(new Color(50,70,90));
+	 mujerC.setForeground(new Color(50,70,90));
+
+//     hombreC.setFont(largeFont);
+//     mujerC.setFont(largeFont);
 
      //envolver el panel final en un JScrollPane
      JScrollPane scrollPane = new JScrollPane(panelFinal);
@@ -396,8 +491,8 @@ try {
 int opcionTrabajo = selectTrabajo.getSelectedIndex();
 int opcionNutricion = selectNutricion.getSelectedIndex();
 int opcionSue = selectSue.getSelectedIndex();
-   int opcionFum = selectFum.getSelectedIndex();
-int opcionAlc = selectAlc.getSelectedIndex();
+//   int opcionFum = selectFum.getSelectedIndex();
+//int opcionAlc = selectAlc.getSelectedIndex();
 int edad = añoActual-(Integer.parseInt((String) selectAños.getSelectedItem()));
 
 //calculamos el indice de masa corporal
@@ -465,24 +560,29 @@ puntos-=2;
 //caso alcohol
 //cierto que los casos "excesivo","moderado" pueden ser muy relativos, pero es a considerar
 //por el usuario
-if (opcionAlc==0) {
+if (puntosAlc.equals("Muy alto")) {
 puntos-=2;
-} else if (opcionAlc==1) {
+} else if (puntosAlc.equals("Alto")) {
 puntos-=1;
-} else if (opcionAlc==2) {
+} else if (puntosAlc.equals("Medio")) {
 puntos+=0;
-} else {
+} else if(puntosAlc.equals("Bajo")){
 puntos+=1;
+}else {
+puntos += 2;
 }
 
 //caso fumar
-if (opcionFum==0) {
-//diariamente
+if (puntosTab.equals("Muy alto")) {
 puntos-=2;
-} else if (opcionFum==1) {
+} else if (puntosTab.equals("Alto")) {
 puntos-=1;
-} else {
+} else if (puntosTab.equals("Medio")) {
+puntos+=0;
+} else if(puntosTab.equals("Bajo")){
 puntos+=1;
+}else {
+puntos += 2;
 }
 
 //caso dormir:
