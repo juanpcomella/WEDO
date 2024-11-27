@@ -1,7 +1,11 @@
 package ProfileWindow;
 
+import MainWindow.MainWindow;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.table.DefaultTableModel;
@@ -14,7 +18,7 @@ public class ProfileWindow extends JFrame {
     public ProfileWindow() {
         setTitle("WEDO - Profile");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 500);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
 
         JPanel mainPanel = new JPanel(new GridBagLayout());
@@ -27,17 +31,40 @@ public class ProfileWindow extends JFrame {
         gbc.gridy = 0;
         gbc.weightx = 0.5;
         gbc.weighty = 1.0;
+
         JPanel leftPanel = new JPanel(new GridBagLayout());
         leftPanel.setBackground(Color.WHITE);
 
-        // Left Panel - Profile Picture
         GridBagConstraints leftGBC = new GridBagConstraints();
         leftGBC.insets = new Insets(5, 5, 5, 5);
-        leftGBC.fill = GridBagConstraints.BOTH;
+        leftGBC.fill = GridBagConstraints.NONE;
+        leftGBC.anchor = GridBagConstraints.NORTHWEST;
+
+
+        // Left Panel - Back Button
         leftGBC.gridx = 0;
         leftGBC.gridy = 0;
+        leftGBC.weightx = 0;
+        leftGBC.weighty = 0;
+        JButton backButton = new JButton("<<");
+        backButton.setBackground(new Color(0,0,0,0));
+
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.setVisible(true);
+                dispose();
+            }
+        });
+
+        leftPanel.add(backButton, leftGBC);
+
+        // Left Panel - Profile Picture
+        leftGBC.gridy = 1;
         leftGBC.weightx = 1.0;
-        leftGBC.weighty = 0.4;
+        leftGBC.weighty = 0.40;
+        leftGBC.fill = GridBagConstraints.BOTH;
+        leftGBC.anchor = GridBagConstraints.CENTER;
 
         JPanel profilePicturePanel = new JPanel(new BorderLayout());
         profilePicturePanel.setBackground(Color.WHITE);
@@ -54,23 +81,24 @@ public class ProfileWindow extends JFrame {
         leftPanel.add(profilePicturePanel, leftGBC);
 
         // Left Panel - Username and Button Row
-        leftGBC.gridy = 1;
+        leftGBC.gridy = 2;
         leftGBC.weighty = 0.2;
 
         JPanel usernamePanel = new JPanel(new GridBagLayout());
         usernamePanel.setBackground(Color.WHITE);
         JLabel usernameLabel = new JLabel("Nombre Usuario", SwingConstants.CENTER);
-        usernameLabel.setFont(new Font("Serif", Font.BOLD, 18));
+        usernameLabel.setFont(new Font("Arial", Font.BOLD, 48));
         usernamePanel.add(usernameLabel);
         leftPanel.add(usernamePanel, leftGBC);
 
         // Left Panel - Description Row
-        leftGBC.gridy = 2;
+        leftGBC.gridy = 3;
         leftGBC.weighty = 0.4;
 
         JPanel descriptionPanel = new JPanel();
         descriptionPanel.setBackground(Color.WHITE);
         JLabel descriptionLabel = new JLabel("Alguna descripción o algún dato noc");
+        descriptionLabel.setFont(new Font("Arial", Font.BOLD, 24));
         descriptionPanel.add(descriptionLabel);
         leftPanel.add(descriptionPanel, leftGBC);
 
@@ -97,7 +125,7 @@ public class ProfileWindow extends JFrame {
         dailyStreakPanel.setBackground(new Color(58, 92, 181));
 
         JLabel streakTitleLabel = new JLabel("Racha de Objetivos Diarios", SwingConstants.CENTER);
-        streakTitleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        streakTitleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         streakTitleLabel.setForeground(Color.WHITE);
         streakTitleLabel.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
         dailyStreakPanel.add(streakTitleLabel, BorderLayout.NORTH);
@@ -132,14 +160,14 @@ public class ProfileWindow extends JFrame {
         streakGBC.gridy = 0;
 
         streakGBC.anchor = GridBagConstraints.CENTER;
-        JPanel gridPanel = new JPanel(new GridLayout(2, 2, 10, 10));
+        JPanel gridPanel = new JPanel(new GridLayout(1, 4, 10, 10));
         gridPanel.setBackground(new Color(58, 92, 181));
 
         int cantObjetivosDiarios = 4;
 
         for (int i = 0; i < cantObjetivosDiarios; i++) {
             JPanel box = new JPanel();
-            box.setPreferredSize(new Dimension(40, 40));
+            box.setPreferredSize(new Dimension(60, 60));
             box.setBackground(new Color(173, 216, 230));
             gridPanel.add(box);
         }
@@ -163,7 +191,7 @@ public class ProfileWindow extends JFrame {
         JLabel progressLabel = new JLabel("Titulo del objetivo", SwingConstants.CENTER);
         progressLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         progressLabel.setForeground(Color.WHITE);
-        progressLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        progressLabel.setFont(new Font("Arial", Font.BOLD, 24));
         progressPanel.add(progressLabel);
 
         progressPanel.add(Box.createVerticalGlue());
@@ -171,7 +199,7 @@ public class ProfileWindow extends JFrame {
         JLabel percentageLabel = new JLabel("0%", SwingConstants.CENTER);
         percentageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         percentageLabel.setForeground(Color.WHITE);
-        percentageLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        percentageLabel.setFont(new Font("Arial", Font.BOLD, 24));
         progressPanel.add(percentageLabel);
 
         progressPanel.add(Box.createVerticalStrut(5));
@@ -198,7 +226,7 @@ public class ProfileWindow extends JFrame {
 
         JLabel activityLabel = new JLabel("Próximas actividades de {USER}", SwingConstants.CENTER);
         activityLabel.setForeground(Color.WHITE);
-        activityLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        activityLabel.setFont(new Font("Arial", Font.BOLD, 24));
         activityLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
         activityPanel.add(activityLabel, BorderLayout.NORTH);
 

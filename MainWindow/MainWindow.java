@@ -10,6 +10,7 @@ public class MainWindow extends JFrame {
         setTitle("WEDO");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -42,7 +43,9 @@ public class MainWindow extends JFrame {
         panelOeste.add(leftSideBar, BorderLayout.CENTER);
 
         RightSideBar rightSideBar = new RightSideBar();
-        panelEste.add(rightSideBar, BorderLayout.CENTER);
+        int rightSideBarWidth = (int) (getWidth() * 0.1);
+        rightSideBar.setPreferredSize(new Dimension(rightSideBarWidth, getHeight()));
+        panelEste.add(rightSideBar, BorderLayout.EAST);
 
         Footer footer = new Footer();
         panelSur.add(footer, BorderLayout.CENTER);
@@ -59,6 +62,10 @@ public class MainWindow extends JFrame {
                 int dynamicHeight = (int) (getHeight() * 0.1);
                 navbar.setPreferredSize(new Dimension(getWidth(), dynamicHeight));
                 navbar.revalidate();
+
+                int dynamicWidth = (int) (getWidth() * 0.1);
+                rightSideBar.setPreferredSize(new Dimension(dynamicWidth, (getHeight())));
+                rightSideBar.revalidate();
             }
         });
 
