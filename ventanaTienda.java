@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
@@ -10,6 +11,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.security.KeyStore.TrustedCertificateEntry;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ventanaTienda extends JFrame {
 	private int hoveredColumn = -1;
@@ -20,6 +23,10 @@ public class ventanaTienda extends JFrame {
         setTitle("Tienda");
         setSize(800, 600);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        
+        //marcar el estado de las celdas
+        Map<Point, Boolean> estadoCeldas = new HashMap<>();
+
 
         // TabbedPane para las secciones
         JTabbedPane tabbedPane = new JTabbedPane();
@@ -64,6 +71,7 @@ public class ventanaTienda extends JFrame {
 				
 			}
 		});
+        Point celda = new Point(hoveredRow, hoveredColumn);
         
         //ocultamos los tableheaders:
         iconoT.getTableHeader().setVisible(false);
@@ -96,7 +104,20 @@ public class ventanaTienda extends JFrame {
                 	JButton comprarB = new JButton("Comprar");
                 	return comprarB;
                 } else {
-                	
+                    //verificar que el valor sea un Object[]
+                    if (value instanceof Object[]) {
+                        Object[] cellData = (Object[]) value;
+
+                        // Agregar el número al panel
+                        JLabel numberLabel = new JLabel(String.valueOf(cellData[0]));
+                        panel.add(numberLabel);
+
+                        // Agregar la imagen al panel
+                        if (cellData[1] instanceof Icon) {
+                        	Image img = ((ImageIcon) cellData[1]).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+                            JLabel iconLabel = new JLabel((Icon)cellData[1]);
+                            panel.add(iconLabel);
+                        }
                 }
 						
 						
@@ -104,29 +125,8 @@ public class ventanaTienda extends JFrame {
 					
 
                 //asegurar colores de selección
-                if (isSelected) {
-                    panel.setBackground(table.getSelectionBackground());
-                } else {
-                    panel.setBackground(table.getBackground());
+                
                 }
-
-                //verificar que el valor sea un Object[]
-                if (value instanceof Object[]) {
-                    Object[] cellData = (Object[]) value;
-
-                    // Agregar el número al panel
-                    JLabel numberLabel = new JLabel(String.valueOf(cellData[0]));
-                    panel.add(numberLabel);
-
-                    // Agregar la imagen al panel
-                    if (cellData[1] instanceof Icon) {
-                    	Image img = ((ImageIcon) cellData[1]).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-                        JLabel iconLabel = new JLabel((Icon)cellData[1]);
-                        panel.add(iconLabel);
-                    }
-                   
-                }
-            
 
                 return panel;
             }
@@ -143,8 +143,9 @@ public class ventanaTienda extends JFrame {
                 return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             }
         });
-        
-		
+        //hashmap para marcar si el producto esta comprado:
+
+		//FUNCIONALIDAD DEL BOTON
 		class ButtonCellEditor extends AbstractCellEditor implements TableCellEditor {
 		    private JPanel panel;
 		    private JButton button;
@@ -158,11 +159,15 @@ public class ventanaTienda extends JFrame {
 		            
 		            if (respuesta == JOptionPane.YES_OPTION) {
 		                System.out.println("Compra realizada.");
+		                estadoCeldas.put(celda, true);
+		                
+		                
 		                panel.remove(button);
-		                panel.add(new JLabel("comprado"));
+		                panel.add(new JLabel("comprado"),BorderLayout.CENTER);
 		                
 		            } else {
 		                System.out.println("Compra cancelada.");
+		                estadoCeldas.put(celda, false);
 		                
 		            }
 
@@ -170,14 +175,13 @@ public class ventanaTienda extends JFrame {
 		        });
 
 		        // Crear el panel y agregar el botón
-		        panel = new JPanel();
-		        panel.add(button);
+		        panel = new JPanel(new BorderLayout());
+		        panel.add(button, BorderLayout.CENTER);
 		    }
 
 		    @Override
 		    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		    	button.setText("Comprar"); 
-		    
 				return panel;
 		    }
 		    @Override
