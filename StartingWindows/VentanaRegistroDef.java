@@ -1,16 +1,12 @@
+package StartingWindows;
+
 import javax.swing.*;
-import javax.swing.border.Border;
 
 import BaseDeDatos.BDs;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashMap;
 
 public class VentanaRegistroDef extends JFrame {
@@ -34,8 +30,9 @@ public class VentanaRegistroDef extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				VentanaBienvenida nuevaVentana = new VentanaBienvenida();
-				nuevaVentana.setVisible(true);
+				VentanaBienvenida ventanaBienvenida = new VentanaBienvenida();
+                ventanaBienvenida.setLocationRelativeTo(null);
+				ventanaBienvenida.setVisible(true);
 				dispose();		
 			}
         	
@@ -65,6 +62,7 @@ public class VentanaRegistroDef extends JFrame {
         datos.add(logo, gbc);
 
         JLabel introducirDatos = new JLabel("Introduce tus datos", JLabel.CENTER);
+        introducirDatos.setFont(new Font("Tahoma", Font.BOLD, 30));
 		introducirDatos.setForeground(new Color(50, 70, 90));
         gbc.gridy = 1;
         gbc.insets = new Insets(5, 10, 20, 10);
@@ -73,6 +71,7 @@ public class VentanaRegistroDef extends JFrame {
         gbc.gridwidth = 1;
 
         JLabel username = new JLabel("Usuario");
+        username.setFont(new Font("Tahoma", Font.BOLD, 20));
 		username.setForeground(new Color(50, 70, 90));
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -80,14 +79,15 @@ public class VentanaRegistroDef extends JFrame {
         datos.add(username, gbc);
 
         JTextField usernameTF = new JTextField(20);
-        Border whiteBorder = BorderFactory.createLineBorder(Color.WHITE, 1);
-		usernameTF.setBorder(whiteBorder);
+        usernameTF.setFont(new Font("Arial", Font.PLAIN, 19));
+		usernameTF.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.insets = new Insets(0, 10, 5, 10);
         datos.add(usernameTF, gbc);
 
         JLabel email = new JLabel("Email");
+        email.setFont(new Font("Tahoma", Font.BOLD, 20));
 		email.setForeground(new Color(50, 70, 90));
         gbc.gridx = 0;
         gbc.gridy = 4;
@@ -95,13 +95,15 @@ public class VentanaRegistroDef extends JFrame {
         datos.add(email, gbc);
 
         JTextField emailTF = new JTextField(20);
-		emailTF.setBorder(whiteBorder);
+        emailTF.setFont(new Font("Arial", Font.PLAIN, 19));
+		emailTF.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         gbc.gridx = 0;
         gbc.gridy = 5;
         gbc.insets = new Insets(0, 10, 5, 10);
         datos.add(emailTF, gbc);
 
         JLabel password = new JLabel("Contraseña");
+        password.setFont(new Font("Tahoma", Font.BOLD, 20));
 		password.setForeground(new Color(50, 70, 90));
         gbc.gridx = 0;
         gbc.gridy = 6;
@@ -109,13 +111,15 @@ public class VentanaRegistroDef extends JFrame {
         datos.add(password, gbc);
 
         JPasswordField passwordTF = new JPasswordField(20);
-		passwordTF.setBorder(whiteBorder);
+        passwordTF.setFont(new Font("Arial", Font.PLAIN, 19));
+		passwordTF.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         gbc.gridx = 0;
         gbc.gridy = 7;
         gbc.insets = new Insets(0, 10, 5, 10);
         datos.add(passwordTF, gbc);
 
         JLabel passwordConf = new JLabel("Confirmar Contraseña");
+        passwordConf.setFont(new Font("Tahoma", Font.BOLD, 20));
 		passwordConf.setForeground(new Color(50, 70, 90));
         gbc.gridx = 0;
         gbc.gridy = 8;
@@ -123,19 +127,18 @@ public class VentanaRegistroDef extends JFrame {
         datos.add(passwordConf, gbc);
 
         JPasswordField passwordConfTF = new JPasswordField(20);
-		passwordConfTF.setBorder(whiteBorder);
+        passwordConfTF.setFont(new Font("Arial", Font.PLAIN, 19));
+		passwordConfTF.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         gbc.gridx = 0;
         gbc.gridy = 9;
-        gbc.insets = new Insets(0, 10, 5, 10);
+        gbc.insets = new Insets(0, 10, 25, 10);
         datos.add(passwordConfTF, gbc);
 
         JButton registerButton = new JButton("Registrarse");
-        registerButton.setForeground(new Color(255,255,255));
+        //registerButton.setBorder(BorderFactory.createEmptyBorder(15,0,0,0));
+        registerButton.setForeground(new Color(50, 70, 90));
         registerButton.setBackground(new Color(50,70,90));
-        registerButton.setBorderPainted(false);
-        registerButton.setFocusPainted(false);
-        registerButton.setPreferredSize(new Dimension(150, 50));
-        registerButton.setMaximumSize(new Dimension(150, 50));
+        registerButton.setFont(new Font("Tahoma", Font.BOLD, 30));
         
         registerButton.addActionListener(new ActionListener() {
 

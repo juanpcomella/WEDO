@@ -1,15 +1,14 @@
+package StartingWindows;
+
 import MainWindow.MainWindow;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 
 import BaseDeDatos.BDs;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class VentanaLoginDef extends JFrame {
 
@@ -32,8 +31,9 @@ public class VentanaLoginDef extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				VentanaBienvenida nuevaVentana = new VentanaBienvenida();
-				nuevaVentana.setVisible(true);
+				VentanaBienvenida ventanaBienvenida = new VentanaBienvenida();
+                ventanaBienvenida.setLocationRelativeTo(null);
+				ventanaBienvenida.setVisible(true);
 				dispose();		
 			}
         	
@@ -77,16 +77,17 @@ public class VentanaLoginDef extends JFrame {
 
         gbc.gridwidth = 1;
 
-        JLabel username = new JLabel("Usuario o Email");
+        JLabel username = new JLabel("Usuario / Email");
 		username.setForeground(new Color(50, 70, 90));
+        username.setFont(new Font("Tahoma", Font.BOLD, 20));
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.insets = new Insets(5, 10, 0, 10);
         datos.add(username, gbc);
 
         JTextField usernameTF = new JTextField(20);
-        Border whiteBorder = BorderFactory.createLineBorder(Color.WHITE, 1);
-		usernameTF.setBorder(whiteBorder);
+		usernameTF.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+        usernameTF.setFont(new Font("Arial", Font.PLAIN, 19));
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.insets = new Insets(0, 10, 5, 10);
@@ -94,21 +95,24 @@ public class VentanaLoginDef extends JFrame {
 
         JLabel password = new JLabel("Contraseña");
 		password.setForeground(new Color(50, 70, 90));
+        password.setFont(new Font("Tahoma", Font.BOLD, 20));
         gbc.gridx = 0;
         gbc.gridy = 5;
         gbc.insets = new Insets(5, 10,0 , 10);
         datos.add(password, gbc);
 
         JPasswordField passwordTF = new JPasswordField(20);
-		passwordTF.setBorder(whiteBorder);
+		passwordTF.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+        passwordTF.setFont(new Font("Arial", Font.PLAIN, 19));
         gbc.gridx = 0;
         gbc.gridy = 6;
         gbc.insets = new Insets(0, 10, 5, 10);
         datos.add(passwordTF, gbc);
 
-        JCheckBox recuerdame = new JCheckBox("Recordar");
+        JCheckBox recuerdame = new JCheckBox("Recuérdame");
 		recuerdame.setForeground(new Color(50, 70, 90));
 		recuerdame.setOpaque(false);
+        recuerdame.setFont(new Font("Arial", Font.ITALIC, 16));
         gbc.gridx = 0;
         gbc.gridy = 7;
         gbc.insets = new Insets(0, 10, 5, 10);
@@ -116,6 +120,7 @@ public class VentanaLoginDef extends JFrame {
 
         JButton olvidado = new JButton("¿Has olvidado tu usuario o contraseña?");
 		olvidado.setForeground(new Color(50, 70, 90));
+        olvidado.setFont(new Font("Arial", Font.ITALIC, 16));
         olvidado.setContentAreaFilled(false);
         olvidado.setBorderPainted(false);
         olvidado.setFocusable(false);
@@ -126,12 +131,9 @@ public class VentanaLoginDef extends JFrame {
         datos.add(olvidado, gbc);
 
         JButton loginButton = new JButton("Iniciar sesión");
-        loginButton.setForeground(new Color(255,255,255));
+        loginButton.setForeground(new Color(50,70,90));
         loginButton.setBackground(new Color(50,70,90));
-        loginButton.setBorderPainted(false);
-        loginButton.setFocusPainted(false);
-        loginButton.setPreferredSize(new Dimension(150, 50));
-        loginButton.setMaximumSize(new Dimension(150, 50));
+        loginButton.setFont(new Font("Tahoma", Font.BOLD, 30));
         loginButton.addActionListener(new ActionListener() {
 			
 			@Override
