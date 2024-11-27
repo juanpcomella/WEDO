@@ -21,16 +21,38 @@ public class MainWindow extends JFrame {
         JPanel panelCentro = new JPanel();
         panelCentro.setLayout(new BorderLayout());
 
+        JPanel panelEste = new JPanel();
+        panelEste.setLayout(new BorderLayout());
+
+        JPanel panelOeste = new JPanel();
+        panelOeste.setLayout(new BorderLayout());
+
+        JPanel panelSur = new JPanel();
+        panelSur.setLayout(new BorderLayout());
+
         Navbar navbar = new Navbar();
         int navbarHeight = (int) (getHeight() * 0.1);
         navbar.setPreferredSize(new Dimension(getWidth(), navbarHeight));
-        panelNorte.add(navbar, BorderLayout.NORTH);
+        panelNorte.add(navbar, BorderLayout.CENTER);
 
         Calendario calendario = new Calendario(LocalDate.now().getYear(), LocalDate.now().getMonthValue());
         panelCentro.add(calendario, BorderLayout.CENTER);
 
+        LeftSideBar leftSideBar = new LeftSideBar();
+        panelOeste.add(leftSideBar, BorderLayout.CENTER);
+
+        RightSideBar rightSideBar = new RightSideBar();
+        panelEste.add(rightSideBar, BorderLayout.CENTER);
+
+        Footer footer = new Footer();
+        panelSur.add(footer, BorderLayout.CENTER);
+
+
         panel.add(panelNorte, BorderLayout.NORTH);
+        panel.add(panelEste, BorderLayout.EAST);
         panel.add(panelCentro, BorderLayout.CENTER);
+        panel.add(panelOeste, BorderLayout.WEST);
+        panel.add(panelSur, BorderLayout.SOUTH);
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
