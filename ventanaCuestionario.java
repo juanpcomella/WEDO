@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -97,22 +98,36 @@ private int opcionSue;
 
         // Creamos varios paneles con FlowLayout centrado
         JPanel borderPanel = new JPanel (new BorderLayout());
+		borderPanel.setBackground(new Color(173, 216, 230));
         JPanel panelFinal = new JPanel (new GridLayout(14,1));
+		panelFinal.setBackground(new Color(173, 216, 230));
         JPanel panelEdad = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		panelEdad.setBackground(new Color(173, 216, 230));
         JPanel panelSexo = new JPanel (new FlowLayout(FlowLayout.CENTER));
+		panelSexo.setBackground(new Color(173, 216, 230));
         JPanel panelPeso = new JPanel (new FlowLayout(FlowLayout.CENTER));
+		panelPeso.setBackground(new Color(173, 216, 230));
         JPanel panelAltura = new JPanel (new FlowLayout(FlowLayout.CENTER));
+		panelAltura.setBackground(new Color(173, 216, 230));
         JPanel panelDeporte = new JPanel (new FlowLayout(FlowLayout.CENTER));
+		panelDeporte.setBackground(new Color(173, 216, 230));
         JPanel panelTrabajo = new JPanel (new FlowLayout(FlowLayout.CENTER));
+		panelTrabajo.setBackground(new Color(173, 216, 230));
         JPanel panelNutricion = new JPanel (new FlowLayout(FlowLayout.CENTER));
+		panelNutricion.setBackground(new Color(173, 216, 230));
         JPanel panelAlc = new JPanel (new FlowLayout(FlowLayout.CENTER));
+		panelAlc.setBackground(new Color(173, 216, 230));
         JPanel panelFumar = new JPanel (new FlowLayout(FlowLayout.CENTER));
+		panelFumar.setBackground(new Color(173, 216, 230));
         JPanel panelSueño = new JPanel (new FlowLayout(FlowLayout.CENTER));
+		panelSueño.setBackground(new Color(173, 216, 230));
         JPanel panelOE = new JPanel (new FlowLayout());
+		panelOE.setBackground(new Color(173, 216, 230));
         JPanel panelLogo = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		panelLogo.setBackground(new Color(173, 216, 230));
         //JButtons para darle a omitir o a enviar
-        JButton omitir = new JButton ("omitir");
-        JButton enviar = new JButton ("enviar");
+        JButton omitir = new JButton ("Omitir");
+        JButton enviar = new JButton ("Enviar");
         panelOE.add(enviar);
         panelOE.add(omitir);
        
@@ -143,25 +158,25 @@ private int opcionSue;
         String[] diasS = dias.toArray(new String[0]);
        
         //creamos el String en el que van a ir las opciones del deporte
-        String [] deporteS = {"deportes relajados (yoga, tiro con arco, meditar, Taichi, caminar, golf, bolos, pesca, etc.)", "deportes moderados (futting, natación de manera relajada, baile, etc.) ",
-        "deportes intensos (cualquier deporte elaborado de manera competitiva)","sedentario (no hago deporte)" };
+        String [] deporteS = {"deportes relajados (yoga, tiro con arco, meditar, taichi, caminar, golf, bolos, pesca, etc.).", "deportes moderados (futting, natación de manera relajada, baile, etc.). ",
+        "deportes intensos (cualquier deporte elaborado de manera competitiva).","sedentario (no hago deporte)." };
 
         //creamos el String en el que van a ir las opciones del trabajo o estudio
-        String [] trabajoS = {"Todo el día de pie, en bici, etc. (repartidor en bicicleta, guía turístico, policía,obrero etc.) ",
-        "Medio (profesor, entrenador, secretario,etc.)","sedentario (oficinista, teletrabajo, programador, dependiente de tienda, etc.)"};
+        String [] trabajoS = {"todo el día de pie, en bici, etc. (repartidor en bicicleta, guía turístico, policía,obrero etc.). ",
+        "medio (profesor, entrenador, secretario,etc.).","sedentario (oficinista, teletrabajo, programador, dependiente de tienda, etc.). "};
        
         //creamos el String en el que van a ir las opciones de nutricion
-        String [] nutricionS = {"como todo casero, alimentación equilibrada y cuento las calorías", "todo casero, normalmente equilibrado y saludable",
-        "como en casa normalmente, pero algunas cosas ultraprocesadas", "como chatarra"};
+        String [] nutricionS = {"como todo casero, alimentación equilibrada y cuento las calorías.", "todo casero, normalmente equilibrado y saludable.",
+        "como en casa normalmente, pero algunas cosas ultraprocesadas.", "como chatarra."};
        
         //creamos el string que va a indicar las opciones de alcohol
-        String [] alcoS = {"excesivo ", "moderado", "casi nulo", "abstemio"};
+        String [] alcoS = {"excesivo. ", "moderado.", "casi nulo.", "abstemio."};
        
         //creamos el string que va a indicar las opciones de fumar+
-        String [] fumarS = {"Diariamente","Ocasionalmente","No fumo"};
+        String [] fumarS = {"diariamente.","ocasionalmente.","no fumo."};
        
         //creamos el string que va a indicar las opciones de sueño
-        String [] suenoS = {"duermo 8 horas o más al día","duermo entre 7 y 8 horas al día","duermo entre 6 y 7 horas al día","duermo menos de 6 horas al día"};
+        String [] suenoS = {"8 o más.","entre 7 y 8.","entre 6 y 7.","menos de 6."};
        
         // Creamos los JComboBox
         JComboBox<String> selectAños = new JComboBox<>(años);
@@ -174,7 +189,9 @@ private int opcionSue;
          
         // creamos los CheckBox que van a ir al panelSexo
         JCheckBox hombreC = new JCheckBox("Hombre");
+        hombreC.setOpaque(false);
         JCheckBox mujerC = new JCheckBox("Mujer");
+        mujerC.setOpaque(false);
        
         // JComboBox de las opciones de deporte
         JComboBox <String> selectDeporte = new JComboBox<>(deporteS);
@@ -316,7 +333,7 @@ hombreC.setSelected(false);
         add(borderPanel);
        
         //ajustamos el tamaño
-        Font largeFont = new Font("Georgia", Font.PLAIN, 16);  // Fuente grande
+        Font largeFont = new Font("Georgia", Font.PLAIN, 14);  // Fuente grande
 
      //configura fuentes más grandes para los componentes
      logoL.setFont(new Font("Serif", Font.BOLD, 24));
