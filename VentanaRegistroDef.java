@@ -1,9 +1,16 @@
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import BaseDeDatos.BDs;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 
 public class VentanaRegistroDef extends JFrame {
@@ -128,16 +135,48 @@ public class VentanaRegistroDef extends JFrame {
         registerButton.setFocusPainted(false);
         registerButton.setPreferredSize(new Dimension(150, 50));
         registerButton.setMaximumSize(new Dimension(150, 50));
+        
         registerButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				VentanaEmpezarCuestionario nuevaVentana = new VentanaEmpezarCuestionario();
-				nuevaVentana.setVisible(true);
-				dispose();
-				
-			}
-		});
+				String passwordUser = new String(passwordTF.getPassword());
+				String passwordConfUser = new String(passwordConfTF.getPassword());
+				String emailUser = emailTF.getText();
+				String usernameUser = usernameTF.getText();
+				if (usernameUser.isEmpty() || emailUser.isEmpty() || passwordUser.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Por favor rellena todos los datos.");
+                }else if (!passwordUser.equals(passwordConfUser)) {
+                    JOptionPane.showMessageDialog(null,"Las contraseñas no son iguales.");
+                }
+                else if(BDs.usuarioExistente().contains(usernameUser)){
+                	JOptionPane.showMessageDialog(null,"Nombre de usuario existente.");
+                }else if(BDs.contraseñaExistente().contains(passwordUser)){
+                	JOptionPane.showMessageDialog(null,"Nombre de usuario existente.");
+                }
+                else {                	
+                	BDs.crearTabla();
+                	BDs.insertarElementos(usernameUser, passwordUser, emailUser);
+                	for (int i = 0; i < BDs.usuarioExistente().size(); i++) {
+    		            System.out.println(BDs.usuarioExistente().get(i));
+    				}
+                	for (int i = 0; i < BDs.contraseñaExistente().size(); i++) {
+    		            System.out.println(BDs.contraseñaExistente().get(i));
+    				}
+                	for (int i = 0; i < BDs.emailExistente().size(); i++) {
+    		            System.out.println(BDs.emailExistente().get(i));
+    				}
+    				System.out.println(BDs.usuarioExistente().size());
+                    JOptionPane.showMessageDialog(null, "Cuenta Creada! \nBienvenido a WEDO!");
+                    VentanaEmpezarCuestionario nuevaVentana = new VentanaEmpezarCuestionario();
+    				nuevaVentana.setVisible(true);
+    				dispose();
+
+                }
+
+			}       	
+        });
+        
         gbc.gridx = 0;
         gbc.gridy = 10;
         gbc.gridwidth = 2;
@@ -152,31 +191,16 @@ public class VentanaRegistroDef extends JFrame {
         users.put("anderorma", "contraseña");
         users.put("ikergamboa", "98765");
 
-        registerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String username = usernameTF.getText();
-                String email = emailTF.getText();
-                String password = new String(passwordTF.getPassword());
-
-
-                if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Por favor rellena todos los datos.");
-                } else if (users.containsKey(username)) {
-                    JOptionPane.showMessageDialog(null, "Ese usuario ya existe");
-                }else if (passwordTF != passwordConfTF) {
-                    JOptionPane.showMessageDialog(null,"Las contraseñas no son iguales.");
-                }else{
-                    JOptionPane.showMessageDialog(null, "Cuenta Creada! \nBienvenido a WEDO!");
-                }
-            }
-        });
+ 
 
         panel.add(datos, BorderLayout.CENTER);
 
     }
 
     public static void main(String[] args) {
+//		// Carga el sqlite-JDBC driver usando el cargador de clases
+		
+		
         VentanaRegistroDef window = new VentanaRegistroDef();
         window.setResizable(false);
         window.setLocationRelativeTo(null);

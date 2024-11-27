@@ -3,9 +3,12 @@ import MainWindow.MainWindow;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import BaseDeDatos.BDs;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class VentanaLoginDef extends JFrame {
@@ -132,9 +135,19 @@ public class VentanaLoginDef extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-                MainWindow mw = new MainWindow();
-                mw.setVisible(true);
-                dispose();
+				String usernameUser = usernameTF.getText();
+                String passwordUser = new String(passwordTF.getPassword());
+                if(!BDs.usuarioExistente().contains(usernameUser)) {
+                    	JOptionPane.showMessageDialog(null,"Nombre de usuario o contraseña incorrectos.");
+                }else if(!BDs.contraseñaExistente().contains(passwordUser)) {
+                	JOptionPane.showMessageDialog(null,"Nombre de usuario o ontraseña incorrectos.");
+                }else {
+                	JOptionPane.showMessageDialog(null,"Bienvenido "+usernameUser+"!");
+                	MainWindow mw = new MainWindow();
+                    mw.setVisible(true);
+                    dispose();
+                }
+                //FALTA AÑADIR LA POSIBILIDAD DE INICIAR SESION CON EL EMAIL
 			}
 		});
         gbc.gridx = 0;
@@ -145,25 +158,12 @@ public class VentanaLoginDef extends JFrame {
 
         // Lógica de Validación
         // Estos usuarios y contraseñas son temporales, luego se implementarán en la base de datos.
-        HashMap<String, String> users = new HashMap<>();
-        users.put("juanpcomella", "password");
-        users.put("adrianbaz", "12345");
-        users.put("anderorma", "contraseña");
-        users.put("ikergamboa", "98765");
+//        HashMap<String, String> users = new HashMap<>();
+//        users.put("juanpcomella", "password");
+//        users.put("adrianbaz", "12345");
+//        users.put("anderorma", "contraseña");
+//        users.put("ikergamboa", "98765");
 
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String username = usernameTF.getText();
-                String password = new String(passwordTF.getPassword());
-
-                if (users.containsKey(username) && users.get(username).equals(password)) {
-                    JOptionPane.showMessageDialog(null, "Bienvenido a WEDO!");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Usuario o Contraseña equivocado.");
-                }
-            }
-        });
 
         panel.add(datos, BorderLayout.CENTER);
 
