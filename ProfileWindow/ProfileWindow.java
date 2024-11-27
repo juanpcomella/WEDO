@@ -110,7 +110,7 @@ public class ProfileWindow extends JFrame {
         streakGBC.gridx = 0;
         streakGBC.gridy = 0;
         streakGBC.anchor = GridBagConstraints.CENTER;
-        JLabel flameIcon = new JLabel("🔥");
+        JLabel flameIcon = new JLabel("\uD83D\uDD25");
         flameIcon.setFont(new Font("Arial", Font.PLAIN, 48));
         contentPanel.add(flameIcon, streakGBC);
 
