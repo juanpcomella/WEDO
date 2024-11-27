@@ -27,6 +27,8 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import MainWindow.MainWindow;
+
 public class ventanaCuestionario extends JFrame {
 private double peso;
 public double getPeso() {
@@ -651,10 +653,11 @@ JOptionPane.showMessageDialog(null, "Faltan campos por rellenar o el formato no 
 
 @Override
 public void actionPerformed(ActionEvent e) {
-// TODO Auto-generated method stub
 int respuesta = JOptionPane.showConfirmDialog(null, "¿Desea omitir el cuestionario?","Omitir",
 JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE );
 if (respuesta == JOptionPane.YES_OPTION) {
+MainWindow ventanaPrincipal = new MainWindow();
+ventanaPrincipal.setVisible(true);
 dispose();
 }
 }
