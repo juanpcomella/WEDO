@@ -66,6 +66,7 @@ public class VentanaBienvenida extends JFrame {
 		botonInicioSesion.setFont(new Font("Tahoma", Font.BOLD, 30));
 		botonInicioSesion.setForeground(Color.WHITE);
 		botonInicioSesion.setBackground(new Color(50,70,90));
+		botonInicioSesion.setOpaque(true);
 		botonInicioSesion.addActionListener(new ActionListener() {
 
 			@Override
@@ -87,10 +88,9 @@ public class VentanaBienvenida extends JFrame {
 		JButton registro = new JButton("Registrarse");
 		registro.setAlignmentX(CENTER_ALIGNMENT);
 		registro.setFont(new Font("Tahoman", Font.BOLD, 30));
-		registro.setForeground(Color.WHITE);
 		registro.setBackground(new Color(50,70,90));
+		registro.setForeground(Color.WHITE);
 		registro.setOpaque(true);
-		registro.setBorderPainted(false);
 		registro.addActionListener(new ActionListener() {
 
 			@Override
@@ -114,10 +114,18 @@ public class VentanaBienvenida extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		
-		VentanaBienvenida ventana = new VentanaBienvenida();
-		ventana.setLocationRelativeTo(null);
-		ventana.setVisible(true);
+		try {
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		SwingUtilities.invokeLater(() -> {
+			VentanaBienvenida ventanaBienvenida = new VentanaBienvenida();
+			ventanaBienvenida.setVisible(true);
+			ventanaBienvenida.setLocationRelativeTo(null);
+
+		});
 
 	}
 

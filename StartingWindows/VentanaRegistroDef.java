@@ -140,6 +140,7 @@ public class VentanaRegistroDef extends JFrame {
         registerButton.setForeground(Color.WHITE);
         registerButton.setBackground(new Color(50,70,90));
         registerButton.setFont(new Font("Tahoma", Font.BOLD, 30));
+        registerButton.setOpaque(true);
         
         registerButton.addActionListener(new ActionListener() {
 
@@ -204,11 +205,20 @@ public class VentanaRegistroDef extends JFrame {
 
     public static void main(String[] args) {
 //		// Carga el sqlite-JDBC driver usando el cargador de clases
-		
-		
-        VentanaRegistroDef window = new VentanaRegistroDef();
-        window.setResizable(false);
-        window.setLocationRelativeTo(null);
-        window.setVisible(true);
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        SwingUtilities.invokeLater(() -> {
+            VentanaRegistroDef window = new VentanaRegistroDef();
+            window.setResizable(false);
+            window.setLocationRelativeTo(null);
+            window.setVisible(true);
+
+        });
+
     }
 }

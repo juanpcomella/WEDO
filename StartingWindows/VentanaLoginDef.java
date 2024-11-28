@@ -136,6 +136,7 @@ public class VentanaLoginDef extends JFrame {
         loginButton.setBackground(new Color(50,70,90));
         loginButton.setForeground(Color.WHITE);
         loginButton.setFont(new Font("Tahoma", Font.BOLD, 30));
+        loginButton.setOpaque(true);
         loginButton.addActionListener(new ActionListener() {
 			
 			@Override
@@ -180,9 +181,19 @@ public class VentanaLoginDef extends JFrame {
     }
 
     public static void main(String[] args) {
-        VentanaLoginDef window = new VentanaLoginDef();
-        window.setResizable(false);
-        window.setLocationRelativeTo(null);
-        window.setVisible(true);
-    }
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        SwingUtilities.invokeLater(() -> {
+            VentanaLoginDef window = new VentanaLoginDef();
+            window.setResizable(false);
+            window.setLocationRelativeTo(null);
+            window.setVisible(true);
+        });
+
+}
 }

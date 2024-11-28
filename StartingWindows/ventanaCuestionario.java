@@ -12,19 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -146,9 +134,11 @@ panelLogo.setBackground(new Color(173, 216, 230));
 omitir.setForeground(Color.WHITE);
         omitir.setBackground(new Color(50,70,90));
 omitir.setFont(new Font("Tahoman", Font.BOLD, 30));
+        omitir.setOpaque(true);
         JButton enviar = new JButton ("Enviar");
 enviar.setForeground(Color.WHITE);
         enviar.setBackground(new Color(50,70,90));
+        enviar.setOpaque(true);
 enviar.setFont(new Font("Tahoman", Font.BOLD, 30));
         panelOE.add(enviar);
         panelOE.add(omitir);
@@ -742,7 +732,16 @@ dispose();
     }//udue+
    
     public static void main(String[] args) {
-        ventanaCuestionario ventana = new ventanaCuestionario();
-        ventana.setVisible(true);
+            try {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            } catch (Exception e) {
+                    e.printStackTrace();
+            }
+
+            SwingUtilities.invokeLater(() -> {
+                    ventanaCuestionario ventana = new ventanaCuestionario();
+                    ventana.setVisible(true);
+            });
+
     }
 }
