@@ -100,7 +100,7 @@ public class Calendario extends JPanel {
     }
    
     private void actualizarMes(int offset) {
-seleccionado = seleccionado.plusMonths(offset);
+    	seleccionado = seleccionado.plusMonths(offset);
         año = seleccionado.getYear();
         mes = seleccionado.getMonthValue();
         tituloLabel.setText(getMonthYearString());

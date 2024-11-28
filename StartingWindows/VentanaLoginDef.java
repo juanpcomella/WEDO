@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 public class VentanaLoginDef extends JFrame {
 
     private static final long serialVersionUID = 1L;
+    
 
 	public VentanaLoginDef() {
         setTitle("WEDO - Inicio de sesión");
@@ -154,6 +155,7 @@ public class VentanaLoginDef extends JFrame {
                     	JOptionPane.showMessageDialog(null,"Bienvenido "+nombreUsuario+"!");
                 	}else {
                     	JOptionPane.showMessageDialog(null,"Bienvenido "+usernameUser+"!");
+                    	 
                 	}
                   	MainWindow mw = new MainWindow();
                     mw.setVisible(true);
