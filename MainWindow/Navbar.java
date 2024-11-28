@@ -1,9 +1,13 @@
 package MainWindow;
 
 import ProfileWindow.ProfileWindow;
+import VentanaTienda.VentanaTienda;
+
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
@@ -46,10 +50,15 @@ public class Navbar extends JPanel {
         add(searchTF, gbc);
 
         // Botón de búsqueda
-        JButton searchButton = new JButton("\uD83D\uDD0E");
+        ImageIcon searchImage = new ImageIcon(Navbar.class.getResource("/imagenes/lupa.png"));
+        Image searchImagenEscalada = searchImage.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        ImageIcon searchImagenRedimensionada = new ImageIcon(searchImagenEscalada);
+        JButton searchIcon = new JButton(searchImagenRedimensionada);
+        searchIcon.setBorderPainted(false);
+        searchIcon.setFocusable(false);
         gbc.gridx++;
         gbc.weightx = 0;
-        add(searchButton, gbc);
+        add(searchIcon, gbc);
 
         // Espacio horizontal
         gbc.gridx++;
@@ -71,10 +80,25 @@ public class Navbar extends JPanel {
         // Icono de tienda
         ImageIcon shopImage = new ImageIcon(Navbar.class.getResource("/imagenes/shop.png"));
         Image shopImagenEscalada = shopImage.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-        ImageIcon imagenRedimensionada = new ImageIcon(shopImagenEscalada);
-        JLabel shopIcon = new JLabel(imagenRedimensionada);
+        ImageIcon shopImagenRedimensionada = new ImageIcon(shopImagenEscalada);
+        JButton shopIcon = new JButton(shopImagenRedimensionada);
+        shopIcon.setBorderPainted(false);
+        shopIcon.setFocusable(false);
+        shopIcon.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                VentanaTienda ventanaTienda = new VentanaTienda();
+                ventanaTienda.setLocationRelativeTo(null);
+                ventanaTienda.setVisible(true);
+                ((JFrame) SwingUtilities.getWindowAncestor(shopIcon)).dispose();
+            }
+        });
+
         gbc.gridx++;
+
+
+
         add(shopIcon, gbc);
+
 
         // Icono de notificaciones
         ImageIcon notifImage = new ImageIcon(Navbar.class.getResource("/imagenes/notification.png"));
