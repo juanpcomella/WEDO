@@ -89,6 +89,8 @@ public class VentanaBienvenida extends JFrame {
 		registro.setFont(new Font("Tahoman", Font.BOLD, 30));
 		registro.setForeground(Color.WHITE);
 		registro.setBackground(new Color(50,70,90));
+		registro.setOpaque(true);
+		registro.setBorderPainted(false);
 		registro.addActionListener(new ActionListener() {
 
 			@Override
