@@ -16,11 +16,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import BaseDeDatos.BDs;
+
 public class VentanaEmpezarCuestionario extends JFrame {
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 
 	public VentanaEmpezarCuestionario() {
         setTitle("WEDO");
@@ -34,8 +37,8 @@ public class VentanaEmpezarCuestionario extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         
         //Texto de Bienvenido a WEDO
-        JLabel bienvenidoL = new JLabel(" Bienvenido (usuario)!");
-        bienvenidoL.setFont(new Font("Bauhaus 93", Font.PLAIN, 35));
+        JLabel bienvenidoL = new JLabel(" Bienvenido!");
+        bienvenidoL.setFont(new Font("Bauhaus 93", Font.PLAIN, 80));
 		bienvenidoL.setForeground(new Color(50, 70, 90));
         gbc.gridy = 0;
         gbc.insets = new java.awt.Insets(0, 0, 20, 0); // Espacio debajo del Label
@@ -44,6 +47,7 @@ public class VentanaEmpezarCuestionario extends JFrame {
         
         // Texto de descripción en la parte superior
         JLabel empezarL = new JLabel("Para disfrutar de una experiencia más personalizada, se recomienda completar el siguiente formulario.");
+        empezarL.setFont(new Font("Tahomna", Font.BOLD, 20));
 		empezarL.setForeground(new Color(50, 70, 90));
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -54,6 +58,7 @@ public class VentanaEmpezarCuestionario extends JFrame {
 
         // Botón "Empezar Cuestionario" centrado
         JButton botonEmpezar = new JButton("Empezar cuestionario");
+        botonEmpezar.setFont(new Font("Tahoma", Font.BOLD, 30));
         botonEmpezar.addActionListener(new ActionListener() {
 
 			@Override
@@ -68,13 +73,14 @@ public class VentanaEmpezarCuestionario extends JFrame {
         botonEmpezar.setBackground(new Color(50,70,90));
         botonEmpezar.setBorderPainted(false);
         botonEmpezar.setFocusPainted(false);
-        botonEmpezar.setPreferredSize(new Dimension(200, 50));
+        botonEmpezar.setPreferredSize(new Dimension(400, 50));
         gbc.gridy = 2; // Colocación en la segunda fila
         gbc.insets = new java.awt.Insets(0, 0, 20, 0); // Espacio debajo del botón
         panel.add(botonEmpezar, gbc);
 
         // Botón "Omitir" debajo del botón "Empezar Cuestionario"
         JButton botonOmitir = new JButton("Omitir");
+        botonOmitir.setFont(new Font("Tahoma", Font.BOLD, 20));
         botonOmitir.addActionListener(new ActionListener() {
 
 			@Override

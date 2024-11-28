@@ -27,6 +27,7 @@ public class VentanaLoginDef extends JFrame {
         JPanel panelVolver = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelVolver.setOpaque(false);
         JButton volverButton = new JButton("<< Volver");
+        volverButton.setFont(new Font("Tahoma", Font.BOLD, 15));
         volverButton.addActionListener(new ActionListener(){
 
 			@Override
@@ -53,14 +54,15 @@ public class VentanaLoginDef extends JFrame {
         gbc.insets = new Insets(10, 10, 10, 10);
 
         ImageIcon imagen = new ImageIcon(VentanaBienvenida.class.getResource("/imagenes/LOGO WEDO 1.png"));
-        Image imagenEscalada = imagen.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        Image imagenEscalada = imagen.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
         ImageIcon imagenRedimensionada = new ImageIcon(imagenEscalada);
 		JLabel logo = new JLabel(imagenRedimensionada);
 		logo.setAlignmentX(CENTER_ALIGNMENT);
         gbc.gridwidth = 2;
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(30, 10, 5, 10);
+        gbc.weighty = 0.1;                     // Reducir peso vertical
+        gbc.insets = new Insets(10, 10, 5, 10);
         datos.add(logo, gbc);
 
 //        JLabel introducirDatos = new JLabel("Introduce tus datos", JLabel.CENTER);

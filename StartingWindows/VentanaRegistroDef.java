@@ -38,6 +38,7 @@ public class VentanaRegistroDef extends JFrame {
         	
         });
 		volverButton.setForeground(new Color(50, 70, 90));
+        volverButton.setFont(new Font("Tahoma", Font.BOLD, 15));
         volverButton.setContentAreaFilled(false);
         volverButton.setBorderPainted(false);
         volverButton.setFocusable(false);
@@ -51,7 +52,7 @@ public class VentanaRegistroDef extends JFrame {
         gbc.insets = new Insets(10, 10, 10, 10);
 
         ImageIcon imagen = new ImageIcon(VentanaBienvenida.class.getResource("/imagenes/LOGO WEDO 1.png"));
-        Image imagenEscalada = imagen.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        Image imagenEscalada = imagen.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
         ImageIcon imagenRedimensionada = new ImageIcon(imagenEscalada);
 		JLabel logo = new JLabel(imagenRedimensionada);
 		logo.setAlignmentX(CENTER_ALIGNMENT);
