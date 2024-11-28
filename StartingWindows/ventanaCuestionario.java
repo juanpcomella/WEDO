@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -108,6 +109,7 @@ private String puntosTab;
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("WEDO");
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // Creamos varios paneles con FlowLayout centrado
         JPanel borderPanel = new JPanel (new BorderLayout());
@@ -141,7 +143,13 @@ private String puntosTab;
 		panelLogo.setBackground(new Color(173, 216, 230));
         //JButtons para darle a omitir o a enviar
         JButton omitir = new JButton ("Omitir");
+		omitir.setForeground(Color.WHITE);
+        omitir.setBackground(new Color(50,70,90));
+		omitir.setFont(new Font("Tahoman", Font.BOLD, 30));
         JButton enviar = new JButton ("Enviar");
+		enviar.setForeground(Color.WHITE);
+//        enviar.setBackground(new Color(50,70,90));
+		enviar.setFont(new Font("Tahoman", Font.BOLD, 30));
         panelOE.add(enviar);
         panelOE.add(omitir);
        
@@ -667,6 +675,5 @@ dispose();
     public static void main(String[] args) {
         ventanaCuestionario ventana = new ventanaCuestionario();
         ventana.setVisible(true);
-        ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 }
