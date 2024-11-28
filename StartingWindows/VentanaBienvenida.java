@@ -37,19 +37,19 @@ public class VentanaBienvenida extends JFrame {
 		panelSuperior.setLayout(new BoxLayout(panelSuperior, BoxLayout.Y_AXIS));
 		panelSuperior.setOpaque(false);
 		JLabel textoBienvenida = new JLabel("WeDo");
-		Font fuente = new Font("Bauhaus 93", Font.BOLD, 30);
+		Font fuente = new Font("Bauhaus 93", Font.BOLD, 80);
 		textoBienvenida.setForeground(new Color(50, 70, 90));
 		textoBienvenida.setFont(fuente);
 		textoBienvenida.setAlignmentX(CENTER_ALIGNMENT);
 		
 			//Logo
 		ImageIcon imagen = new ImageIcon(VentanaBienvenida.class.getResource("/imagenes/LOGO WEDO 1.png"));
-        Image imagenEscalada = imagen.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        Image imagenEscalada = imagen.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
         ImageIcon imagenRedimensionada = new ImageIcon(imagenEscalada);
 		JLabel logo = new JLabel(imagenRedimensionada);
 		logo.setAlignmentX(CENTER_ALIGNMENT);
 		
-		panelSuperior.add(Box.createVerticalStrut(40));
+		panelSuperior.add(Box.createVerticalStrut(60));
 		panelSuperior.add(textoBienvenida);
 		panelSuperior.add(Box.createVerticalStrut(0));
 		panelSuperior.add(logo);
