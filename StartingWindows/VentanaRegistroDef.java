@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 public class VentanaRegistroDef extends JFrame {
-
+	
     private static final long serialVersionUID = 1L;
 
 	public VentanaRegistroDef() {
@@ -174,7 +174,7 @@ public class VentanaRegistroDef extends JFrame {
 //    				}
 //    				System.out.println(BDs.usuarioExistente().size());
                     JOptionPane.showMessageDialog(null, "Cuenta Creada! \nBienvenido a WEDO!");
-                    VentanaEmpezarCuestionario nuevaVentana = new VentanaEmpezarCuestionario();
+                    VentanaEmpezarCuestionario nuevaVentana = new VentanaEmpezarCuestionario(usernameUser);
     				nuevaVentana.setVisible(true);
     				dispose();
 
@@ -191,19 +191,19 @@ public class VentanaRegistroDef extends JFrame {
 
         // Lógica de Validación
         // Estos usuarios y contraseñas son temporales, luego se implementarán en la base de datos.
-        HashMap<String, String> users = new HashMap<>();
-        users.put("juanpcomella", "password");
-        users.put("adrianbaz", "12345");
-        users.put("anderorma", "contraseña");
-        users.put("ikergamboa", "98765");
+//        HashMap<String, String> users = new HashMap<>();
+//        users.put("juanpcomella", "password");
+//        users.put("adrianbaz", "12345");
+//        users.put("anderorma", "contraseña");
+//        users.put("ikergamboa", "98765");
 
  
 
         panel.add(datos, BorderLayout.CENTER);
 
     }
-
-    public static void main(String[] args) {
+	
+	public static void main(String[] args) {
 //		// Carga el sqlite-JDBC driver usando el cargador de clases
 
         try {

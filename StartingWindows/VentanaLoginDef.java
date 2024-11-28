@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class VentanaLoginDef extends JFrame {
-
+	
     private static final long serialVersionUID = 1L;
     
 
@@ -163,6 +163,8 @@ public class VentanaLoginDef extends JFrame {
                 }
 			}
 		});
+
+        	
         gbc.gridx = 0;
         gbc.gridy = 9;
         gbc.gridwidth = 2;

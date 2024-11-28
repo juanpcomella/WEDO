@@ -25,7 +25,7 @@ public class VentanaEmpezarCuestionario extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 
-	public VentanaEmpezarCuestionario() {
+	public VentanaEmpezarCuestionario(String usuario) {
         setTitle("WEDO");
         setSize(700, 500);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -37,7 +37,7 @@ public class VentanaEmpezarCuestionario extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         
         //Texto de Bienvenido a WEDO
-        JLabel bienvenidoL = new JLabel(" Bienvenido!");
+        JLabel bienvenidoL = new JLabel(" Bienvenido "+usuario+"!");
         bienvenidoL.setFont(new Font("Bauhaus 93", Font.PLAIN, 80));
 		bienvenidoL.setForeground(new Color(50, 70, 90));
         gbc.gridy = 0;
@@ -144,9 +144,9 @@ public class VentanaEmpezarCuestionario extends JFrame {
         
     }
 
-    public static void main(String[] args) {
-        new VentanaEmpezarCuestionario();
-        
-    }
+//    public static void main(String[] args) {
+//        new VentanaEmpezarCuestionario();
+//        
+//    }
 }
 
