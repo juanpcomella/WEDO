@@ -61,6 +61,7 @@ public class VentanaBienvenida extends JFrame {
 		
 		//Inicio sesión
 		JButton botonInicioSesion = new JButton("Iniciar sesión");
+		botonInicioSesion.setFocusPainted(false);
 		botonInicioSesion.setAlignmentX(CENTER_ALIGNMENT);
 		botonInicioSesion.setFont(new Font("Bauhaus 93", Font.BOLD, 30));
 		botonInicioSesion.setForeground(Color.WHITE);
