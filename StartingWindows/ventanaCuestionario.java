@@ -113,43 +113,43 @@ private String puntosTab;
 
         // Creamos varios paneles con FlowLayout centrado
         JPanel borderPanel = new JPanel (new BorderLayout());
-		borderPanel.setBackground(new Color(173, 216, 230));
+borderPanel.setBackground(new Color(173, 216, 230));
         JPanel panelFinal = new JPanel ();
         panelFinal.setLayout(new BoxLayout(panelFinal, BoxLayout.Y_AXIS));
-		panelFinal.setBackground(new Color(173, 216, 230));
+panelFinal.setBackground(new Color(173, 216, 230));
         JPanel panelEdad = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		panelEdad.setBackground(new Color(173, 216, 230));
+panelEdad.setBackground(new Color(173, 216, 230));
         JPanel panelSexo = new JPanel (new FlowLayout(FlowLayout.CENTER));
-		panelSexo.setBackground(new Color(173, 216, 230));
+panelSexo.setBackground(new Color(173, 216, 230));
         JPanel panelPeso = new JPanel (new FlowLayout(FlowLayout.CENTER));
-		panelPeso.setBackground(new Color(173, 216, 230));
+panelPeso.setBackground(new Color(173, 216, 230));
         JPanel panelAltura = new JPanel (new FlowLayout(FlowLayout.CENTER));
-		panelAltura.setBackground(new Color(173, 216, 230));
+panelAltura.setBackground(new Color(173, 216, 230));
         JPanel panelDeporte = new JPanel (new FlowLayout(FlowLayout.CENTER));
-		panelDeporte.setBackground(new Color(173, 216, 230));
+panelDeporte.setBackground(new Color(173, 216, 230));
         JPanel panelTrabajo = new JPanel (new FlowLayout(FlowLayout.CENTER));
-		panelTrabajo.setBackground(new Color(173, 216, 230));
+panelTrabajo.setBackground(new Color(173, 216, 230));
         JPanel panelNutricion = new JPanel (new FlowLayout(FlowLayout.CENTER));
-		panelNutricion.setBackground(new Color(173, 216, 230));
+panelNutricion.setBackground(new Color(173, 216, 230));
         JPanel panelAlc = new JPanel (new FlowLayout(FlowLayout.CENTER));
-		panelAlc.setBackground(new Color(173, 216, 230));
+panelAlc.setBackground(new Color(173, 216, 230));
         JPanel panelFumar = new JPanel (new FlowLayout(FlowLayout.CENTER));
-		panelFumar.setBackground(new Color(173, 216, 230));
+panelFumar.setBackground(new Color(173, 216, 230));
         JPanel panelSueño = new JPanel (new FlowLayout(FlowLayout.CENTER));
-		panelSueño.setBackground(new Color(173, 216, 230));
+panelSueño.setBackground(new Color(173, 216, 230));
         JPanel panelOE = new JPanel (new FlowLayout());
-		panelOE.setBackground(new Color(173, 216, 230));
+panelOE.setBackground(new Color(173, 216, 230));
         JPanel panelLogo = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		panelLogo.setBackground(new Color(173, 216, 230));
+panelLogo.setBackground(new Color(173, 216, 230));
         //JButtons para darle a omitir o a enviar
         JButton omitir = new JButton ("Omitir");
-		omitir.setForeground(Color.WHITE);
+omitir.setForeground(Color.WHITE);
         omitir.setBackground(new Color(50,70,90));
-		omitir.setFont(new Font("Tahoman", Font.BOLD, 30));
+omitir.setFont(new Font("Tahoman", Font.BOLD, 30));
         JButton enviar = new JButton ("Enviar");
-		enviar.setForeground(Color.WHITE);
+enviar.setForeground(Color.WHITE);
         enviar.setBackground(new Color(50,70,90));
-		enviar.setFont(new Font("Tahoman", Font.BOLD, 30));
+enviar.setFont(new Font("Tahoman", Font.BOLD, 30));
         panelOE.add(enviar);
         panelOE.add(omitir);
        
@@ -157,8 +157,8 @@ private String puntosTab;
         ImageIcon imagen = new ImageIcon(VentanaBienvenida.class.getResource("/imagenes/LOGO WEDO 1.png"));
         Image imagenEscalada = imagen.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
         ImageIcon imagenRedimensionada = new ImageIcon(imagenEscalada);
-		JLabel logo = new JLabel(imagenRedimensionada);
-		logo.setAlignmentX(CENTER_ALIGNMENT);
+JLabel logo = new JLabel(imagenRedimensionada);
+logo.setAlignmentX(CENTER_ALIGNMENT);
        
         //JScrollPane
         JScrollPane p = new JScrollPane(panelFinal);
@@ -180,7 +180,7 @@ private String puntosTab;
         String[] años = listaAños.toArray(new String[0]);
         String[] meses = {" enero", " febrero", " marzo", " abril", " mayo", " junio",
                           " julio", " agosto", " septiembre", " octubre", " noviembre", " diciembre"};
-        String[] diasS = dias.toArray(new String[0]); 
+        String[] diasS = dias.toArray(new String[0]);
        
         //creamos el String en el que van a ir las opciones del deporte
         String [] deporteS = {"  deportes relajados (yoga, tiro con arco, meditar, taichi, caminar, golf, bolos, pesca, etc.).", "  deportes moderados (futting, natación de manera relajada, baile, etc.). ",
@@ -255,7 +255,7 @@ private String puntosTab;
        
         //JLabel que va a indicar la opcione de nutricion
         JLabel nutricionL = new JLabel ("Alimentacion: ");
-        
+       
         //Fuente
         Font fuente = new Font("Tahoma", Font.BOLD, 20);  // Fuente grande
         Font fuente2 = new Font("Tahoma", Font.BOLD, 15);
@@ -271,7 +271,7 @@ private String puntosTab;
         sliderAlc.setPreferredSize(new Dimension(550, 50));
         JLabel espacioAlc = new JLabel("  ");
         espacioAlc.setOpaque(false);
-        
+       
         Hashtable<Integer, JLabel> labelTableAlc = new Hashtable<>();
         JLabel abstemio = new JLabel("Abstemio");
         abstemio.setFont(fuente2);
@@ -302,7 +302,7 @@ private String puntosTab;
                 puntosAlc = (labelTableAlc.get(sliderAlc.getValue())).getText();
             }
         });
-        
+       
         //JLabel que va a indicar la opcion de fumar
         JLabel fumarL = new JLabel ("Consumo de tabaco:      ");
         JSlider sliderTab = new JSlider(JSlider.HORIZONTAL, 0, 4, 2);
@@ -314,7 +314,7 @@ private String puntosTab;
         sliderTab.setPreferredSize(new Dimension(550, 50));
         JLabel espacioTab = new JLabel("  ");
         espacioTab.setOpaque(false);
-        
+       
         Hashtable<Integer, JLabel> labelTableTab = new Hashtable<>();
         JLabel abstemio2 = new JLabel("Abstemio");
         abstemio2.setFont(fuente2);
@@ -351,23 +351,23 @@ private String puntosTab;
        
        
         hombreC.addActionListener(new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (hombreC.isSelected()) {
-			mujerC.setSelected(false);
-			}
-		}
-		});
+@Override
+public void actionPerformed(ActionEvent e) {
+if (hombreC.isSelected()) {
+mujerC.setSelected(false);
+}
+}
+});
        
         mujerC.addActionListener(new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (mujerC.isSelected()) {
-			hombreC.setSelected(false);
-			}
-		}
-		});
-		       
+@Override
+public void actionPerformed(ActionEvent e) {
+if (mujerC.isSelected()) {
+hombreC.setSelected(false);
+}
+}
+});
+     
        
         // Añadimos los elementos al panelEdad
         panelEdad.add(fechaNacL);
@@ -467,18 +467,18 @@ private String puntosTab;
      alcoL.setFont(fuente);
      fumarL.setFont(fuente);
      sueñoL.setFont(fuente);
-	 fechaNacL.setForeground(new Color(50,70,90));
-	 sexoL.setForeground(new Color(50,70,90));
-	 pesoL.setForeground(new Color(50,70,90));
+fechaNacL.setForeground(new Color(50,70,90));
+sexoL.setForeground(new Color(50,70,90));
+pesoL.setForeground(new Color(50,70,90));
      kilos.setForeground(new Color(50,70,90));
-	 alturaL.setForeground(new Color(50,70,90));
+alturaL.setForeground(new Color(50,70,90));
      cms.setForeground(new Color(50,70,90));
-	 deporteL.setForeground(new Color(50,70,90));
-	 trabajoL.setForeground(new Color(50,70,90));
-	 nutricionL.setForeground(new Color(50,70,90));
-	 alcoL.setForeground(new Color(50,70,90));
-	 fumarL.setForeground(new Color(50,70,90));
-	 sueñoL.setForeground(new Color(50,70,90));
+deporteL.setForeground(new Color(50,70,90));
+trabajoL.setForeground(new Color(50,70,90));
+nutricionL.setForeground(new Color(50,70,90));
+alcoL.setForeground(new Color(50,70,90));
+fumarL.setForeground(new Color(50,70,90));
+sueñoL.setForeground(new Color(50,70,90));
 
 
 //     fechaNacL.setFont(largeFont);
@@ -495,7 +495,7 @@ private String puntosTab;
 //     enviar.setFont(largeFont);
 
      //aplica la fuente a los JComboBox y JTextFields
-	 selectAños.setFont(fuente);
+selectAños.setFont(fuente);
      selectMes.setFont(fuente);
      selectDia.setFont(fuente);
      selectNutricion.setFont(fuente);
@@ -504,15 +504,15 @@ private String puntosTab;
      selectTrabajo.setFont(fuente);
      pesoTF.setFont(fuente);
      alturaTF.setFont(fuente);
-	 selectAños.setForeground(new Color(50,70,90));
-	 selectMes.setForeground(new Color(50,70,90));
-	 selectDia.setForeground(new Color(50,70,90));
-	 selectNutricion.setForeground(new Color(50,70,90));
-	 selectSue.setForeground(new Color(50,70,90));
-	 selectDeporte.setForeground(new Color(50,70,90));
-	 selectTrabajo.setForeground(new Color(50,70,90));
-	 pesoTF.setForeground(new Color(50,70,90));
-	 alturaTF.setForeground(new Color(50,70,90));
+selectAños.setForeground(new Color(50,70,90));
+selectMes.setForeground(new Color(50,70,90));
+selectDia.setForeground(new Color(50,70,90));
+selectNutricion.setForeground(new Color(50,70,90));
+selectSue.setForeground(new Color(50,70,90));
+selectDeporte.setForeground(new Color(50,70,90));
+selectTrabajo.setForeground(new Color(50,70,90));
+pesoTF.setForeground(new Color(50,70,90));
+alturaTF.setForeground(new Color(50,70,90));
 
 //     selectAños.setFont(largeFont);
 //     selectMes.setFont(largeFont);
@@ -525,10 +525,10 @@ private String puntosTab;
 //     alturaTF.setFont(largeFont);
 
      //aplica la fuente a los JCheckBox
-	 hombreC.setForeground(new Color(50,70,90));
-	 hombreC.setFont(fuente);
-	 mujerC.setForeground(new Color(50,70,90));
-	 mujerC.setFont(fuente);
+hombreC.setForeground(new Color(50,70,90));
+hombreC.setFont(fuente);
+mujerC.setForeground(new Color(50,70,90));
+mujerC.setFont(fuente);
 
 //     hombreC.setFont(largeFont);
 //     mujerC.setFont(largeFont);
@@ -550,15 +550,38 @@ private String puntosTab;
 
    
     //calculamos el indice de masa corporal
-    enviar.addActionListener(new ActionListener() {
+enviar.addActionListener(new ActionListener() {
 
 @Override
 public void actionPerformed(ActionEvent e) {
-// TODO Auto-generated method stub
+
+Boolean pasarAlMain = false;
+
+if(pesoTF.getText().isEmpty() || alturaTF.getText().isEmpty()) {
+JOptionPane.showMessageDialog(null,"Faltan campos por rellenar.");
+}else {
+
 try {
-   int peso = Integer.parseInt(pesoTF.getText());
-   double altura = Double.parseDouble(alturaTF.getText()) / 100;
-   int opcionDeporte = selectDeporte.getSelectedIndex();
+Double.parseDouble(pesoTF.getText());
+Double.parseDouble(alturaTF.getText());
+pasarAlMain = true;
+
+}catch (NumberFormatException ex) {
+JOptionPane.showMessageDialog(null,"Datos introducidos no válidos.");
+}
+if(pasarAlMain) {
+JOptionPane.showMessageDialog(null,"Cuestionario completado con éxito.");
+MainWindow mw = new MainWindow();
+mw.setVisible(true);
+dispose();
+}
+}
+
+
+
+int peso = Integer.parseInt(pesoTF.getText());
+double altura = Double.parseDouble(alturaTF.getText()) / 100;
+int opcionDeporte = selectDeporte.getSelectedIndex();
 int opcionTrabajo = selectTrabajo.getSelectedIndex();
 int opcionNutricion = selectNutricion.getSelectedIndex();
 int opcionSue = selectSue.getSelectedIndex();
@@ -571,6 +594,7 @@ double Imc = peso/(altura*altura);
 
 //ahora realizaremos el conteo de los puntos:
 double puntos =0;
+String rango;
 
 //caso del imc:
 //cabe recalcar que hay casos en los que el sobrepeso no es peligroso o malo
@@ -666,7 +690,6 @@ puntos+=0;
 } else {
 puntos-=1;
 }
-
 //caso edad
 if (edad<16) {
 puntos+=0;
@@ -683,11 +706,7 @@ puntos-=1;
 } else {
 puntos-=2;
 }
-
-
 //ahora dependiendo de los puntos que tenga el usuario, estara en un rango o en otro
-String rango;
-
 if (puntos < -5) {
    rango = "Principiante";
 } else if (puntos >= -5 && puntos <= 0) {
@@ -700,25 +719,14 @@ if (puntos < -5) {
    rango = "Ultraavanzado";
 }
 
-System.out.println("Tu rango es: " + rango);
-System.out.println("Has obtenido " + puntos+ " puntos");
-
-JOptionPane.showMessageDialog(null, "Cuestionario realizado con exito"
-,"Gracias por la informacion",JOptionPane.INFORMATION_MESSAGE);
-
-} catch (NumberFormatException o) {
-JOptionPane.showMessageDialog(null, "Faltan campos por rellenar o el formato no es correcto",
-"Error", JOptionPane.ERROR_MESSAGE);
-}
-
-
+//System.out.println("Tu rango es: " + rango);
+//System.out.println("Has obtenido " + puntos+ " puntos");
 }
    
     });
      
-   
-    //listener de omitir
-    omitir.addActionListener(new ActionListener() {
+//listener de omitir
+omitir.addActionListener(new ActionListener() {
 
 @Override
 public void actionPerformed(ActionEvent e) {
