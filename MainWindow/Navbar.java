@@ -82,6 +82,7 @@ public class Navbar extends JPanel {
         Image shopImagenEscalada = shopImage.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         ImageIcon shopImagenRedimensionada = new ImageIcon(shopImagenEscalada);
         JButton shopIcon = new JButton(shopImagenRedimensionada);
+        shopIcon.setBackground(new Color(0,0,0,0));
         shopIcon.setBorderPainted(false);
         shopIcon.setFocusable(false);
         shopIcon.addActionListener(new ActionListener() {
