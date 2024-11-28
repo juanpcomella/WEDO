@@ -47,15 +47,11 @@ public class MainWindow extends JFrame {
         rightSideBar.setPreferredSize(new Dimension(rightSideBarWidth, getHeight()));
         panelEste.add(rightSideBar, BorderLayout.EAST);
 
-        Footer footer = new Footer();
-        panelSur.add(footer, BorderLayout.CENTER);
-
 
         panel.add(panelNorte, BorderLayout.NORTH);
         panel.add(panelEste, BorderLayout.EAST);
         panel.add(panelCentro, BorderLayout.CENTER);
         panel.add(panelOeste, BorderLayout.WEST);
-        panel.add(panelSur, BorderLayout.SOUTH);
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
