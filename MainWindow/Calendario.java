@@ -145,7 +145,7 @@ public class Calendario extends JPanel {
             diaPanel.add(diaLabel, BorderLayout.NORTH);
 
             JPanel eventosPanel = new JPanel();
-            eventosPanel.setLayout(new GridLayout(8, 0));
+            eventosPanel.setLayout(new GridLayout(5, 0));
             eventosPanel.setOpaque(false);
 
             for (Evento evento : listaEventos) {
