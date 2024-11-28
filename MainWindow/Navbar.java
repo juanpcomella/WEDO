@@ -127,6 +127,16 @@ public class Navbar extends JPanel {
         } catch (IOException e) {
             System.out.println("Error al cargar la imagen de perfil: " + e.getMessage());
         }
+
+        hamburgerMenu.addActionListener(new ActionListener() {
+            private boolean leftSideBarVisible = false;
+            public void actionPerformed(ActionEvent e) {
+                leftSideBarVisible = !leftSideBarVisible;
+                if(!leftSideBarVisible) {
+
+                }
+            }
+        });
     }
 
     private Image getCircularImage(BufferedImage image, int diameter) {
@@ -138,4 +148,5 @@ public class Navbar extends JPanel {
         g2d.dispose();
         return output;
     }
+
 }
