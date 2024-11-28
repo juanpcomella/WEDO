@@ -63,14 +63,14 @@ public class VentanaBienvenida extends JFrame {
 		JButton botonInicioSesion = new JButton("Iniciar sesión");
 		botonInicioSesion.setAlignmentX(CENTER_ALIGNMENT);
 		botonInicioSesion.setFont(new Font("Bauhaus 93", Font.BOLD, 30));
-		botonInicioSesion.setForeground(new Color(50,70,90));
+		botonInicioSesion.setForeground(Color.WHITE);
 		botonInicioSesion.setBackground(new Color(50,70,90));
 		botonInicioSesion.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {	
 				VentanaLoginDef ventanaLoginDef = new VentanaLoginDef();
-				ventanaLoginDef.setLocationRelativeTo(null);
+//				ventanaLoginDef.setLocationRelativeTo(null);
 				ventanaLoginDef.setVisible(true);
 				dispose();
 			}			
@@ -86,7 +86,7 @@ public class VentanaBienvenida extends JFrame {
 		JButton registro = new JButton("Registrarse");
 		registro.setAlignmentX(CENTER_ALIGNMENT);
 		registro.setFont(new Font("Bauhaus 93", Font.BOLD, 30));
-		registro.setForeground(new Color(50,70,90));
+		registro.setForeground(Color.WHITE);
 		registro.setBackground(new Color(50,70,90));
 		registro.addActionListener(new ActionListener() {
 

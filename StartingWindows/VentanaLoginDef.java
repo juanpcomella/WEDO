@@ -132,7 +132,7 @@ public class VentanaLoginDef extends JFrame {
 
         JButton loginButton = new JButton("Iniciar sesión");
         loginButton.setForeground(new Color(50,70,90));
-        loginButton.setBackground(new Color(50,70,90));
+        loginButton.setBackground(Color.WHITE);
         loginButton.setFont(new Font("Tahoma", Font.BOLD, 30));
         loginButton.addActionListener(new ActionListener() {
 			

@@ -136,7 +136,7 @@ public class VentanaRegistroDef extends JFrame {
 
         JButton registerButton = new JButton("Registrarse");
         //registerButton.setBorder(BorderFactory.createEmptyBorder(15,0,0,0));
-        registerButton.setForeground(new Color(50, 70, 90));
+        registerButton.setForeground(Color.WHITE);
         registerButton.setBackground(new Color(50,70,90));
         registerButton.setFont(new Font("Tahoma", Font.BOLD, 30));
         
