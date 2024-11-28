@@ -148,14 +148,14 @@ private String puntosTab;
 		omitir.setFont(new Font("Tahoman", Font.BOLD, 30));
         JButton enviar = new JButton ("Enviar");
 		enviar.setForeground(Color.WHITE);
-//        enviar.setBackground(new Color(50,70,90));
+        enviar.setBackground(new Color(50,70,90));
 		enviar.setFont(new Font("Tahoman", Font.BOLD, 30));
         panelOE.add(enviar);
         panelOE.add(omitir);
        
         //JLabel Logo
         ImageIcon imagen = new ImageIcon(VentanaBienvenida.class.getResource("/imagenes/LOGO WEDO 1.png"));
-        Image imagenEscalada = imagen.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
+        Image imagenEscalada = imagen.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
         ImageIcon imagenRedimensionada = new ImageIcon(imagenEscalada);
 		JLabel logo = new JLabel(imagenRedimensionada);
 		logo.setAlignmentX(CENTER_ALIGNMENT);
@@ -178,21 +178,21 @@ private String puntosTab;
         }
        
         String[] años = listaAños.toArray(new String[0]);
-        String[] meses = {"enero", "febrero", "marzo", "abril", "mayo", "junio",
-                          "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"};
-        String[] diasS = dias.toArray(new String[0]);
+        String[] meses = {" enero", " febrero", " marzo", " abril", " mayo", " junio",
+                          " julio", " agosto", " septiembre", " octubre", " noviembre", " diciembre"};
+        String[] diasS = dias.toArray(new String[0]); 
        
         //creamos el String en el que van a ir las opciones del deporte
-        String [] deporteS = {"deportes relajados (yoga, tiro con arco, meditar, taichi, caminar, golf, bolos, pesca, etc.).", "deportes moderados (futting, natación de manera relajada, baile, etc.). ",
-        "deportes intensos (cualquier deporte elaborado de manera competitiva).","sedentario (no hago deporte)." };
+        String [] deporteS = {"  deportes relajados (yoga, tiro con arco, meditar, taichi, caminar, golf, bolos, pesca, etc.).", "  deportes moderados (futting, natación de manera relajada, baile, etc.). ",
+        "  deportes intensos (cualquier deporte elaborado de manera competitiva).","  sedentario (no hago deporte)." };
 
         //creamos el String en el que van a ir las opciones del trabajo o estudio
-        String [] trabajoS = {"todo el día de pie, en bici, etc. (repartidor en bicicleta, guía turístico, policía,obrero etc.). ",
-        "medio (profesor, entrenador, secretario,etc.).","sedentario (oficinista, teletrabajo, programador, dependiente de tienda, etc.). "};
+        String [] trabajoS = {"  todo el día de pie, en bici, etc. (repartidor en bicicleta, guía turístico, policía, obrero etc.). ",
+        "  medio (profesor, entrenador, secretario,etc.).","  sedentario (oficinista, teletrabajo, programador, dependiente de tienda, etc.). "};
        
         //creamos el String en el que van a ir las opciones de nutricion
-        String [] nutricionS = {"como todo casero, alimentación equilibrada y cuento las calorías.", "todo casero, normalmente equilibrado y saludable.",
-        "como en casa normalmente, pero algunas cosas ultraprocesadas.", "como chatarra."};
+        String [] nutricionS = {"  como todo casero, alimentación equilibrada y cuento las calorías.", "  todo casero, normalmente equilibrado y saludable.",
+        "  como en casa normalmente, pero algunas cosas ultraprocesadas.", "  como chatarra."};
        
         //creamos el string que va a indicar las opciones de alcohol
 //        String [] alcoS = {"excesivo. ", "moderado.", "casi nulo.", "abstemio."};
@@ -201,7 +201,7 @@ private String puntosTab;
 //        String [] fumarS = {"diariamente.","ocasionalmente.","no fumo."};
        
         //creamos el string que va a indicar las opciones de sueño
-        String [] suenoS = {"8 o más.","entre 7 y 8.","entre 6 y 7.","menos de 6."};
+        String [] suenoS = {"  8 o más.","  entre 7 y 8.","  entre 6 y 7.","  menos de 6."};
        
         // Creamos los JComboBox
         JComboBox<String> selectAños = new JComboBox<>(años);
@@ -232,10 +232,12 @@ private String puntosTab;
         JLabel sexoL = new JLabel("Sexo: ");
        
         //Altura en cm
-        JLabel alturaL = new JLabel("Altura(cm): ");
+        JLabel alturaL = new JLabel("Altura: ");
+        JLabel cms = new JLabel (" cm");
        
         //Peso en kg
-        JLabel pesoL = new JLabel ("Peso(kg): ");
+        JLabel pesoL = new JLabel ("Peso: ");
+        JLabel kilos = new JLabel (" kg");
        
         //JTextField para que el usuario introduzca el Peso
         JTextField pesoTF = new JTextField(2);
@@ -253,9 +255,13 @@ private String puntosTab;
        
         //JLabel que va a indicar la opcione de nutricion
         JLabel nutricionL = new JLabel ("Alimentacion: ");
+        
+        //Fuente
+        Font fuente = new Font("Tahoma", Font.BOLD, 20);  // Fuente grande
+        Font fuente2 = new Font("Tahoma", Font.BOLD, 15);
        
         //JLabel que va a indicar la opcion de alcohol
-        JLabel alcoL = new JLabel ("Consumo de alcohol:");
+        JLabel alcoL = new JLabel ("Consumo de alcohol:   ");
         JSlider sliderAlc = new JSlider(JSlider.HORIZONTAL, 0, 4, 2);
         sliderAlc.setMajorTickSpacing(20); // Espaciado principal (marcas grandes)
         sliderAlc.setMinorTickSpacing(5);  // Espaciado menor (marcas pequeñas)
@@ -267,11 +273,27 @@ private String puntosTab;
         espacioAlc.setOpaque(false);
         
         Hashtable<Integer, JLabel> labelTableAlc = new Hashtable<>();
-        labelTableAlc.put(0, new JLabel("Abstemio"));
-        labelTableAlc.put(1, new JLabel("Bajo"));
-        labelTableAlc.put(2, new JLabel("Medio"));
-        labelTableAlc.put(3, new JLabel("Alto"));
-        labelTableAlc.put(4, new JLabel("Muy alto"));
+        JLabel abstemio = new JLabel("Abstemio");
+        abstemio.setFont(fuente2);
+        abstemio.setForeground(new Color(50,70,90));
+        JLabel bajo = new JLabel("Bajo");
+        bajo.setFont(fuente2);
+        bajo.setForeground(new Color(50,70,90));
+        JLabel medio = new JLabel("Medio");
+        medio.setFont(fuente2);
+        medio.setForeground(new Color(50,70,90));
+        JLabel alto = new JLabel("Alto");
+        alto.setFont(fuente2);
+        alto.setForeground(new Color(50,70,90));
+        JLabel muyAlto = new JLabel("Muy alto");
+        muyAlto.setFont(fuente2);
+        muyAlto.setForeground(new Color(50,70,90));
+
+        labelTableAlc.put(0, abstemio);
+        labelTableAlc.put(1, bajo);
+        labelTableAlc.put(2, medio);
+        labelTableAlc.put(3, alto);
+        labelTableAlc.put(4, muyAlto);
 
         sliderAlc.setLabelTable(labelTableAlc);
         sliderAlc.addChangeListener(new ChangeListener() {
@@ -282,7 +304,7 @@ private String puntosTab;
         });
         
         //JLabel que va a indicar la opcion de fumar
-        JLabel fumarL = new JLabel ("Consumo de tabaco: ");
+        JLabel fumarL = new JLabel ("Consumo de tabaco:      ");
         JSlider sliderTab = new JSlider(JSlider.HORIZONTAL, 0, 4, 2);
         sliderTab.setMajorTickSpacing(20); // Espaciado principal (marcas grandes)
         sliderTab.setMinorTickSpacing(5);  // Espaciado menor (marcas pequeñas)
@@ -294,11 +316,27 @@ private String puntosTab;
         espacioTab.setOpaque(false);
         
         Hashtable<Integer, JLabel> labelTableTab = new Hashtable<>();
-        labelTableTab.put(0, new JLabel("Abstemio"));
-        labelTableTab.put(1, new JLabel("Bajo"));
-        labelTableTab.put(2, new JLabel("Medio"));
-        labelTableTab.put(3, new JLabel("Alto"));
-        labelTableTab.put(4, new JLabel("Muy alto"));
+        JLabel abstemio2 = new JLabel("Abstemio");
+        abstemio2.setFont(fuente2);
+        abstemio2.setForeground(new Color(50,70,90));
+        JLabel bajo2 = new JLabel("Bajo");
+        bajo2.setFont(fuente2);
+        bajo2.setForeground(new Color(50,70,90));
+        JLabel medio2 = new JLabel("Medio");
+        medio2.setFont(fuente2);
+        medio2.setForeground(new Color(50,70,90));
+        JLabel alto2 = new JLabel("Alto");
+        alto2.setFont(fuente2);
+        alto2.setForeground(new Color(50,70,90));
+        JLabel muyAlto2 = new JLabel("Muy alto");
+        muyAlto2.setFont(fuente2);
+        muyAlto2.setForeground(new Color(50,70,90));
+
+        labelTableTab.put(0, abstemio2);
+        labelTableTab.put(1, bajo2);
+        labelTableTab.put(2, medio2);
+        labelTableTab.put(3, alto2);
+        labelTableTab.put(4, muyAlto2);
 
         sliderTab.setLabelTable(labelTableTab);
         sliderAlc.addChangeListener(new ChangeListener() {
@@ -346,10 +384,12 @@ private String puntosTab;
         //añadimos los elementos al panelPeso
         panelPeso.add(pesoL);
         panelPeso.add(pesoTF);
+        panelPeso.add(kilos);
        
         //añadimos los elementos al panelAltura
         panelAltura.add(alturaL);
         panelAltura.add(alturaTF);
+        panelAltura.add(cms);
        
         //añadimos los elementos al panelDeporte
         panelDeporte.add(deporteL);
@@ -385,23 +425,23 @@ private String puntosTab;
         panelFinal.add(panelLogo);
         panelFinal.add(Box.createVerticalStrut(20));
         panelFinal.add(panelEdad);
-        panelFinal.add(Box.createVerticalStrut(20));
+        panelFinal.add(Box.createVerticalStrut(60));
         panelFinal.add(panelSexo);
-        panelFinal.add(Box.createVerticalStrut(20));
+        panelFinal.add(Box.createVerticalStrut(60));
         panelFinal.add(panelPeso);
-        panelFinal.add(Box.createVerticalStrut(20));
+        panelFinal.add(Box.createVerticalStrut(60));
         panelFinal.add(panelAltura);
-        panelFinal.add(Box.createVerticalStrut(20));
+        panelFinal.add(Box.createVerticalStrut(60));
         panelFinal.add(panelDeporte);
-        panelFinal.add(Box.createVerticalStrut(20));
+        panelFinal.add(Box.createVerticalStrut(60));
         panelFinal.add(panelTrabajo);
-        panelFinal.add(Box.createVerticalStrut(20));
+        panelFinal.add(Box.createVerticalStrut(60));
         panelFinal.add(panelNutricion);
-        panelFinal.add(Box.createVerticalStrut(20));
+        panelFinal.add(Box.createVerticalStrut(60));
         panelFinal.add(panelAlc);
-        panelFinal.add(Box.createVerticalStrut(20));
+        panelFinal.add(Box.createVerticalStrut(60));
         panelFinal.add(panelFumar);
-        panelFinal.add(Box.createVerticalStrut(20));
+        panelFinal.add(Box.createVerticalStrut(60));
         panelFinal.add(panelSueño);
         panelFinal.add(Box.createVerticalStrut(60));
         panelFinal.add(panelOE);
@@ -413,23 +453,33 @@ private String puntosTab;
         borderPanel.add(panelFinal, BorderLayout.CENTER);
         borderPanel.add(p, BorderLayout.SOUTH);
         add(borderPanel);
-       
-        //ajustamos el tamaño
-//        Font largeFont = new Font("Georgia", Font.PLAIN, 14);  // Fuente grande
 
      //configura fuentes más grandes para los componentes
+     fechaNacL.setFont(fuente);
+     sexoL.setFont(fuente);
+     pesoL.setFont(fuente);
+     kilos.setFont(fuente);
+     alturaL.setFont(fuente);
+     cms.setFont(fuente);
+     deporteL.setFont(fuente);
+     trabajoL.setFont(fuente);
+     nutricionL.setFont(fuente);
+     alcoL.setFont(fuente);
+     fumarL.setFont(fuente);
+     sueñoL.setFont(fuente);
 	 fechaNacL.setForeground(new Color(50,70,90));
 	 sexoL.setForeground(new Color(50,70,90));
 	 pesoL.setForeground(new Color(50,70,90));
+     kilos.setForeground(new Color(50,70,90));
 	 alturaL.setForeground(new Color(50,70,90));
+     cms.setForeground(new Color(50,70,90));
 	 deporteL.setForeground(new Color(50,70,90));
 	 trabajoL.setForeground(new Color(50,70,90));
 	 nutricionL.setForeground(new Color(50,70,90));
 	 alcoL.setForeground(new Color(50,70,90));
 	 fumarL.setForeground(new Color(50,70,90));
 	 sueñoL.setForeground(new Color(50,70,90));
-	 omitir.setForeground(new Color(50,70,90));
-	 enviar.setForeground(new Color(50,70,90));
+
 
 //     fechaNacL.setFont(largeFont);
 //     sexoL.setFont(largeFont);
@@ -445,6 +495,15 @@ private String puntosTab;
 //     enviar.setFont(largeFont);
 
      //aplica la fuente a los JComboBox y JTextFields
+	 selectAños.setFont(fuente);
+     selectMes.setFont(fuente);
+     selectDia.setFont(fuente);
+     selectNutricion.setFont(fuente);
+     selectSue.setFont(fuente);
+     selectDeporte.setFont(fuente);
+     selectTrabajo.setFont(fuente);
+     pesoTF.setFont(fuente);
+     alturaTF.setFont(fuente);
 	 selectAños.setForeground(new Color(50,70,90));
 	 selectMes.setForeground(new Color(50,70,90));
 	 selectDia.setForeground(new Color(50,70,90));
@@ -467,7 +526,9 @@ private String puntosTab;
 
      //aplica la fuente a los JCheckBox
 	 hombreC.setForeground(new Color(50,70,90));
+	 hombreC.setFont(fuente);
 	 mujerC.setForeground(new Color(50,70,90));
+	 mujerC.setFont(fuente);
 
 //     hombreC.setFont(largeFont);
 //     mujerC.setFont(largeFont);
