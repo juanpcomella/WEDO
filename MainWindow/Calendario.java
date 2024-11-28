@@ -74,14 +74,14 @@ public class Calendario extends JPanel {
 
         diasPanel.setLayout(new GridLayout(0, 7));
         add(diasPanel, BorderLayout.CENTER);
-        
+       
         actualizarVista();
     }
 
     private String getMonthYearString() {
         return String.format("%d - %02d", año, mes);
     }
-    
+   
     private void irMesActual() {
         LocalDate hoy = LocalDate.now();
         this.año = hoy.getYear();
@@ -98,9 +98,9 @@ public class Calendario extends JPanel {
         diasPanel.revalidate();
         diasPanel.repaint();
     }
-    
+   
     private void actualizarMes(int offset) {
-		seleccionado = seleccionado.plusMonths(offset);
+seleccionado = seleccionado.plusMonths(offset);
         año = seleccionado.getYear();
         mes = seleccionado.getMonthValue();
         tituloLabel.setText(getMonthYearString());
@@ -152,21 +152,21 @@ public class Calendario extends JPanel {
                 if (evento.getFecha().equals(date)) {
                     JLabel eventoLabel = new JLabel(evento.getNombre());
                     eventoLabel.setOpaque(true);
-                    
+                   
                     if (evento.getCategoria().equals(Categorias.Estudios)) {
-                    	eventoLabel.setBackground(Color.MAGENTA);
-					}else if (evento.getCategoria().equals(Categorias.Trabajo)) {
-						eventoLabel.setBackground(Color.GREEN);
-					}else if (evento.getCategoria().equals(Categorias.Deporte)) {
-						eventoLabel.setBackground(Color.CYAN);
-					}else if (evento.getCategoria().equals(Categorias.Ocio)) {
-						eventoLabel.setBackground(Color.ORANGE);
-					}
+                    eventoLabel.setBackground(Color.MAGENTA);
+}else if (evento.getCategoria().equals(Categorias.Trabajo)) {
+eventoLabel.setBackground(Color.GREEN);
+}else if (evento.getCategoria().equals(Categorias.Deporte)) {
+eventoLabel.setBackground(Color.CYAN);
+}else if (evento.getCategoria().equals(Categorias.Ocio)) {
+eventoLabel.setBackground(Color.ORANGE);
+}
 
                     eventoLabel.setPreferredSize(new java.awt.Dimension(8, 8));
                     eventoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                     eventoLabel.setFont(new Font("Arial", Font.BOLD, 8));
-                    
+                   
                     eventoLabel.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
@@ -213,11 +213,11 @@ public class Calendario extends JPanel {
         JTextField campoNombre = new JTextField();
         panel.add(etiquetaNombre);
         panel.add(campoNombre);
-        
+       
         panel.add(new JLabel());
         JCheckBox todoElDiaCheckBox = new JCheckBox("Todo el día");
         panel.add(todoElDiaCheckBox);
-        
+       
 
         JLabel fechaInicio = new JLabel("Hora de inicio:");
         Integer[] horasArray = new Integer[25];
@@ -228,7 +228,7 @@ public class Calendario extends JPanel {
 
         JComboBox<Integer> horas = new JComboBox<>(horasArray);
         JComboBox<String> minutos =  new JComboBox<>(minutosArray);
-        
+       
         JPanel panelHoraInicio = new JPanel();
         panelHoraInicio.add(horas);
         panelHoraInicio.add(minutos);
@@ -259,7 +259,7 @@ public class Calendario extends JPanel {
         JComboBox<Categorias> categorias = new JComboBox<>(Categorias.values());
         panel.add(etiquetaCategorias);
         panel.add(categorias);
-        
+       
         todoElDiaCheckBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -270,7 +270,7 @@ public class Calendario extends JPanel {
                 minutosFinal.setEnabled(!seleccionado);
             }
         });
-        
+       
         JButton botonGuardar = new JButton("Guardar");
         botonGuardar.addActionListener(new ActionListener() {
             @Override
@@ -281,13 +281,13 @@ public class Calendario extends JPanel {
                 if (nombreEvento.isEmpty()) {
                     JOptionPane.showMessageDialog(dialog, "Por favor, ingresa un nombre para el evento.");
                 } else {
-                	Evento evento = new Evento(nombreEvento, descripcionEvento, categoriaSeleccionada, date);
+                Evento evento = new Evento(nombreEvento, descripcionEvento, categoriaSeleccionada, date);
                     listaEventos.add(evento);
                     JOptionPane.showMessageDialog(dialog, "Evento guardado.");
                     actualizarVista();
                     dialog.dispose();
                 }
-                     	        		
+                             
             }
         });
 
@@ -297,16 +297,16 @@ public class Calendario extends JPanel {
         dialog.getContentPane().add(panel);
         dialog.setVisible(true);
     }
-    
+   
     private void mostrarEvento(Evento evento, LocalDate date) {
-    	JDialog dialog = new JDialog();
+    JDialog dialog = new JDialog();
         dialog.setTitle("Evento para el " + date.toString());
         dialog.setSize(300, 150);
         dialog.setLocationRelativeTo(this);
-        
+       
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(3, 1, 10, 10));
-        
+       
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                
         JLabel labelNombre = new JLabel("Nombre evento:");
@@ -321,13 +321,13 @@ public class Calendario extends JPanel {
         JLabel labelFechaEvento = new JLabel(evento.getFecha().format(formatter));
         panel.add(labelFecha);
         panel.add(labelFechaEvento);
-        
+       
         dialog.getContentPane().add(panel);
         dialog.setVisible(true);
-        
-    	
+       
+   
     }
-    
+   
     public static void interfaz() {
         JFrame frame = new JFrame("Calendario de Eventos");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -335,7 +335,7 @@ public class Calendario extends JPanel {
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        
+       
     }
 
     public static void main(String[] args) {
