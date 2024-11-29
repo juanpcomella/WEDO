@@ -112,6 +112,12 @@ public class VentanaTienda extends JFrame {
         modeloIcono.addRow(new Object[]{logoPlayaPalmeras, new Object[]{140, icon2}});
         modeloIcono.addRow(new Object[]{perfilMonje, new Object[]{300, icon2}});
 
+        for (int i = 0; i < iconoT.getRowCount(); i++) {
+            Point celda_comprada = new Point(i, 1); // Crear un Point para la celda en la fila i y columna 1
+            estadoCeldas.put(celda, false); // Añadir al HashMap con valor por defecto false
+        }
+
+        
         // Renderizador para la columna de "Precio" (JPanel con número e imagen)
         iconoT.getColumnModel().getColumn(1).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
