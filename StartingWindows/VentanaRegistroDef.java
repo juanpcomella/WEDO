@@ -166,6 +166,7 @@ public class VentanaRegistroDef extends JFrame {
                 else {                	
                 	BDs.crearTabla();
                 	BDs.insertarElementos(usernameUser, passwordUser, emailUser);
+                	Usuario usuario = new Usuario(usernameUser, emailUser, passwordUser);
 //                	for (int i = 0; i < BDs.usuarioExistente().size(); i++) {
 //    		            System.out.println(BDs.usuarioExistente().get(i));
 //    				}
@@ -177,7 +178,7 @@ public class VentanaRegistroDef extends JFrame {
 //    				}
 //    				System.out.println(BDs.usuarioExistente().size());
                     JOptionPane.showMessageDialog(null, "Cuenta Creada! \nBienvenido a WEDO!");
-                    VentanaEmpezarCuestionario nuevaVentana = new VentanaEmpezarCuestionario(usernameUser);
+                    VentanaEmpezarCuestionario nuevaVentana = new VentanaEmpezarCuestionario(usuario);
     				nuevaVentana.setVisible(true);
     				dispose();
 
