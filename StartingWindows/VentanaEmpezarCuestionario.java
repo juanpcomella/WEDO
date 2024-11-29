@@ -144,9 +144,10 @@ public class VentanaEmpezarCuestionario extends JFrame {
         
     }
 
-//    public static void main(String[] args) {
-//        new VentanaEmpezarCuestionario();
-//        
-//    }
+    public static void main(String[] args) {
+    	//le da la bienvenida a USUARIO cuando se ejecuta directamente la ventana, si se hace al registrarse, pondra el nombre de usuario
+        new VentanaEmpezarCuestionario("USUARIO");
+        
+    }
 }
 
