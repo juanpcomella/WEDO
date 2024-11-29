@@ -157,6 +157,12 @@ public class VentanaLoginDef extends JFrame {
                     	JOptionPane.showMessageDialog(null,"Bienvenido "+usernameUser+"!");
                     	 
                 	}
+                	Usuario usuario = new Usuario(usernameUser, usernameUser, nombreUsuario);
+                	if(usernameUser.contains("@") & usernameUser.contains(".")) {
+                		usuario.setNombreUsuario(BDs.pasarDeEmailAUsername(usernameUser));
+                	}else {
+                		usuario.setCorreo(BDs.getEmail(usernameUser));
+                	}
                   	MainWindow mw = new MainWindow();
                     mw.setVisible(true);
                     dispose();
