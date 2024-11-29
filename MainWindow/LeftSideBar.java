@@ -14,8 +14,10 @@ public class LeftSideBar extends JPanel {
         panel.setBackground(Color.LIGHT_GRAY);
         panel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
-        JButton button = new JButton("Left");
-        panel.add(button);
+        JButton button1 = new JButton("1");
+        panel.add(button1);
+
+
 
         add(panel);
     }

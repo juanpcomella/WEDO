@@ -163,7 +163,7 @@ public class VentanaLoginDef extends JFrame {
                 	}else {
                 		usuario.setCorreo(BDs.getEmail(usernameUser));
                 	}
-                  	MainWindow mw = new MainWindow();
+                  	MainWindow mw = new MainWindow(usuario);
                     mw.setVisible(true);
                     dispose();
                 }

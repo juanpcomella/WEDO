@@ -1,6 +1,7 @@
 package MainWindow;
 
 import ProfileWindow.ProfileWindow;
+import StartingWindows.Usuario;
 import VentanaTienda.VentanaTienda;
 
 
@@ -16,9 +17,13 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+import static java.lang.Thread.sleep;
+
 public class Navbar extends JPanel {
 
-    public Navbar() {
+    private boolean isLeftSidebarVisible = false;
+
+    public Navbar(LeftSideBar leftSideBar, Usuario usuario) {
         setLayout(new GridBagLayout()); // Cambiar a GridBagLayout
         setBackground(Color.LIGHT_GRAY);
 
@@ -36,6 +41,49 @@ public class Navbar extends JPanel {
         gbc.gridx = 0;
         gbc.weightx = 0; // No se expande horizontalmente
         add(hamburgerMenu, gbc);
+
+        // left sidebar thread logic
+        int lsbWidth = (int) ((getWidth()) * 0.1); // 15% of the width for the sidebar
+
+        hamburgerMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Thread(() -> {
+                    int targetWidth = isLeftSidebarVisible ? 0 : lsbWidth;
+                    int currentWidth = leftSideBar.getWidth();
+                    int step = isLeftSidebarVisible ? -10 : 10; // Correct the step direction
+
+                    System.out.println("Starting animation. Target width: " + targetWidth + ", Current width: " + currentWidth);
+
+                    while ((step > 0 && currentWidth < targetWidth) || (step < 0 && currentWidth > targetWidth)) {
+                        currentWidth += step;
+
+                        // Avoid overshooting the target width
+                        if ((step > 0 && currentWidth > targetWidth) || (step < 0 && currentWidth < targetWidth)) {
+                            currentWidth = targetWidth;
+                        }
+
+                        int finalCurrentWidth = currentWidth;
+                        SwingUtilities.invokeLater(() -> {
+                            leftSideBar.setPreferredSize(new Dimension(finalCurrentWidth, leftSideBar.getHeight()));
+                            SwingUtilities.getWindowAncestor(leftSideBar).revalidate();
+                            SwingUtilities.getWindowAncestor(leftSideBar).repaint();
+                        });
+
+                        try {
+                            Thread.sleep(10); // Control animation speed
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+
+                    // Toggle sidebar visibility state
+                    isLeftSidebarVisible = !isLeftSidebarVisible;
+                }).start();
+            }
+        });
+
+
 
         // Espacio horizontal (puedes ajustar los tamaños)
         gbc.gridx++;
@@ -56,6 +104,9 @@ public class Navbar extends JPanel {
         JButton searchIcon = new JButton(searchImagenRedimensionada);
         searchIcon.setBorderPainted(false);
         searchIcon.setFocusable(false);
+        searchIcon.setFocusPainted(false);
+        searchIcon.setContentAreaFilled(false);
+        searchIcon.setBackground(new Color(0,0,0,0));
         gbc.gridx++;
         gbc.weightx = 0;
         add(searchIcon, gbc);
@@ -83,8 +134,10 @@ public class Navbar extends JPanel {
         ImageIcon shopImagenRedimensionada = new ImageIcon(shopImagenEscalada);
         JButton shopIcon = new JButton(shopImagenRedimensionada);
         shopIcon.setBackground(new Color(0,0,0,0));
+        shopIcon.setFocusPainted(false);
         shopIcon.setBorderPainted(false);
         shopIcon.setFocusable(false);
+        shopIcon.setContentAreaFilled(false);
         shopIcon.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 VentanaTienda ventanaTienda = new VentanaTienda();
@@ -118,7 +171,7 @@ public class Navbar extends JPanel {
             profileLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    SwingUtilities.invokeLater(() -> new ProfileWindow().setVisible(true));
+                    SwingUtilities.invokeLater(() -> new ProfileWindow(usuario).setVisible(true));
                     ((JFrame) SwingUtilities.getWindowAncestor(profileLabel)).dispose();
                 }
             });
@@ -128,15 +181,6 @@ public class Navbar extends JPanel {
             System.out.println("Error al cargar la imagen de perfil: " + e.getMessage());
         }
 
-        hamburgerMenu.addActionListener(new ActionListener() {
-            private boolean leftSideBarVisible = false;
-            public void actionPerformed(ActionEvent e) {
-                leftSideBarVisible = !leftSideBarVisible;
-                if(!leftSideBarVisible) {
-
-                }
-            }
-        });
     }
 
     private Image getCircularImage(BufferedImage image, int diameter) {

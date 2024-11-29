@@ -93,7 +93,7 @@ private int opcionFum;
 private int opcionSue;
 private String puntosAlc;
 private String puntosTab;
-    public ventanaCuestionario() {
+    public ventanaCuestionario(Usuario usuario) {
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("WEDO");
@@ -561,7 +561,7 @@ JOptionPane.showMessageDialog(null,"Datos introducidos no válidos.");
 }
 if(pasarAlMain) {
 JOptionPane.showMessageDialog(null,"Cuestionario completado con éxito.");
-MainWindow mw = new MainWindow();
+MainWindow mw = new MainWindow(usuario);
 mw.setVisible(true);
 dispose();
 }
@@ -723,14 +723,14 @@ public void actionPerformed(ActionEvent e) {
 int respuesta = JOptionPane.showConfirmDialog(null, "¿Desea omitir el cuestionario?","Omitir",
 JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE );
 if (respuesta == JOptionPane.YES_OPTION) {
-MainWindow ventanaPrincipal = new MainWindow();
+MainWindow ventanaPrincipal = new MainWindow(usuario);
 ventanaPrincipal.setVisible(true);
 dispose();
 }
 }
 });
     }//udue+
-   
+   /*
     public static void main(String[] args) {
             try {
                     UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -739,9 +739,11 @@ dispose();
             }
 
             SwingUtilities.invokeLater(() -> {
-                    ventanaCuestionario ventana = new ventanaCuestionario();
+                    ventanaCuestionario ventana = new ventanaCuestionario(usuario);
                     ventana.setVisible(true);
             });
 
     }
+
+    */
 }

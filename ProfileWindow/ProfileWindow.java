@@ -1,6 +1,7 @@
 package ProfileWindow;
 
 import MainWindow.MainWindow;
+import StartingWindows.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,11 +12,13 @@ import javax.imageio.ImageIO;
 import javax.swing.table.DefaultTableModel;
 import java.io.*;
 
+
+
 import java.awt.geom.Ellipse2D;
 
 public class ProfileWindow extends JFrame {
 
-    public ProfileWindow() {
+    public ProfileWindow(Usuario usuario) {
         setTitle("WEDO - Profile");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -51,7 +54,7 @@ public class ProfileWindow extends JFrame {
 
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                MainWindow mainWindow = new MainWindow();
+                MainWindow mainWindow = new MainWindow(usuario);
                 mainWindow.setVisible(true);
                 dispose();
             }
@@ -86,7 +89,7 @@ public class ProfileWindow extends JFrame {
 
         JPanel usernamePanel = new JPanel(new GridBagLayout());
         usernamePanel.setBackground(Color.WHITE);
-        JLabel usernameLabel = new JLabel("Nombre Usuario", SwingConstants.CENTER);
+        JLabel usernameLabel = new JLabel(""+usuario.getNombreUsuario(), SwingConstants.CENTER);
         usernameLabel.setFont(new Font("Arial", Font.BOLD, 48));
         usernamePanel.add(usernameLabel);
         leftPanel.add(usernamePanel, leftGBC);
@@ -264,9 +267,11 @@ public class ProfileWindow extends JFrame {
         g2d.dispose();
         return output;
     }
-
+/*
     public static void main(String[] args) {
         ProfileWindow window = new ProfileWindow();
         window.setVisible(true);
     }
+
+ */
 }

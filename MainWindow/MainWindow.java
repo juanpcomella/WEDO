@@ -1,5 +1,7 @@
 package MainWindow;
 
+import StartingWindows.Usuario;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,7 +10,7 @@ import java.time.LocalDate;
 
 public class MainWindow extends JFrame {
 
-    public MainWindow() {
+    public MainWindow(Usuario usuario) {
         setTitle("WEDO");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,7 +35,11 @@ public class MainWindow extends JFrame {
         JPanel panelSur = new JPanel();
         panelSur.setLayout(new BorderLayout());
 
-        Navbar navbar = new Navbar();
+        LeftSideBar leftSideBar = new LeftSideBar();
+        leftSideBar.setPreferredSize(new Dimension(0, getHeight()));
+        panelOeste.add(leftSideBar, BorderLayout.CENTER);
+
+        Navbar navbar = new Navbar(leftSideBar, usuario);
         int navbarHeight = (int) (getHeight() * 0.1);
         navbar.setPreferredSize(new Dimension(getWidth(), navbarHeight));
         panelNorte.add(navbar, BorderLayout.CENTER);
@@ -41,12 +47,11 @@ public class MainWindow extends JFrame {
         Calendario calendario = new Calendario(LocalDate.now().getYear(), LocalDate.now().getMonthValue());
         panelCentro.add(calendario, BorderLayout.CENTER);
 
-        LeftSideBar leftSideBar = new LeftSideBar();
-        panelOeste.add(leftSideBar, BorderLayout.CENTER);
+
 
         RightSideBar rightSideBar = new RightSideBar();
-        int rightSideBarWidth = (int) (getWidth() * 0.1);
-        rightSideBar.setPreferredSize(new Dimension(rightSideBarWidth, getHeight()));
+        int rsbWidth = (int) (getWidth() * 0.1);
+        rightSideBar.setPreferredSize(new Dimension(rsbWidth, getHeight()));
         panelEste.add(rightSideBar, BorderLayout.EAST);
 
 
@@ -66,16 +71,14 @@ public class MainWindow extends JFrame {
                 rightSideBar.revalidate();
             }
         });
-        /*
-
-        */
 
 
         setVisible(true);
     }
-
+/*
     public static void main(String[] args) {
-        MainWindow window = new MainWindow();
+        MainWindow window = new MainWindow(Usuario usuario);
         window.setVisible(true);
     }
+ */
 }
