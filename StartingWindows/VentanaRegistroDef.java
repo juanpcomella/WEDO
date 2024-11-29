@@ -150,15 +150,18 @@ public class VentanaRegistroDef extends JFrame {
 				String passwordConfUser = new String(passwordConfTF.getPassword());
 				String emailUser = emailTF.getText();
 				String usernameUser = usernameTF.getText();
+				//rellenar todos los campos
 				if (usernameUser.isEmpty() || emailUser.isEmpty() || passwordUser.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Por favor rellena todos los datos.");
+                    //confirmar que la contraseña y su confirmación sean iguales
                 }else if (!passwordUser.equals(passwordConfUser)) {
                     JOptionPane.showMessageDialog(null,"Las contraseñas no son iguales.");
                 }
+				//comprobar que el nombre de usuario no existe
                 else if(BDs.usuarioExistente(usernameUser)){
                 	JOptionPane.showMessageDialog(null,"Nombre de usuario existente.");
-                }else if(BDs.contraseñaExistente(passwordUser)){
-                	JOptionPane.showMessageDialog(null,"Contraseña existente.");
+                }else if(BDs.emailExistente(emailUser)){
+                	JOptionPane.showMessageDialog(null,"Correo electrónico en uso.");
                 }
                 else {                	
                 	BDs.crearTabla();
