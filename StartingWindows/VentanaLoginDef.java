@@ -9,6 +9,10 @@ import BaseDeDatos.BDs;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.font.TextAttribute;
+import java.util.Map;
 
 public class VentanaLoginDef extends JFrame {
 	
@@ -126,8 +130,41 @@ public class VentanaLoginDef extends JFrame {
         olvidado.setFont(new Font("Arial", Font.ITALIC, 16));
         olvidado.setContentAreaFilled(false);
         olvidado.setBorderPainted(false);
-        olvidado.setFocusable(false);
+        olvidado.addMouseListener(new MouseAdapter() {
 
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				olvidado.setFont(olvidado.getFont().deriveFont(
+					Map.of(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON)));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				olvidado.setFont(new Font("Arial", Font.ITALIC, 16));
+			}
+			       	
+        });
+        olvidado.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				 // Crear un JTextField
+                JTextField textField = new JTextField(15); // Ancho de 15 columnas
+
+                // Mostrar el JOptionPane con el JTextField
+                int option = JOptionPane.showOptionDialog(
+                        panel,
+                        new Object[]{"Introduce tu correo o usuario:", textField},
+                        "",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        new Object[]{"Aceptar"}, // Botón personalizado
+                        "Aceptar"
+                );
+			}
+        });
+        
         gbc.gridx = 0;
         gbc.gridy = 8;
         gbc.insets = new Insets(0, 10, 5, 10);
