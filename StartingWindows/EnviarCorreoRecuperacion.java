@@ -34,7 +34,7 @@ public class EnviarCorreoRecuperacion {
             message.setFrom(new InternetAddress(usuarioCorreo));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(correoDestino));
             message.setSubject("Recuperación de contraseña");
-            message.setText("Tu contrase es "+BDs.getPassword(BDs.pasarDeEmailAUsername(correoDestino)));
+            message.setText("Tu contrase es: "+BDs.getPassword(BDs.pasarDeEmailAUsername(correoDestino)));
 
             // Enviar el mensaje
             Transport.send(message);

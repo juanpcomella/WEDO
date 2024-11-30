@@ -76,4 +76,8 @@ propiedades.put("mail.smtp.port", "587");
 propiedades.put("mail.smtp.auth", "true");
 propiedades.put("mail.smtp.starttls.enable", "true");
 
-
+He tenido varios problemas a la hora de ejecutar el código ya que me saltaba una excepción relacionada con la contraseña del correo emisor. Después de una larga
+búsqueda he descubierto que lo que habia que hacer era generar una contraseña de aplicación, y utilizar esa contraseña para acceder desde el código. Así, el funcionamiento 
+de la recuperación de contraseña funciona, con un único pero: cada vez que se ejecute el código, como el correo desde el que se envía el mensaje está vinculado a mi teléfono, y se pide
+una verificación de doble factor, es necesario que acepte la solicitud de realizar el mensaje desde mi móvil.
+-------------------------------------------------------------------
