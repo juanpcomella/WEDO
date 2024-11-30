@@ -63,4 +63,17 @@ Use SwingUtilities.invokeLater or SwingWorker to update the UI on the EDT while 
 Revalidate and Repaint:
 
 After each incremental change, call revalidate() and repaint() on the parent container to update the layout dynamically.
+-----------------------------------------------------------------
+Esta consulta está relacionada con la recuperación de una contraseña olvidada.
+Q:¿Cómo le mando un correo a una dirección de correo especifica?
+
+DUDAS ACLARADAS:
+- Se debe descargar un .jar (javax.mail.jar) para poder utilizar las funciones que se necesitan para poder trabajar con correos electrónicos
+- Las siguientes propiedades son muy importantes para que el mensaje se envia de forma segura:
+
+propiedades.put("mail.smtp.host", "smtp.gmail.com");
+propiedades.put("mail.smtp.port", "587");
+propiedades.put("mail.smtp.auth", "true");
+propiedades.put("mail.smtp.starttls.enable", "true");
+
 

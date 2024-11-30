@@ -162,6 +162,19 @@ public class VentanaLoginDef extends JFrame {
                         new Object[]{"Aceptar"}, // Botón personalizado
                         "Aceptar"
                 );
+                if(option == 0) { 
+                	String correoRep = null;
+                	String correoOuserDeRecuperacion = textField.getText();
+                	if(BDs.usuarioExistente(correoOuserDeRecuperacion)) {
+                		correoRep = BDs.getEmail(correoOuserDeRecuperacion);
+                		EnviarCorreoRecuperacion.enviarCorreo(correoRep);
+                	}else if(BDs.emailExistente(correoOuserDeRecuperacion)) {
+                		correoRep = correoOuserDeRecuperacion;
+                		EnviarCorreoRecuperacion.enviarCorreo(correoRep);
+                	}else {
+                        JOptionPane.showMessageDialog(null,"Usuario no encontrado.");
+                	}
+                }
 			}
         });
         
