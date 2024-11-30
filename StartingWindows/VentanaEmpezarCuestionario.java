@@ -63,7 +63,7 @@ public class VentanaEmpezarCuestionario extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ventanaCuestionario nuevaVentana = new ventanaCuestionario();
+				ventanaCuestionario nuevaVentana = new ventanaCuestionario(usuario);
 				nuevaVentana.setVisible(true);
 				dispose();			
 			}
@@ -85,7 +85,7 @@ public class VentanaEmpezarCuestionario extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-                MainWindow mainWindow = new MainWindow();
+                MainWindow mainWindow = new MainWindow(usuario);
                 mainWindow.setVisible(true);
                 dispose();
 			}

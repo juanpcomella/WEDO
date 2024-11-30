@@ -46,3 +46,21 @@ public class ImageExample {
         frame.setVisible(true);
     }
 }
+------------------------------------------------------------
+Esta consulta es referente al thread para el left sidebar.
+Q: Now i want the sidebar to have sort of an animation. For it to appear from the left. Dont do it, but tell me,
+is it posible to do it with a thread?
+
+A:
+Steps for Sliding Animation with a Thread
+Use a Thread or SwingWorker:
+
+Create a thread to handle the animation logic.
+Incrementally adjust the width (or position) of the sidebar over time to simulate the sliding effect.
+Update the UI Safely:
+
+Use SwingUtilities.invokeLater or SwingWorker to update the UI on the EDT while the thread handles the computation.
+Revalidate and Repaint:
+
+After each incremental change, call revalidate() and repaint() on the parent container to update the layout dynamically.
+
