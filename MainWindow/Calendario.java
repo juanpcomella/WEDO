@@ -123,7 +123,7 @@ public class Calendario extends JPanel {
         seleccionado = seleccionado.plusMonths(offset);
         año = seleccionado.getYear();
         mes = seleccionado.getMonthValue();
-        tituloLabel.setText(getMonthYearString()); // Actualiza el título con el mes y año
+        tituloLabel.setText(getMonthYearString());
         actualizarVista();
     }
 
