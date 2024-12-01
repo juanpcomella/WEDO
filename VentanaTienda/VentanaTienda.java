@@ -114,7 +114,7 @@ public class VentanaTienda extends JFrame {
 
         for (int i = 0; i < iconoT.getRowCount(); i++) {
             Point celda_comprada = new Point(i, 1); // Crear un Point para la celda en la fila i y columna 1
-            estadoCeldas.put(celda, false); // Añadir al HashMap con valor por defecto false
+            estadoCeldas.put(celda_comprada, false); // Añadir al HashMap con valor por defecto false
         }
 
         
@@ -123,12 +123,11 @@ public class VentanaTienda extends JFrame {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-                if (selectedRow != -1 && row == selectedRow && compra) {
-                    JLabel comprado = new JLabel("Comprado");
-                	iconoT.setValueAt(comprado, selectedRow, 1);
-                    return comprado;
-                }
+                Point celda_Render = new Point(row, column);
+                if (estadoCeldas.getOrDefault(celda_Render, false)) {
+                    // Si la celda ya está comprada, muestra el JLabel "Comprado"
+                    return new JLabel("Comprado");
+                } else {
 
                 if (column == hoveredColumn && row == hoveredRow) {
                     JButton comprarB = new JButton("Comprar");
@@ -144,6 +143,7 @@ public class VentanaTienda extends JFrame {
                             panel.add(iconLabel);
                         }
                     }
+                }
                 }
                 return panel;
             }
@@ -174,19 +174,15 @@ public class VentanaTienda extends JFrame {
             private Object valorOriginal;
             private JLabel comprado;
             private Object componente;
+            private Point celda;
 
             public ButtonCellEditor() {
                 button = new JButton("Comprar");
                 button.addActionListener(e -> {
                     int respuesta = JOptionPane.showConfirmDialog(null, "¿Desea comprar?", "Comprar", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
                     if (respuesta == JOptionPane.YES_OPTION) {
-                        comprado = new JLabel("comprado");
+                        comprado = new JLabel("Comprado");
                         componente = iconoT.getValueAt(selectedRow, 1);
-                        if (componente ==comprado) {
-                        	JOptionPane.showMessageDialog(null, "Ya ha comprado este objeto", "Error", JOptionPane.ERROR_MESSAGE);
-                            iconoT.setValueAt(comprado, selectedRow, 1);
-
-                        }
                         System.out.println("Compra realizada.");
                         estadoCeldas.put(celda, true);
                         compra = true;
@@ -208,8 +204,14 @@ public class VentanaTienda extends JFrame {
             public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
                 selectedRow = row;
                 button.setText("Comprar");
+                celda = new Point(row,column);
                 valorOriginal = value;
-                    return panel;
+                if (estadoCeldas.getOrDefault(celda,true)) {
+                	return comprado;
+                
+                } else {
+                	return panel;
+                }
 
                 
             }
