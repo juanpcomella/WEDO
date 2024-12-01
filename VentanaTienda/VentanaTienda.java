@@ -23,8 +23,7 @@ public class VentanaTienda extends JFrame {
     private int selectedRow = -1;
     private int selectedColumn = -1;
     private Map<Point, Boolean> estadoCeldas = new HashMap<>();
-    private boolean compra;
-
+    private int money;
     public VentanaTienda() {
         // Configuración de la ventana principal
         setTitle("Tienda");
@@ -84,7 +83,7 @@ public class VentanaTienda extends JFrame {
         panelIcono.add(new JScrollPane(iconoT), BorderLayout.CENTER);
 
         // Dinero almacenado aquí, luego se hará un parseInt para convertir
-        String dinero = "0";
+        String dinero = "200";
 
         // Parseo de dinero
         int money = Integer.parseInt(dinero);
@@ -136,6 +135,7 @@ public class VentanaTienda extends JFrame {
                     if (value instanceof Object[]) {
                         Object[] cellData = (Object[]) value;
                         JLabel numberLabel = new JLabel(String.valueOf(cellData[0]));
+                        
                         panel.add(numberLabel);
 
                         if (cellData[1] instanceof Icon) {
@@ -173,25 +173,48 @@ public class VentanaTienda extends JFrame {
             private JButton button;
             private Object valorOriginal;
             private JLabel comprado;
-            private Object componente;
             private Point celda;
-
             public ButtonCellEditor() {
                 button = new JButton("Comprar");
                 button.addActionListener(e -> {
-                    int respuesta = JOptionPane.showConfirmDialog(null, "¿Desea comprar?", "Comprar", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-                    if (respuesta == JOptionPane.YES_OPTION) {
-                        comprado = new JLabel("Comprado");
-                        componente = iconoT.getValueAt(selectedRow, 1);
-                        System.out.println("Compra realizada.");
-                        estadoCeldas.put(celda, true);
-                        compra = true;
-                        iconoT.setValueAt(comprado, selectedRow, 1);
-                        panel.repaint();
+                    // Obtener el precio de la celda seleccionada
+                    Object cellValue = iconoT.getValueAt(selectedRow, 1);
+                    int precio = 0;
+                    if (cellValue instanceof Object[]) {
+                        Object[] cellData = (Object[]) cellValue;
+                        if (cellData[0] instanceof Integer) {
+                            precio = (Integer) cellData[0];
+                        }
+                    }
+
+                    // Verificar si hay suficiente dinero
+                    if (money >= precio) {
+                        int respuesta = JOptionPane.showConfirmDialog(
+                                null, 
+                                "¿Desea comprar?", 
+                                "Comprar", 
+                                JOptionPane.YES_NO_OPTION, 
+                                JOptionPane.INFORMATION_MESSAGE
+                        );
+                        if (respuesta == JOptionPane.YES_OPTION) {
+                            comprado = new JLabel("Comprado");
+                            System.out.println("Compra realizada.");
+                            //money -= precio; // Restar el precio al dinero del usuario
+                            estadoCeldas.put(celda, true);
+                            iconoT.setValueAt(comprado, selectedRow, 1);
+                            panel.repaint();
+                        } else {
+                            System.out.println("Compra cancelada.");
+                            estadoCeldas.put(celda, false);
+                        }
                     } else {
-                        System.out.println("Compra cancelada.");
-                        compra = false;
-                        estadoCeldas.put(celda, false);
+                        // Mostrar un mensaje de error si no hay suficiente dinero
+                        JOptionPane.showMessageDialog(
+                                null, 
+                                "Error, no se puede comprar", 
+                                "Dinero insuficiente", 
+                                JOptionPane.ERROR_MESSAGE
+                        );
                     }
                     fireEditingStopped();
                 });
@@ -204,16 +227,13 @@ public class VentanaTienda extends JFrame {
             public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
                 selectedRow = row;
                 button.setText("Comprar");
-                celda = new Point(row,column);
+                celda = new Point(row, column);
                 valorOriginal = value;
-                if (estadoCeldas.getOrDefault(celda,true)) {
-                	return comprado;
-                
+                if (estadoCeldas.getOrDefault(celda, true)) {
+                    return new JLabel("Comprado");
                 } else {
-                	return panel;
+                    return panel;
                 }
-
-                
             }
 
             @Override
@@ -221,6 +241,7 @@ public class VentanaTienda extends JFrame {
                 return valorOriginal;
             }
         }
+
 
         iconoT.getColumnModel().getColumn(1).setCellEditor(new ButtonCellEditor());
 
