@@ -124,9 +124,6 @@ public class RightSideBar extends JPanel {
 
         habitos.add(habitosBoton);
 
-
-
-
         add(habitos);
     }
 }

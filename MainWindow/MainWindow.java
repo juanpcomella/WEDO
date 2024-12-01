@@ -10,7 +10,9 @@ import java.time.LocalDate;
 
 public class MainWindow extends JFrame {
 
-    public MainWindow(Usuario usuario) {
+    private static final Usuario Usuario = null;
+
+	public MainWindow(Usuario usuario) {
         setTitle("WEDO");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,10 +77,11 @@ public class MainWindow extends JFrame {
 
         setVisible(true);
     }
-/*
+
     public static void main(String[] args) {
-        MainWindow window = new MainWindow(Usuario usuario);
+    	Usuario usuario = new Usuario(null, null, null);
+        MainWindow window = new MainWindow(usuario);
         window.setVisible(true);
     }
- */
+
 }
