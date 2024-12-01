@@ -1,8 +1,7 @@
 package MainWindow;
 
 import java.time.LocalDate;
-
-
+import java.time.LocalDateTime;
 
 public class Evento {
     private String nombre;
@@ -28,10 +27,8 @@ public class Evento {
     public Categorias getCategoria() {
         return categoria;
     }
-
+    
     public LocalDate getFecha() {
-        return fecha;
+    	return fecha;
     }
-
 }
-

@@ -11,8 +11,9 @@ import java.time.LocalDate;
 public class MainWindow extends JFrame {
 
     private static final Usuario Usuario = null;
+    private Calendario calendario;
 
-	public MainWindow(Usuario usuario) {
+    public MainWindow(Usuario usuario) {
         setTitle("WEDO");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -46,21 +47,31 @@ public class MainWindow extends JFrame {
         navbar.setPreferredSize(new Dimension(getWidth(), navbarHeight));
         panelNorte.add(navbar, BorderLayout.CENTER);
 
-        Calendario calendario = new Calendario(LocalDate.now().getYear(), LocalDate.now().getMonthValue());
+        // Crear el calendario con la fecha actual
+        calendario = new Calendario(LocalDate.now().getYear(), LocalDate.now().getMonthValue());
         panelCentro.add(calendario, BorderLayout.CENTER);
 
+        // Agregar botón para cambiar vista
+        JButton toggleButton = new JButton("Cambiar Vista");
+        toggleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calendario.toggleView();  // Alternar entre vista semanal y mensual
+            }
+        });
 
+        panelSur.add(toggleButton, BorderLayout.CENTER);
 
         RightSideBar rightSideBar = new RightSideBar();
         int rsbWidth = (int) (getWidth() * 0.1);
         rightSideBar.setPreferredSize(new Dimension(rsbWidth, getHeight()));
         panelEste.add(rightSideBar, BorderLayout.EAST);
 
-
         panel.add(panelNorte, BorderLayout.NORTH);
         panel.add(panelEste, BorderLayout.EAST);
         panel.add(panelCentro, BorderLayout.CENTER);
         panel.add(panelOeste, BorderLayout.WEST);
+        panel.add(panelSur, BorderLayout.SOUTH);
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
@@ -74,14 +85,12 @@ public class MainWindow extends JFrame {
             }
         });
 
-
         setVisible(true);
     }
 
     public static void main(String[] args) {
-    	Usuario usuario = new Usuario(null, null, null);
+        Usuario usuario = new Usuario(null, null, null);
         MainWindow window = new MainWindow(usuario);
         window.setVisible(true);
     }
-
 }
