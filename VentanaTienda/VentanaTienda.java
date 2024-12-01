@@ -86,7 +86,7 @@ public class VentanaTienda extends JFrame {
         String dinero = "200";
 
         // Parseo de dinero
-        int money = Integer.parseInt(dinero);
+        money = Integer.parseInt(dinero);
 
         // Cargar imágenes y redimensionarlas
         ImageIcon icon1 = new ImageIcon("imagenes/Imagen1.png");
@@ -199,7 +199,8 @@ public class VentanaTienda extends JFrame {
                         if (respuesta == JOptionPane.YES_OPTION) {
                             comprado = new JLabel("Comprado");
                             System.out.println("Compra realizada.");
-                            //money -= precio; // Restar el precio al dinero del usuario
+                            money -= precio; // Restar el precio al dinero del usuario
+                            stringDinero.setText(String.valueOf(money));
                             estadoCeldas.put(celda, true);
                             iconoT.setValueAt(comprado, selectedRow, 1);
                             panel.repaint();
