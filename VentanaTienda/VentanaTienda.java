@@ -155,8 +155,10 @@ public class VentanaTienda extends JFrame {
                 } else {
 
                 if (column == hoveredColumn && row == hoveredRow) {
-                    JButton comprarB = new JButton("Comprar");
-                    return comprarB;
+                	JButton boton = new JButton("Comprar");
+                	boton.setBackground(new Color(220, 220, 80));
+                	boton.setFont(new Font("Arial", Font.BOLD, 18));
+                	return boton;
                 } else {
                     if (value instanceof Object[]) {
                         Object[] cellData = (Object[]) value;
@@ -210,6 +212,8 @@ public class VentanaTienda extends JFrame {
                 this.estadoCeldas = estadoCeldas;
 
                 button = new JButton("Comprar");
+                button.setBackground(new Color(220, 100, 80));
+            	button.setFont(new Font("Arial", Font.BOLD, 18));
                 button.addActionListener(e -> {
                     // Obtener la celda seleccionada
                     int selectedRow = table.getSelectedRow();
@@ -269,7 +273,7 @@ public class VentanaTienda extends JFrame {
                 celda = new Point(row, column);
                 valorOriginal = value;
                 if (estadoCeldas.getOrDefault(celda, true)) {
-                	JLabel compradoL = new JLabel("  Comprado");
+                	JLabel compradoL = new JLabel("Comprado");
                     compradoL.setFont(new Font("Arial", Font.BOLD, 16));
                     compradoL.setForeground(Color.green);
                     return compradoL;
@@ -383,7 +387,10 @@ public class VentanaTienda extends JFrame {
                     }
                 }
                 if (hoveredRow==row && hoveredColumn ==1) {
-                	return new JButton("Comprar");
+                	JButton boton = new JButton("Comprar");
+                	boton.setBackground(new Color(220, 220, 80));
+                	boton.setFont(new Font("Arial", Font.BOLD, 18));
+                	return boton;
                 }
                 return panel;
             }
@@ -443,7 +450,7 @@ public class VentanaTienda extends JFrame {
         panelIconoConMargen.setBorder(new EmptyBorder(20, 250, 90, 250)); // Márgenes: arriba, izquierda, abajo, derecha
         panelIconoConMargen.add(scrollPane); // Añadir el JScrollPane que contiene el JTable
         panelIcono.add(panelIconoConMargen, BorderLayout.CENTER); // Añadir el panel con márgenes al panel principal
-
+        
         // Panel con márgenes para el JTable de Monedas
         JPanel panelMonedasConMargen = new JPanel();
         panelMonedasConMargen.setLayout(new BoxLayout(panelMonedasConMargen, BoxLayout.Y_AXIS));
