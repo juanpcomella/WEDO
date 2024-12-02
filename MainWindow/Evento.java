@@ -8,12 +8,14 @@ public class Evento {
     private String descripcion;
     private Categorias categoria;
     private LocalDate fecha;
+    private boolean todoElDia;
 
     public Evento(String nombre, String descripcion, Categorias categoria, LocalDate fecha) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.categoria = categoria;
         this.fecha = fecha;
+        this.todoElDia = todoElDia;
     }
 
     public String getNombre() {
@@ -30,5 +32,13 @@ public class Evento {
     
     public LocalDate getFecha() {
     	return fecha;
+    }
+    
+    public boolean esTodoElDia() {
+        return todoElDia;
+    }
+
+    public void setTodoElDia(boolean todoElDia) {
+        this.todoElDia = todoElDia;
     }
 }
