@@ -40,7 +40,8 @@ public class VentanaTienda extends JFrame {
 
         // TabbedPane para las secciones
         JTabbedPane tabbedPane = new JTabbedPane();
-        
+
+
 
         //tabbedPane.setPreferredSize(new Dimension(500, 500)); // Ancho personalizado para las pestañas
 
@@ -59,7 +60,16 @@ public class VentanaTienda extends JFrame {
 
         JTable iconoT = new JTable(modeloIcono);
         
-        //iconoT.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 0)); // Margen: arriba, izquierda, abajo, derecha
+     // Crear el JTable
+        JScrollPane scrollPane = new JScrollPane(iconoT);
+
+        // Crear un panel para envolver el JScrollPane
+        JPanel tablePanel = new JPanel(new BorderLayout());
+        iconoT.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 0)); // Margen: arriba, izquierda, abajo, derecha
+        tablePanel.add(scrollPane, BorderLayout.CENTER);
+
+
+        
 
         
         // MouseListener para capturar las celdas seleccionadas
@@ -311,33 +321,32 @@ public class VentanaTienda extends JFrame {
         ImageIcon pizzaazul = cargarImagen("imagenes/pizzaazul.png", 80, 80);
         
 
-        modeloDinero.addRow(new Object[]{zorroenluna, new Object[]{50, cargarImagen("imagenes/coin.jpg", 50, 50)}});
-        modeloDinero.addRow(new Object[]{pizzaazul, new Object[]{100, cargarImagen("imagenes/coin.jpg", 50, 50)}});
+        modeloDinero.addRow(new Object[]{zorroenluna, new Object[]{50, icon2}});
+        modeloDinero.addRow(new Object[]{pizzaazul, new Object[]{100, icon2}});
 
-        
         ImageIcon futCoin = cargarImagen("imagenes/futcoin.png", 80, 80);
         ImageIcon florenluna = cargarImagen("imagenes/florenluna.png", 80, 80);
 
-        modeloDinero.addRow(new Object[]{futCoin, new Object[]{50, cargarImagen("imagenes/coin.jpg", 50, 50)}});
-        modeloDinero.addRow(new Object[]{florenluna, new Object[]{100, cargarImagen("imagenes/coin.jpg", 50, 50)}});
+        modeloDinero.addRow(new Object[]{futCoin, new Object[]{50, icon2}});
+        modeloDinero.addRow(new Object[]{florenluna, new Object[]{100, icon2}});
 
         ImageIcon crabcoin = cargarImagen("imagenes/crabcoin.png", 80, 80);
         ImageIcon dragoncoin = cargarImagen("imagenes/dragoncoin.png", 80, 80);
 
-        modeloDinero.addRow(new Object[]{crabcoin, new Object[]{50, cargarImagen("imagenes/coin.jpg", 50, 50)}});
-        modeloDinero.addRow(new Object[]{dragoncoin, new Object[]{100, cargarImagen("imagenes/coin.jpg", 50, 50)}});
+        modeloDinero.addRow(new Object[]{crabcoin, new Object[]{50, icon2}});
+        modeloDinero.addRow(new Object[]{dragoncoin, new Object[]{100, icon2}});
 
         ImageIcon ghostCoin = cargarImagen("imagenes/ghostcoin.png", 80, 80);
         ImageIcon nubeCoin = cargarImagen("imagenes/nubecoin.png", 80, 80);
 
-        modeloDinero.addRow(new Object[]{ghostCoin, new Object[]{50, cargarImagen("imagenes/coin.jpg", 50, 50)}});
-        modeloDinero.addRow(new Object[]{nubeCoin, new Object[]{100, cargarImagen("imagenes/coin.jpg", 50, 50)}});
+        modeloDinero.addRow(new Object[]{ghostCoin, new Object[]{50, icon2}});
+        modeloDinero.addRow(new Object[]{nubeCoin, new Object[]{100, icon2}});
 
         ImageIcon onepiece = cargarImagen("imagenes/onepiece.png", 80, 80);
         ImageIcon indiacoin = cargarImagen("imagenes/indiacoin.png", 80, 80);
 
-        modeloDinero.addRow(new Object[]{onepiece, new Object[]{50, cargarImagen("imagenes/coin.jpg", 50, 50)}});
-        modeloDinero.addRow(new Object[]{indiacoin, new Object[]{100, cargarImagen("imagenes/coin.jpg", 50, 50)}});
+        modeloDinero.addRow(new Object[]{onepiece, new Object[]{50, icon2}});
+        modeloDinero.addRow(new Object[]{indiacoin, new Object[]{100, icon2}});
 
         
         
