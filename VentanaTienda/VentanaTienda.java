@@ -32,12 +32,19 @@ public class VentanaTienda extends JFrame {
         setSize(800, 600);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        
+        setLayout(new BorderLayout());
 
         // Marcar el estado de las celdas
         Map<Point, Boolean> estadoCeldasIcono = new HashMap<>();
 
         // TabbedPane para las secciones
         JTabbedPane tabbedPane = new JTabbedPane();
+        
+
+        //tabbedPane.setPreferredSize(new Dimension(500, 500)); // Ancho personalizado para las pestañas
+
+
 
         // Panel para los iconos
         JPanel panelIcono = new JPanel(new BorderLayout());
@@ -51,6 +58,11 @@ public class VentanaTienda extends JFrame {
         };
 
         JTable iconoT = new JTable(modeloIcono);
+        
+        //iconoT.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 0)); // Margen: arriba, izquierda, abajo, derecha
+
+        
+        // MouseListener para capturar las celdas seleccionadas
         iconoT.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseMoved(MouseEvent e) {
@@ -79,7 +91,7 @@ public class VentanaTienda extends JFrame {
         // Ocultamos los tableheaders
         iconoT.getTableHeader().setVisible(false);
         iconoT.getTableHeader().setPreferredSize(new Dimension(0, 0));
-        iconoT.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        //iconoT.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         iconoT.setRowHeight(100);
 
         panelIcono.add(new JScrollPane(iconoT), BorderLayout.CENTER);
@@ -103,7 +115,7 @@ public class VentanaTienda extends JFrame {
         ImageIcon logoPlayaPalmeras = cargarImagen("imagenes/logoPlayaPalmeras.png", 80, 80);
         ImageIcon logoHomer = cargarImagen("imagenes/logoHomer.png", 80, 80);
 
-        ImageIcon icon2 = cargarImagen("imagenes/coin.jpg", 50, 50);
+        ImageIcon icon2 = cargarImagen("imagenes/coin_sin_fondo.png", 50, 50);
 
         // Agregar ejemplos de filas con un icono y precio
         modeloIcono.addRow(new Object[]{logoHomer, new Object[]{85, icon2}});
@@ -272,23 +284,7 @@ public class VentanaTienda extends JFrame {
         JPanel panelApodos = new JPanel();
         tabbedPane.addTab("Apodos", panelApodos);
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
 
         // Panel para la temática
         JPanel panelTematica = new JPanel(new BorderLayout());
@@ -427,7 +423,7 @@ public class VentanaTienda extends JFrame {
         
 
         // Agregar el tabbedPane al frame
-        add(tabbedPane);
+        add(tabbedPane,BorderLayout.CENTER);
         setVisible(true);
     }
 
