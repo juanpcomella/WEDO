@@ -2,6 +2,7 @@ package VentanaTienda;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
@@ -24,7 +25,6 @@ public class VentanaTienda extends JFrame {
     private int selectedColumn = -1;
     private Map<Point, Boolean> estadoCeldasIcono = new HashMap<>();
     private Map<Point, Boolean> estadoCeldasMoneda = new HashMap<>();
-
     private int money;
     public VentanaTienda() {
         // Configuración de la ventana principal
@@ -40,11 +40,6 @@ public class VentanaTienda extends JFrame {
 
         // TabbedPane para las secciones
         JTabbedPane tabbedPane = new JTabbedPane();
-
-
-
-        //tabbedPane.setPreferredSize(new Dimension(500, 500)); // Ancho personalizado para las pestañas
-
 
 
         // Panel para los iconos
@@ -64,13 +59,15 @@ public class VentanaTienda extends JFrame {
         JScrollPane scrollPane = new JScrollPane(iconoT);
 
         // Crear un panel para envolver el JScrollPane
-        JPanel tablePanel = new JPanel(new BorderLayout());
-        iconoT.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 0)); // Margen: arriba, izquierda, abajo, derecha
-        tablePanel.add(scrollPane, BorderLayout.CENTER);
+        panelIcono.add(scrollPane, BorderLayout.CENTER);
 
 
+        // Fondo del tabbedPane:
+        tabbedPane.setBackground(Color.yellow);
         
-
+        iconoT.setBackground(Color.blue);
+        
+        panelIcono.setBackground(Color.cyan);
         
         // MouseListener para capturar las celdas seleccionadas
         iconoT.addMouseMotionListener(new MouseMotionListener() {
@@ -104,7 +101,7 @@ public class VentanaTienda extends JFrame {
         //iconoT.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         iconoT.setRowHeight(100);
 
-        panelIcono.add(new JScrollPane(iconoT), BorderLayout.CENTER);
+        //panelIcono.add(new JScrollPane(iconoT), BorderLayout.CENTER);
 
         // Dinero almacenado aquí, luego se hará un parseInt para convertir
         String dinero = "200";
@@ -134,6 +131,8 @@ public class VentanaTienda extends JFrame {
         modeloIcono.addRow(new Object[]{logoUnicornio, new Object[]{70, icon2}});
         modeloIcono.addRow(new Object[]{logoPlayaPalmeras, new Object[]{140, icon2}});
         modeloIcono.addRow(new Object[]{perfilMonje, new Object[]{300, icon2}});
+        modeloIcono.addRow(new Object[]{logoPanda, new Object[]{200, icon2}});
+
 
         for (int i = 0; i < iconoT.getRowCount(); i++) {
             Point celda_comprada = new Point(i, 1); // Crear un Point para la celda en la fila i y columna 1
@@ -302,7 +301,7 @@ public class VentanaTienda extends JFrame {
         
         
         JTable monedasT = new JTable();
-        panelTematica.add(new JScrollPane(monedasT), BorderLayout.CENTER);
+        //panelTematica.add(new JScrollPane(monedasT), BorderLayout.CENTER);
         
         DefaultTableModel modeloDinero = new DefaultTableModel(new Object[]{"Moneda", "Precio"}, 0) {
             public boolean isCellEditable(int row, int column) {
@@ -390,7 +389,8 @@ public class VentanaTienda extends JFrame {
             }
         });
 
-        
+        // Color tabla monedasT
+        monedasT.setBackground(new Color(0, 100, 0));
 
         monedasT.addMouseMotionListener(new MouseMotionListener() {
             @Override
@@ -434,6 +434,26 @@ public class VentanaTienda extends JFrame {
         // Agregar el tabbedPane al frame
         add(tabbedPane,BorderLayout.CENTER);
         setVisible(true);
+        
+        
+        
+     // Panel con márgenes para el JTable de Iconos
+        JPanel panelIconoConMargen = new JPanel();
+        panelIconoConMargen.setLayout(new BoxLayout(panelIconoConMargen, BoxLayout.Y_AXIS));
+        panelIconoConMargen.setBorder(new EmptyBorder(20, 250, 90, 250)); // Márgenes: arriba, izquierda, abajo, derecha
+        panelIconoConMargen.add(scrollPane); // Añadir el JScrollPane que contiene el JTable
+        panelIcono.add(panelIconoConMargen, BorderLayout.CENTER); // Añadir el panel con márgenes al panel principal
+
+        // Panel con márgenes para el JTable de Monedas
+        JPanel panelMonedasConMargen = new JPanel();
+        panelMonedasConMargen.setLayout(new BoxLayout(panelMonedasConMargen, BoxLayout.Y_AXIS));
+        panelMonedasConMargen.setBorder(new EmptyBorder(20, 250, 90, 250)); // Márgenes
+        panelMonedasConMargen.add(new JScrollPane(monedasT)); // Añadir el JScrollPane con el JTable
+        panelTematica.add(panelMonedasConMargen, BorderLayout.CENTER); // Añadir al panel principal
+
+        
+        //Poner una imagen de fondo:
+        
     }
 
     private ImageIcon cargarImagen(String ruta, int ancho, int alto) {
