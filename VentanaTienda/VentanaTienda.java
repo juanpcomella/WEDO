@@ -241,7 +241,7 @@ public class VentanaTienda extends JFrame {
 
                 panel = new JPanel(new BorderLayout());
                 panel.add(button, BorderLayout.CENTER);
-            }
+            }//
 
             @Override
             public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
