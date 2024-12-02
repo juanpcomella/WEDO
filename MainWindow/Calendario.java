@@ -134,6 +134,9 @@ public class Calendario extends JPanel {
     }
 
     private void mostrarVistaMes() {
+        diasPanel.removeAll();
+        diasPanel.setLayout(new GridLayout(0, 7)); 
+        
         String[] diasSemana = {"Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"};
         for (String dia : diasSemana) {
             JLabel diaLabel = new JLabel(dia, SwingConstants.CENTER);
@@ -176,7 +179,7 @@ public class Calendario extends JPanel {
                 if (evento.getFecha().equals(date)) {
                     JLabel eventoLabel = new JLabel(evento.getNombre());
                     eventoLabel.setOpaque(true);
-                    eventoLabel.setPreferredSize(new java.awt.Dimension(8, 8));
+                    eventoLabel.setPreferredSize(new Dimension(8, 8));
                     eventoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                     eventoLabel.setFont(new Font("Arial", Font.BOLD, 8));
 
@@ -217,31 +220,82 @@ public class Calendario extends JPanel {
         for (int i = utilizados; i < sitios; i++) {
             diasPanel.add(new JLabel(""));
         }
+
+        diasPanel.revalidate();
+        diasPanel.repaint();
     }
+
 
     private void mostrarVistaSemanal() {
         String[] diasSemana = {"Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"};
         LocalDate startOfWeek = seleccionado.with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
+        diasPanel.setLayout(new GridLayout(1, 7));
 
         for (int i = 0; i < 7; i++) {
             LocalDate diaActual = startOfWeek.plusDays(i);
-            JPanel celdaPanel = new JPanel();
-            celdaPanel.setLayout(new BoxLayout(celdaPanel, BoxLayout.Y_AXIS));
-            celdaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-            celdaPanel.setPreferredSize(new java.awt.Dimension(120, 100));
+
+            JPanel diaPanel = new JPanel();
+            diaPanel.setLayout(new BorderLayout());
+            diaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
+            diaPanel.setBackground(Color.WHITE);
+            diaPanel.setPreferredSize(new Dimension(150, 200));
 
             JLabel diaSemanaLabel = new JLabel(diasSemana[i], SwingConstants.CENTER);
-            diaSemanaLabel.setFont(new Font("Arial", Font.BOLD, 12));
-            diaSemanaLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+            diaSemanaLabel.setFont(new Font("Arial", Font.BOLD, 16));
             JLabel numeroDiaLabel = new JLabel(String.valueOf(diaActual.getDayOfMonth()), SwingConstants.CENTER);
-            numeroDiaLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-            numeroDiaLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+            numeroDiaLabel.setFont(new Font("Arial", Font.PLAIN, 20));
 
-            celdaPanel.add(diaSemanaLabel);
-            celdaPanel.add(Box.createVerticalStrut(10));
-            celdaPanel.add(numeroDiaLabel);
+            JPanel headerPanel = new JPanel(new GridLayout(2, 1));
+            headerPanel.setBackground(Color.LIGHT_GRAY);
+            headerPanel.add(diaSemanaLabel);
+            headerPanel.add(numeroDiaLabel);
+            diaPanel.add(headerPanel, BorderLayout.NORTH);
 
-            diasPanel.add(celdaPanel);
+            JPanel eventosPanel = new JPanel();
+            eventosPanel.setLayout(new BoxLayout(eventosPanel, BoxLayout.Y_AXIS));
+            eventosPanel.setOpaque(false);
+
+            for (Evento evento : listaEventos) {
+                if (evento.getFecha().equals(diaActual)) {
+                    JLabel eventoLabel = new JLabel(evento.getNombre(), SwingConstants.CENTER);
+                    eventoLabel.setOpaque(true);
+                    eventoLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+                    eventoLabel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+
+                    if (evento.getCategoria().equals(Categorias.Estudios)) {
+                        eventoLabel.setBackground(Color.MAGENTA);
+                    } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
+                        eventoLabel.setBackground(Color.GREEN);
+                    } else if (evento.getCategoria().equals(Categorias.Deporte)) {
+                        eventoLabel.setBackground(Color.CYAN);
+                    } else if (evento.getCategoria().equals(Categorias.Ocio)) {
+                        eventoLabel.setBackground(Color.ORANGE);
+                    }
+
+                    eventoLabel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+                    eventoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                    eventoLabel.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            mostrarEvento(evento, diaActual);
+                        }
+                    });
+
+                    eventosPanel.add(eventoLabel);
+                }
+            }
+
+            diaPanel.add(eventosPanel, BorderLayout.CENTER);
+
+            diaPanel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    mostrarDialogo(diaActual);
+                }
+            });
+
+            diasPanel.add(diaPanel);
         }
     }
 
