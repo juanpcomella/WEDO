@@ -367,7 +367,7 @@ public class VentanaTienda extends JFrame {
                             JLabel iconLabel = new JLabel((Icon) cellData[1]);
                             panel.add(iconLabel);
                         }
-                    }
+                    }//j
                 }
                 if (hoveredRow==row && hoveredColumn ==1) {
                 	return new JButton("Comprar");
