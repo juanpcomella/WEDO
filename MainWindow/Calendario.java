@@ -229,6 +229,8 @@ public class Calendario extends JPanel {
     private void mostrarVistaSemanal() {
         String[] diasSemana = {"Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"};
         LocalDate startOfWeek = seleccionado.with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
+        LocalDate hoy = LocalDate.now();
+        
         diasPanel.setLayout(new GridLayout(1, 7));
 
         for (int i = 0; i < 7; i++) {
@@ -239,6 +241,10 @@ public class Calendario extends JPanel {
             diaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
             diaPanel.setBackground(Color.WHITE);
             diaPanel.setPreferredSize(new Dimension(150, 200));
+
+            if (diaActual.equals(hoy)) {
+                diaPanel.setBackground(Color.LIGHT_GRAY);
+            }
 
             JLabel diaSemanaLabel = new JLabel(diasSemana[i], SwingConstants.CENTER);
             diaSemanaLabel.setFont(new Font("Arial", Font.BOLD, 16));
@@ -298,6 +304,7 @@ public class Calendario extends JPanel {
             diasPanel.add(diaPanel);
         }
     }
+
 
     private void mostrarDialogo(LocalDate date) {
         JDialog dialog = new JDialog();
