@@ -16,10 +16,10 @@ import java.io.*;
 
 import java.awt.geom.Ellipse2D;
 
-public class ProfileWindow extends JFrame {
+public class ProfileWindowSelf extends JFrame {
 
-    public ProfileWindow(Usuario usuario) {
-        setTitle("WEDO - Profile");
+    public ProfileWindowSelf(Usuario usuario, Boolean isSelfProfile) {
+        setTitle("WEDO - " + usuario.getNombreUsuario());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
@@ -51,7 +51,9 @@ public class ProfileWindow extends JFrame {
         leftGBC.weighty = 0;
         JButton backButton = new JButton("<<");
         backButton.setBackground(new Color(0,0,0,0));
-
+        backButton.setFocusPainted(false);
+        backButton.setFocusable(false);
+        backButton.setContentAreaFilled(false);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 MainWindow mainWindow = new MainWindow(usuario);
@@ -62,8 +64,28 @@ public class ProfileWindow extends JFrame {
 
         leftPanel.add(backButton, leftGBC);
 
-        // Left Panel - Profile Picture
+        leftGBC.gridx = 0;
         leftGBC.gridy = 1;
+        leftGBC.anchor = GridBagConstraints.NORTHEAST;
+        leftGBC.insets = new Insets(0, 0, 0, 15);
+        JButton editButton = new JButton("Editar Perfil");
+        editButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        editButton.setBackground(new Color(0,0,0,0));
+        editButton.setFocusPainted(false);
+        editButton.setFocusable(false);
+        editButton.setContentAreaFilled(false);
+
+        editButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                EditarPerfil editarPerfil = new EditarPerfil(usuario);
+
+            }
+        });
+
+        leftPanel.add(editButton, leftGBC);
+
+        // Left Panel - Profile Picture
+        leftGBC.gridy = 2;
         leftGBC.weightx = 1.0;
         leftGBC.weighty = 0.40;
         leftGBC.fill = GridBagConstraints.BOTH;
@@ -84,7 +106,7 @@ public class ProfileWindow extends JFrame {
         leftPanel.add(profilePicturePanel, leftGBC);
 
         // Left Panel - Username and Button Row
-        leftGBC.gridy = 2;
+        leftGBC.gridy = 3;
         leftGBC.weighty = 0.2;
 
         JPanel usernamePanel = new JPanel(new GridBagLayout());
@@ -95,7 +117,7 @@ public class ProfileWindow extends JFrame {
         leftPanel.add(usernamePanel, leftGBC);
 
         // Left Panel - Description Row
-        leftGBC.gridy = 3;
+        leftGBC.gridy = 4;
         leftGBC.weighty = 0.4;
 
         JPanel descriptionPanel = new JPanel();
@@ -104,6 +126,8 @@ public class ProfileWindow extends JFrame {
         descriptionLabel.setFont(new Font("Arial", Font.BOLD, 24));
         descriptionPanel.add(descriptionLabel);
         leftPanel.add(descriptionPanel, leftGBC);
+
+
 
         mainPanel.add(leftPanel, gbc);
 
@@ -267,11 +291,23 @@ public class ProfileWindow extends JFrame {
         g2d.dispose();
         return output;
     }
-/*
+
     public static void main(String[] args) {
-        ProfileWindow window = new ProfileWindow();
-        window.setVisible(true);
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Crear la ventana principal
+        SwingUtilities.invokeLater(() -> {
+            Usuario user = new Usuario(null, null, null);
+            ProfileWindowSelf window = new ProfileWindowSelf(user, true);
+            window.setVisible(true);
+
+        });
+
     }
 
- */
 }
