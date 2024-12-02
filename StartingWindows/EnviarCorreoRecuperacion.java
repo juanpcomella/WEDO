@@ -38,7 +38,7 @@ public class EnviarCorreoRecuperacion {
 
             // Enviar el mensaje
             Transport.send(message);
-            System.out.println("Correo enviado exitosamente a " + correoDestino);
+//            System.out.println("Correo enviado exitosamente a " + correoDestino);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
