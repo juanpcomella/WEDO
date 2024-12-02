@@ -23,7 +23,7 @@ public class BDs {
 //			statement.executeUpdate("drop table if exists person");
 			
 			// Ejecutar sentencias SQL (Update)
-			statement.executeUpdate("create table if not exists usuarios (username string, password string, email string)");
+			statement.executeUpdate("create table if not exists usuarios (username string, password string, email string, calendarioPersonal text)");
 
 		} catch(SQLException e) {
 			System.err.println(e.getMessage());

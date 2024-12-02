@@ -1,6 +1,6 @@
 package pruebaMainWindow;
 
-import ProfileWindow.ProfileWindow;
+import ProfileWindow.*;
 import StartingWindows.Usuario;
 import VentanaTienda.VentanaTienda;
 
@@ -167,24 +167,24 @@ public class Navbar1 extends JPanel {
         add(notifIcon, gbc);
 
         // Icono de perfil (circular)
-        try {
-            BufferedImage profileImage = ImageIO.read(new File("imagenes/PERFIL.png"));
-            ImageIcon profileIcon = new ImageIcon(getCircularImage(profileImage, 50));
-            JLabel profileLabel = new JLabel(profileIcon);
-            profileLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            profileLabel.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    SwingUtilities.invokeLater(() -> new ProfileWindow(usuario).setVisible(true));
-                    ((JFrame) SwingUtilities.getWindowAncestor(profileLabel)).dispose();
-                }
-            });
-            gbc.gridx++;
-            add(profileLabel, gbc);
-        } catch (IOException e) {
-            System.out.println("Error al cargar la imagen de perfil: " + e.getMessage());
-        }
-
+//        try {
+//            BufferedImage profileImage = ImageIO.read(new File("imagenes/PERFIL.png"));
+//            ImageIcon profileIcon = new ImageIcon(getCircularImage(profileImage, 50));
+//            JLabel profileLabel = new JLabel(profileIcon);
+//            profileLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+//            profileLabel.addMouseListener(new MouseAdapter() {
+//                @Override
+//                public void mouseClicked(MouseEvent e) {
+//                    SwingUtilities.invokeLater(() -> new ProfileWindow(usuario).setVisible(true));
+//                    ((JFrame) SwingUtilities.getWindowAncestor(profileLabel)).dispose();
+//                }
+//            });
+//            gbc.gridx++;
+//            add(profileLabel, gbc);
+//        } catch (IOException e) {
+//            System.out.println("Error al cargar la imagen de perfil: " + e.getMessage());
+//        }
+//
     }
 
     private Image getCircularImage(BufferedImage image, int diameter) {
