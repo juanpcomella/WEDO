@@ -230,11 +230,25 @@ public class Calendario extends JPanel {
     private void mostrarVistaSemanal() {
         diasPanel.removeAll();
 
+        JPanel horasPanelIzquierda = new JPanel();
+        horasPanelIzquierda.setLayout(new GridLayout(24, 1));
+        horasPanelIzquierda.setPreferredSize(new Dimension(60, 600));
+
+        for (int hora = 0; hora < 24; hora++) {
+            JPanel horaContainer = new JPanel(new GridBagLayout());
+            JLabel horaLabel = new JLabel(String.format("%02d:00", hora));
+            horaLabel.setFont(new Font("Arial", Font.BOLD, 12));
+            horaLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            horaContainer.add(horaLabel);
+            horasPanelIzquierda.add(horaContainer);
+        }
+
         String[] diasSemana = {"Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"};
         LocalDate startOfWeek = seleccionado.with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
         LocalDate hoy = LocalDate.now();
 
-        diasPanel.setLayout(new GridLayout(1, 7)); // 7 días por fila.
+        diasPanel.setLayout(new GridLayout(1, 8)); 
+        diasPanel.add(horasPanelIzquierda);
 
         for (int i = 0; i < 7; i++) {
             LocalDate diaActual = startOfWeek.plusDays(i);
@@ -243,7 +257,7 @@ public class Calendario extends JPanel {
             diaPanel.setLayout(new BorderLayout());
             diaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
             diaPanel.setBackground(Color.WHITE);
-            diaPanel.setPreferredSize(new Dimension(150, 600)); 
+            diaPanel.setPreferredSize(new Dimension(150, 600));
 
             if (diaActual.equals(hoy)) {
                 diaPanel.setBackground(Color.LIGHT_GRAY);
@@ -254,7 +268,7 @@ public class Calendario extends JPanel {
             diaPanel.add(diaSemanaLabel, BorderLayout.NORTH);
 
             JPanel horasPanel = new JPanel();
-            horasPanel.setLayout(new GridLayout(24, 1)); 
+            horasPanel.setLayout(new GridLayout(24, 1));
             horasPanel.setOpaque(true);
 
             for (int hora = 0; hora < 24; hora++) {
@@ -272,21 +286,14 @@ public class Calendario extends JPanel {
                         eventoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                         eventoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-                        switch (evento.getCategoria()) {
-                            case Estudios:
-                                eventoLabel.setBackground(Color.MAGENTA);
-                                break;
-                            case Trabajo:
-                                eventoLabel.setBackground(Color.GREEN);
-                                break;
-                            case Deporte:
-                                eventoLabel.setBackground(Color.CYAN);
-                                break;
-                            case Ocio:
-                                eventoLabel.setBackground(Color.ORANGE);
-                                break;
-                            default:
-                                eventoLabel.setBackground(Color.LIGHT_GRAY);
+                        if (evento.getCategoria().equals(Categorias.Estudios)) {
+                            eventoLabel.setBackground(Color.MAGENTA);
+                        } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
+                            eventoLabel.setBackground(Color.GREEN);
+                        } else if (evento.getCategoria().equals(Categorias.Deporte)) {
+                            eventoLabel.setBackground(Color.CYAN);
+                        } else if (evento.getCategoria().equals(Categorias.Ocio)) {
+                            eventoLabel.setBackground(Color.ORANGE);
                         }
 
                         eventoLabel.setPreferredSize(new Dimension(150, 25));
@@ -314,6 +321,7 @@ public class Calendario extends JPanel {
         diasPanel.revalidate();
         diasPanel.repaint();
     }
+
 
 
     private void mostrarDialogo(LocalDate date) {
