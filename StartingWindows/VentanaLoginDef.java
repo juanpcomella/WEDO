@@ -15,15 +15,14 @@ import java.awt.font.TextAttribute;
 import java.util.Map;
 
 public class VentanaLoginDef extends JFrame {
-	
+
     private static final long serialVersionUID = 1L;
-    
+
 
 	public VentanaLoginDef() {
         setTitle("WEDO - Inicio de sesión");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setSize(700, 500);
 
         JPanel panel = new JPanel(new BorderLayout());
 		panel.setBackground(new Color(173, 216, 230));
@@ -32,19 +31,16 @@ public class VentanaLoginDef extends JFrame {
         JPanel panelVolver = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelVolver.setOpaque(false);
         JButton volverButton = new JButton("<< Volver");
-        volverButton.setFont(new Font("Tahoma", Font.BOLD, 15));
         volverButton.addActionListener(new ActionListener(){
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				VentanaBienvenida ventanaBienvenida = new VentanaBienvenida();
                 ventanaBienvenida.setLocationRelativeTo(null);
 				ventanaBienvenida.setVisible(true);
-				dispose();		
+				dispose();
 			}
-        	
         });
-        
+        volverButton.setFont(new Font("Tahoma", Font.BOLD, 15));
 		volverButton.setForeground(new Color(50, 70, 90));
         volverButton.setContentAreaFilled(false);
         volverButton.setBorderPainted(false);
@@ -56,7 +52,7 @@ public class VentanaLoginDef extends JFrame {
         datos.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.insets = new Insets(10,10,10,10);
 
         ImageIcon imagen = new ImageIcon(VentanaBienvenida.class.getResource("/imagenes/LOGO WEDO 1.png"));
         Image imagenEscalada = imagen.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
@@ -66,21 +62,14 @@ public class VentanaLoginDef extends JFrame {
         gbc.gridwidth = 2;
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.weighty = 0.1;                     // Reducir peso vertical
-        gbc.insets = new Insets(10, 10, 5, 10);
+        gbc.insets = new Insets(30, 10, 5, 10);
         datos.add(logo, gbc);
 
-//        JLabel introducirDatos = new JLabel("Introduce tus datos", JLabel.CENTER);
-//		introducirDatos.setForeground(new Color(50, 70, 90));
-//        gbc.gridy = 1;
-//        gbc.insets = new Insets(5, 10, 20, 10);
-//        datos.add(introducirDatos, gbc);
-
-        // Espacio entre texto e inputs, aquí va el logo.
+        JLabel introducirDatos = new JLabel("Introduce tus datos", JLabel.CENTER);
+        introducirDatos.setFont(new Font("Tahoma", Font.BOLD, 30));
         gbc.gridy = 1;
-        gbc.insets = new Insets(20, 10, 20, 10);
-        gbc.gridheight = 1;
-        datos.add(Box.createVerticalStrut(0), gbc);
+        gbc.insets = new Insets(5, 10, 20, 10);
+        datos.add(introducirDatos, gbc);
 
         gbc.gridwidth = 1;
 
@@ -88,7 +77,7 @@ public class VentanaLoginDef extends JFrame {
 		username.setForeground(new Color(50, 70, 90));
         username.setFont(new Font("Tahoma", Font.BOLD, 20));
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 2;
         gbc.insets = new Insets(5, 10, 0, 10);
         datos.add(username, gbc);
 
@@ -96,7 +85,7 @@ public class VentanaLoginDef extends JFrame {
 		usernameTF.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         usernameTF.setFont(new Font("Arial", Font.PLAIN, 19));
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 3;
         gbc.insets = new Insets(0, 10, 5, 10);
         datos.add(usernameTF, gbc);
 
@@ -104,7 +93,7 @@ public class VentanaLoginDef extends JFrame {
 		password.setForeground(new Color(50, 70, 90));
         password.setFont(new Font("Tahoma", Font.BOLD, 20));
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 4;
         gbc.insets = new Insets(5, 10,0 , 10);
         datos.add(password, gbc);
 
@@ -112,7 +101,7 @@ public class VentanaLoginDef extends JFrame {
 		passwordTF.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         passwordTF.setFont(new Font("Arial", Font.PLAIN, 19));
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 5;
         gbc.insets = new Insets(0, 10, 5, 10);
         datos.add(passwordTF, gbc);
 
@@ -121,8 +110,8 @@ public class VentanaLoginDef extends JFrame {
 		recuerdame.setOpaque(false);
         recuerdame.setFont(new Font("Arial", Font.ITALIC, 16));
         gbc.gridx = 0;
-        gbc.gridy = 7;
-        gbc.insets = new Insets(0, 10, 5, 10);
+        gbc.gridy = 6;
+        gbc.insets = new Insets(5, 10, 0, 10);
         datos.add(recuerdame, gbc);
 
         JButton olvidado = new JButton("¿Has olvidado tu usuario o contraseña?");
@@ -142,7 +131,7 @@ public class VentanaLoginDef extends JFrame {
 			public void mouseExited(MouseEvent e) {
 				olvidado.setFont(new Font("Arial", Font.ITALIC, 16));
 			}
-			       	
+
         });
         olvidado.addActionListener(new ActionListener() {
 
@@ -162,7 +151,7 @@ public class VentanaLoginDef extends JFrame {
                         new Object[]{"Aceptar"}, // Botón personalizado
                         "Aceptar"
                 );
-                if(option == 0) { 
+                if(option == 0) {
                 	String correoRep = null;
                 	String correoOuserDeRecuperacion = textField.getText();
                 	if(BDs.usuarioExistente(correoOuserDeRecuperacion)) {
@@ -177,10 +166,8 @@ public class VentanaLoginDef extends JFrame {
                 }
 			}
         });
-        
-        gbc.gridx = 0;
-        gbc.gridy = 8;
-        gbc.insets = new Insets(0, 10, 5, 10);
+
+        gbc.gridy = 7;
         datos.add(olvidado, gbc);
 
         JButton loginButton = new JButton("Iniciar sesión");
@@ -189,7 +176,7 @@ public class VentanaLoginDef extends JFrame {
         loginButton.setFont(new Font("Tahoma", Font.BOLD, 30));
         loginButton.setOpaque(true);
         loginButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String usernameUser = usernameTF.getText();
@@ -205,7 +192,7 @@ public class VentanaLoginDef extends JFrame {
                     	JOptionPane.showMessageDialog(null,"Bienvenido "+nombreUsuario+"!");
                 	}else {
                     	JOptionPane.showMessageDialog(null,"Bienvenido "+usernameUser+"!");
-                    	 
+
                 	}
                 	Usuario usuario = new Usuario(usernameUser, usernameUser, nombreUsuario);
                 	if(usernameUser.contains("@") & usernameUser.contains(".")) {
@@ -220,24 +207,14 @@ public class VentanaLoginDef extends JFrame {
 			}
 		});
 
-        	
         gbc.gridx = 0;
-        gbc.gridy = 9;
+        gbc.gridy = 8;
         gbc.gridwidth = 2;
+        gbc.insets = new Insets(20, 10, 10, 20);
         gbc.anchor = GridBagConstraints.CENTER;
         datos.add(loginButton, gbc);
 
-        // Lógica de Validación
-        // Estos usuarios y contraseñas son temporales, luego se implementarán en la base de datos.
-//        HashMap<String, String> users = new HashMap<>();
-//        users.put("juanpcomella", "password");
-//        users.put("adrianbaz", "12345");
-//        users.put("anderorma", "contraseña");
-//        users.put("ikergamboa", "98765");
-
-
         panel.add(datos, BorderLayout.CENTER);
-
     }
 
     public static void main(String[] args) {
