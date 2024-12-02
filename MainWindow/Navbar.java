@@ -1,6 +1,6 @@
 package MainWindow;
 
-import ProfileWindow.ProfileWindow;
+import ProfileWindow.ProfileWindowSelf;
 import StartingWindows.Usuario;
 import VentanaTienda.VentanaTienda;
 
@@ -20,8 +20,6 @@ import javax.imageio.ImageIO;
 import static java.lang.Thread.sleep;
 
 public class Navbar extends JPanel {
-
-    private boolean isLeftSidebarVisible = false;
 
     public Navbar(LeftSideBar leftSideBar, Usuario usuario) {
         setLayout(new GridBagLayout()); // Cambiar a GridBagLayout
@@ -43,22 +41,21 @@ public class Navbar extends JPanel {
         add(hamburgerMenu, gbc);
 
         // left sidebar thread logic
-        int lsbWidth = (int) ((getWidth()) * 0.1); // 15% of the width for the sidebar
+        int lsbWidth = (int) ((Toolkit.getDefaultToolkit().getScreenSize().width) * 0.1);
 
         hamburgerMenu.addActionListener(new ActionListener() {
+            private boolean isLeftSidebarVisible = false;
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 new Thread(() -> {
                     int targetWidth = isLeftSidebarVisible ? 0 : lsbWidth;
-                    int currentWidth = leftSideBar.getWidth();
-                    int step = isLeftSidebarVisible ? -10 : 10; // Correct the step direction
-
-                    System.out.println("Starting animation. Target width: " + targetWidth + ", Current width: " + currentWidth);
+                    int currentWidth = leftSideBar.getPreferredSize().width;
+                    int step = isLeftSidebarVisible ? -10 : 10;
 
                     while ((step > 0 && currentWidth < targetWidth) || (step < 0 && currentWidth > targetWidth)) {
                         currentWidth += step;
 
-                        // Avoid overshooting the target width
                         if ((step > 0 && currentWidth > targetWidth) || (step < 0 && currentWidth < targetWidth)) {
                             currentWidth = targetWidth;
                         }
@@ -66,38 +63,33 @@ public class Navbar extends JPanel {
                         int finalCurrentWidth = currentWidth;
                         SwingUtilities.invokeLater(() -> {
                             leftSideBar.setPreferredSize(new Dimension(finalCurrentWidth, leftSideBar.getHeight()));
-                            SwingUtilities.getWindowAncestor(leftSideBar).revalidate();
-                            SwingUtilities.getWindowAncestor(leftSideBar).repaint();
+                            leftSideBar.revalidate();
+                            leftSideBar.repaint();
                         });
 
                         try {
-                            Thread.sleep(10); // Control animation speed
+                            Thread.sleep(10);
                         } catch (InterruptedException ex) {
                             ex.printStackTrace();
                         }
                     }
 
-                    // Toggle sidebar visibility state
                     isLeftSidebarVisible = !isLeftSidebarVisible;
                 }).start();
             }
         });
 
 
-
-        // Espacio horizontal (puedes ajustar los tamaños)
         gbc.gridx++;
-        gbc.weightx = 0.1; // Espaciador flexible
+        gbc.weightx = 0.1;
         add(Box.createHorizontalStrut(20), gbc);
 
-        // Campo de búsqueda
         JTextField searchTF = new JTextField(20);
         searchTF.setFont(new Font("Arial", Font.PLAIN, 20));
         gbc.gridx++;
-        gbc.weightx = 1; // Se expande para ocupar espacio
+        gbc.weightx = 1;
         add(searchTF, gbc);
 
-        // Botón de búsqueda
         ImageIcon searchImage = new ImageIcon(Navbar.class.getResource("/imagenes/lupa.png"));
         Image searchImagenEscalada = searchImage.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         ImageIcon searchImagenRedimensionada = new ImageIcon(searchImagenEscalada);
@@ -111,24 +103,20 @@ public class Navbar extends JPanel {
         gbc.weightx = 0;
         add(searchIcon, gbc);
 
-        // Espacio horizontal
         gbc.gridx++;
         add(Box.createHorizontalStrut(20), gbc);
 
-        // Icono de moneda
         JLabel coinLabel = new JLabel("\uD83E\uDE99");
         coinLabel.setFont(new Font("Arial", Font.BOLD, 30));
         gbc.gridx++;
         gbc.weightx = 0;
         add(coinLabel, gbc);
 
-        // Cantidad de monedas
         int coinAmount = 0;
         JLabel coinAmountLabel = new JLabel(coinAmount + "");
         gbc.gridx++;
         add(coinAmountLabel, gbc);
 
-        // Icono de tienda
         ImageIcon shopImage = new ImageIcon(Navbar.class.getResource("/imagenes/shop.png"));
         Image shopImagenEscalada = shopImage.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         ImageIcon shopImagenRedimensionada = new ImageIcon(shopImagenEscalada);
@@ -153,8 +141,6 @@ public class Navbar extends JPanel {
 
         add(shopIcon, gbc);
 
-
-        // Icono de notificaciones
         ImageIcon notifImage = new ImageIcon(Navbar.class.getResource("/imagenes/notification.png"));
         Image notifImagenEscalada = notifImage.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         ImageIcon notifImagenRedimensionada = new ImageIcon(notifImagenEscalada);
@@ -162,7 +148,6 @@ public class Navbar extends JPanel {
         gbc.gridx++;
         add(notifIcon, gbc);
 
-        // Icono de perfil (circular)
         try {
             BufferedImage profileImage = ImageIO.read(new File("imagenes/PERFIL.png"));
             ImageIcon profileIcon = new ImageIcon(getCircularImage(profileImage, 50));
@@ -171,7 +156,7 @@ public class Navbar extends JPanel {
             profileLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    SwingUtilities.invokeLater(() -> new ProfileWindow(usuario).setVisible(true));
+                    SwingUtilities.invokeLater(() -> new ProfileWindowSelf(usuario).setVisible(true));
                     ((JFrame) SwingUtilities.getWindowAncestor(profileLabel)).dispose();
                 }
             });
