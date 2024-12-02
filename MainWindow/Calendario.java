@@ -1,33 +1,12 @@
 package MainWindow;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.Box;
+import javax.swing.*;
 
 public class Calendario extends JPanel {
 
@@ -35,7 +14,7 @@ public class Calendario extends JPanel {
     private int mes;
     private LocalDate seleccionado;
     private JPanel diasPanel;
-    private boolean isWeeklyView = false;
+    private boolean esVistaSemanal = false;
     JLabel tituloLabel = new JLabel(getMonthYearString(), SwingConstants.CENTER);
     ArrayList<Evento> listaEventos = new ArrayList<>();
 
@@ -57,11 +36,23 @@ public class Calendario extends JPanel {
         JButton botonPrevio = new JButton("<");
         JButton botonSiguiente = new JButton(">");
 
-        botonPrevio.addActionListener(e -> actualizarMes(-1));
-        botonSiguiente.addActionListener(e -> actualizarMes(1));
+        botonPrevio.addActionListener(e -> {
+            if (esVistaSemanal) {
+                actualizarSemana(-1);
+            } else {
+                actualizarMes(-1);
+            }
+            actualizarTitulo();
+        });
 
-        botonPrevio.addActionListener(e -> actualizarSemana(-1));
-        botonSiguiente.addActionListener(e -> actualizarSemana(1));
+        botonSiguiente.addActionListener(e -> {
+            if (esVistaSemanal) {
+                actualizarSemana(1);
+            } else {
+                actualizarMes(1);
+            }
+            actualizarTitulo();
+        });
 
         JPanel mesPanel = new JPanel();
         mesPanel.add(botonPrevio);
@@ -75,7 +66,7 @@ public class Calendario extends JPanel {
         botonMesActual.addActionListener(e -> irMesActual());
         botonMesActual.setBackground(Color.LIGHT_GRAY);
 
-        JButton botonVista = new JButton("Ver Semanal");
+        JButton botonVista = new JButton("Cambiar vista");
         botonVista.addActionListener(e -> toggleView());
         panelArriba.add(botonVista, BorderLayout.SOUTH);
 
@@ -94,23 +85,27 @@ public class Calendario extends JPanel {
         this.año = hoy.getYear();
         this.mes = hoy.getMonthValue();
         this.seleccionado = hoy;
-        tituloLabel.setText(getMonthYearString());
+        actualizarTitulo();
         actualizarVista();
     }
 
     void toggleView() {
-        isWeeklyView = !isWeeklyView;
-        if (isWeeklyView) {
+    	esVistaSemanal = !esVistaSemanal;
+        actualizarTitulo();
+        actualizarVista();
+    }
+
+    private void actualizarTitulo() {
+        if (esVistaSemanal) {
             actualizarTituloSemanal();
         } else {
             tituloLabel.setText(getMonthYearString());
         }
-        actualizarVista();
     }
 
     private void actualizarVista() {
         diasPanel.removeAll();
-        if (isWeeklyView) {
+        if (esVistaSemanal) {
             mostrarVistaSemanal();
         } else {
             mostrarVistaMes();
@@ -123,14 +118,13 @@ public class Calendario extends JPanel {
         seleccionado = seleccionado.plusMonths(offset);
         año = seleccionado.getYear();
         mes = seleccionado.getMonthValue();
-        tituloLabel.setText(getMonthYearString());
         actualizarVista();
     }
 
     private void actualizarSemana(int offset) {
         seleccionado = seleccionado.plusWeeks(offset);
         actualizarVista();
-        actualizarTituloSemanal();
+        actualizarTitulo();
     }
 
     private void actualizarTituloSemanal() {
