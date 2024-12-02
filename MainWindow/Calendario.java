@@ -243,20 +243,18 @@ public class Calendario extends JPanel {
             diaPanel.setLayout(new BorderLayout());
             diaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
             diaPanel.setBackground(Color.WHITE);
-            diaPanel.setPreferredSize(new Dimension(150, 600)); // Altura para 24 bloques.
+            diaPanel.setPreferredSize(new Dimension(150, 600)); 
 
             if (diaActual.equals(hoy)) {
                 diaPanel.setBackground(Color.LIGHT_GRAY);
             }
 
-            // Encabezado del día.
             JLabel diaSemanaLabel = new JLabel(diasSemana[i] + " " + diaActual.getDayOfMonth(), SwingConstants.CENTER);
             diaSemanaLabel.setFont(new Font("Arial", Font.BOLD, 16));
             diaPanel.add(diaSemanaLabel, BorderLayout.NORTH);
 
-            // Panel de horas.
             JPanel horasPanel = new JPanel();
-            horasPanel.setLayout(new GridLayout(24, 1)); // 24 filas para 24 horas.
+            horasPanel.setLayout(new GridLayout(24, 1)); 
             horasPanel.setOpaque(true);
 
             for (int hora = 0; hora < 24; hora++) {
@@ -264,9 +262,8 @@ public class Calendario extends JPanel {
                 bloqueHora.setLayout(new BoxLayout(bloqueHora, BoxLayout.Y_AXIS));
                 bloqueHora.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
                 bloqueHora.setBackground(Color.WHITE);
-                bloqueHora.setPreferredSize(new Dimension(150, 25)); // Altura de cada hora.
+                bloqueHora.setPreferredSize(new Dimension(150, 25));
 
-                // Agregar eventos a la hora correspondiente.
                 for (Evento evento : listaEventos) {
                     if (evento.getFecha().equals(diaActual) && evento.getHoraInicio().getHour() == hora) {
                         JLabel eventoLabel = new JLabel(evento.getNombre());
@@ -275,7 +272,6 @@ public class Calendario extends JPanel {
                         eventoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                         eventoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-                        // Ajustar el color por categoría.
                         switch (evento.getCategoria()) {
                             case Estudios:
                                 eventoLabel.setBackground(Color.MAGENTA);
@@ -293,8 +289,7 @@ public class Calendario extends JPanel {
                                 eventoLabel.setBackground(Color.LIGHT_GRAY);
                         }
 
-                        // Ajustar el tamaño del evento para ocupar toda la celda
-                        eventoLabel.setPreferredSize(new Dimension(150, 25)); // Este es el tamaño base.
+                        eventoLabel.setPreferredSize(new Dimension(150, 25));
                         eventoLabel.setMaximumSize(new Dimension(150, Integer.MAX_VALUE));
 
                         bloqueHora.add(eventoLabel);
@@ -306,7 +301,6 @@ public class Calendario extends JPanel {
 
             diaPanel.add(horasPanel, BorderLayout.CENTER);
 
-            // Interacción con el día.
             diaPanel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -320,9 +314,6 @@ public class Calendario extends JPanel {
         diasPanel.revalidate();
         diasPanel.repaint();
     }
-
-
-
 
 
     private void mostrarDialogo(LocalDate date) {
@@ -405,29 +396,23 @@ public class Calendario extends JPanel {
                 if (nombreEvento.isEmpty()) {
                     JOptionPane.showMessageDialog(dialog, "Por favor, ingresa un nombre para el evento.");
                 } else {
-                    // Verificar si el evento es todo el día o tiene hora de inicio y fin
                     boolean todoElDia = todoElDiaCheckBox.isSelected();
                     Evento evento;
                     
                     if (todoElDia) {
-                        // Crear un evento todo el día
                         evento = new Evento(nombreEvento, descripcionEvento, categoriaSeleccionada, date, todoElDia);
                     } else {
-                        // Obtener las horas y minutos seleccionados
                         int horaInicio = (int) horas.getSelectedItem();
                         int minutoInicio = Integer.parseInt((String) minutos.getSelectedItem());
                         int horaFin = (int) horasFinal.getSelectedItem();
                         int minutoFin = Integer.parseInt((String) minutosFinal.getSelectedItem());
 
-                        // Crear LocalTime para la hora de inicio y fin
                         LocalTime horaInicioEvent = LocalTime.of(horaInicio, minutoInicio);
                         LocalTime horaFinEvent = LocalTime.of(horaFin, minutoFin);
 
-                        // Crear un evento con hora de inicio y fin
                         evento = new Evento(nombreEvento, descripcionEvento, categoriaSeleccionada, date, horaInicioEvent, horaFinEvent);
                     }
 
-                    // Agregar el evento a la lista de eventos
                     listaEventos.add(evento);
                     JOptionPane.showMessageDialog(dialog, "Evento guardado.");
                     actualizarVista();
@@ -447,11 +432,11 @@ public class Calendario extends JPanel {
     private void mostrarEvento(Evento evento, LocalDate date) {
         JDialog dialog = new JDialog();
         dialog.setTitle("Evento para el " + date.toString());
-        dialog.setSize(300, 150);
+        dialog.setSize(300, 200); 
         dialog.setLocationRelativeTo(this);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 1, 10, 10));
+        panel.setLayout(new GridLayout(4, 1, 10, 10));
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -459,14 +444,43 @@ public class Calendario extends JPanel {
         JLabel labelNombreEvento = new JLabel(evento.getNombre());
         panel.add(labelNombre);
         panel.add(labelNombreEvento);
+
         JLabel labelDescripcion = new JLabel("Descripción del evento:");
         JLabel labelDescripcionEvento = new JLabel(evento.getDescripcion());
         panel.add(labelDescripcion);
         panel.add(labelDescripcionEvento);
+
         JLabel labelFecha = new JLabel("Fecha del evento:");
         JLabel labelFechaEvento = new JLabel(evento.getFecha().format(formatter));
         panel.add(labelFecha);
         panel.add(labelFechaEvento);
+
+        JButton botonEliminar = new JButton("Eliminar evento");
+        botonEliminar.setBackground(Color.RED); 
+        botonEliminar.setForeground(Color.WHITE);
+        botonEliminar.setFocusPainted(false); 
+        botonEliminar.setFont(new Font("Arial", Font.BOLD, 12));
+
+        botonEliminar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int confirmacion = JOptionPane.showConfirmDialog(dialog, "¿Estás seguro de eliminar este evento?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+                if (confirmacion == JOptionPane.YES_OPTION) {
+                    listaEventos.remove(evento); 
+                    JOptionPane.showMessageDialog(dialog, "Evento eliminado.");
+                    actualizarVista();
+                    dialog.dispose(); 
+                }
+            }
+        });
+
+        JPanel panelBoton = new JPanel();
+        panelBoton.setLayout(new BoxLayout(panelBoton, BoxLayout.X_AXIS)); 
+        panelBoton.add(Box.createHorizontalGlue()); 
+        panelBoton.add(botonEliminar);
+        panelBoton.add(Box.createHorizontalGlue()); 
+ 
+        panel.add(panelBoton);
 
         dialog.getContentPane().add(panel);
         dialog.setVisible(true);
