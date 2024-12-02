@@ -339,7 +339,7 @@ public class VentanaTienda extends JFrame {
 
         
         
-     // Renderizador para la columna "Moneda" (solo imagen)
+     // Renderizador para la columna Moneda (solo imagen)
         monedasT.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -350,7 +350,7 @@ public class VentanaTienda extends JFrame {
             }
         });
 
-        // Renderizador para la columna "Precio" (con número y icono)
+        // Renderizador para la columna "Precio" (con número e icono)
         monedasT.getColumnModel().getColumn(1).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
