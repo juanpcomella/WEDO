@@ -103,7 +103,7 @@ public class VentanaTienda extends JFrame {
         ImageIcon logoPlayaPalmeras = cargarImagen("imagenes/logoPlayaPalmeras.png", 80, 80);
         ImageIcon logoHomer = cargarImagen("imagenes/logoHomer.png", 80, 80);
 
-        ImageIcon icon2 = cargarImagen("imagenes/coin.jpg", 50, 50);
+        ImageIcon icon2 = cargarImagen("imagenes/coin_sin_fondo.png", 50, 50);
 
         // Agregar ejemplos de filas con un icono y precio
         modeloIcono.addRow(new Object[]{logoHomer, new Object[]{85, icon2}});
@@ -272,23 +272,7 @@ public class VentanaTienda extends JFrame {
         JPanel panelApodos = new JPanel();
         tabbedPane.addTab("Apodos", panelApodos);
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
 
         // Panel para la temática
         JPanel panelTematica = new JPanel(new BorderLayout());
