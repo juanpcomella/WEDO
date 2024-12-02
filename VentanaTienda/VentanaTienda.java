@@ -127,7 +127,10 @@ public class VentanaTienda extends JFrame {
                 Point celda_Render = new Point(row, column);
                 if (estadoCeldasIcono.getOrDefault(celda_Render, false)) {
                     // Si la celda ya está comprada, muestra el JLabel "Comprado"
-                    return new JLabel("Comprado");
+                    JLabel compradoL = new JLabel("  Comprado");
+                    compradoL.setFont(new Font("Arial", Font.BOLD, 16));
+                    compradoL.setForeground(Color.green);
+                    return compradoL;
                 } else {
 
                 if (column == hoveredColumn && row == hoveredRow) {
@@ -245,7 +248,10 @@ public class VentanaTienda extends JFrame {
                 celda = new Point(row, column);
                 valorOriginal = value;
                 if (estadoCeldas.getOrDefault(celda, true)) {
-                    return new JLabel("Comprado");
+                	JLabel compradoL = new JLabel("  Comprado");
+                    compradoL.setFont(new Font("Arial", Font.BOLD, 16));
+                    compradoL.setForeground(Color.green);
+                    return compradoL;
                 } else {
                     return panel;
                 }
@@ -357,7 +363,10 @@ public class VentanaTienda extends JFrame {
                 JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
                 Point celda_Render = new Point(row, column);
                 if (estadoCeldasMoneda.getOrDefault(celda_Render, false)) {
-                    return new JLabel("Comprado");
+                    JLabel compradoL = new JLabel("  Comprado");
+                    compradoL.setFont(new Font("Arial", Font.BOLD, 16));
+                    compradoL.setForeground(Color.green);
+                    return compradoL;
                 } else {
                     if (value instanceof Object[]) {
                         Object[] cellData = (Object[]) value;
@@ -367,7 +376,7 @@ public class VentanaTienda extends JFrame {
                             JLabel iconLabel = new JLabel((Icon) cellData[1]);
                             panel.add(iconLabel);
                         }
-                    }//j
+                    }
                 }
                 if (hoveredRow==row && hoveredColumn ==1) {
                 	return new JButton("Comprar");
