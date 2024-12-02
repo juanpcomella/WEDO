@@ -62,14 +62,18 @@ public class Calendario extends JPanel {
 
         add(panelArriba, BorderLayout.NORTH);
 
-        JButton botonMesActual = new JButton("Hoy");
-        panelArriba.add(botonMesActual, BorderLayout.EAST);
-        botonMesActual.addActionListener(e -> irMesActual());
-        botonMesActual.setBackground(Color.LIGHT_GRAY);
-
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         JButton botonVista = new JButton("Cambiar vista");
+        botonVista.setPreferredSize(new Dimension(120, 30));
         botonVista.addActionListener(e -> toggleView());
-        panelArriba.add(botonVista, BorderLayout.SOUTH);
+        panelBotones.add(botonVista);
+
+        JButton botonMesActual = new JButton("Hoy");
+        botonMesActual.setBackground(Color.LIGHT_GRAY);
+        botonMesActual.addActionListener(e -> irMesActual());
+        panelBotones.add(botonMesActual);
+
+        panelArriba.add(panelBotones, BorderLayout.EAST);
 
         diasPanel.setLayout(new GridLayout(0, 7));
         add(diasPanel, BorderLayout.CENTER);
@@ -91,7 +95,7 @@ public class Calendario extends JPanel {
     }
 
     void toggleView() {
-    	esVistaSemanal = !esVistaSemanal;
+        esVistaSemanal = !esVistaSemanal;
         actualizarTitulo();
         actualizarVista();
     }
@@ -136,8 +140,8 @@ public class Calendario extends JPanel {
 
     private void mostrarVistaMes() {
         diasPanel.removeAll();
-        diasPanel.setLayout(new GridLayout(0, 7)); 
-        
+        diasPanel.setLayout(new GridLayout(0, 7));
+
         String[] diasSemana = {"Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"};
         for (String dia : diasSemana) {
             JLabel diaLabel = new JLabel(dia, SwingConstants.CENTER);
@@ -225,7 +229,6 @@ public class Calendario extends JPanel {
         diasPanel.revalidate();
         diasPanel.repaint();
     }
-
 
     private void mostrarVistaSemanal() {
         diasPanel.removeAll();
