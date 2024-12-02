@@ -105,6 +105,7 @@ public class VentanaTienda extends JFrame {
 
         // Dinero almacenado aquí, luego se hará un parseInt para convertir
         String dinero = "200";
+        
 
         // Parseo de dinero
         money = Integer.parseInt(dinero);
@@ -144,7 +145,7 @@ public class VentanaTienda extends JFrame {
         iconoT.getColumnModel().getColumn(1).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                JPanel panel = new JPanel(new BorderLayout());
                 Point celda_Render = new Point(row, column);
                 if (estadoCeldasIcono.getOrDefault(celda_Render, false)) {
                     // Si la celda ya está comprada, muestra el JLabel "Comprado"
@@ -156,19 +157,22 @@ public class VentanaTienda extends JFrame {
 
                 if (column == hoveredColumn && row == hoveredRow) {
                 	JButton boton = new JButton("Comprar");
-                	boton.setBackground(new Color(220, 220, 80));
+                	boton.setBackground(new Color(255, 215, 0));
                 	boton.setFont(new Font("Arial", Font.BOLD, 18));
                 	return boton;
                 } else {
                     if (value instanceof Object[]) {
+                    	JPanel panelElements = new JPanel();
                         Object[] cellData = (Object[]) value;
                         JLabel numberLabel = new JLabel(String.valueOf(cellData[0]));
+                        numberLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
                         
-                        panel.add(numberLabel);
+                        panelElements.add(numberLabel);
 
                         if (cellData[1] instanceof Icon) {
                             JLabel iconLabel = new JLabel((Icon) cellData[1]);
-                            panel.add(iconLabel);
+                            panelElements.add(iconLabel);
+                            panel.add(panelElements,BorderLayout.CENTER);
                         }
                     }
                 }
@@ -179,6 +183,7 @@ public class VentanaTienda extends JFrame {
 
         JLabel dineroL = new JLabel(icon2);
         JPanel panelNorteIcono = new JPanel();
+        panelNorteIcono.setBackground(new Color(255, 215, 0));
         JLabel stringDinero = new JLabel(dinero);
         panelNorteIcono.add(dineroL);
         panelNorteIcono.add(stringDinero);
@@ -245,6 +250,7 @@ public class VentanaTienda extends JFrame {
                             money -= precio; // Restar el precio al dinero del usuario
                             stringDinero.setText(String.valueOf(money));
                             StringmonyL.setText(String.valueOf(money));
+                            
                             estadoCeldas.put(celda, true);
                             table.setValueAt(comprado, selectedRow, selectedColumn);
                             panel.repaint();
@@ -368,7 +374,7 @@ public class VentanaTienda extends JFrame {
         monedasT.getColumnModel().getColumn(1).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                JPanel panel = new JPanel(new BorderLayout());
                 Point celda_Render = new Point(row, column);
                 if (estadoCeldasMoneda.getOrDefault(celda_Render, false)) {
                     JLabel compradoL = new JLabel("  Comprado");
@@ -377,18 +383,21 @@ public class VentanaTienda extends JFrame {
                     return compradoL;
                 } else {
                     if (value instanceof Object[]) {
+                    	JPanel panelElements2 = new JPanel();
                         Object[] cellData = (Object[]) value;
                         JLabel numberLabel = new JLabel(String.valueOf(cellData[0]));
-                        panel.add(numberLabel);
+                        numberLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
+                        panelElements2.add(numberLabel);
                         if (cellData[1] instanceof Icon) {
                             JLabel iconLabel = new JLabel((Icon) cellData[1]);
-                            panel.add(iconLabel);
+                            panelElements2.add(iconLabel);
+                            panel.add(panelElements2, BorderLayout.CENTER);
                         }
                     }
                 }
                 if (hoveredRow==row && hoveredColumn ==1) {
                 	JButton boton = new JButton("Comprar");
-                	boton.setBackground(new Color(220, 220, 80));
+                	boton.setBackground(new Color(255, 215, 0));
                 	boton.setFont(new Font("Arial", Font.BOLD, 18));
                 	return boton;
                 }
@@ -432,6 +441,7 @@ public class VentanaTienda extends JFrame {
         panelNorteMonedas.add(icoinmony);
         panelNorteMonedas.add(StringmonyL);
         panelTematica.add(panelNorteMonedas, BorderLayout.NORTH);
+        panelNorteMonedas.setBackground(new Color(255, 215, 0));
         
         monedasT.getColumnModel().getColumn(1).setCellEditor(new ButtonCellEditor(monedasT, estadoCeldasMoneda));
 
@@ -458,10 +468,13 @@ public class VentanaTienda extends JFrame {
         panelMonedasConMargen.add(new JScrollPane(monedasT)); // Añadir el JScrollPane con el JTable
         panelTematica.add(panelMonedasConMargen, BorderLayout.CENTER); // Añadir al panel principal
 
-        
-        //Poner una imagen de fondo:
-        
+        // Design of the text money:
+        stringDinero.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
+        StringmonyL.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
     }
+
+        
+
 
     private ImageIcon cargarImagen(String ruta, int ancho, int alto) {
         ImageIcon icono = new ImageIcon(ruta);
