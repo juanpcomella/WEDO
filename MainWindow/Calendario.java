@@ -305,7 +305,6 @@ public class Calendario extends JPanel {
         }
     }
 
-
     private void mostrarDialogo(LocalDate date) {
         JDialog dialog = new JDialog();
         dialog.setTitle("Añadir evento para " + date.toString());
