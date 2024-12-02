@@ -9,6 +9,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.*;
 
+import BaseDeDatos.BDs;
+import StartingWindows.Usuario;
+
 public class Calendario extends JPanel {
 
     private int año;
@@ -19,15 +22,15 @@ public class Calendario extends JPanel {
     JLabel tituloLabel = new JLabel(getMonthYearString(), SwingConstants.CENTER);
     ArrayList<Evento> listaEventos = new ArrayList<>();
 
-    public Calendario(int año, int mes) {
+    public Calendario(int año, int mes, Usuario usuario) {
         this.año = año;
         this.mes = mes;
         this.seleccionado = LocalDate.of(año, mes, 1);
         this.diasPanel = new JPanel();
-        Calendar();
+        Calendar(usuario);
     }
 
-    private void Calendar() {
+    private void Calendar(Usuario usuario) {
         setLayout(new BorderLayout());
         JPanel panelArriba = new JPanel(new BorderLayout());
         tituloLabel = new JLabel(getMonthYearString(), SwingConstants.CENTER);
@@ -39,18 +42,18 @@ public class Calendario extends JPanel {
 
         botonPrevio.addActionListener(e -> {
             if (esVistaSemanal) {
-                actualizarSemana(-1);
+                actualizarSemana(-1, usuario);
             } else {
-                actualizarMes(-1);
+                actualizarMes(-1, usuario);
             }
             actualizarTitulo();
         });
 
         botonSiguiente.addActionListener(e -> {
             if (esVistaSemanal) {
-                actualizarSemana(1);
+                actualizarSemana(1, usuario);
             } else {
-                actualizarMes(1);
+                actualizarMes(1, usuario);
             }
             actualizarTitulo();
         });
@@ -65,12 +68,12 @@ public class Calendario extends JPanel {
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         JButton botonVista = new JButton("Cambiar vista");
         botonVista.setPreferredSize(new Dimension(120, 30));
-        botonVista.addActionListener(e -> toggleView());
+        botonVista.addActionListener(e -> toggleView(usuario));
         panelBotones.add(botonVista);
 
         JButton botonMesActual = new JButton("Hoy");
         botonMesActual.setBackground(Color.LIGHT_GRAY);
-        botonMesActual.addActionListener(e -> irMesActual());
+        botonMesActual.addActionListener(e -> irMesActual(usuario));
         panelBotones.add(botonMesActual);
 
         panelArriba.add(panelBotones, BorderLayout.EAST);
@@ -78,26 +81,26 @@ public class Calendario extends JPanel {
         diasPanel.setLayout(new GridLayout(0, 7));
         add(diasPanel, BorderLayout.CENTER);
 
-        actualizarVista();
+        actualizarVista(usuario);
     }
 
     private String getMonthYearString() {
         return String.format("%d - %02d", año, mes);
     }
 
-    private void irMesActual() {
+    private void irMesActual(Usuario usuario) {
         LocalDate hoy = LocalDate.now();
         this.año = hoy.getYear();
         this.mes = hoy.getMonthValue();
         this.seleccionado = hoy;
         actualizarTitulo();
-        actualizarVista();
+        actualizarVista(usuario);
     }
 
-    void toggleView() {
+    void toggleView(Usuario usuario) {
         esVistaSemanal = !esVistaSemanal;
         actualizarTitulo();
-        actualizarVista();
+        actualizarVista(usuario);
     }
 
     private void actualizarTitulo() {
@@ -108,27 +111,27 @@ public class Calendario extends JPanel {
         }
     }
 
-    private void actualizarVista() {
+    private void actualizarVista(Usuario usuario) {
         diasPanel.removeAll();
         if (esVistaSemanal) {
-            mostrarVistaSemanal();
+            mostrarVistaSemanal(usuario);
         } else {
-            mostrarVistaMes();
+            mostrarVistaMes(usuario);
         }
         diasPanel.revalidate();
         diasPanel.repaint();
     }
 
-    private void actualizarMes(int offset) {
+    private void actualizarMes(int offset, Usuario usuario) {
         seleccionado = seleccionado.plusMonths(offset);
         año = seleccionado.getYear();
         mes = seleccionado.getMonthValue();
-        actualizarVista();
+        actualizarVista(usuario);
     }
 
-    private void actualizarSemana(int offset) {
+    private void actualizarSemana(int offset, Usuario usuario) {
         seleccionado = seleccionado.plusWeeks(offset);
-        actualizarVista();
+        actualizarVista(usuario);
         actualizarTitulo();
     }
 
@@ -138,7 +141,7 @@ public class Calendario extends JPanel {
         tituloLabel.setText("Semana: " + startOfWeek.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " - " + endOfWeek.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     }
 
-    private void mostrarVistaMes() {
+    private void mostrarVistaMes(Usuario usuario) {
         diasPanel.removeAll();
         diasPanel.setLayout(new GridLayout(0, 7));
 
@@ -201,7 +204,7 @@ public class Calendario extends JPanel {
                     eventoLabel.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
-                            mostrarEvento(evento, date);
+                            mostrarEvento(evento, date, usuario);
                         }
                     });
 
@@ -215,7 +218,7 @@ public class Calendario extends JPanel {
             diaPanel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    mostrarDialogo(date);
+                    mostrarDialogo(date, usuario);
                 }
             });
         }
@@ -230,7 +233,7 @@ public class Calendario extends JPanel {
         diasPanel.repaint();
     }
 
-    private void mostrarVistaSemanal() {
+    private void mostrarVistaSemanal(Usuario usuario) {
         diasPanel.removeAll();
 
         JPanel horasPanelIzquierda = new JPanel();
@@ -314,7 +317,7 @@ public class Calendario extends JPanel {
             diaPanel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    mostrarDialogo(diaActual);
+                    mostrarDialogo(diaActual, usuario);
                 }
             });
 
@@ -327,7 +330,7 @@ public class Calendario extends JPanel {
 
 
 
-    private void mostrarDialogo(LocalDate date) {
+    private void mostrarDialogo(LocalDate date, Usuario usuario) {
         JDialog dialog = new JDialog();
         dialog.setTitle("Añadir evento para " + date.toString());
         dialog.setSize(400, 350);
@@ -400,6 +403,7 @@ public class Calendario extends JPanel {
         botonGuardar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            	BDs.crearTablaEventos();
                 String nombreEvento = campoNombre.getText();
                 String descripcionEvento = texto.getText();
                 Categorias categoriaSeleccionada = (Categorias) categorias.getSelectedItem();
@@ -412,6 +416,7 @@ public class Calendario extends JPanel {
                     
                     if (todoElDia) {
                         evento = new Evento(nombreEvento, descripcionEvento, categoriaSeleccionada, date, todoElDia);
+                        BDs.insertarEventos(usuario.getNombreUsuario(), nombreEvento, descripcionEvento, descripcionEvento, descripcionEvento, nombreEvento, descripcionEvento, todoElDia);
                     } else {
                         int horaInicio = (int) horas.getSelectedItem();
                         int minutoInicio = Integer.parseInt((String) minutos.getSelectedItem());
@@ -426,7 +431,7 @@ public class Calendario extends JPanel {
 
                     listaEventos.add(evento);
                     JOptionPane.showMessageDialog(dialog, "Evento guardado.");
-                    actualizarVista();
+                    actualizarVista(usuario);
                     dialog.dispose();
                 }
             }
@@ -440,7 +445,7 @@ public class Calendario extends JPanel {
         dialog.setVisible(true);
     }
 
-    private void mostrarEvento(Evento evento, LocalDate date) {
+    private void mostrarEvento(Evento evento, LocalDate date, Usuario usuario) {
         JDialog dialog = new JDialog();
         dialog.setTitle("Evento para el " + date.toString());
         dialog.setSize(300, 200); 
@@ -479,7 +484,7 @@ public class Calendario extends JPanel {
                 if (confirmacion == JOptionPane.YES_OPTION) {
                     listaEventos.remove(evento); 
                     JOptionPane.showMessageDialog(dialog, "Evento eliminado.");
-                    actualizarVista();
+                    actualizarVista(usuario);
                     dialog.dispose(); 
                 }
             }
@@ -497,16 +502,16 @@ public class Calendario extends JPanel {
         dialog.setVisible(true);
     }
 
-    public static void interfaz() {
+    public static void interfaz(Usuario usuario) {
         JFrame frame = new JFrame("Calendario de Eventos");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().add(new Calendario(LocalDate.now().getYear(), LocalDate.now().getMonthValue()));
+        frame.getContentPane().add(new Calendario(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), usuario));
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(Calendario::interfaz);
+        SwingUtilities.invokeLater(() -> Calendario.interfaz(null));
     }
 }
