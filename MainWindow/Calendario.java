@@ -1,33 +1,12 @@
 package MainWindow;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.Box;
+import javax.swing.*;
 
 public class Calendario extends JPanel {
 
@@ -35,7 +14,7 @@ public class Calendario extends JPanel {
     private int mes;
     private LocalDate seleccionado;
     private JPanel diasPanel;
-    private boolean isWeeklyView = false;
+    private boolean esVistaSemanal = false;
     JLabel tituloLabel = new JLabel(getMonthYearString(), SwingConstants.CENTER);
     ArrayList<Evento> listaEventos = new ArrayList<>();
 
@@ -57,11 +36,23 @@ public class Calendario extends JPanel {
         JButton botonPrevio = new JButton("<");
         JButton botonSiguiente = new JButton(">");
 
-        botonPrevio.addActionListener(e -> actualizarMes(-1));
-        botonSiguiente.addActionListener(e -> actualizarMes(1));
+        botonPrevio.addActionListener(e -> {
+            if (esVistaSemanal) {
+                actualizarSemana(-1);
+            } else {
+                actualizarMes(-1);
+            }
+            actualizarTitulo();
+        });
 
-        botonPrevio.addActionListener(e -> actualizarSemana(-1));
-        botonSiguiente.addActionListener(e -> actualizarSemana(1));
+        botonSiguiente.addActionListener(e -> {
+            if (esVistaSemanal) {
+                actualizarSemana(1);
+            } else {
+                actualizarMes(1);
+            }
+            actualizarTitulo();
+        });
 
         JPanel mesPanel = new JPanel();
         mesPanel.add(botonPrevio);
@@ -75,7 +66,7 @@ public class Calendario extends JPanel {
         botonMesActual.addActionListener(e -> irMesActual());
         botonMesActual.setBackground(Color.LIGHT_GRAY);
 
-        JButton botonVista = new JButton("Ver Semanal");
+        JButton botonVista = new JButton("Cambiar vista");
         botonVista.addActionListener(e -> toggleView());
         panelArriba.add(botonVista, BorderLayout.SOUTH);
 
@@ -94,23 +85,27 @@ public class Calendario extends JPanel {
         this.año = hoy.getYear();
         this.mes = hoy.getMonthValue();
         this.seleccionado = hoy;
-        tituloLabel.setText(getMonthYearString());
+        actualizarTitulo();
         actualizarVista();
     }
 
     void toggleView() {
-        isWeeklyView = !isWeeklyView;
-        if (isWeeklyView) {
+    	esVistaSemanal = !esVistaSemanal;
+        actualizarTitulo();
+        actualizarVista();
+    }
+
+    private void actualizarTitulo() {
+        if (esVistaSemanal) {
             actualizarTituloSemanal();
         } else {
             tituloLabel.setText(getMonthYearString());
         }
-        actualizarVista();
     }
 
     private void actualizarVista() {
         diasPanel.removeAll();
-        if (isWeeklyView) {
+        if (esVistaSemanal) {
             mostrarVistaSemanal();
         } else {
             mostrarVistaMes();
@@ -123,14 +118,13 @@ public class Calendario extends JPanel {
         seleccionado = seleccionado.plusMonths(offset);
         año = seleccionado.getYear();
         mes = seleccionado.getMonthValue();
-        tituloLabel.setText(getMonthYearString());
         actualizarVista();
     }
 
     private void actualizarSemana(int offset) {
         seleccionado = seleccionado.plusWeeks(offset);
         actualizarVista();
-        actualizarTituloSemanal();
+        actualizarTitulo();
     }
 
     private void actualizarTituloSemanal() {
@@ -140,6 +134,9 @@ public class Calendario extends JPanel {
     }
 
     private void mostrarVistaMes() {
+        diasPanel.removeAll();
+        diasPanel.setLayout(new GridLayout(0, 7)); 
+        
         String[] diasSemana = {"Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"};
         for (String dia : diasSemana) {
             JLabel diaLabel = new JLabel(dia, SwingConstants.CENTER);
@@ -182,7 +179,7 @@ public class Calendario extends JPanel {
                 if (evento.getFecha().equals(date)) {
                     JLabel eventoLabel = new JLabel(evento.getNombre());
                     eventoLabel.setOpaque(true);
-                    eventoLabel.setPreferredSize(new java.awt.Dimension(8, 8));
+                    eventoLabel.setPreferredSize(new Dimension(8, 8));
                     eventoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                     eventoLabel.setFont(new Font("Arial", Font.BOLD, 8));
 
@@ -223,31 +220,88 @@ public class Calendario extends JPanel {
         for (int i = utilizados; i < sitios; i++) {
             diasPanel.add(new JLabel(""));
         }
+
+        diasPanel.revalidate();
+        diasPanel.repaint();
     }
+
 
     private void mostrarVistaSemanal() {
         String[] diasSemana = {"Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"};
         LocalDate startOfWeek = seleccionado.with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
+        LocalDate hoy = LocalDate.now();
+        
+        diasPanel.setLayout(new GridLayout(1, 7));
 
         for (int i = 0; i < 7; i++) {
             LocalDate diaActual = startOfWeek.plusDays(i);
-            JPanel celdaPanel = new JPanel();
-            celdaPanel.setLayout(new BoxLayout(celdaPanel, BoxLayout.Y_AXIS));
-            celdaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-            celdaPanel.setPreferredSize(new java.awt.Dimension(120, 100));
+
+            JPanel diaPanel = new JPanel();
+            diaPanel.setLayout(new BorderLayout());
+            diaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
+            diaPanel.setBackground(Color.WHITE);
+            diaPanel.setPreferredSize(new Dimension(150, 200));
+
+            if (diaActual.equals(hoy)) {
+                diaPanel.setBackground(Color.LIGHT_GRAY);
+            }
 
             JLabel diaSemanaLabel = new JLabel(diasSemana[i], SwingConstants.CENTER);
-            diaSemanaLabel.setFont(new Font("Arial", Font.BOLD, 12));
-            diaSemanaLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+            diaSemanaLabel.setFont(new Font("Arial", Font.BOLD, 16));
             JLabel numeroDiaLabel = new JLabel(String.valueOf(diaActual.getDayOfMonth()), SwingConstants.CENTER);
-            numeroDiaLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-            numeroDiaLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+            numeroDiaLabel.setFont(new Font("Arial", Font.PLAIN, 20));
 
-            celdaPanel.add(diaSemanaLabel);
-            celdaPanel.add(Box.createVerticalStrut(10));
-            celdaPanel.add(numeroDiaLabel);
+            JPanel headerPanel = new JPanel(new GridLayout(2, 1));
+            headerPanel.setBackground(Color.LIGHT_GRAY);
+            headerPanel.add(diaSemanaLabel);
+            headerPanel.add(numeroDiaLabel);
+            diaPanel.add(headerPanel, BorderLayout.NORTH);
 
-            diasPanel.add(celdaPanel);
+            JPanel eventosPanel = new JPanel();
+            eventosPanel.setLayout(new BoxLayout(eventosPanel, BoxLayout.Y_AXIS));
+            eventosPanel.setOpaque(false);
+
+            for (Evento evento : listaEventos) {
+                if (evento.getFecha().equals(diaActual)) {
+                    JLabel eventoLabel = new JLabel(evento.getNombre(), SwingConstants.CENTER);
+                    eventoLabel.setOpaque(true);
+                    eventoLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+                    eventoLabel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+
+                    if (evento.getCategoria().equals(Categorias.Estudios)) {
+                        eventoLabel.setBackground(Color.MAGENTA);
+                    } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
+                        eventoLabel.setBackground(Color.GREEN);
+                    } else if (evento.getCategoria().equals(Categorias.Deporte)) {
+                        eventoLabel.setBackground(Color.CYAN);
+                    } else if (evento.getCategoria().equals(Categorias.Ocio)) {
+                        eventoLabel.setBackground(Color.ORANGE);
+                    }
+
+                    eventoLabel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+                    eventoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                    eventoLabel.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            mostrarEvento(evento, diaActual);
+                        }
+                    });
+
+                    eventosPanel.add(eventoLabel);
+                }
+            }
+
+            diaPanel.add(eventosPanel, BorderLayout.CENTER);
+
+            diaPanel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    mostrarDialogo(diaActual);
+                }
+            });
+
+            diasPanel.add(diaPanel);
         }
     }
 

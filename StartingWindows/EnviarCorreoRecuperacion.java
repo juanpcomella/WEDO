@@ -34,11 +34,11 @@ public class EnviarCorreoRecuperacion {
             message.setFrom(new InternetAddress(usuarioCorreo));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(correoDestino));
             message.setSubject("Recuperación de contraseña");
-            message.setText("Tu contrase es: "+BDs.getPassword(BDs.pasarDeEmailAUsername(correoDestino)));
+            message.setText("Tu contraseña es: "+BDs.getPassword(BDs.pasarDeEmailAUsername(correoDestino)));
 
             // Enviar el mensaje
             Transport.send(message);
-            System.out.println("Correo enviado exitosamente a " + correoDestino);
+//            System.out.println("Correo enviado exitosamente a " + correoDestino);
         } catch (MessagingException e) {
             e.printStackTrace();
         }

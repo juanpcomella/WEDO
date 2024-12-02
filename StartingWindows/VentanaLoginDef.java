@@ -156,9 +156,11 @@ public class VentanaLoginDef extends JFrame {
                 	String correoOuserDeRecuperacion = textField.getText();
                 	if(BDs.usuarioExistente(correoOuserDeRecuperacion)) {
                 		correoRep = BDs.getEmail(correoOuserDeRecuperacion);
+                        JOptionPane.showMessageDialog(null,"Correo enviado.");
                 		EnviarCorreoRecuperacion.enviarCorreo(correoRep);
                 	}else if(BDs.emailExistente(correoOuserDeRecuperacion)) {
                 		correoRep = correoOuserDeRecuperacion;
+                        JOptionPane.showMessageDialog(null,"Correo enviado.");
                 		EnviarCorreoRecuperacion.enviarCorreo(correoRep);
                 	}else {
                         JOptionPane.showMessageDialog(null,"Usuario no encontrado.");

@@ -47,20 +47,9 @@ public class MainWindow extends JFrame {
         navbar.setPreferredSize(new Dimension(getWidth(), navbarHeight));
         panelNorte.add(navbar, BorderLayout.CENTER);
 
-        // Crear el calendario con la fecha actual
         calendario = new Calendario(LocalDate.now().getYear(), LocalDate.now().getMonthValue());
         panelCentro.add(calendario, BorderLayout.CENTER);
 
-        // Agregar botón para cambiar vista
-        JButton toggleButton = new JButton("Cambiar Vista");
-        toggleButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                calendario.toggleView();  // Alternar entre vista semanal y mensual
-            }
-        });
-
-        panelSur.add(toggleButton, BorderLayout.CENTER);
 
         RightSideBar rightSideBar = new RightSideBar();
         int rsbWidth = (int) (getWidth() * 0.1);
