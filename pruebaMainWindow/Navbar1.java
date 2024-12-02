@@ -96,6 +96,7 @@ public class Navbar1 extends JPanel {
         // Campo de búsqueda
         JTextField searchTF = new JTextField(20);
         searchTF.setFont(new Font("Arial", Font.PLAIN, 20));
+        //--------------------------
         gbc.gridx++;
         gbc.weightx = 1; // Se expande para ocupar espacio
         add(searchTF, gbc);
