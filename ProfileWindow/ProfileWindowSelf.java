@@ -18,7 +18,7 @@ import java.awt.geom.Ellipse2D;
 
 public class ProfileWindowSelf extends JFrame {
 
-    public ProfileWindowSelf(Usuario usuario, Boolean isSelfProfile) {
+    public ProfileWindowSelf(Usuario usuario) {
         setTitle("WEDO - " + usuario.getNombreUsuario());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -78,7 +78,9 @@ public class ProfileWindowSelf extends JFrame {
         editButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 EditarPerfil editarPerfil = new EditarPerfil(usuario);
-
+                editarPerfil.setSize(450, 600);
+                editarPerfil.setLocationRelativeTo(null);
+                editarPerfil.setVisible(true);
             }
         });
 
@@ -303,7 +305,7 @@ public class ProfileWindowSelf extends JFrame {
         // Crear la ventana principal
         SwingUtilities.invokeLater(() -> {
             Usuario user = new Usuario(null, null, null);
-            ProfileWindowSelf window = new ProfileWindowSelf(user, true);
+            ProfileWindowSelf window = new ProfileWindowSelf(user);
             window.setVisible(true);
 
         });

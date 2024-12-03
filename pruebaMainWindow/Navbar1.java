@@ -1,6 +1,6 @@
 package pruebaMainWindow;
 
-import ProfileWindow.ProfileWindow;
+import ProfileWindow.ProfileWindowSelf;
 import StartingWindows.Usuario;
 import VentanaTienda.VentanaTienda;
 
@@ -175,7 +175,7 @@ public class Navbar1 extends JPanel {
             profileLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    SwingUtilities.invokeLater(() -> new ProfileWindow(usuario).setVisible(true));
+                    SwingUtilities.invokeLater(() -> new ProfileWindowSelf(usuario).setVisible(true));
                     ((JFrame) SwingUtilities.getWindowAncestor(profileLabel)).dispose();
                 }
             });

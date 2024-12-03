@@ -156,7 +156,7 @@ public class Navbar extends JPanel {
             profileLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    SwingUtilities.invokeLater(() -> new ProfileWindowSelf(usuario, true).setVisible(true));
+                    SwingUtilities.invokeLater(() -> new ProfileWindowSelf(usuario).setVisible(true));
                     ((JFrame) SwingUtilities.getWindowAncestor(profileLabel)).dispose();
                 }
             });
