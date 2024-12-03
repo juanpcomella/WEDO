@@ -145,38 +145,58 @@ public class VentanaTienda extends JFrame {
         iconoT.getColumnModel().getColumn(1).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JPanel panel = new JPanel(new BorderLayout());
+                JPanel panel = new JPanel();
                 Point celda_Render = new Point(row, column);
                 if (estadoCeldasIcono.getOrDefault(celda_Render, false)) {
                     // Si la celda ya está comprada, muestra el JLabel "Comprado"
-                    JLabel compradoL = new JLabel("  Comprado");
-                    compradoL.setFont(new Font("Arial", Font.BOLD, 16));
+                    JLabel compradoL = new JLabel("Comprado");
+                    compradoL.setFont(new Font("Arial", Font.BOLD, 24));
                     compradoL.setForeground(Color.green);
+                    compradoL.setHorizontalAlignment(SwingConstants.CENTER);
+                    compradoL.setVerticalAlignment(SwingConstants.CENTER);
                     return compradoL;
+
                 } else {
 
                 if (column == hoveredColumn && row == hoveredRow) {
                 	JButton boton = new JButton("Comprar");
                 	boton.setBackground(new Color(255, 215, 0));
-                	boton.setFont(new Font("Arial", Font.BOLD, 18));
+                	boton.setFont(new Font("Arial", Font.BOLD, 24));
                 	return boton;
                 } else {
-                    if (value instanceof Object[]) {
-                    	JPanel panelElements = new JPanel();
-                        Object[] cellData = (Object[]) value;
-                        JLabel numberLabel = new JLabel(String.valueOf(cellData[0]));
-                        numberLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
-                        
-                        panelElements.add(numberLabel);
+                	if (value instanceof Object[]) {
+                	    // Crear un panel con GridBagLayout
+                	    JPanel panelElements = new JPanel(new GridBagLayout());
+                	    GridBagConstraints gbc = new GridBagConstraints();
+                	    gbc.insets = new Insets(0, 1, 0, 1); // Espaciado entre componentes
+                	    gbc.gridy = 0; // Misma fila para ambos elementos
+                	    gbc.weightx = .0; // Permitir expansión horizontal
+                	    gbc.anchor = GridBagConstraints.CENTER; // Centrado vertical y horizontal
 
-                        if (cellData[1] instanceof Icon) {
-                            JLabel iconLabel = new JLabel((Icon) cellData[1]);
-                            panelElements.add(iconLabel);
-                            panel.add(panelElements,BorderLayout.CENTER);
-                        }
+                	    Object[] cellData = (Object[]) value;
+
+                	    // Crear el JLabel para el número
+                	    JLabel numberLabel = new JLabel(String.valueOf(cellData[0]));
+                	    numberLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
+                	    gbc.gridx = 0; // Columna izquierda
+                	    gbc.anchor = GridBagConstraints.CENTER; // Alineado hacia la izquierda en su celda
+                	    panelElements.add(numberLabel, gbc);
+
+                	    // Crear el JLabel para el ícono
+                	    if (cellData[1] instanceof Icon) {
+                	        JLabel iconLabel = new JLabel((Icon) cellData[1]);
+                	        gbc.gridx = 1; // Columna derecha
+                	        gbc.anchor = GridBagConstraints.CENTER; // Alineado hacia la derecha en su celda
+                	        panelElements.add(iconLabel, gbc);
+                	    }
+
+                	    return panelElements;
+                	}
+
+
                     }
                 }
-                }
+                
                 return panel;
             }
         });
@@ -218,7 +238,7 @@ public class VentanaTienda extends JFrame {
 
                 button = new JButton("Comprar");
                 button.setBackground(new Color(220, 100, 80));
-            	button.setFont(new Font("Arial", Font.BOLD, 18));
+            	button.setFont(new Font("Arial", Font.BOLD, 24));
                 button.addActionListener(e -> {
                     // Obtener la celda seleccionada
                     int selectedRow = table.getSelectedRow();
@@ -246,6 +266,10 @@ public class VentanaTienda extends JFrame {
                         );
                         if (respuesta == JOptionPane.YES_OPTION) {
                             comprado = new JLabel("Comprado");
+                            comprado.setFont(new Font("Arial", Font.BOLD, 24));
+                            comprado.setForeground(Color.green);
+                            comprado.setHorizontalAlignment(SwingConstants.CENTER);
+                            comprado.setVerticalAlignment(SwingConstants.CENTER);
                             System.out.println("Compra realizada.");
                             money -= precio; // Restar el precio al dinero del usuario
                             stringDinero.setText(String.valueOf(money));
@@ -280,8 +304,10 @@ public class VentanaTienda extends JFrame {
                 valorOriginal = value;
                 if (estadoCeldas.getOrDefault(celda, true)) {
                 	JLabel compradoL = new JLabel("Comprado");
-                    compradoL.setFont(new Font("Arial", Font.BOLD, 16));
+                    compradoL.setFont(new Font("Arial", Font.BOLD, 24));
                     compradoL.setForeground(Color.green);
+                    compradoL.setHorizontalAlignment(SwingConstants.CENTER);
+                    compradoL.setVerticalAlignment(SwingConstants.CENTER);
                     return compradoL;
                 } else {
                     return panel;
@@ -377,12 +403,14 @@ public class VentanaTienda extends JFrame {
                 JPanel panel = new JPanel(new BorderLayout());
                 Point celda_Render = new Point(row, column);
                 if (estadoCeldasMoneda.getOrDefault(celda_Render, false)) {
-                	//JPanel panelComprado = new JPanel(new BorderLayout());
+                	JPanel panelComprado = new JPanel();
                 	JLabel compradoL = new JLabel("Comprado");
-                    compradoL.setFont(new Font("Arial", Font.BOLD, 16));
+                    compradoL.setFont(new Font("Arial", Font.BOLD, 24));
                     compradoL.setForeground(Color.green);
-                    //panelComprado.add(compradoL, BorderLayout.NORTH);
+                    compradoL.setHorizontalAlignment(SwingConstants.CENTER);
+                    compradoL.setVerticalAlignment(SwingConstants.CENTER);
                     return compradoL;
+
                 } else {
                     if (value instanceof Object[]) {
                     	JPanel panelElements2 = new JPanel();
@@ -400,7 +428,7 @@ public class VentanaTienda extends JFrame {
                 if (hoveredRow==row && hoveredColumn ==1) {
                 	JButton boton = new JButton("Comprar");
                 	boton.setBackground(new Color(255, 215, 0));
-                	boton.setFont(new Font("Arial", Font.BOLD, 18));
+                	boton.setFont(new Font("Arial", Font.BOLD, 24));
                 	return boton;
                 }
                 return panel;
