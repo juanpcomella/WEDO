@@ -164,7 +164,7 @@ public class VentanaRegistroDef extends JFrame {
                 	JOptionPane.showMessageDialog(null,"Correo electrónico en uso.");
                 }
                 else {                	
-                	BDs.crearTabla();
+                	BDs.crearTablaUsuarios();
                 	BDs.insertarElementos(usernameUser, passwordUser, emailUser);
                 	Usuario usuario = new Usuario(usernameUser, emailUser, passwordUser);
 //                	for (int i = 0; i < BDs.usuarioExistente().size(); i++) {

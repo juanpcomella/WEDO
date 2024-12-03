@@ -47,7 +47,7 @@ public class MainWindow extends JFrame {
         navbar.setPreferredSize(new Dimension(getWidth(), navbarHeight));
         panelNorte.add(navbar, BorderLayout.CENTER);
 
-        calendario = new Calendario(LocalDate.now().getYear(), LocalDate.now().getMonthValue());
+        calendario = new Calendario(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), usuario);
         panelCentro.add(calendario, BorderLayout.CENTER);
 
 
