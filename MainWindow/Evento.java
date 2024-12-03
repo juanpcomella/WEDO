@@ -65,13 +65,12 @@ public class Evento {
         this.todoElDia = todoElDia;
     }
 
-    // Método para calcular la duración en minutos
     public int getDuracionEnMinutos() {
         if (todoElDia) {
-            return 1440;  // Un día tiene 1440 minutos
+            return 1440; 
         } else if (horaInicio != null && horaFin != null) {
             return (int) ChronoUnit.MINUTES.between(horaInicio, horaFin);
         }
-        return 0;  // Si no hay duración definida
+        return 0;
     }
 }
