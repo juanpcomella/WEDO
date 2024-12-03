@@ -377,9 +377,11 @@ public class VentanaTienda extends JFrame {
                 JPanel panel = new JPanel(new BorderLayout());
                 Point celda_Render = new Point(row, column);
                 if (estadoCeldasMoneda.getOrDefault(celda_Render, false)) {
-                    JLabel compradoL = new JLabel("  Comprado");
+                	//JPanel panelComprado = new JPanel(new BorderLayout());
+                	JLabel compradoL = new JLabel("Comprado");
                     compradoL.setFont(new Font("Arial", Font.BOLD, 16));
                     compradoL.setForeground(Color.green);
+                    //panelComprado.add(compradoL, BorderLayout.NORTH);
                     return compradoL;
                 } else {
                     if (value instanceof Object[]) {
