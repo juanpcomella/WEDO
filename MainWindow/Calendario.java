@@ -298,8 +298,12 @@ public class Calendario extends JPanel {
                         int finEvento = evento.getHoraFin().getHour();
                         int duracionBloques = finEvento - inicioEvento;
 
-                        JLabel eventoLabel = new JLabel("<html><b>" + evento.getNombre() + "</b><br>" +
-                                evento.getHoraInicio().toString() + " - " + evento.getHoraFin().toString() + "</html>");
+                        JLabel eventoLabel = new JLabel(
+                        	    evento.getNombre() + " " +
+                        	    evento.getHoraInicio() + " - " +
+                        	    evento.getHoraFin()
+                        	);
+
 
                         eventoLabel.setOpaque(true);
                         eventoLabel.setFont(new Font("Arial", Font.BOLD, 12));
