@@ -279,18 +279,26 @@ public class Calendario extends JPanel {
 
             for (int hora = 0; hora < 24; hora++) {
                 JPanel bloqueHora = new JPanel();
-                bloqueHora.setLayout(new BoxLayout(bloqueHora, BoxLayout.Y_AXIS));
+                bloqueHora.setLayout(null); 
                 bloqueHora.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
                 bloqueHora.setBackground(Color.WHITE);
                 bloqueHora.setPreferredSize(new Dimension(150, 25));
 
                 for (Evento evento : listaEventos) {
-                    if (evento.getFecha().equals(diaActual) && evento.getHoraInicio().getHour() == hora) {
-                        JLabel eventoLabel = new JLabel(evento.getNombre());
+                    if (evento.getFecha().equals(diaActual) &&
+                        (evento.getHoraInicio().getHour() <= hora && evento.getHoraFin().getHour() > hora)) {
+
+                        int inicioEvento = evento.getHoraInicio().getHour();
+                        int finEvento = evento.getHoraFin().getHour();
+                        int duracionBloques = finEvento - inicioEvento;
+
+                        JLabel eventoLabel = new JLabel(evento.getNombre() + "/n" +
+                                                        evento.getHoraInicio().toString() + " - " + evento.getHoraFin().toString());
                         eventoLabel.setOpaque(true);
-                        eventoLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-                        eventoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-                        eventoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                        eventoLabel.setFont(new Font("Arial", Font.BOLD, 12));
+                        eventoLabel.setForeground(Color.WHITE);
+                        eventoLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); 
+                        eventoLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
                         if (evento.getCategoria().equals(Categorias.Estudios)) {
                             eventoLabel.setBackground(Color.MAGENTA);
@@ -302,8 +310,15 @@ public class Calendario extends JPanel {
                             eventoLabel.setBackground(Color.ORANGE);
                         }
 
-                        eventoLabel.setPreferredSize(new Dimension(150, 25));
-                        eventoLabel.setMaximumSize(new Dimension(150, Integer.MAX_VALUE));
+                        int yPos = (inicioEvento - hora) * 25;
+                        eventoLabel.setBounds(0, yPos, bloqueHora.getWidth(), 25 * duracionBloques);
+
+                        bloqueHora.addComponentListener(new ComponentAdapter() {
+                            @Override
+                            public void componentResized(ComponentEvent e) {
+                                eventoLabel.setBounds(0, yPos, bloqueHora.getWidth(), 25 * duracionBloques);
+                            }
+                        });
 
                         bloqueHora.add(eventoLabel);
                     }
@@ -311,6 +326,7 @@ public class Calendario extends JPanel {
 
                 horasPanel.add(bloqueHora);
             }
+
 
             diaPanel.add(horasPanel, BorderLayout.CENTER);
 
@@ -417,7 +433,7 @@ public class Calendario extends JPanel {
                     if (todoElDia) {
                         evento = new Evento(nombreEvento, descripcionEvento, categoriaSeleccionada, date, todoElDia);
                         //TODAVIA HAY QUE MODIFICAR ESTO
-                        BDs.insertarEventos(usuario.getNombreUsuario(), nombreEvento, descripcionEvento, descripcionEvento, descripcionEvento, nombreEvento, descripcionEvento, todoElDia);
+                        //BDs.insertarEventos(usuario.getNombreUsuario(), nombreEvento, descripcionEvento, descripcionEvento, descripcionEvento, nombreEvento, descripcionEvento, todoElDia);
                     } else {
                         int horaInicio = (int) horas.getSelectedItem();
                         int minutoInicio = Integer.parseInt((String) minutos.getSelectedItem());
@@ -429,7 +445,7 @@ public class Calendario extends JPanel {
 
                         evento = new Evento(nombreEvento, descripcionEvento, categoriaSeleccionada, date, horaInicioEvent, horaFinEvent);
                         //aqui se añade el evento
-                        BDs.insertarEventos(usuario.getNombreUsuario(), nombreEvento, descripcionEvento, categoriaSeleccionada.toString(), date.toString(), horaInicioEvent.toString(), horaFinEvent.toString(), todoElDia);
+                        //BDs.insertarEventos(usuario.getNombreUsuario(), nombreEvento, descripcionEvento, categoriaSeleccionada.toString(), date.toString(), horaInicioEvent.toString(), horaFinEvent.toString(), todoElDia);
                     }
 
                     listaEventos.add(evento);
