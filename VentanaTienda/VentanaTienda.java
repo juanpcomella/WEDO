@@ -210,6 +210,7 @@ public class VentanaTienda extends JFrame {
         panelNorteIcono.add(dineroL);
         panelNorteIcono.add(stringDinero);
         JLabel StringmonyL = new JLabel(dinero);
+        JLabel StrApodomoney = new JLabel(dinero);
 
         panelIcono.add(panelNorteIcono, BorderLayout.NORTH);
 
@@ -332,6 +333,7 @@ public class VentanaTienda extends JFrame {
         JPanel panelApodos = new JPanel();
         tabbedPane.addTab("Apodos", panelApodos);
         
+        
 
 
         // Panel para la temática
@@ -341,12 +343,8 @@ public class VentanaTienda extends JFrame {
         
         JTable monedasT = new JTable();
         
-        JTable apodosT = new JTable();
         
-        for (int i = 0; i < apodosT.getRowCount(); i++) {
-            Point celda_comprada = new Point(i, 1); // Crear un Point para la celda en la fila i y columna 1
-            estadoCeldasIcono.put(celda_comprada, false); // Añadir al HashMap con valor por defecto false
-        }
+  
         
         DefaultTableModel modeloDinero = new DefaultTableModel(new Object[]{"Moneda", "Precio"}, 0) {
             public boolean isCellEditable(int row, int column) {
@@ -404,6 +402,8 @@ public class VentanaTienda extends JFrame {
                 return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             }
         });
+        
+
 
         // Renderizador para la columna "Precio" (con número e icono)
         monedasT.getColumnModel().getColumn(1).setCellRenderer(new DefaultTableCellRenderer() {
@@ -459,10 +459,12 @@ public class VentanaTienda extends JFrame {
                 return panel; // Retornar un panel vacío si no hay datos
             }
         });
-
+        
+        
 
         // Color tabla monedasT
         monedasT.setBackground(new Color(0, 100, 0));
+        
 
         monedasT.addMouseMotionListener(new MouseMotionListener() {
             @Override
@@ -486,6 +488,8 @@ public class VentanaTienda extends JFrame {
                 // Método generado automáticamente
             }
         });
+        
+       
 
         for (int i = 0; i < monedasT.getRowCount(); i++) {
             Point celda_comprada = new Point(i, 1);
@@ -499,7 +503,10 @@ public class VentanaTienda extends JFrame {
         panelTematica.add(panelNorteMonedas, BorderLayout.NORTH);
         panelNorteMonedas.setBackground(new Color(255, 215, 0));
         
+ 
+        
         monedasT.getColumnModel().getColumn(1).setCellEditor(new ButtonCellEditor(monedasT, estadoCeldasMoneda));
+
 
         
         
@@ -523,11 +530,132 @@ public class VentanaTienda extends JFrame {
         panelMonedasConMargen.setBorder(new EmptyBorder(20, 250, 90, 250)); // Márgenes
         panelMonedasConMargen.add(new JScrollPane(monedasT)); // Añadir el JScrollPane con el JTable
         panelTematica.add(panelMonedasConMargen, BorderLayout.CENTER); // Añadir al panel principal
+        
 
-        // Design of the text money:
+        
+     // Configurar la tabla de apodos
+        DefaultTableModel modeloApodos = new DefaultTableModel(new Object[]{"Apodo", "Acción"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 1; // Solo la columna "Acción" es editable
+            }
+        };
+        
+        JTable apodosT = new JTable();
+
+
+        apodosT.setModel(modeloApodos);
+
+        // Crear renderizador para la tabla
+        apodosT.getColumnModel().getColumn(1).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JPanel panel = new JPanel();
+                Point celda_Render = new Point(row, column);
+
+                if (estadoCeldasApodo.getOrDefault(celda_Render, false)) {
+                    // Mostrar "Comprado" si la celda ya está comprada
+                    JLabel compradoL = new JLabel("Comprado");
+                    compradoL.setFont(new Font("Arial", Font.BOLD, 24));
+                    compradoL.setForeground(Color.green);
+                    compradoL.setHorizontalAlignment(SwingConstants.CENTER);
+                    return compradoL;
+                } else if (column == hoveredColumn && row == hoveredRow) {
+                    // Mostrar botón "Comprar" si la celda está resaltada
+                    JButton boton = new JButton("Comprar");
+                    boton.setBackground(new Color(255, 215, 0));
+                    boton.setFont(new Font("Arial", Font.BOLD, 24));
+                    return boton;
+                } else if (value instanceof Object[]) {
+                    // Renderizar celda con ícono y texto
+                    JPanel panelElements = new JPanel(new GridBagLayout());
+                    GridBagConstraints gbc = new GridBagConstraints();
+                    gbc.insets = new Insets(0, 1, 0, 1);
+                    gbc.gridy = 0;
+                    gbc.weightx = 0.0;
+                    gbc.anchor = GridBagConstraints.CENTER;
+
+                    Object[] cellData = (Object[]) value;
+
+                    JLabel textLabel = new JLabel(String.valueOf(cellData[0]));
+                    textLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
+                    gbc.gridx = 0;
+                    panelElements.add(textLabel, gbc);
+
+                    if (cellData[1] instanceof Icon) {
+                        JLabel iconLabel = new JLabel((Icon) cellData[1]);
+                        gbc.gridx = 1;
+                        panelElements.add(iconLabel, gbc);
+                    }
+
+                    return panelElements;
+                }
+                return panel;
+            }
+        });
+        
+
+        // Editor de celdas
+        apodosT.getColumnModel().getColumn(1).setCellEditor(new ButtonCellEditor(monedasT, estadoCeldasMoneda));
+
+        // Listener para resaltar celdas
+        apodosT.addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                int row = apodosT.rowAtPoint(e.getPoint());
+                int column = apodosT.columnAtPoint(e.getPoint());
+
+                if (column == 1) {
+                    hoveredRow = row;
+                    hoveredColumn = column;
+                } else {
+                    hoveredRow = -1;
+                    hoveredColumn = -1;
+                }
+                apodosT.repaint();
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                // Método generado automáticamente
+            }
+        });
+        
+        
+
+        // Configuración del panel superior
+        JPanel panelNorteApodo = new JPanel();
+        panelNorteApodo.setBackground(new Color(255, 215, 0));
+        panelNorteApodo.add(new JLabel(icon2)); // Ícono
+        panelNorteApodo.add(StrApodomoney); // Etiqueta del dinero
+        StrApodomoney.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
+        
         stringDinero.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
+        
         StringmonyL.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
+
+
+
+        // Configuración del panel con márgenes para la tabla
+        JPanel panelApodosConMargen = new JPanel();
+        panelApodosConMargen.setLayout(new BoxLayout(panelApodosConMargen, BoxLayout.Y_AXIS));
+        panelApodosConMargen.setBorder(new EmptyBorder(20, 250, 90, 250));
+        panelApodosConMargen.add(new JScrollPane(apodosT));
+
+        // Agregar componentes al panel principal de apodos
+        panelApodos.setLayout(new BorderLayout());
+        panelApodos.add(panelNorteApodo, BorderLayout.NORTH);
+        panelApodos.add(panelApodosConMargen, BorderLayout.CENTER);
+
+        // Agregar filas de ejemplo a la tabla de apodos
+        modeloApodos.addRow(new Object[]{"Superman", new Object[]{100, icon2}});
+        modeloApodos.addRow(new Object[]{"Batman", new Object[]{200, icon2}});
+        modeloApodos.addRow(new Object[]{"Spiderman", new Object[]{150, icon2}});
+
+        
+
     }
+    
 
         
 
