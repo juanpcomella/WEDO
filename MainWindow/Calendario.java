@@ -433,7 +433,7 @@ public class Calendario extends JPanel {
                     if (todoElDia) {
                         evento = new Evento(nombreEvento, descripcionEvento, categoriaSeleccionada, date, todoElDia);
                         //TODAVIA HAY QUE MODIFICAR ESTO
-                        //BDs.insertarEventos(usuario.getNombreUsuario(), nombreEvento, descripcionEvento, descripcionEvento, descripcionEvento, nombreEvento, descripcionEvento, todoElDia);
+                        BDs.insertarEventos(usuario.getNombreUsuario(), nombreEvento, descripcionEvento, descripcionEvento, descripcionEvento, nombreEvento, descripcionEvento, todoElDia);
                     } else {
                         int horaInicio = (int) horas.getSelectedItem();
                         int minutoInicio = Integer.parseInt((String) minutos.getSelectedItem());
