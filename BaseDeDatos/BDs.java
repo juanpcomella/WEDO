@@ -239,42 +239,42 @@ public class BDs {
 		return nombreUsuario;
 	}
 
-//	public static String getUsername(String usuario) {
-//		try {
-//		} catch (ClassNotFoundException e) {
-//			Class.forName("org.sqlite.JDBC");
-//			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
-//		}
-//		Connection connection = null;
-//		String nombreUsuario = null;
-//		try {
-//			// Crear una conexión de BD
-//			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuario2");//a partir de los ultimo : es donde quieres que se guarden
-//			// Crear gestores de sentencias
-//			Statement statement = connection.createStatement();//crear consultas
-//			statement.setQueryTimeout(30);  // poner timeout 30 msg
-//
-//			String sql = "SELECT username FROM usuarios WHERE username = ?";
-//			PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//	        preparedStatement.setString(1, usuario);
-//            ResultSet resultSet = preparedStatement.executeQuery();
-//
-//            if (resultSet.next()) {
-//                nombreUsuario = resultSet.getString("username");
-//            }
-//		} catch(SQLException e) {
-//			System.err.println(e.getMessage());
-//		} finally {
-//			try {
-//				if(connection != null)
-//					connection.close();
-//			} catch(SQLException e) {
-//				// Cierre de conexión fallido
-//				System.err.println(e);
-//			}
-//	}
-//		return nombreUsuario;
-//	}
+	public static String getUsername(String usuario) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+		}
+		Connection connection = null;
+		String nombreUsuario = null;
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuario2");//a partir de los ultimo : es donde quieres que se guarden
+			// Crear gestores de sentencias
+			Statement statement = connection.createStatement();//crear consultas
+			statement.setQueryTimeout(30);  // poner timeout 30 msg
+
+			String sql = "SELECT username FROM usuarios WHERE username = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setString(1, usuario);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                nombreUsuario = resultSet.getString("username");
+            }
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+		return nombreUsuario;
+	}
 	public static String getPassword(String usuario) {
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -521,14 +521,46 @@ public class BDs {
 			}
 	}
 	}
-/*
-	public Usuario obtenerUsuario(String username){
-		Usuario usuario = null;
-		try{
 
+	public static Usuario obtenerUsuario(String username) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return null;
 		}
+		Connection connection = null;
+		Usuario usuario = null;
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");
+			String sql = "SELECT username, email, password FROM usuarios WHERE username = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, username);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			if (resultSet.next()) {
+				usuario = new Usuario(
+						resultSet.getString("username"),
+						resultSet.getString("email"),
+						resultSet.getString("password")
+				);
+			} else {
+				System.err.println("No se encontraron resultados para el usuario: " + username);
+			}
+
+		} catch (SQLException e) {
+			System.err.println("Error SQL: " + e.getMessage());
+		} finally {
+			try {
+				if (connection != null) connection.close();
+			} catch (SQLException e) {
+				System.err.println(e);
+			}
+		}
+		return usuario;
 	}
 
- */
+
+
 }
 

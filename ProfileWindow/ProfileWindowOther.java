@@ -18,8 +18,8 @@ import java.awt.geom.Ellipse2D;
 
 public class ProfileWindowOther extends JFrame {
 
-    public ProfileWindowOther(Usuario usuario) {
-        setTitle("WEDO - " + usuario.getNombreUsuario());
+    public ProfileWindowOther(Usuario usuarioActual, Usuario usuarioBusqueda) {
+        setTitle("WEDO - " + usuarioBusqueda.getNombreUsuario());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
@@ -56,7 +56,7 @@ public class ProfileWindowOther extends JFrame {
         backButton.setContentAreaFilled(false);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                MainWindow mainWindow = new MainWindow(usuario);
+                MainWindow mainWindow = new MainWindow(usuarioActual);
                 mainWindow.setVisible(true);
                 dispose();
             }
@@ -92,7 +92,7 @@ public class ProfileWindowOther extends JFrame {
 
         JPanel usernamePanel = new JPanel(new GridBagLayout());
         usernamePanel.setBackground(Color.WHITE);
-        JLabel usernameLabel = new JLabel(""+usuario.getNombreUsuario(), SwingConstants.CENTER);
+        JLabel usernameLabel = new JLabel(""+usuarioBusqueda.getNombreUsuario(), SwingConstants.CENTER);
         usernameLabel.setFont(new Font("Arial", Font.BOLD, 48));
         usernamePanel.add(usernameLabel);
         leftPanel.add(usernamePanel, leftGBC);
@@ -295,7 +295,7 @@ public class ProfileWindowOther extends JFrame {
         // Crear la ventana principal
         SwingUtilities.invokeLater(() -> {
             Usuario user = new Usuario(null, null, null);
-            ProfileWindowOther window = new ProfileWindowOther(user);
+            ProfileWindowOther window = new ProfileWindowOther(user, user);
             window.setVisible(true);
 
         });
