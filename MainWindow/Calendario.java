@@ -428,6 +428,7 @@ public class Calendario extends JPanel {
                         LocalTime horaFinEvent = LocalTime.of(horaFin, minutoFin);
 
                         evento = new Evento(nombreEvento, descripcionEvento, categoriaSeleccionada, date, horaInicioEvent, horaFinEvent);
+                        //aqui se añade el evento
                         BDs.insertarEventos(usuario.getNombreUsuario(), nombreEvento, descripcionEvento, categoriaSeleccionada.toString(), date.toString(), horaInicioEvent.toString(), horaFinEvent.toString(), todoElDia);
                     }
 
