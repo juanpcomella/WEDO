@@ -400,40 +400,57 @@ public class VentanaTienda extends JFrame {
         monedasT.getColumnModel().getColumn(1).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JPanel panel = new JPanel(new BorderLayout());
+                JPanel panel = new JPanel();
                 Point celda_Render = new Point(row, column);
+                
                 if (estadoCeldasMoneda.getOrDefault(celda_Render, false)) {
-                	JPanel panelComprado = new JPanel();
-                	JLabel compradoL = new JLabel("Comprado");
+                    // Si la celda ya está comprada, muestra el JLabel "Comprado"
+                    JLabel compradoL = new JLabel("Comprado");
                     compradoL.setFont(new Font("Arial", Font.BOLD, 24));
                     compradoL.setForeground(Color.green);
                     compradoL.setHorizontalAlignment(SwingConstants.CENTER);
                     compradoL.setVerticalAlignment(SwingConstants.CENTER);
                     return compradoL;
-
                 } else {
-                    if (value instanceof Object[]) {
-                    	JPanel panelElements2 = new JPanel();
-                        Object[] cellData = (Object[]) value;
-                        JLabel numberLabel = new JLabel(String.valueOf(cellData[0]));
-                        numberLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
-                        panelElements2.add(numberLabel);
-                        if (cellData[1] instanceof Icon) {
-                            JLabel iconLabel = new JLabel((Icon) cellData[1]);
-                            panelElements2.add(iconLabel);
-                            panel.add(panelElements2, BorderLayout.CENTER);
+                    if (column == hoveredColumn && row == hoveredRow) {
+                        // Mostrar el botón "Comprar" cuando la celda está resaltada
+                        JButton boton = new JButton("Comprar");
+                        boton.setBackground(new Color(255, 215, 0));
+                        boton.setFont(new Font("Arial", Font.BOLD, 24));
+                        return boton;
+                    } else {
+                        if (value instanceof Object[]) {
+                            // Crear un panel con GridBagLayout
+                            JPanel panelElements = new JPanel(new GridBagLayout());
+                            GridBagConstraints gbc = new GridBagConstraints();
+                            gbc.insets = new Insets(0, 1, 0, 1); // Espaciado entre componentes
+                            gbc.gridy = 0; // Misma fila para ambos elementos
+                            gbc.weightx = 0.0; // Evitar expansión horizontal
+                            gbc.anchor = GridBagConstraints.CENTER; // Centrado vertical y horizontal
+
+                            Object[] cellData = (Object[]) value;
+
+                            // Crear el JLabel para el número
+                            JLabel numberLabel = new JLabel(String.valueOf(cellData[0]));
+                            numberLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
+                            gbc.gridx = 0; // Columna izquierda
+                            panelElements.add(numberLabel, gbc);
+
+                            // Crear el JLabel para el ícono
+                            if (cellData[1] instanceof Icon) {
+                                JLabel iconLabel = new JLabel((Icon) cellData[1]);
+                                gbc.gridx = 1; // Columna derecha
+                                panelElements.add(iconLabel, gbc);
+                            }
+
+                            return panelElements;
                         }
                     }
                 }
-                if (hoveredRow==row && hoveredColumn ==1) {
-                	JButton boton = new JButton("Comprar");
-                	boton.setBackground(new Color(255, 215, 0));
-                	boton.setFont(new Font("Arial", Font.BOLD, 24));
-                	return boton;
-                }
-                return panel;
+                return panel; // Retornar un panel vacío si no hay datos
             }
         });
+
 
         // Color tabla monedasT
         monedasT.setBackground(new Color(0, 100, 0));
