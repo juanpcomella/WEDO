@@ -32,6 +32,16 @@ public class Evento {
         this.horaFin = horaFin;
         this.todoElDia = false;  // No es todo el día si tiene horas específicas
     }
+    
+    public Evento(String nombre, String descripcion, Categorias categoria, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, boolean todoElDia) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.categoria = categoria;
+        this.fecha = fecha;
+        this.horaInicio = horaInicio;
+        this.horaFin = horaFin;
+        this.todoElDia = todoElDia;  // No es todo el día si tiene horas específicas
+    }
 
 
     public String getNombre() {
@@ -42,7 +52,35 @@ public class Evento {
         return descripcion;
     }
 
-    public Categorias getCategoria() {
+    public boolean isTodoElDia() {
+		return todoElDia;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public void setCategoria(Categorias categoria) {
+		this.categoria = categoria;
+	}
+
+	public void setFecha(LocalDate fecha) {
+		this.fecha = fecha;
+	}
+
+	public void setHoraInicio(LocalTime horaInicio) {
+		this.horaInicio = horaInicio;
+	}
+
+	public void setHoraFin(LocalTime horaFin) {
+		this.horaFin = horaFin;
+	}
+
+	public Categorias getCategoria() {
         return categoria;
     }
 

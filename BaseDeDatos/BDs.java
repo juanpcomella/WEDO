@@ -1,10 +1,15 @@
 package BaseDeDatos;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import StartingWindows.Usuario;
 import org.w3c.dom.Text;
+
+import MainWindow.Categorias;
+import MainWindow.Evento;
 
 public class BDs {
 	public static void crearTablaUsuarios() {
@@ -307,7 +312,8 @@ public class BDs {
 		return contraseña;
 		
 	
-	}public static String getEmail(String usuario) {
+	}
+	public static String getEmail(String usuario) {
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
@@ -423,6 +429,52 @@ public class BDs {
 				System.err.println(e);
 			}
 	}
+	}
+	
+	public static ArrayList<Evento> crearListaEventosPorUsuario(String usuario) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+		}
+		Connection connection = null;
+		ArrayList<Evento> eventos = new ArrayList<>();
+		Evento evento = new Evento(usuario, usuario, null, null, null, null, false);
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuario2");//a partir de los ultimo : es donde quieres que se guarden
+			// Crear gestores de sentencias
+			Statement statement = connection.createStatement();//crear consultas
+			statement.setQueryTimeout(30);  // poner timeout 30 msg
+			
+			String sql = "SELECT nombreEvento, descripcionEv, categoriaEv, fechaEv, horaInicioEv, horaFinEv, todoElDiaEv  FROM eventos WHERE username = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setString(1, usuario);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                evento.setNombre(resultSet.getString("nombreEvento"));
+                evento.setDescripcion(resultSet.getString("descripcionEv"));
+                evento.setCategoria(Categorias.valueOf(resultSet.getString("categoriaEv")));
+                evento.setFecha(LocalDate.parse(resultSet.getString("fechaEv")));
+                evento.setHoraInicio(LocalTime.parse(resultSet.getString("horaInicioEv")));
+                evento.setHoraFin(LocalTime.parse(resultSet.getString("horaFinEv")));
+                evento.setTodoElDia(Boolean.parseBoolean(resultSet.getString("todoElDiaEv")));
+                eventos.add(evento);
+
+            } 
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+		return eventos;
 	}
 /*
 	public Usuario obtenerUsuario(String username){
