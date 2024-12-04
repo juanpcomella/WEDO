@@ -25,7 +25,7 @@ public class VentanaTienda extends JFrame {
     private int selectedColumn = -1;
     private Map<Point, Boolean> estadoCeldasIcono = new HashMap<>();
     private Map<Point, Boolean> estadoCeldasMoneda = new HashMap<>();
-    private Map<Point, Boolean> estadoCeldasApodo = new HashMap<>();
+    private Map<Point, Boolean> estadoCeldasApodo = new HashMap<>(); //new
 
     private int money;
     public VentanaTienda() {
