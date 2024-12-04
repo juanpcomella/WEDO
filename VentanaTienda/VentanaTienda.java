@@ -668,7 +668,7 @@ public class VentanaTienda extends JFrame {
         apodosT.getTableHeader().setVisible(false);
         apodosT.getTableHeader().setPreferredSize(new Dimension(0, 0));
         //iconoT.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        apodosT.setRowHeight(100);
+        apodosT.setRowHeight(100);//new
 
     }
     
