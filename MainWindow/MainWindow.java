@@ -1,240 +1,92 @@
 package MainWindow;
 
+import StartingWindows.Usuario;
+
 import javax.swing.*;
+
+import BaseDeDatos.BDs;
+
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 
-import com.toedter.calendar.JDateChooser;
+public class MainWindow extends JFrame {
 
-public class MainWindow extends JFrame{
-    private JDateChooser dateChooser;
-    public MainWindow() {
+    private static final Usuario Usuario = null;
+    private Calendario calendario;
+
+    public MainWindow(Usuario usuario) {
+    	
+    	for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())){
+        	System.out.println(evento.getNombre());
+        }
         setTitle("WEDO");
-        setSize(800,500);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
         JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
         add(panel);
-        //APARTADO BOTON MAS, IZQUIERDA DE LA PANTALLA
-        JButton botonMas = new JButton("+");
-        JPopupMenu menuEventos = new JPopupMenu();
-        JMenuItem opcion1 = new JMenuItem("Añadir evento personal");
-        JMenuItem opcion2 = new JMenuItem("Añadir evento grupal");
-        menuEventos.add(opcion1);
-        menuEventos.add(opcion2);
-        botonMas.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
-                menuEventos.show(botonMas, botonMas.getWidth() / 2, botonMas.getHeight() / 2);
-            }
-        });
-        opcion1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
-                ventanaEventoPersonal();
-            }
-        });
-        opcion2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
-                ventanaEventoGrupal();
-            }
-        });
-        //APARTADO PRINCIPAL (CALENDARIO)
-        //APARTADO TIENDA, ARRIBA DE LA PANTALLA
-        JButton botonTienda = new JButton();
-        botonTienda.setSize(200,100);
-        JPopupMenu menuTienda = new JPopupMenu();
-        menuTienda.setLayout(new GridLayout(2,1));
-        JPanel panelMonedas = new JPanel();
-        panelMonedas.setLayout(new GridLayout(1,2));
-        JMenuItem monedas =  new JMenuItem("Monedas disponibles: ");
-        JMenuItem monedasUsuario = new JMenuItem("XX MONEDAS");
-        panelMonedas.add(monedas);
-        panelMonedas.add(monedasUsuario);
-        menuTienda.add(panelMonedas);
-        JMenuItem verTienda = new JMenuItem("Ver tienda completa");
-        menuTienda.add(verTienda);
-        verTienda.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
-                ventanaTienda();
-            }
-        });
-        botonTienda.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
-                menuTienda.show(botonTienda, botonTienda.getHeight()/2, botonTienda.getWidth()/2);
-            }
-        });
-        panel.add(botonTienda);
-        panel.add(botonMas);
-        //APARTADO HABIT TRACKER, ARRIBA DE LA PANTALLA
-    }
-    private void ventanaEventoPersonal() {
-        JDialog ventanaEmergente = new JDialog();
-        ventanaEmergente.setTitle("Nuevo Evento");
-        ventanaEmergente.setSize(400, 300);
-        ventanaEmergente.setVisible(true);
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(6, 2, 10, 10));
-        JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayout(1,3));
-        JPanel panel2 = new JPanel();
-        panel2.setLayout(new GridLayout(1,3));
-        JLabel etiquetaNombre = new JLabel("Nombre del evento:");
-        JTextField campoNombre = new JTextField();
 
-        JLabel etiquetaFecha = new JLabel("Fecha:");
-        dateChooser = new JDateChooser();
-        JLabel fechaInicio = new JLabel("Hora de inicio");
-        Integer[] horasArray = new Integer[25];
-        for (int i = 0; i < 25; i++) {
-            horasArray[i] = i;
-        }
-        Integer[] minutosArray = new Integer[61];
-        for (int i = 0; i < 61; i++) {
-            minutosArray[i] = i;
-        }
-        JComboBox<Integer> horas = new JComboBox<Integer>(horasArray);
-        JComboBox<Integer> minutos = new JComboBox<Integer>(minutosArray);
-        JComboBox<Integer> segundos = new JComboBox<Integer>(minutosArray);
-        panel1.add(horas);
-        panel1.add(minutos);
-        panel1.add(segundos);
-        JLabel fechafinal = new JLabel("Hora de finalización");
-        JComboBox<Integer> horasFinal = new JComboBox<Integer>(horasArray);
-        JComboBox<Integer> minutosFinal = new JComboBox<Integer>(minutosArray);
-        JComboBox<Integer> segundosFinal = new JComboBox<Integer>(minutosArray);
-        panel2.add(horasFinal);
-        panel2.add(minutosFinal);
-        panel2.add(segundosFinal);
-        JLabel descripcion = new JLabel("Breve descripción");
-        JTextField texto = new JTextField();
-        JLabel etiquetaCategorias = new JLabel("Categoria");
-        JComboBox<Categorias> categorias = new JComboBox<>(Categorias.values());
-        JButton botonGuardar = new JButton("Guardar");
-        botonGuardar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String nombreEvento = campoNombre.getText();
-                Date fechaEvento = dateChooser.getDate();
-                if (nombreEvento.isEmpty() || fechaEvento == null) {
-                    JOptionPane.showMessageDialog(ventanaEmergente, "Evento vacio, te falta por añadir el nombre del evento o la fecha");
-                    ventanaEmergente.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(ventanaEmergente, "Evento '" + nombreEvento + "' añadido con fecha: " + fechaEvento);
-                    ventanaEmergente.dispose();
-                }
+        JPanel panelNorte = new JPanel();
+        panelNorte.setLayout(new BorderLayout());
+
+        JPanel panelCentro = new JPanel();
+        panelCentro.setLayout(new BorderLayout());
+
+        JPanel panelEste = new JPanel();
+        panelEste.setLayout(new BorderLayout());
+
+        JPanel panelOeste = new JPanel();
+        panelOeste.setLayout(new BorderLayout());
+
+        JPanel panelSur = new JPanel();
+        panelSur.setLayout(new BorderLayout());
+
+        LeftSideBar leftSideBar = new LeftSideBar();
+        leftSideBar.setPreferredSize(new Dimension(0, getHeight()));
+        panelOeste.add(leftSideBar, BorderLayout.CENTER);
+
+        Navbar navbar = new Navbar(leftSideBar, usuario);
+        int navbarHeight = (int) (getHeight() * 0.1);
+        navbar.setPreferredSize(new Dimension(getWidth(), navbarHeight));
+        panelNorte.add(navbar, BorderLayout.CENTER);
+
+        calendario = new Calendario(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), usuario);
+        panelCentro.add(calendario, BorderLayout.CENTER);
+
+
+        RightSideBar rightSideBar = new RightSideBar();
+        int rsbWidth = (int) (getWidth() * 0.1);
+        rightSideBar.setPreferredSize(new Dimension(rsbWidth, getHeight()));
+        panelEste.add(rightSideBar, BorderLayout.EAST);
+
+        panel.add(panelNorte, BorderLayout.NORTH);
+        panel.add(panelEste, BorderLayout.EAST);
+        panel.add(panelCentro, BorderLayout.CENTER);
+        panel.add(panelOeste, BorderLayout.WEST);
+        panel.add(panelSur, BorderLayout.SOUTH);
+
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                int dynamicHeight = (int) (getHeight() * 0.1);
+                navbar.setPreferredSize(new Dimension(getWidth(), dynamicHeight));
+                navbar.revalidate();
+
+                int dynamicWidth = (int) (getWidth() * 0.1);
+                rightSideBar.setPreferredSize(new Dimension(dynamicWidth, (getHeight())));
+                rightSideBar.revalidate();
             }
         });
 
-        JPanel panelGuardar = new JPanel();
-        botonGuardar.setBackground(Color.BLACK);
-        panelGuardar.add(botonGuardar, CENTER_ALIGNMENT);
-        panel.add(etiquetaNombre);
-        panel.add(campoNombre);
-        panel.add(etiquetaFecha);
-        panel.add(dateChooser);
-        panel.add(fechaInicio);
-        panel.add(panel1);
-        panel.add(fechafinal);
-        panel.add(panel2);
-        panel.add(descripcion);
-        panel.add(texto);
-        panel.add(etiquetaCategorias);
-        panel.add(categorias);
-        ventanaEmergente.add(panel);
-    }
-    private void ventanaEventoGrupal() {
-        JDialog ventanaEmergente = new JDialog();
-        ventanaEmergente.setSize(400, 300);
-        ventanaEmergente.setVisible(true);
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(7, 2, 10, 10));
-        JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayout(1,3));
-        JPanel panel2 = new JPanel();
-        panel2.setLayout(new GridLayout(1,3));
-        JLabel etiquetaNombre = new JLabel("Nombre del evento:");
-        JTextField campoNombre = new JTextField();
-
-        JLabel etiquetaFecha = new JLabel("Fecha:");
-        dateChooser = new JDateChooser();
-        JLabel fechaInicio = new JLabel("Hora de inicio");
-        Integer[] horasArray = new Integer[25];
-        for (int i = 0; i < 25; i++) {
-            horasArray[i] = i;
-        }
-        Integer[] minutosArray = new Integer[61];
-        for (int i = 0; i < 61; i++) {
-            minutosArray[i] = i;
-        }
-        JComboBox<Integer> horas = new JComboBox<Integer>(horasArray);
-        JComboBox<Integer> minutos = new JComboBox<Integer>(minutosArray);
-        JComboBox<Integer> segundos = new JComboBox<Integer>(minutosArray);
-        panel1.add(horas);
-        panel1.add(minutos);
-        panel1.add(segundos);
-        JLabel fechafinal = new JLabel("Hora de finalización");
-        JComboBox<Integer> horasFinal = new JComboBox<Integer>(horasArray);
-        JComboBox<Integer> minutosFinal = new JComboBox<Integer>(minutosArray);
-        JComboBox<Integer> segundosFinal = new JComboBox<Integer>(minutosArray);
-        panel2.add(horasFinal);
-        panel2.add(minutosFinal);
-        panel2.add(segundosFinal);
-        JLabel descripcion = new JLabel("Breve descripción");
-        JTextField texto = new JTextField();
-        JLabel invitar = new JLabel("Invitar a");
-        JTextField campoInvitar = new JTextField();
-        JLabel etiquetaCategorias = new JLabel("Categoria");
-        JComboBox<Categorias> categorias = new JComboBox<>(Categorias.values());
-        JButton botonGuardar = new JButton("Guardar");
-        botonGuardar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String nombreEvento = campoNombre.getText();
-                Date fechaEvento = dateChooser.getDate();
-                if (nombreEvento.isEmpty() || fechaEvento == null) {
-                    JOptionPane.showMessageDialog(ventanaEmergente, "Evento vacio, te falta por añadir el nombre del evento o la fecha");
-                    ventanaEmergente.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(ventanaEmergente, "Evento '" + nombreEvento + "' añadido con fecha: " + fechaEvento);
-                    ventanaEmergente.dispose();
-                }
-            }
-        });
-        panel.add(etiquetaNombre);
-        panel.add(campoNombre);
-        panel.add(etiquetaFecha);
-        panel.add(dateChooser);
-        panel.add(fechaInicio);
-        panel.add(panel1);
-        panel.add(fechafinal);
-        panel.add(panel2);
-        panel.add(descripcion);
-        panel.add(texto);
-        panel.add(invitar);
-        panel.add(campoInvitar);
-        panel.add(etiquetaCategorias);
-        panel.add(categorias);
-        ventanaEmergente.add(panel);
+        setVisible(true);
     }
 
-    private void ventanaTienda() {
-        JPanel panel = new JPanel();
-    }
     public static void main(String[] args) {
-        MainWindow window = new MainWindow();
+        Usuario usuario = new Usuario(null, null, null);
+        MainWindow window = new MainWindow(usuario);
         window.setVisible(true);
     }
 }

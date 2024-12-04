@@ -1,7 +1,7 @@
 package MainWindow;
 public enum Categorias {
-	OCIO,
-	DEPORTE,
-	TRABAJO,
-	ESTUDIOS
+	Ocio,
+	Deporte,
+	Trabajo,
+	Estudios
 }

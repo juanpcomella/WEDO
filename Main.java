@@ -1,10 +1,26 @@
+import StartingWindows.VentanaBienvenida;
+
+import javax.swing.*;
+
 public class Main {
 
     public static void main(String[] args) {
 
-        VentanaBienvenida pv = new VentanaBienvenida();
-        pv.setResizable(false);
-        pv.setLocationRelativeTo(null);
-        pv.setVisible(true);
+            try {
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // Crear la ventana principal
+            SwingUtilities.invokeLater(() -> {
+                // Tu ventana principal
+                VentanaBienvenida ventanaBienvenida = new VentanaBienvenida();
+                ventanaBienvenida.setVisible(true);
+                ventanaBienvenida.setLocationRelativeTo(null);
+
+            });
+        }
+
     }
-}
+
