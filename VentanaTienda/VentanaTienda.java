@@ -419,7 +419,7 @@ public class VentanaTienda extends JFrame {
                         boton.setFont(new Font("Arial", Font.BOLD, 24));
                         return boton;
                     } else {
-                        if (value instanceof Object[]) {
+                        if (value instanceof Object[]) {//
                             // Crear un panel con GridBagLayout
                             JPanel panelElements = new JPanel(new GridBagLayout());
                             GridBagConstraints gbc = new GridBagConstraints();
