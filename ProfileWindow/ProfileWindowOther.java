@@ -108,7 +108,18 @@ public class ProfileWindowOther extends JFrame {
         descriptionPanel.add(descriptionLabel);
         leftPanel.add(descriptionPanel, leftGBC);
 
+        // Follow Button
+        leftGBC.fill = GridBagConstraints.NONE;
+        leftGBC.gridy = 5;
+        leftGBC.insets = new Insets(5, 0, 0, 15);
+        JButton editButton = new JButton("Seguir");
+        editButton.setFont(new Font("Tahoma", Font.BOLD, 24));
+        editButton.setBackground(new Color(0,0,0,0));
+        editButton.setFocusPainted(false);
+        editButton.setFocusable(false);
+        editButton.setContentAreaFilled(false);
 
+        leftPanel.add(editButton, leftGBC);
 
         mainPanel.add(leftPanel, gbc);
 

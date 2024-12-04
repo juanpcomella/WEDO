@@ -64,6 +64,7 @@ public class ProfileWindowSelf extends JFrame {
 
         leftPanel.add(backButton, leftGBC);
 
+        // Left Panel - Edit Profile Button
         leftGBC.gridx = 0;
         leftGBC.gridy = 1;
         leftGBC.anchor = GridBagConstraints.NORTHEAST;
@@ -174,8 +175,8 @@ public class ProfileWindowSelf extends JFrame {
         streakGBC.gridx = 1;
         streakGBC.gridy = 0;
         streakGBC.anchor = GridBagConstraints.WEST;
-        int streakCount = 0;
-        JLabel streakCountLabel = new JLabel(streakCount + "");
+        final int[] streakCount = {0};
+        JLabel streakCountLabel = new JLabel(streakCount[0] + "");
         streakCountLabel.setFont(new Font("Arial", Font.BOLD, 48));
         streakCountLabel.setForeground(new Color(255, 165, 0));
         contentPanel.add(streakCountLabel, streakGBC);
@@ -193,11 +194,46 @@ public class ProfileWindowSelf extends JFrame {
         gridPanel.setBackground(new Color(58, 92, 181));
 
         int cantObjetivosDiarios = 4;
+        final int[] completedObjectives = {0};
 
         for (int i = 0; i < cantObjetivosDiarios; i++) {
             JPanel box = new JPanel();
             box.setPreferredSize(new Dimension(60, 60));
-            box.setBackground(new Color(173, 216, 230));
+            box.setBackground(new Color(244, 100, 93)); // Initially red
+
+            box.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+                    int response = JOptionPane.showConfirmDialog(
+                            null,
+                            "Quieres marcar este objetivo completado?",
+                            "Confirmar Acción",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE
+                    );
+
+                    if (response == JOptionPane.YES_OPTION) {
+                        if (box.getBackground().equals(new Color(244, 100, 93))) {
+                            box.setBackground(new Color(197, 229, 191)); // Change to green
+                            completedObjectives[0]++;
+
+                            // Check if all tasks are completed
+                            if (completedObjectives[0] == cantObjetivosDiarios) {
+                                streakCount[0]++; // Increment streak counter
+                                streakCountLabel.setText(streakCount[0] + ""); // Update streak label
+
+                                JOptionPane.showMessageDialog(
+                                        null,
+                                        "Felicidades! Haz completado tus tareas de hoy.\nRacha incrementada a " + streakCount[0],
+                                        "Actualización Racha",
+                                        JOptionPane.INFORMATION_MESSAGE
+                                );
+                            }
+                        }
+                    }
+                }
+            });
+
             gridPanel.add(box);
         }
 

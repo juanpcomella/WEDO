@@ -3,6 +3,7 @@ package BaseDeDatos;
 import java.sql.*;
 import java.util.ArrayList;
 
+import StartingWindows.Usuario;
 import org.w3c.dom.Text;
 
 public class BDs {
@@ -232,11 +233,11 @@ public class BDs {
 	}
 		return nombreUsuario;
 	}
-	
+
 //	public static String getUsername(String usuario) {
 //		try {
-//			Class.forName("org.sqlite.JDBC");
 //		} catch (ClassNotFoundException e) {
+//			Class.forName("org.sqlite.JDBC");
 //			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
 //		}
 //		Connection connection = null;
@@ -247,7 +248,7 @@ public class BDs {
 //			// Crear gestores de sentencias
 //			Statement statement = connection.createStatement();//crear consultas
 //			statement.setQueryTimeout(30);  // poner timeout 30 msg
-//			
+//
 //			String sql = "SELECT username FROM usuarios WHERE username = ?";
 //			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 //	        preparedStatement.setString(1, usuario);
@@ -255,7 +256,7 @@ public class BDs {
 //
 //            if (resultSet.next()) {
 //                nombreUsuario = resultSet.getString("username");
-//            } 
+//            }
 //		} catch(SQLException e) {
 //			System.err.println(e.getMessage());
 //		} finally {
@@ -423,4 +424,14 @@ public class BDs {
 			}
 	}
 	}
+/*
+	public Usuario obtenerUsuario(String username){
+		Usuario usuario = null;
+		try{
+
+		}
+	}
+
+ */
 }
+

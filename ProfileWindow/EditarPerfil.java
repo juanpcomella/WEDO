@@ -45,9 +45,21 @@ public class EditarPerfil extends JFrame {
         cambiarFoto.setMargin(new Insets(5, 10, 5, 10));
         panel.add(cambiarFoto);
 
-        JPanel cambiarDatos = new JPanel(new GridLayout(4, 2, 10, 10)); // 2 rows, 2 columns, with padding
+
+        JPanel cambiarDatos = new JPanel(new GridLayout(5, 2, 10, 10)); // 2 rows, 2 columns, with padding
         cambiarDatos.setAlignmentX(Component.CENTER_ALIGNMENT);
         cambiarDatos.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10)); // Add margins
+
+        JButton cambiarApodo = new JButton("Cambiar apodo");
+        cambiarApodo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        cambiarApodo.setFont(new Font("Arial", Font.PLAIN, 16));
+
+        cambiarDatos.add(cambiarApodo);
+
+        JButton cambiarMoneda = new JButton("Cambiar moneda");
+        cambiarMoneda.setAlignmentX(Component.CENTER_ALIGNMENT);
+        cambiarMoneda.setFont(new Font("Arial", Font.PLAIN, 16));
+        cambiarDatos.add(cambiarMoneda);
 
         JTextField username = new JTextField(usuario.getNombreUsuario(), SwingConstants.CENTER); // Align right
         username.setFont(new Font("Arial", Font.PLAIN, 16));
