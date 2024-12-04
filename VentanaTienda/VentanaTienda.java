@@ -259,7 +259,7 @@ public class VentanaTienda extends JFrame {
                     if (money >= precio) {
                         int respuesta = JOptionPane.showConfirmDialog(
                                 null,
-                                "¿Desea comprar?",
+                                "¿Desea comprar por " + precio + " monedas?",
                                 "Comprar",
                                 JOptionPane.YES_NO_OPTION,
                                 JOptionPane.INFORMATION_MESSAGE
@@ -284,10 +284,11 @@ public class VentanaTienda extends JFrame {
                         }
                     } else {
                         // Mostrar un mensaje de error si no hay suficiente dinero
+                    	int dinero_faltante = (money-precio) * (-1) ;
                         JOptionPane.showMessageDialog(
                                 null,
-                                "Error, no se puede comprar",
-                                "Dinero insuficiente",
+                                "Dinero insuficiente, te faltan " + dinero_faltante + " monedas" ,
+                                "Error, compra no realizada",
                                 JOptionPane.ERROR_MESSAGE
                         );
                     }
