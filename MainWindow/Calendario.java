@@ -356,7 +356,7 @@ public class Calendario extends JPanel {
         String[] minutosArray = {"00", "15", "30", "45"};
         JComboBox<Integer> horas = new JComboBox<>(horasArray);
         JComboBox<String> minutos = new JComboBox<>(minutosArray);
-
+        
         JPanel panelHoraInicio = new JPanel();
         panelHoraInicio.add(horas);
         panelHoraInicio.add(minutos);
@@ -398,7 +398,7 @@ public class Calendario extends JPanel {
                 minutosFinal.setEnabled(!seleccionado);
             }
         });
-
+        
         JButton botonGuardar = new JButton("Guardar");
         botonGuardar.addActionListener(new ActionListener() {
             @Override
@@ -428,6 +428,7 @@ public class Calendario extends JPanel {
                         LocalTime horaFinEvent = LocalTime.of(horaFin, minutoFin);
 
                         evento = new Evento(nombreEvento, descripcionEvento, categoriaSeleccionada, date, horaInicioEvent, horaFinEvent);
+                        BDs.insertarEventos(usuario.getNombreUsuario(), nombreEvento, descripcionEvento, categoriaSeleccionada.toString(), date.toString(), horaInicioEvent.toString(), horaFinEvent.toString(), todoElDia);
                     }
 
                     listaEventos.add(evento);
