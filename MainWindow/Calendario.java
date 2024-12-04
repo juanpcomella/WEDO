@@ -304,7 +304,6 @@ public class Calendario extends JPanel {
                         	    evento.getHoraFin()
                         	);
 
-
                         eventoLabel.setOpaque(true);
                         eventoLabel.setFont(new Font("Arial", Font.BOLD, 12));
                         eventoLabel.setForeground(Color.WHITE);
