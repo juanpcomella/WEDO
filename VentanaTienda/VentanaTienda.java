@@ -25,6 +25,8 @@ public class VentanaTienda extends JFrame {
     private int selectedColumn = -1;
     private Map<Point, Boolean> estadoCeldasIcono = new HashMap<>();
     private Map<Point, Boolean> estadoCeldasMoneda = new HashMap<>();
+    private Map<Point, Boolean> estadoCeldasApodo = new HashMap<>();
+
     private int money;
     public VentanaTienda() {
         // Configuración de la ventana principal
@@ -338,7 +340,13 @@ public class VentanaTienda extends JFrame {
         
         
         JTable monedasT = new JTable();
-        //panelTematica.add(new JScrollPane(monedasT), BorderLayout.CENTER);
+        
+        JTable apodosT = new JTable();
+        
+        for (int i = 0; i < apodosT.getRowCount(); i++) {
+            Point celda_comprada = new Point(i, 1); // Crear un Point para la celda en la fila i y columna 1
+            estadoCeldasIcono.put(celda_comprada, false); // Añadir al HashMap con valor por defecto false
+        }
         
         DefaultTableModel modeloDinero = new DefaultTableModel(new Object[]{"Moneda", "Precio"}, 0) {
             public boolean isCellEditable(int row, int column) {
