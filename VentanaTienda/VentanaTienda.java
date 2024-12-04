@@ -103,7 +103,6 @@ public class VentanaTienda extends JFrame {
         //iconoT.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         iconoT.setRowHeight(100);
 
-        //panelIcono.add(new JScrollPane(iconoT), BorderLayout.CENTER);
 
         // Dinero almacenado aquí, luego se hará un parseInt para convertir
         String dinero = "200";
@@ -596,7 +595,7 @@ public class VentanaTienda extends JFrame {
         
 
         // Editor de celdas
-        apodosT.getColumnModel().getColumn(1).setCellEditor(new ButtonCellEditor(monedasT, estadoCeldasMoneda));
+        apodosT.getColumnModel().getColumn(1).setCellEditor(new ButtonCellEditor(apodosT, estadoCeldasApodo));
 
         // Listener para resaltar celdas
         apodosT.addMouseMotionListener(new MouseMotionListener() {
@@ -626,7 +625,7 @@ public class VentanaTienda extends JFrame {
         // Configuración del panel superior
         JPanel panelNorteApodo = new JPanel();
         panelNorteApodo.setBackground(new Color(255, 215, 0));
-        panelNorteApodo.add(new JLabel(icon2)); // Ícono
+        panelNorteApodo.add(new JLabel(icon2)); //Icono
         panelNorteApodo.add(StrApodomoney); // Etiqueta del dinero
         StrApodomoney.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
         
@@ -647,14 +646,32 @@ public class VentanaTienda extends JFrame {
         panelApodos.add(panelNorteApodo, BorderLayout.NORTH);
         panelApodos.add(panelApodosConMargen, BorderLayout.CENTER);
 
+        
+        JLabel sup = new JLabel("Superman");
+        sup.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
+        
         // Agregar filas de ejemplo a la tabla de apodos
-        modeloApodos.addRow(new Object[]{"Superman", new Object[]{100, icon2}});
+        modeloApodos.addRow(new Object[]{sup, new Object[]{100, icon2}});
         modeloApodos.addRow(new Object[]{"Batman", new Object[]{200, icon2}});
         modeloApodos.addRow(new Object[]{"Spiderman", new Object[]{150, icon2}});
 
+        apodosT.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                if (value instanceof JLabel) {
+                    return (Component) value;
+                }
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            }
+        });
         
+        apodosT.getTableHeader().setVisible(false);
+        apodosT.getTableHeader().setPreferredSize(new Dimension(0, 0));
+        //iconoT.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        apodosT.setRowHeight(100);
 
     }
+    
     
 
         
