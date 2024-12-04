@@ -33,6 +33,7 @@ public class Evento {
         this.todoElDia = false;  // No es todo el día si tiene horas específicas
     }
 
+
     public String getNombre() {
         return nombre;
     }
