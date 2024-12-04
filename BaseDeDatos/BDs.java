@@ -22,7 +22,7 @@ public class BDs {
 		Connection connection = null;
 		try {
 			// Crear una conexión de BD
-			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuario2");//a partir de los ultimo : es donde quieres que se guarden
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
 			// Crear gestores de sentencias
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
@@ -55,7 +55,7 @@ public class BDs {
 		Connection connection = null;
 		try {
 			// Crear una conexión de BD
-			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuario2");//a partir de los ultimo : es donde quieres que se guarden
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
 			// Crear gestores de sentencias
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
@@ -94,7 +94,7 @@ public class BDs {
 		Boolean existe = null;
 		try {
 			// Crear una conexión de BD
-			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuario2");//a partir de los ultimo : es donde quieres que se guarden
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
 			// Crear gestores de sentencias
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
@@ -133,7 +133,7 @@ public class BDs {
 		Boolean existe = null;
 		try {
 			// Crear una conexión de BD
-			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuario2");//a partir de los ultimo : es donde quieres que se guarden
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
 			// Crear gestores de sentencias
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
@@ -173,7 +173,7 @@ public class BDs {
 		Boolean existe = null;
 		try {
 			// Crear una conexión de BD
-			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuario2");//a partir de los ultimo : es donde quieres que se guarden
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
 			// Crear gestores de sentencias
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
@@ -212,7 +212,7 @@ public class BDs {
 		String nombreUsuario = null;
 		try {
 			// Crear una conexión de BD
-			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuario2");//a partir de los ultimo : es donde quieres que se guarden
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
 			// Crear gestores de sentencias
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
@@ -285,7 +285,7 @@ public class BDs {
 		String contraseña = null;
 		try {
 			// Crear una conexión de BD
-			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuario2");//a partir de los ultimo : es donde quieres que se guarden
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
 			// Crear gestores de sentencias
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
@@ -323,7 +323,7 @@ public class BDs {
 		String correoE = null;
 		try {
 			// Crear una conexión de BD
-			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuario2");//a partir de los ultimo : es donde quieres que se guarden
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
 			// Crear gestores de sentencias
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
@@ -361,7 +361,7 @@ public class BDs {
 		Connection connection = null;
 		try {
 			// Crear una conexión de BD
-			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuario2");//a partir de los ultimo : es donde quieres que se guarden
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
 			// Crear gestores de sentencias
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
@@ -396,7 +396,7 @@ public class BDs {
 		Connection connection = null;
 		try {
 			// Crear una conexión de BD
-			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuario2");//a partir de los ultimo : es donde quieres que se guarden
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
 			// Crear gestores de sentencias
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
@@ -439,10 +439,9 @@ public class BDs {
 		}
 		Connection connection = null;
 		ArrayList<Evento> eventos = new ArrayList<>();
-		Evento evento = new Evento(usuario, usuario, null, null, null, null, false);
 		try {
 			// Crear una conexión de BD
-			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuario2");//a partir de los ultimo : es donde quieres que se guarden
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
 			// Crear gestores de sentencias
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
@@ -453,6 +452,7 @@ public class BDs {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
+        		Evento evento = new Evento(usuario, usuario, null, null, null, null, false);
                 evento.setNombre(resultSet.getString("nombreEvento"));
                 evento.setDescripcion(resultSet.getString("descripcionEv"));
                 evento.setCategoria(Categorias.valueOf(resultSet.getString("categoriaEv")));

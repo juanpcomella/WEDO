@@ -182,8 +182,8 @@ public class Calendario extends JPanel {
             JPanel eventosPanel = new JPanel();
             eventosPanel.setLayout(new GridLayout(5, 0));
             eventosPanel.setOpaque(false);
-
-            for (Evento evento : listaEventos) {
+            
+            for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())) {
                 if (evento.getFecha().equals(date)) {
                     JLabel eventoLabel = new JLabel(evento.getNombre());
                     eventoLabel.setOpaque(true);
@@ -283,8 +283,8 @@ public class Calendario extends JPanel {
                 bloqueHora.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
                 bloqueHora.setBackground(Color.WHITE);
                 bloqueHora.setPreferredSize(new Dimension(150, 25));
-
-                for (Evento evento : listaEventos) {
+                
+                for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())) {
                     if (evento.getFecha().equals(diaActual) &&
                         (evento.getHoraInicio().getHour() <= hora && evento.getHoraFin().getHour() > hora)) {
 
@@ -440,16 +440,12 @@ public class Calendario extends JPanel {
                     
                     if (todoElDia) {
                         evento = new Evento(nombreEvento, descripcionEvento, categoriaSeleccionada, date, todoElDia);
-                        //TODAVIA HAY QUE MODIFICAR ESTO
-                        BDs.insertarEventos(usuario.getNombreUsuario(), nombreEvento, descripcionEvento, categoriaSeleccionada.toString(), date.toString(), horaInicioEvent.toString(), horaFinEvent.toString(), todoElDia);
                     } else {
-
                         evento = new Evento(nombreEvento, descripcionEvento, categoriaSeleccionada, date, horaInicioEvent, horaFinEvent);
-                        //aqui se añade el evento
-                        BDs.insertarEventos(usuario.getNombreUsuario(), nombreEvento, descripcionEvento, categoriaSeleccionada.toString(), date.toString(), horaInicioEvent.toString(), horaFinEvent.toString(), todoElDia);
                     }
 
                     listaEventos.add(evento);
+                    BDs.insertarEventos(usuario.getNombreUsuario(), nombreEvento, descripcionEvento, categoriaSeleccionada.toString(), date.toString(), horaInicioEvent.toString(), horaFinEvent.toString(), todoElDia);
                     JOptionPane.showMessageDialog(dialog, "Evento guardado.");
                     actualizarVista(usuario);
                     dialog.dispose();

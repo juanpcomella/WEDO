@@ -233,6 +233,7 @@ public class VentanaLoginDef extends JFrame {
             window.setLocationRelativeTo(null);
             window.setVisible(true);
         });
+        
 
 }
 }

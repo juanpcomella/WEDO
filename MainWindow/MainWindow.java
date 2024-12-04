@@ -3,6 +3,9 @@ package MainWindow;
 import StartingWindows.Usuario;
 
 import javax.swing.*;
+
+import BaseDeDatos.BDs;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +17,10 @@ public class MainWindow extends JFrame {
     private Calendario calendario;
 
     public MainWindow(Usuario usuario) {
+    	
+    	for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())){
+        	System.out.println(evento.getNombre());
+        }
         setTitle("WEDO");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
