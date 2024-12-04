@@ -274,7 +274,6 @@ public class Calendario extends JPanel {
             if (diaActual.equals(hoy)) {
                 diaPanel.setBackground(Color.LIGHT_GRAY);
             }
-
             JLabel diaSemanaLabel = new JLabel(diasSemana[i] + " " + diaActual.getDayOfMonth(), SwingConstants.CENTER);
             diaSemanaLabel.setFont(new Font("Arial", Font.BOLD, 16));
             diaPanel.add(diaSemanaLabel, BorderLayout.NORTH);
