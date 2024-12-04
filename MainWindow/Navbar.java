@@ -103,17 +103,27 @@ public class Navbar extends JPanel {
         searchIcon.setBackground(new Color(0,0,0,0));
         gbc.gridx++;
         gbc.weightx = 0;
-/*
+
         searchIcon.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                String username = searchTF.getText();
-                if(BDs.usuarioExistente(username)) {
-                    Usuario userSearch = new Usuario(username);
+                String usuarioInput = searchTF.getText();
+                if (BDs.usuarioExistente(usuarioInput)) {
+                    Usuario usuarioObtenido = BDs.obtenerUsuario(usuarioInput);
+                    if (usuarioObtenido != null) {
+                        ProfileWindowOther profile = new ProfileWindowOther(usuario, usuarioObtenido);
+                        profile.setVisible(true);
+                        ((JFrame) SwingUtilities.getWindowAncestor(searchIcon)).dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Usuario no encontrado en la base de datos.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "El usuario no existe.");
                 }
             }
         });
 
- */
+
+
         add(searchIcon, gbc);
 
         gbc.gridx++;
