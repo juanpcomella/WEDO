@@ -424,6 +424,13 @@ public class Calendario extends JPanel {
                 String nombreEvento = campoNombre.getText();
                 String descripcionEvento = texto.getText();
                 Categorias categoriaSeleccionada = (Categorias) categorias.getSelectedItem();
+                int horaInicio = (int) horas.getSelectedItem();
+                int minutoInicio = Integer.parseInt((String) minutos.getSelectedItem());
+                int horaFin = (int) horasFinal.getSelectedItem();
+                int minutoFin = Integer.parseInt((String) minutosFinal.getSelectedItem());
+
+                LocalTime horaInicioEvent = LocalTime.of(horaInicio, minutoInicio);
+                LocalTime horaFinEvent = LocalTime.of(horaFin, minutoFin);
 
                 if (nombreEvento.isEmpty()) {
                     JOptionPane.showMessageDialog(dialog, "Por favor, ingresa un nombre para el evento.");
@@ -434,19 +441,12 @@ public class Calendario extends JPanel {
                     if (todoElDia) {
                         evento = new Evento(nombreEvento, descripcionEvento, categoriaSeleccionada, date, todoElDia);
                         //TODAVIA HAY QUE MODIFICAR ESTO
-                        BDs.insertarEventos(usuario.getNombreUsuario(), nombreEvento, descripcionEvento, descripcionEvento, descripcionEvento, nombreEvento, descripcionEvento, todoElDia);
+                        BDs.insertarEventos(usuario.getNombreUsuario(), nombreEvento, descripcionEvento, categoriaSeleccionada.toString(), date.toString(), horaInicioEvent.toString(), horaFinEvent.toString(), todoElDia);
                     } else {
-                        int horaInicio = (int) horas.getSelectedItem();
-                        int minutoInicio = Integer.parseInt((String) minutos.getSelectedItem());
-                        int horaFin = (int) horasFinal.getSelectedItem();
-                        int minutoFin = Integer.parseInt((String) minutosFinal.getSelectedItem());
-
-                        LocalTime horaInicioEvent = LocalTime.of(horaInicio, minutoInicio);
-                        LocalTime horaFinEvent = LocalTime.of(horaFin, minutoFin);
 
                         evento = new Evento(nombreEvento, descripcionEvento, categoriaSeleccionada, date, horaInicioEvent, horaFinEvent);
                         //aqui se añade el evento
-                        //BDs.insertarEventos(usuario.getNombreUsuario(), nombreEvento, descripcionEvento, categoriaSeleccionada.toString(), date.toString(), horaInicioEvent.toString(), horaFinEvent.toString(), todoElDia);
+                        BDs.insertarEventos(usuario.getNombreUsuario(), nombreEvento, descripcionEvento, categoriaSeleccionada.toString(), date.toString(), horaInicioEvent.toString(), horaFinEvent.toString(), todoElDia);
                     }
 
                     listaEventos.add(evento);
