@@ -1,5 +1,7 @@
 package MainWindow;
 
+import BaseDeDatos.BDs;
+import ProfileWindow.ProfileWindowOther;
 import ProfileWindow.ProfileWindowSelf;
 import StartingWindows.Usuario;
 import VentanaTienda.VentanaTienda;
@@ -101,6 +103,17 @@ public class Navbar extends JPanel {
         searchIcon.setBackground(new Color(0,0,0,0));
         gbc.gridx++;
         gbc.weightx = 0;
+/*
+        searchIcon.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                String username = searchTF.getText();
+                if(BDs.usuarioExistente(username)) {
+                    Usuario userSearch = new Usuario(username);
+                }
+            }
+        });
+
+ */
         add(searchIcon, gbc);
 
         gbc.gridx++;
