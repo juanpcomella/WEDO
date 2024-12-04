@@ -476,6 +476,51 @@ public class BDs {
 	}
 		return eventos;
 	}
+	
+	public static void eliminarEventos(String usuario, String nombre, String descripcion, String categoria, String fecha, String horaInicio, String horaFin, boolean todoElDia) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return;
+		}
+		Connection connection = null;
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
+			// Crear gestores de sentencias
+			Statement statement = connection.createStatement();//crear consultas
+			statement.setQueryTimeout(30);  // poner timeout 30 msg
+			
+			String sql = "delete from eventos where username = ? and nombreEvento = ? and descripcionEv = ? and categoriaEv = ? and fechaEv = ? and horaInicioEv = ? and horaFinEv = ? and todoElDiaEv = ?";
+
+            // Preparar la consulta
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            // Asignar los valores de las variables a los parámetros
+            preparedStatement.setString(1, usuario);     
+            preparedStatement.setString(2, nombre);  
+            preparedStatement.setString(3, descripcion);
+            preparedStatement.setString(4, categoria);
+            preparedStatement.setString(5, fecha);
+            preparedStatement.setString(6, horaInicio);
+            preparedStatement.setString(7, horaFin);
+            preparedStatement.setBoolean(8, todoElDia);
+          
+            preparedStatement.executeUpdate();
+
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+	}
 /*
 	public Usuario obtenerUsuario(String username){
 		Usuario usuario = null;

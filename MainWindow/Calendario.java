@@ -20,7 +20,6 @@ public class Calendario extends JPanel {
     private JPanel diasPanel;
     private boolean esVistaSemanal = false;
     JLabel tituloLabel = new JLabel(getMonthYearString(), SwingConstants.CENTER);
-    ArrayList<Evento> listaEventos = new ArrayList<>();
 
     public Calendario(int año, int mes, Usuario usuario) {
         this.año = año;
@@ -29,6 +28,13 @@ public class Calendario extends JPanel {
         this.diasPanel = new JPanel();
         Calendar(usuario);
     }
+    
+    String nombreEv;
+    String descripcionEv;
+    Categorias categoria;
+    LocalTime horaInicioEv;
+    LocalTime horaFinEv;
+    boolean todoElDiaEv;
 
     private void Calendar(Usuario usuario) {
         setLayout(new BorderLayout());
@@ -421,31 +427,23 @@ public class Calendario extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
             	BDs.crearTablaEventos();
-                String nombreEvento = campoNombre.getText();
-                String descripcionEvento = texto.getText();
-                Categorias categoriaSeleccionada = (Categorias) categorias.getSelectedItem();
+                nombreEv = campoNombre.getText();
+                descripcionEv = texto.getText();
+                categoria = (Categorias) categorias.getSelectedItem();
                 int horaInicio = (int) horas.getSelectedItem();
                 int minutoInicio = Integer.parseInt((String) minutos.getSelectedItem());
                 int horaFin = (int) horasFinal.getSelectedItem();
                 int minutoFin = Integer.parseInt((String) minutosFinal.getSelectedItem());
 
-                LocalTime horaInicioEvent = LocalTime.of(horaInicio, minutoInicio);
-                LocalTime horaFinEvent = LocalTime.of(horaFin, minutoFin);
+                horaInicioEv = LocalTime.of(horaInicio, minutoInicio);
+                horaFinEv  = LocalTime.of(horaFin, minutoFin);
 
-                if (nombreEvento.isEmpty()) {
+                todoElDiaEv = todoElDiaCheckBox.isSelected();
+
+                if (nombreEv.isEmpty()) {
                     JOptionPane.showMessageDialog(dialog, "Por favor, ingresa un nombre para el evento.");
                 } else {
-                    boolean todoElDia = todoElDiaCheckBox.isSelected();
-                    Evento evento;
-                    
-                    if (todoElDia) {
-                        evento = new Evento(nombreEvento, descripcionEvento, categoriaSeleccionada, date, todoElDia);
-                    } else {
-                        evento = new Evento(nombreEvento, descripcionEvento, categoriaSeleccionada, date, horaInicioEvent, horaFinEvent);
-                    }
-
-                    listaEventos.add(evento);
-                    BDs.insertarEventos(usuario.getNombreUsuario(), nombreEvento, descripcionEvento, categoriaSeleccionada.toString(), date.toString(), horaInicioEvent.toString(), horaFinEvent.toString(), todoElDia);
+                    BDs.insertarEventos(usuario.getNombreUsuario(), nombreEv, descripcionEv, categoria.toString(), date.toString(), horaInicioEv.toString(), horaFinEv.toString(), todoElDiaEv);
                     JOptionPane.showMessageDialog(dialog, "Evento guardado.");
                     actualizarVista(usuario);
                     dialog.dispose();
@@ -496,10 +494,20 @@ public class Calendario extends JPanel {
         botonEliminar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            	    nombreEv = evento.getNombre();
+            	    descripcionEv = evento.getDescripcion();
+            	    categoria = evento.getCategoria();
+            	    horaInicioEv = evento.getHoraInicio();
+            	    horaFinEv = evento.getHoraFin();
+            	    todoElDiaEv = evento.isTodoElDia();
+
                 int confirmacion = JOptionPane.showConfirmDialog(dialog, "¿Estás seguro de eliminar este evento?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
                 if (confirmacion == JOptionPane.YES_OPTION) {
-                    listaEventos.remove(evento); 
-                    JOptionPane.showMessageDialog(dialog, "Evento eliminado.");
+                	
+                	//aqui va lo de borrar el evento de la bbdd
+                    BDs.eliminarEventos(usuario.getNombreUsuario(), nombreEv, descripcionEv, categoria.toString(), date.toString(), horaInicioEv.toString(), horaFinEv.toString(), todoElDiaEv);
+                    
+                	JOptionPane.showMessageDialog(dialog, "Evento eliminado.");
                     actualizarVista(usuario);
                     dialog.dispose(); 
                 }
