@@ -119,9 +119,12 @@ public class RightSideBar extends JPanel {
 
         for (String habito : habitosDiarios) {
             JButton habitoButton = new JButton(habito);
-            habitoButton.setFont(new Font("Arial", Font.PLAIN, 14));
+            habitoButton.setFont(new Font("Arial", Font.PLAIN, 12));
             habitoButton.setBackground(Color.RED);
             habitoButton.setForeground(Color.WHITE);
+            habitoButton.setPreferredSize(new Dimension(150, 60)); // Ajusta el tamaño del botón
+            habitoButton.setMaximumSize(new Dimension(150, 60));
+            
 
             habitoButton.addActionListener(e -> {
                 int respuesta = JOptionPane.showConfirmDialog(

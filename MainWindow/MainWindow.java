@@ -75,7 +75,7 @@ public class MainWindow extends JFrame {
                 navbar.setPreferredSize(new Dimension(getWidth(), dynamicHeight));
                 navbar.revalidate();
 
-                int dynamicWidth = (int) (getWidth() * 0.25);
+                int dynamicWidth = (int) (getWidth() * 0.2);
                 rightSideBar.setPreferredSize(new Dimension(dynamicWidth, (getHeight())));
                 rightSideBar.revalidate();
             }
