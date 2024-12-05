@@ -327,6 +327,7 @@ public class Calendario extends JPanel {
                             @Override
                             public void componentResized(ComponentEvent e) {
                                 eventoLabel.setBounds(0, yPos, bloqueHora.getWidth(), 25 * duracionBloques);
+                                eventoLabel.setVerticalAlignment(SwingConstants.NORTH);
                             }
                         });
                        
