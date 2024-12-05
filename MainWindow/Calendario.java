@@ -476,7 +476,6 @@ public class Calendario extends JPanel {
         dialog.setTitle("Evento para el " + date.toString());
         dialog.setSize(500, 400); 
         dialog.setLocationRelativeTo(this);
-
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(6, 1, 10, 10));
 
