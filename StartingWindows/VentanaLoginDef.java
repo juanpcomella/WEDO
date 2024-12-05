@@ -17,22 +17,6 @@ import java.util.Map;
 public class VentanaLoginDef extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    
-    
-    
-    public int insertarContraseña(JPanel panel, JTextField textfield) {
-    	int option3 = JOptionPane.showOptionDialog(
-                panel,
-                new Object[]{"Introduce tu nueva contraseña", textfield},
-                "",
-                JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                new Object[]{"Aceptar"}, // Botón personalizado
-                "Aceptar"
-        );
-    	return option3;
-    }
 
 	public VentanaLoginDef() {
         setTitle("WEDO - Inicio de sesión");
@@ -178,47 +162,118 @@ public class VentanaLoginDef extends JFrame {
                 		correoRep = BDs.getEmail(correoOuserDeRecuperacion); 
                 		BDs.crearTablaCodigosDeVerificacionTemporales();
                 		EnviarCorreoRecuperacion.enviarCorreo(correoRep);
+                		boolean codigoCorrecto = false;
+                        while (!codigoCorrecto) {
+                            int option2 = JOptionPane.showOptionDialog(
+                                    panel,
+                                    new Object[]{"Introduce el código de verificación:", textField2},
+                                    "",
+                                    JOptionPane.OK_CANCEL_OPTION,
+                                    JOptionPane.PLAIN_MESSAGE,
+                                    null,
+                                    new Object[]{"Aceptar"}, // Botón personalizado
+                                    "Aceptar"
+                            );
+
+                            if (option2 == 0) {
+                                String codigoIngresado = textField2.getText();
+                                if (codigoIngresado.equals(BDs.obtenerCodigoDeVerificacion(correoRep))) {
+                                    codigoCorrecto = true;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Código de verificación incorrecto. Inténtalo de nuevo.");
+                                }
+                            } else {
+                                return; // Cancelar
+                            }
+                        }
+                        boolean contraseñaValida = false;
+                        while (!contraseñaValida) {
+                            int option3 = JOptionPane.showOptionDialog(
+                                    panel,
+                                    new Object[]{"Introduce tu nueva contraseña:", textField3},
+                                    "",
+                                    JOptionPane.OK_CANCEL_OPTION,
+                                    JOptionPane.PLAIN_MESSAGE,
+                                    null,
+                                    new Object[]{"Aceptar"}, // Botón personalizado
+                                    "Aceptar"
+                            );
+
+                            if (option3 == 0) {
+                                String nuevaContraseña = textField3.getText().trim();
+                                if (!nuevaContraseña.isEmpty()) {
+                                    BDs.updatePassword(usuarioParaContraseña, nuevaContraseña);
+                                    JOptionPane.showMessageDialog(null, "¡Contraseña actualizada exitosamente!");
+                                    contraseñaValida = true;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Introduce una contraseña válida.");
+                                }
+                            } else {
+                                return; // Cancelar
+                            }
+                        }
                 	}else if(BDs.emailExistente(correoOuserDeRecuperacion)) {
                 		usuarioParaContraseña = BDs.getUsuarioMedianteCorreo(correoOuserDeRecuperacion);
                 		correoRep = correoOuserDeRecuperacion;
                 		BDs.crearTablaCodigosDeVerificacionTemporales();
                 		EnviarCorreoRecuperacion.enviarCorreo(correoRep);
+                		boolean codigoCorrecto = false;
+                        while (!codigoCorrecto) {
+                            int option2 = JOptionPane.showOptionDialog(
+                                    panel,
+                                    new Object[]{"Introduce el código de verificación:", textField2},
+                                    "",
+                                    JOptionPane.OK_CANCEL_OPTION,
+                                    JOptionPane.PLAIN_MESSAGE,
+                                    null,
+                                    new Object[]{"Aceptar"}, // Botón personalizado
+                                    "Aceptar"
+                            );
+
+                            if (option2 == 0) {
+                                String codigoIngresado = textField2.getText();
+                                if (codigoIngresado.equals(BDs.obtenerCodigoDeVerificacion(correoRep))) {
+                                    codigoCorrecto = true;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Código de verificación incorrecto. Inténtalo de nuevo.");
+                                }
+                            } else {
+                                return; // Cancelar
+                            }
+                        }
+                    	//HAY QUE HACER CAMBIOS
+                        boolean contraseñaValida = false;
+                        while (!contraseñaValida) {
+                            int option3 = JOptionPane.showOptionDialog(
+                                    panel,
+                                    new Object[]{"Introduce tu nueva contraseña:", textField3},
+                                    "",
+                                    JOptionPane.OK_CANCEL_OPTION,
+                                    JOptionPane.PLAIN_MESSAGE,
+                                    null,
+                                    new Object[]{"Aceptar"}, // Botón personalizado
+                                    "Aceptar"
+                            );
+
+                            if (option3 == 0) {
+                                String nuevaContraseña = textField3.getText().trim();
+                                if (!nuevaContraseña.isEmpty()) {
+                                    BDs.updatePassword(usuarioParaContraseña, nuevaContraseña);
+                                    JOptionPane.showMessageDialog(null, "¡Contraseña actualizada exitosamente!");
+                                    contraseñaValida = true;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Introduce una contraseña válida.");
+                                }
+                            } else {
+                                return; // Cancelar
+                            }
+                        }
                 	}else {
                         JOptionPane.showMessageDialog(null,"Usuario o correo no encontrados.");
-                        actionPerformed(e);
                 	}
-                	int option2 = JOptionPane.showOptionDialog(
-                            panel,
-                            new Object[]{"Introduce el codigo de verificación:", textField2},
-                            "",
-                            JOptionPane.OK_CANCEL_OPTION,
-                            JOptionPane.PLAIN_MESSAGE,
-                            null,
-                            new Object[]{"Aceptar"}, // Botón personalizado
-                            "Aceptar"
-                    );
-                	//HAY QUE HACER CAMBIOS
-            		if(option2 == 0) {
-            			if(textField2.getText().equals(BDs.obtenerCodigoDeVerificacion(correoRep))) {
-            				int option3 = insertarContraseña(panel, textField3);
-            				boolean contraseñaNoValida = textField3.getText().trim().isEmpty();//ES FALSE
-            				while(option3 == 0 & contraseñaNoValida == false) {
-            					
-            				}
-            				if(option3 == 0 & contraseñaNoValida == false) {
-            					BDs.updatePassword(usuarioParaContraseña, textField3.getText());
-                                JOptionPane.showMessageDialog(null,"¡Contraseña actualizada exitosamente!");
-            				}else {
-            					while(contraseñaNoValida == true) {
-            						
-            					}
-                                JOptionPane.showMessageDialog(null,"Introduce una contraseña válida.");
-            				}
-            			}else {
-                            JOptionPane.showMessageDialog(null,"Código de verificación incorrecto.");
-            			}
-            		}
+                	
                 }
+                
 			}
         });
         

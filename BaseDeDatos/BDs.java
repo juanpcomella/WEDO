@@ -700,7 +700,7 @@ public class BDs {
 //			statement.executeUpdate("drop table if exists person");
 			
 			// Ejecutar sentencias SQL (Update)
-			statement.executeUpdate("create table if not exists codigos (email string, codigo string)");
+			statement.executeUpdate("create table if not exists codigos (email string, codigo string, fecha_expiracion long)");
 
 		} catch(SQLException e) {
 			System.err.println(e.getMessage());
@@ -715,7 +715,7 @@ public class BDs {
 	}
 	}
 	
-	public static void insertarCodigosDeVerificacion(String correo, String codigo) {
+	public static void insertarCodigosDeVerificacion(String correo, String codigo, Long fecha_expiracion) {
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
@@ -730,7 +730,7 @@ public class BDs {
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
 			
-			String sql = "insert into codigos (email, codigo) VALUES (?, ?)";
+			String sql = "insert into codigos (email, codigo, fecha_expiracion) VALUES (?, ?, ?)";
 
             // Preparar la consulta
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -738,6 +738,7 @@ public class BDs {
             // Asignar los valores de las variables a los parámetros
             preparedStatement.setString(1, correo);     
             preparedStatement.setString(2, codigo);  
+            preparedStatement.setLong(3, fecha_expiracion);  
   
             preparedStatement.executeUpdate();
 
@@ -753,6 +754,45 @@ public class BDs {
 			}
 	}
 	}
+	public static void eliminarPorEmail(String correo) {
+	    try {
+	        Class.forName("org.sqlite.JDBC");
+	    } catch (ClassNotFoundException e) {
+	        System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+	        return;
+	    }
+	    Connection connection = null;
+	    try {
+	        // Crear una conexión de BD
+	        connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");
+	        
+	        // Instrucción SQL para eliminar
+	        String sql = "DELETE FROM codigos WHERE email = ?";
+	        
+	        // Preparar la consulta
+	        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        
+	        // Asignar el valor del correo al parámetro
+	        preparedStatement.setString(1, correo);
+	        
+	        // Ejecutar la consulta
+	        preparedStatement.executeUpdate();
+//	        System.out.println("Número de filas eliminadas: " + filasAfectadas);
+	        
+	    } catch (SQLException e) {
+	        System.err.println("Error en la operación DELETE: " + e.getMessage());
+	    } finally {
+	        try {
+	            if (connection != null) {
+	                connection.close();
+	            }
+	        } catch (SQLException e) {
+	            // Cierre de conexión fallido
+	            System.err.println("Error cerrando la conexión: " + e.getMessage());
+	        }
+	    }
+	}
+
 	public static String obtenerCodigoDeVerificacion(String correo) {
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -783,6 +823,38 @@ public class BDs {
 			}
 		}
 		return codigo;
+	}
+	
+	public static Long obtenerFechaExpiracion(String correo) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return null;
+		}
+		Connection connection = null;
+		Long fecha = null;
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");
+			String sql = "SELECT fecha_expiracion FROM codigos WHERE email = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, correo);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			if (resultSet.next()) {
+				fecha = resultSet.getLong("fecha_expiracion");
+			} 
+
+		} catch (SQLException e) {
+			System.err.println("Error SQL: " + e.getMessage());
+		} finally {
+			try {
+				if (connection != null) connection.close();
+			} catch (SQLException e) {
+				System.err.println(e);
+			}
+		}
+		return fecha;
 	}
 
 	public static void crearTablaSeguimientos() {
@@ -897,6 +969,9 @@ public class BDs {
 
 		return sigue;
 	}
+//	public static void main(String[] args) {
+//		crearTablaCodigosDeVerificacionTemporales();
+//	}
 
 }
 
