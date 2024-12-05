@@ -504,7 +504,7 @@ public class Calendario extends JPanel {
         panel.add(labelHoraInicio);
         panel.add(horaInicio);
         
-        JLabel labelHoraFinal = new JLabel("Hora de Inicio");
+        JLabel labelHoraFinal = new JLabel("Hora de Fin");
         LocalTime horaFinalLocalTime = evento.getHoraFin();
         DateTimeFormatter formatterFechaFinal = DateTimeFormatter.ofPattern("HH:mm");
         String horaFinalFormatted = horaFinalLocalTime.format(formatterFechaFinal);
