@@ -459,7 +459,7 @@ public class VentanaTienda extends JFrame {
                         }
                     }
                 }
-                return panel; // Retornar un panel vacío si no hay datos
+                return panel; 
             }
         });
         
@@ -651,14 +651,14 @@ public class VentanaTienda extends JFrame {
         panelApodos.add(panelApodosConMargen, BorderLayout.CENTER);
 
         
-        JLabel sup = new JLabel("Superman");
-        sup.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
+
         
+        apodosT.setRowHeight(50);//new
+
         
-        
-        Font customFont = null;
+        Font customFontBatman = null;
 		try {
-			customFont = Font.createFont(Font.TRUETYPE_FONT, new File("textos/Gotham.ttf")).deriveFont(48f);
+			customFontBatman = Font.createFont(Font.TRUETYPE_FONT, new File("textos/Gotham.ttf")).deriveFont(48f);
 		} catch (FontFormatException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -667,23 +667,26 @@ public class VentanaTienda extends JFrame {
 			e1.printStackTrace();
 		}
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        ge.registerFont(customFont);
+        ge.registerFont(customFontBatman);
         
-        // Agregar filas de ejemplo a la tabla de apodos
-        modeloApodos.addRow(new Object[]{sup, new Object[]{100, icon2}});
-        modeloApodos.addRow(new Object[]{"Batman", new Object[]{200, icon2}});
-        modeloApodos.addRow(new Object[]{"Spiderman", new Object[]{150, icon2}});
+      ;
+        
+
+        
         
         JLabel batmanL = new JLabel("Batman");
-        batmanL.setFont(customFont);
+        batmanL.setFont(customFontBatman);
+        JPanel panelBatman = new JPanel();
+        panelBatman.add(batmanL);
         
-        modeloApodos.addRow(new Object[]{batmanL, new Object[]{200, icon2}});
+        
+        modeloApodos.addRow(new Object[]{panelBatman, new Object[]{200, icon2}});
 
 
         apodosT.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                if (value instanceof JLabel) {
+                if (value instanceof JPanel) {
                     return (Component) value;
                 }
                 return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -693,8 +696,82 @@ public class VentanaTienda extends JFrame {
         apodosT.getTableHeader().setVisible(false);
         apodosT.getTableHeader().setPreferredSize(new Dimension(0, 0));
         //iconoT.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        apodosT.setRowHeight(100);//new
         
+        
+        
+        Font customFontSs = null;
+		try {
+			customFontSs = Font.createFont(Font.TRUETYPE_FONT, new File("textos/Saiyan-Sans.ttf")).deriveFont(48f);
+		} catch (FontFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        GraphicsEnvironment ge2 = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        ge2.registerFont(customFontBatman);
+        
+        JLabel ssLabel = new JLabel("Super Saiyan");
+        ssLabel.setFont(customFontSs);
+        
+        JPanel ssPanel = new JPanel();
+        ssPanel.add(ssLabel);
+        
+        modeloApodos.addRow(new Object[]{ssPanel, new Object[]{100, icon2}});
+        
+        Font customFontAve = null;
+		try {
+			customFontAve = Font.createFont(Font.TRUETYPE_FONT, new File("textos/AVENGEANCE HEROIC AVENGER.ttf")).deriveFont(48f);
+		} catch (FontFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        GraphicsEnvironment ge3 = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        ge3.registerFont(customFontBatman);
+        
+        JLabel aveLabel = new JLabel("Vengador ");
+        aveLabel.setFont(customFontAve);
+        
+        JPanel avePanel = new JPanel();
+        avePanel.add(aveLabel);
+        
+        modeloApodos.addRow(new Object[]{avePanel, new Object[]{100, icon2}});
+        
+        
+        
+        Font customFontTer = null;
+        
+        try {
+			customFontTer = Font.createFont(Font.TRUETYPE_FONT, new File("textos/terminator real nfi.ttf")).deriveFont(30f);
+	        
+
+		} catch (FontFormatException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.out.println("no se encontro");
+		}
+        GraphicsEnvironment ge4 = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        ge4.registerFont(customFontTer);
+        
+        JLabel terLabel = new JLabel("Terminator");
+        terLabel.setFont(customFontTer);
+        
+        JPanel terPanel = new JPanel();
+        terPanel.add(terLabel);
+        
+        modeloApodos.addRow(new Object[]{terPanel, new Object[]{100, icon2}});
+     
+        
+        
+        
+        
+        
+        
+
         for (int i = 0; i < apodosT.getRowCount(); i++) {
             Point celda_comprada = new Point(i, 1); // Crear un Point para la celda en la fila i y columna 1
             estadoCeldasApodo.put(celda_comprada, false); // Añadir al HashMap con valor por defecto false
