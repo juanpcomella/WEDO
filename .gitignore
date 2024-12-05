@@ -16,3 +16,4 @@ build/
 *.sqlite3
 *.db
 *.db-journal
+/BaseDeDatos/usuariosYeventos
