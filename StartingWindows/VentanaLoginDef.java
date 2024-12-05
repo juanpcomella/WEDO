@@ -138,6 +138,7 @@ public class VentanaLoginDef extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				 // Crear un JTextField
+				String usuarioParaContraseña = null;
                 JTextField textField = new JTextField(15); // Ancho de 15 columnas
                 JTextField textField2 = new JTextField(15); // Ancho de 15 columnas
                 JTextField textField3 = new JTextField(15); // Ancho de 15 columnas
@@ -158,10 +159,12 @@ public class VentanaLoginDef extends JFrame {
                 	String correoRep = null;
                 	String correoOuserDeRecuperacion = textField.getText();
                 	if(BDs.usuarioExistente(correoOuserDeRecuperacion)) {
+                		usuarioParaContraseña = correoOuserDeRecuperacion;
                 		correoRep = BDs.getEmail(correoOuserDeRecuperacion); 
                 		BDs.crearTablaCodigosDeVerificacionTemporales();
                 		EnviarCorreoRecuperacion.enviarCorreo(correoRep);
                 	}else if(BDs.emailExistente(correoOuserDeRecuperacion)) {
+                		usuarioParaContraseña = BDs.getUsuarioMedianteCorreo(correoOuserDeRecuperacion);
                 		correoRep = correoOuserDeRecuperacion;
                 		BDs.crearTablaCodigosDeVerificacionTemporales();
                 		EnviarCorreoRecuperacion.enviarCorreo(correoRep);
@@ -193,7 +196,10 @@ public class VentanaLoginDef extends JFrame {
                                     "Aceptar"
                             );
             				if(option3 == 0 & textField3.getText() != null) {
-            					BDs.updatePassword(correoRep, textField3.getText());
+//            					System.out.println(correoRep);
+//            					System.out.println(usuarioParaContraseña);
+//            					System.out.println(textField3.getText());
+            					BDs.updatePassword(usuarioParaContraseña, textField3.getText());
                                 JOptionPane.showMessageDialog(null,"¡Contraseña actualizada exitosamente!");
             				}else {
                                 JOptionPane.showMessageDialog(null,"Introduce una contraseña nueva.");

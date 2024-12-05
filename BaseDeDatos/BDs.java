@@ -275,6 +275,42 @@ public class BDs {
 	}
 		return nombreUsuario;
 	}
+	public static String getUsuarioMedianteCorreo(String correo) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+		}
+		Connection connection = null;
+		String correoE = null;
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
+			// Crear gestores de sentencias
+			Statement statement = connection.createStatement();//crear consultas
+			statement.setQueryTimeout(30);  // poner timeout 30 msg
+			
+			String sql = "SELECT username FROM usuarios WHERE email = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setString(1, correo);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                correoE = resultSet.getString("email");
+            } 
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+		return correoE;
+	}
 	public static String getPassword(String usuario) {
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -326,8 +362,6 @@ public class BDs {
 			// Crear una conexión de BD
 			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
 			// Crear gestores de sentencias
-			Statement statement = connection.createStatement();//crear consultas
-			statement.setQueryTimeout(30);  // poner timeout 30 msg
 			
 	        String sql = "UPDATE usuarios SET password = ? WHERE username = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -335,6 +369,7 @@ public class BDs {
 	        preparedStatement.setString(2, usuario);
 	        
 	        int filasActualizadas = preparedStatement.executeUpdate(); // Ejecutar la actualización
+
 	        actualizado = filasActualizadas > 0; 
 
 		} catch(SQLException e) {
@@ -348,6 +383,7 @@ public class BDs {
 				System.err.println(e);
 			}
 	}
+		System.out.println(getPassword(usuario));
 		return actualizado;
 		
 	
