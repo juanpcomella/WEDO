@@ -1,6 +1,10 @@
 package VentanaTienda;
 
 import javax.swing.*;
+
+import java.io.File;
+import java.io.IOException;
+
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -650,10 +654,31 @@ public class VentanaTienda extends JFrame {
         JLabel sup = new JLabel("Superman");
         sup.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
         
+        
+        
+        Font customFont = null;
+		try {
+			customFont = Font.createFont(Font.TRUETYPE_FONT, new File("textos/Gotham.ttf")).deriveFont(48f);
+		} catch (FontFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        ge.registerFont(customFont);
+        
         // Agregar filas de ejemplo a la tabla de apodos
         modeloApodos.addRow(new Object[]{sup, new Object[]{100, icon2}});
         modeloApodos.addRow(new Object[]{"Batman", new Object[]{200, icon2}});
         modeloApodos.addRow(new Object[]{"Spiderman", new Object[]{150, icon2}});
+        
+        JLabel batmanL = new JLabel("Batman");
+        batmanL.setFont(customFont);
+        
+        modeloApodos.addRow(new Object[]{batmanL, new Object[]{200, icon2}});
+
 
         apodosT.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
