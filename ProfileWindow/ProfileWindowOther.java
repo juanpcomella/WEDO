@@ -13,8 +13,9 @@ import javax.swing.table.DefaultTableModel;
 import java.io.*;
 
 
-
 import java.awt.geom.Ellipse2D;
+
+import static BaseDeDatos.BDs.*;
 
 public class ProfileWindowOther extends JFrame {
 
@@ -112,14 +113,45 @@ public class ProfileWindowOther extends JFrame {
         leftGBC.fill = GridBagConstraints.NONE;
         leftGBC.gridy = 5;
         leftGBC.insets = new Insets(5, 0, 0, 15);
-        JButton editButton = new JButton("Seguir");
-        editButton.setFont(new Font("Tahoma", Font.BOLD, 24));
-        editButton.setBackground(new Color(0,0,0,0));
-        editButton.setFocusPainted(false);
-        editButton.setFocusable(false);
-        editButton.setContentAreaFilled(false);
+        JButton followButton = new JButton();
+        if(yaSigue(usuarioActual, usuarioBusqueda)) {
+            followButton.setText("Siguiendo");
+        } else {
+            followButton.setText("Seguir");
+        }
 
-        leftPanel.add(editButton, leftGBC);
+        followButton.setFont(new Font("Tahoma", Font.BOLD, 24));
+        followButton.setBackground(new Color(0,0,0,0));
+        followButton.setFocusPainted(false);
+        followButton.setFocusable(false);
+        followButton.setContentAreaFilled(false);
+
+
+        followButton.addActionListener(e -> {
+            // Validar que los usuarios no sean nulos
+            if (usuarioActual != null && usuarioBusqueda != null) {
+                try {
+                    // Crear instancias de Usuario
+                    //Usuario seguidor = new Usuario(usuarioActual, null, null);  // Tu usuario
+                    //Usuario seguido = new Usuario(usuarioBusqueda, null, null);  // Usuario del perfil
+
+                    // Insertar la relación en la base de datos
+                    crearTablaSeguimientos();
+                    insertarElementosSeguimientos(usuarioActual, usuarioBusqueda);
+
+                    // Mostrar confirmación
+                    JOptionPane.showMessageDialog(null, "¡Ahora sigues a " + usuarioBusqueda + "!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    // Manejar errores
+                    JOptionPane.showMessageDialog(null, "Error al seguir al usuario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                // Si los usuarios no están definidos
+                JOptionPane.showMessageDialog(null, "No se pueden procesar los usuarios.", "Error", JOptionPane.WARNING_MESSAGE);
+            }
+        });
+
+        leftPanel.add(followButton, leftGBC);
 
         mainPanel.add(leftPanel, gbc);
 

@@ -24,6 +24,7 @@ import static java.lang.Thread.sleep;
 public class Navbar extends JPanel {
 
     public Navbar(LeftSideBar leftSideBar, Usuario usuario) {
+        Usuario CURRENT_USER = usuario;
         setLayout(new GridBagLayout()); // Cambiar a GridBagLayout
         setBackground(Color.LIGHT_GRAY);
 
@@ -105,13 +106,26 @@ public class Navbar extends JPanel {
         gbc.weightx = 0;
 
         searchIcon.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 String usuarioInput = searchTF.getText();
+
+                // Verificar si el usuario existe
                 if (BDs.usuarioExistente(usuarioInput)) {
                     Usuario usuarioObtenido = BDs.obtenerUsuario(usuarioInput);
+
                     if (usuarioObtenido != null) {
-                        ProfileWindowOther profile = new ProfileWindowOther(usuario, usuarioObtenido);
-                        profile.setVisible(true);
+                        // Comparar con el usuario actual
+                        if (usuarioObtenido.equals(CURRENT_USER)) {
+                            // Abrir ProfileWindowSelf
+                            ProfileWindowSelf profile = new ProfileWindowSelf(usuario);
+                            profile.setVisible(true);
+                        } else {
+                            // Abrir ProfileWindowOther
+                            ProfileWindowOther profile = new ProfileWindowOther(usuario, usuarioObtenido);
+                            profile.setVisible(true);
+                        }
+                        // Cerrar ventana actual
                         ((JFrame) SwingUtilities.getWindowAncestor(searchIcon)).dispose();
                     } else {
                         JOptionPane.showMessageDialog(null, "Usuario no encontrado en la base de datos.");
