@@ -139,7 +139,6 @@ public class RightSideBar extends JPanel {
 
             habitosPanel.add(habitoButton);
         }
-
         revalidate();
         repaint();
     }
