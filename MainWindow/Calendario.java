@@ -307,7 +307,8 @@ public class Calendario extends JPanel {
                         eventoLabel.setFont(new Font("Arial", Font.BOLD, 12));
                         eventoLabel.setForeground(Color.WHITE);
                         eventoLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); 
-                        eventoLabel.setHorizontalAlignment(SwingConstants.LEFT);
+                        eventoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                        eventoLabel.setVerticalAlignment(SwingConstants.NORTH);
 
                         if (evento.getCategoria().equals(Categorias.Estudios)) {
                             eventoLabel.setBackground(Color.MAGENTA);
@@ -327,7 +328,6 @@ public class Calendario extends JPanel {
                             @Override
                             public void componentResized(ComponentEvent e) {
                                 eventoLabel.setBounds(0, yPos, bloqueHora.getWidth(), 25 * duracionBloques);
-                                eventoLabel.setVerticalAlignment(SwingConstants.NORTH);
                             }
                         });
                        
