@@ -59,7 +59,7 @@ public class MainWindow extends JFrame {
 
 
         RightSideBar rightSideBar = new RightSideBar();
-        int rsbWidth = (int) (getWidth() * 0.1);
+        int rsbWidth = (int) (getWidth() * 0.3);
         rightSideBar.setPreferredSize(new Dimension(rsbWidth, getHeight()));
         panelEste.add(rightSideBar, BorderLayout.EAST);
 
@@ -75,7 +75,7 @@ public class MainWindow extends JFrame {
                 navbar.setPreferredSize(new Dimension(getWidth(), dynamicHeight));
                 navbar.revalidate();
 
-                int dynamicWidth = (int) (getWidth() * 0.1);
+                int dynamicWidth = (int) (getWidth() * 0.25);
                 rightSideBar.setPreferredSize(new Dimension(dynamicWidth, (getHeight())));
                 rightSideBar.revalidate();
             }
