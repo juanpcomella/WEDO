@@ -275,6 +275,7 @@ public class BDs {
 	}
 		return nombreUsuario;
 	}
+
 	public static String getUsuarioMedianteCorreo(String correo) {
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -289,7 +290,7 @@ public class BDs {
 			// Crear gestores de sentencias
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
-			
+
 			String sql = "SELECT username FROM usuarios WHERE email = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 	        preparedStatement.setString(1, correo);
@@ -297,7 +298,7 @@ public class BDs {
 
             if (resultSet.next()) {
                 correoE = resultSet.getString("email");
-            } 
+            }
 		} catch(SQLException e) {
 			System.err.println(e.getMessage());
 		} finally {
@@ -311,6 +312,7 @@ public class BDs {
 	}
 		return correoE;
 	}
+
 	public static String getPassword(String usuario) {
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -370,7 +372,7 @@ public class BDs {
 	        
 	        int filasActualizadas = preparedStatement.executeUpdate(); // Ejecutar la actualización
 
-	        actualizado = filasActualizadas > 0; 
+	        actualizado = filasActualizadas > 0;
 
 		} catch(SQLException e) {
 			System.err.println(e.getMessage());
@@ -634,7 +636,50 @@ public class BDs {
 		}
 		return usuario;
 	}
-	
+
+	public static boolean setUsuario(Usuario usuario) {
+		try {
+			// Cargar el driver JDBC
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return false;
+		}
+
+		Connection connection = null;
+		try {
+			// Conectar a la base de datos
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");
+
+			// Comando SQL para insertar o actualizar un usuario
+			String sql = "INSERT INTO usuarios (username, email, password) " +
+					"VALUES (?, ?, ?) " +
+					"ON CONFLICT(username) DO UPDATE SET email = excluded.email, password = excluded.password";
+
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, usuario.getNombreUsuario());
+			preparedStatement.setString(2, usuario.getCorreo());
+			preparedStatement.setString(3, usuario.getContraseña());
+
+			// Ejecutar la consulta
+			int rowsAffected = preparedStatement.executeUpdate();
+
+			// Verificar si se realizó la operación
+			return rowsAffected > 0;
+
+		} catch (SQLException e) {
+			System.err.println("Error SQL: " + e.getMessage());
+			return false;
+		} finally {
+			try {
+				if (connection != null) connection.close();
+			} catch (SQLException e) {
+				System.err.println(e);
+			}
+		}
+	}
+
+
 	//aqui empiezo a crear metodos para trabajar con la recuperacion de la contraseña (una tabla donde se guarde el codigo de recuperacion...)
 	public static void crearTablaCodigosDeVerificacionTemporales() {
 		try {
@@ -740,7 +785,118 @@ public class BDs {
 		return codigo;
 	}
 
+	public static void crearTablaSeguimientos() {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return;
+		}
 
+		Connection connection = null;
+		try {
+			// Conexión a la base de datos
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); // Timeout de 30 ms
+
+			// Crear la tabla con tipos de datos correctos
+			String sql = "CREATE TABLE IF NOT EXISTS seguimientos (" +
+					"seguidor TEXT NOT NULL, " +
+					"seguido TEXT NOT NULL, " +
+					"PRIMARY KEY (seguidor, seguido))";
+			statement.executeUpdate(sql);
+
+			System.out.println("Tabla 'seguimientos' creada o ya existente.");
+		} catch (SQLException e) {
+			System.err.println("Error SQL: " + e.getMessage());
+		} finally {
+			try {
+				if (connection != null) connection.close();
+			} catch (SQLException e) {
+				System.err.println("Error al cerrar la conexión: " + e.getMessage());
+			}
+		}
+	}
+
+	public static void insertarElementosSeguimientos(Usuario seguidor, Usuario seguido) {
+		try {
+			// Cargar el driver JDBC
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return;
+		}
+
+		Connection connection = null;
+		try {
+			// Conectar a la base de datos
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");
+
+			// Consulta SQL para insertar relación de seguimiento
+			String sql = "INSERT INTO seguimientos (seguidor, seguido) VALUES (?, ?)";
+
+			// Preparar la consulta
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+			// Asignar valores a los parámetros
+			preparedStatement.setString(1, seguidor.getNombreUsuario());
+			preparedStatement.setString(2, seguido.getNombreUsuario());
+
+			// Ejecutar la consulta
+			preparedStatement.executeUpdate();
+
+			System.out.println("Relación de seguimiento insertada con éxito.");
+		} catch (SQLException e) {
+			System.err.println("Error SQL: " + e.getMessage());
+		} finally {
+			try {
+				if (connection != null) connection.close();
+			} catch (SQLException e) {
+				System.err.println("Error al cerrar la conexión: " + e.getMessage());
+			}
+		}
+	}
+
+	public static boolean yaSigue(Usuario seguidor, Usuario seguido) {
+		boolean sigue = false;
+		try {
+			// Cargar el driver JDBC
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return false;
+		}
+
+		Connection connection = null;
+		try {
+			// Conectar a la base de datos
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");
+
+			// Comando SQL para insertar o actualizar un usuario
+			String sql = "SELECT 1 FROM seguimientos WHERE seguidor = ? AND seguido = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, seguidor.getNombreUsuario());
+			preparedStatement.setString(2, seguido.getNombreUsuario());
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			// Si hay resultados, significa que ya lo sigue
+			if (resultSet.next()) {
+				sigue = true;
+			}
+		} catch (SQLException e) {
+			System.err.println("Error SQL: " + e.getMessage());
+		} finally {
+			try {
+				if (connection != null) connection.close();
+			} catch (SQLException e) {
+				System.err.println("Error al cerrar la conexión: " + e.getMessage());
+			}
+		}
+
+		return sigue;
+	}
 
 }
 

@@ -37,6 +37,14 @@ public class Usuario {
 		this.contraseña = contraseña;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true; // Mismo objeto en memoria
+		if (obj == null || getClass() != obj.getClass()) return false; // Tipos diferentes
+		Usuario usuario = (Usuario) obj;
+		return this.nombreUsuario.equals(usuario.nombreUsuario); // Compara por un identificador único
+	}
+
 	public static void main(String[] args) {
 
 	}
