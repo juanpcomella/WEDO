@@ -766,7 +766,50 @@ public class VentanaTienda extends JFrame {
         modeloApodos.addRow(new Object[]{terPanel, new Object[]{100, icon2}});
      
         
+        Font customFontGlad = null;
         
+        try {
+			customFontGlad = Font.createFont(Font.TRUETYPE_FONT, new File("textos/Marav2.ttf")).deriveFont(40f);
+	        
+
+		} catch (FontFormatException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.out.println("no se encontro");
+		}
+        GraphicsEnvironment ge5 = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        ge5.registerFont(customFontGlad);
+        
+        JLabel gladLabel = new JLabel("{Gladiador#");
+        gladLabel.setFont(customFontGlad);
+        
+        JPanel gladPanel = new JPanel();
+        gladPanel.add(gladLabel);
+        
+        modeloApodos.addRow(new Object[]{gladPanel, new Object[]{100, icon2}});
+        
+        
+        Font maestroFont = null;
+        
+        try {
+			maestroFont = Font.createFont(Font.TRUETYPE_FONT, new File("textos/Karate.ttf")).deriveFont(40f);
+	        
+
+		} catch (FontFormatException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.out.println("no se encontro");
+		}
+        GraphicsEnvironment ge6 = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        ge6.registerFont(maestroFont);
+        
+        JLabel maestroL = new JLabel("maestro");
+        maestroL.setFont(maestroFont);
+        
+        JPanel maestroPanel = new JPanel();
+        maestroPanel.add(maestroL);
+        
+        modeloApodos.addRow(new Object[]{maestroPanel, new Object[]{100, icon2}});
         
         
         
