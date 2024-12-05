@@ -13,7 +13,6 @@ public class Evento {
     private LocalTime horaFin;
     private boolean todoElDia;
 
-    // Constructor para evento todo el día
     public Evento(String nombre, String descripcion, Categorias categoria, LocalDate fecha, boolean todoElDia) {
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -22,7 +21,6 @@ public class Evento {
         this.todoElDia = todoElDia;
     }
 
-    // Constructor para evento con hora de inicio y fin
     public Evento(String nombre, String descripcion, Categorias categoria, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin) {
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -30,7 +28,7 @@ public class Evento {
         this.fecha = fecha;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
-        this.todoElDia = false;  // No es todo el día si tiene horas específicas
+        this.todoElDia = false;  
     }
     
     public Evento(String nombre, String descripcion, Categorias categoria, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, boolean todoElDia) {
@@ -40,7 +38,7 @@ public class Evento {
         this.fecha = fecha;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
-        this.todoElDia = todoElDia;  // No es todo el día si tiene horas específicas
+        this.todoElDia = todoElDia; 
     }
 
 
