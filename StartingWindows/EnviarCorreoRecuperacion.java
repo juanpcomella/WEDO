@@ -6,6 +6,7 @@ import javax.mail.internet.*;
 import BaseDeDatos.BDs;
 
 import java.util.Properties;
+import java.util.UUID;
 
 public class EnviarCorreoRecuperacion {
 
@@ -27,6 +28,9 @@ public class EnviarCorreoRecuperacion {
                 return new PasswordAuthentication(usuarioCorreo, contrasenaCorreo);
             }
         });
+        
+        String codigoVerificacion = UUID.randomUUID().toString().substring(0, 6).toUpperCase(); // Ejemplo: "A1B2C3"
+        BDs.insertarCodigosDeVerificacion(correoDestino, codigoVerificacion); // Guardar el código en la BD con un tiempo de expiración
 
         try {
             // Crear el mensaje de correo
@@ -34,7 +38,8 @@ public class EnviarCorreoRecuperacion {
             message.setFrom(new InternetAddress(usuarioCorreo));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(correoDestino));
             message.setSubject("Recuperación de contraseña");
-            message.setText("Tu contraseña es: "+BDs.getPassword(BDs.pasarDeEmailAUsername(correoDestino)));
+            message.setText("Hemos recibido un aviso de que has olvidado tu contraseña. Introduce el código adjunto en la aplicación para cambiar tu contraseña a una nueva.\n"
+            		+BDs.obtenerCodigoDeVerificacion(correoDestino));
 
             // Enviar el mensaje
             Transport.send(message);

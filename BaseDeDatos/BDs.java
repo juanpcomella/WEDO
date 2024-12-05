@@ -313,6 +313,45 @@ public class BDs {
 		
 	
 	}
+	
+	public static boolean updatePassword(String usuario, String nuevaContraseña) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+		}
+		Connection connection = null;
+		boolean actualizado = false;
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
+			// Crear gestores de sentencias
+			Statement statement = connection.createStatement();//crear consultas
+			statement.setQueryTimeout(30);  // poner timeout 30 msg
+			
+	        String sql = "UPDATE usuarios SET password = ? WHERE username = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setString(1, nuevaContraseña);
+	        preparedStatement.setString(2, usuario);
+	        
+	        int filasActualizadas = preparedStatement.executeUpdate(); // Ejecutar la actualización
+	        actualizado = filasActualizadas > 0; 
+
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+		return actualizado;
+		
+	
+	}
 	public static String getEmail(String usuario) {
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -558,6 +597,111 @@ public class BDs {
 			}
 		}
 		return usuario;
+	}
+	
+	//aqui empiezo a crear metodos para trabajar con la recuperacion de la contraseña (una tabla donde se guarde el codigo de recuperacion...)
+	public static void crearTablaCodigosDeVerificacionTemporales() {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return;
+		}
+		Connection connection = null;
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
+			// Crear gestores de sentencias
+			Statement statement = connection.createStatement();//crear consultas
+			statement.setQueryTimeout(30);  // poner timeout 30 msg
+			
+			// Ejecutar sentencias SQL (Delete)
+//			statement.executeUpdate("drop table if exists person");
+			
+			// Ejecutar sentencias SQL (Update)
+			statement.executeUpdate("create table if not exists codigos (email string, codigo string)");
+
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+	}
+	
+	public static void insertarCodigosDeVerificacion(String correo, String codigo) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return;
+		}
+		Connection connection = null;
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
+			// Crear gestores de sentencias
+			Statement statement = connection.createStatement();//crear consultas
+			statement.setQueryTimeout(30);  // poner timeout 30 msg
+			
+			String sql = "insert into codigos (email, codigo) VALUES (?, ?)";
+
+            // Preparar la consulta
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            // Asignar los valores de las variables a los parámetros
+            preparedStatement.setString(1, correo);     
+            preparedStatement.setString(2, codigo);  
+  
+            preparedStatement.executeUpdate();
+
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+	}
+	public static String obtenerCodigoDeVerificacion(String correo) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return null;
+		}
+		Connection connection = null;
+		String codigo = null;
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");
+			String sql = "SELECT codigo FROM codigos WHERE email = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, correo);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			if (resultSet.next()) {
+				codigo = resultSet.getString("codigo");
+			} 
+
+		} catch (SQLException e) {
+			System.err.println("Error SQL: " + e.getMessage());
+		} finally {
+			try {
+				if (connection != null) connection.close();
+			} catch (SQLException e) {
+				System.err.println(e);
+			}
+		}
+		return codigo;
 	}
 
 

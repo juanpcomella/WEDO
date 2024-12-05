@@ -18,9 +18,9 @@ public class MainWindow extends JFrame {
 
     public MainWindow(Usuario usuario) {
     	
-    	for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())){
-        	System.out.println(evento.getNombre());
-        }
+//    	for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())){
+//        	System.out.println(evento.getNombre());
+//        }
         setTitle("WEDO");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
