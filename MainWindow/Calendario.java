@@ -267,7 +267,7 @@ public class Calendario extends JPanel {
 
             JPanel diaPanel = new JPanel();
             diaPanel.setLayout(new BorderLayout());
-            diaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
+            //diaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
             diaPanel.setBackground(Color.WHITE);
             diaPanel.setPreferredSize(new Dimension(150, 600));
 
@@ -320,7 +320,8 @@ public class Calendario extends JPanel {
                         }
 
                         int yPos = (inicioEvento - hora) * 25;
-                        eventoLabel.setBounds(0, yPos, bloqueHora.getWidth(), 25 * duracionBloques);
+                        int alturaEvento = duracionBloques * 25;
+                        eventoLabel.setBounds(0, yPos, bloqueHora.getWidth(), alturaEvento);
 
                         bloqueHora.addComponentListener(new ComponentAdapter() {
                             @Override
@@ -328,14 +329,13 @@ public class Calendario extends JPanel {
                                 eventoLabel.setBounds(0, yPos, bloqueHora.getWidth(), 25 * duracionBloques);
                             }
                         });
-
+                       
                         bloqueHora.add(eventoLabel);
                     }
                 }
 
                 horasPanel.add(bloqueHora);
             }
-
 
             diaPanel.add(horasPanel, BorderLayout.CENTER);
 
@@ -352,8 +352,6 @@ public class Calendario extends JPanel {
         diasPanel.revalidate();
         diasPanel.repaint();
     }
-
-
 
     private void mostrarDialogo(LocalDate date, Usuario usuario) {
         JDialog dialog = new JDialog();
