@@ -17,7 +17,22 @@ import java.util.Map;
 public class VentanaLoginDef extends JFrame {
 
     private static final long serialVersionUID = 1L;
-
+    
+    
+    
+    public int insertarContraseña(JPanel panel, JTextField textfield) {
+    	int option3 = JOptionPane.showOptionDialog(
+                panel,
+                new Object[]{"Introduce tu nueva contraseña", textfield},
+                "",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                new Object[]{"Aceptar"}, // Botón personalizado
+                "Aceptar"
+        );
+    	return option3;
+    }
 
 	public VentanaLoginDef() {
         setTitle("WEDO - Inicio de sesión");
@@ -170,6 +185,7 @@ public class VentanaLoginDef extends JFrame {
                 		EnviarCorreoRecuperacion.enviarCorreo(correoRep);
                 	}else {
                         JOptionPane.showMessageDialog(null,"Usuario o correo no encontrados.");
+                        actionPerformed(e);
                 	}
                 	int option2 = JOptionPane.showOptionDialog(
                             panel,
@@ -183,26 +199,20 @@ public class VentanaLoginDef extends JFrame {
                     );
                 	//HAY QUE HACER CAMBIOS
             		if(option2 == 0) {
-            			System.out.println(BDs.obtenerCodigoDeVerificacion(correoRep));
             			if(textField2.getText().equals(BDs.obtenerCodigoDeVerificacion(correoRep))) {
-            				int option3 = JOptionPane.showOptionDialog(
-                                    panel,
-                                    new Object[]{"Introduce tu nueva contraseña", textField3},
-                                    "",
-                                    JOptionPane.OK_CANCEL_OPTION,
-                                    JOptionPane.PLAIN_MESSAGE,
-                                    null,
-                                    new Object[]{"Aceptar"}, // Botón personalizado
-                                    "Aceptar"
-                            );
-            				if(option3 == 0 & textField3.getText() != null) {
-//            					System.out.println(correoRep);
-//            					System.out.println(usuarioParaContraseña);
-//            					System.out.println(textField3.getText());
+            				int option3 = insertarContraseña(panel, textField3);
+            				boolean contraseñaNoValida = textField3.getText().trim().isEmpty();//ES FALSE
+            				while(option3 == 0 & contraseñaNoValida == false) {
+            					
+            				}
+            				if(option3 == 0 & contraseñaNoValida == false) {
             					BDs.updatePassword(usuarioParaContraseña, textField3.getText());
                                 JOptionPane.showMessageDialog(null,"¡Contraseña actualizada exitosamente!");
             				}else {
-                                JOptionPane.showMessageDialog(null,"Introduce una contraseña nueva.");
+            					while(contraseñaNoValida == true) {
+            						
+            					}
+                                JOptionPane.showMessageDialog(null,"Introduce una contraseña válida.");
             				}
             			}else {
                             JOptionPane.showMessageDialog(null,"Código de verificación incorrecto.");
@@ -211,6 +221,7 @@ public class VentanaLoginDef extends JFrame {
                 }
 			}
         });
+        
 
         gbc.gridy = 7;
         datos.add(olvidado, gbc);
