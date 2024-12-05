@@ -669,6 +669,11 @@ public class VentanaTienda extends JFrame {
         apodosT.getTableHeader().setPreferredSize(new Dimension(0, 0));
         //iconoT.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         apodosT.setRowHeight(100);//new
+        
+        for (int i = 0; i < apodosT.getRowCount(); i++) {
+            Point celda_comprada = new Point(i, 1); // Crear un Point para la celda en la fila i y columna 1
+            estadoCeldasApodo.put(celda_comprada, false); // Añadir al HashMap con valor por defecto false
+        }
 
     }
     
