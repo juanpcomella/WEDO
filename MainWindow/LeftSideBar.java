@@ -2,6 +2,9 @@ package MainWindow;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 
 public class LeftSideBar extends JPanel {
 
@@ -14,8 +17,11 @@ public class LeftSideBar extends JPanel {
         panel.setBackground(Color.LIGHT_GRAY);
         panel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
-        JButton button1 = new JButton("1");
+        JButton button1 = new JButton("+");
+
+
         panel.add(button1);
+
 
 
 
