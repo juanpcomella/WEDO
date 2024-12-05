@@ -178,6 +178,7 @@ public class VentanaLoginDef extends JFrame {
                             new Object[]{"Aceptar"}, // Botón personalizado
                             "Aceptar"
                     );
+                	//HAY QUE HACER CAMBIOS
             		if(option2 == 0) {
             			System.out.println(BDs.obtenerCodigoDeVerificacion(correoRep));
             			if(textField2.getText().equals(BDs.obtenerCodigoDeVerificacion(correoRep))) {
