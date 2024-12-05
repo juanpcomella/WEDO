@@ -10,3 +10,9 @@ build/
 
 # Ignore JARs and compiled classes
 *.class
+
+# Ignorar base de dato
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
