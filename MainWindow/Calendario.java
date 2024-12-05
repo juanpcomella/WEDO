@@ -330,8 +330,17 @@ public class Calendario extends JPanel {
                                 eventoLabel.setBounds(0, yPos, bloqueHora.getWidth(), 25 * duracionBloques);
                             }
                         });
-                       
+                        
+                        
                         bloqueHora.add(eventoLabel);
+                        
+                        eventoLabel.addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mouseClicked(MouseEvent e) {
+                                mostrarEvento(evento, diaActual, usuario);
+                            }
+                        });
+
                     }
                 }
 
@@ -346,6 +355,8 @@ public class Calendario extends JPanel {
                     mostrarDialogo(diaActual, usuario);
                 }
             });
+            
+            
 
             diasPanel.add(diaPanel);
         }
