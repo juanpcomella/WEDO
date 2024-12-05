@@ -474,11 +474,11 @@ public class Calendario extends JPanel {
     private void mostrarEvento(Evento evento, LocalDate date, Usuario usuario) {
         JDialog dialog = new JDialog();
         dialog.setTitle("Evento para el " + date.toString());
-        dialog.setSize(300, 200); 
+        dialog.setSize(500, 400); 
         dialog.setLocationRelativeTo(this);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4, 1, 10, 10));
+        panel.setLayout(new GridLayout(6, 1, 10, 10));
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -496,6 +496,22 @@ public class Calendario extends JPanel {
         JLabel labelFechaEvento = new JLabel(evento.getFecha().format(formatter));
         panel.add(labelFecha);
         panel.add(labelFechaEvento);
+        
+        JLabel labelHoraInicio = new JLabel("Hora de Inicio");
+        LocalTime horaInicioLocalTime = evento.getHoraInicio();
+        DateTimeFormatter formatterFechaInicio = DateTimeFormatter.ofPattern("HH:mm");
+        String horaInicioFormatted = horaInicioLocalTime.format(formatterFechaInicio);
+        JLabel horaInicio = new JLabel(horaInicioFormatted);
+        panel.add(labelHoraInicio);
+        panel.add(horaInicio);
+        
+        JLabel labelHoraFinal = new JLabel("Hora de Inicio");
+        LocalTime horaFinalLocalTime = evento.getHoraFin();
+        DateTimeFormatter formatterFechaFinal = DateTimeFormatter.ofPattern("HH:mm");
+        String horaFinalFormatted = horaFinalLocalTime.format(formatterFechaFinal);
+        JLabel horaFinal = new JLabel(horaFinalFormatted);
+        panel.add(labelHoraFinal);
+        panel.add(horaFinal);
 
         JButton botonEliminar = new JButton("Eliminar evento");
         botonEliminar.setBackground(Color.RED); 
