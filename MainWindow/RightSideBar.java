@@ -16,7 +16,6 @@ public class RightSideBar extends JPanel {
     private ArrayList<String> habitosDiarios; 
     private JPanel objetivosPanel;
     private JPanel habitosPanel;
-    private static final String ARCHIVO_OBJETIVOS = "BaseDeDatos/objetivos_guardados.txt";
     private static final String ARCHIVO_HABITOS = "BaseDeDatos/habitos_guardados.txt";
     private ArrayList<Objetivo> listaObjetivos = new ArrayList<>();
 
