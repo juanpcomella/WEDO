@@ -11,6 +11,7 @@ import org.w3c.dom.Text;
 import MainWindow.Categorias;
 import MainWindow.Evento;
 import MainWindow.Habito;
+import MainWindow.Objetivo;
 
 public class BDs {
 	public static void crearTablaUsuarios() {
@@ -970,7 +971,7 @@ public class BDs {
 
 		return sigue;
 	}
-	
+	//AQUI EMPIEZAN LOS METODOS DE LOS HABITOS
 	public static void crearTablaHabitosTemporales() {
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -1119,6 +1120,126 @@ public class BDs {
 	            System.err.println("Error al cerrar la conexión: " + e.getMessage());
 	        }
 	    }
+	}
+	
+	//AQUI EMPIEZAN LOS METODOS DE LOS OBJETIVOS
+	public static void crearTablaObjetivos() {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return;
+		}
+		Connection connection = null;
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
+			// Crear gestores de sentencias
+			Statement statement = connection.createStatement();//crear consultas
+			statement.setQueryTimeout(30);  // poner timeout 30 msg
+			
+			// Ejecutar sentencias SQL (Delete)
+//			statement.executeUpdate("drop table if exists person");
+			
+			// Ejecutar sentencias SQL (Update)
+			statement.executeUpdate("create table if not exists objetivos (username string, nombre_obj string, descripcion_obj string, fecha_obj string, completado_obj boolean)");
+
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+	}
+	
+	public static void insertarObjetivos(String nombreUsuario, String nombreObj, String descripcionObj, String fechaObj, boolean completadoObj) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return;
+		}
+		Connection connection = null;
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
+			// Crear gestores de sentencias
+			Statement statement = connection.createStatement();//crear consultas
+			statement.setQueryTimeout(30);  // poner timeout 30 msg
+			
+			String sql = "insert into objetivos (username, nombre_obj, descripcion_obj, fecha_obj, completado_obj) VALUES (?, ?, ?, ?, ?)";
+
+            // Preparar la consulta
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            // Asignar los valores de las variables a los parámetros
+            preparedStatement.setString(1, nombreUsuario);     
+            preparedStatement.setString(2, nombreObj);
+            preparedStatement.setString(3, descripcionObj);  
+            preparedStatement.setString(4, fechaObj);
+            preparedStatement.setBoolean(5, completadoObj);  
+            
+            preparedStatement.executeUpdate();
+
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+	}
+	
+	public static ArrayList<Objetivo> crearListaObjetivos(String nombreUsuario) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+		}
+		Connection connection = null;
+		ArrayList<Objetivo> objetivos = new ArrayList<>();
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
+			// Crear gestores de sentencias
+			Statement statement = connection.createStatement();//crear consultas
+			statement.setQueryTimeout(30);  // poner timeout 30 msg
+			
+			String sql = "SELECT nombre_obj, descripcion_obj, fecha_obj, completado_obj FROM objetivos WHERE username = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setString(1, nombreUsuario);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+        		Objetivo objetivo = new Objetivo(null, null, null, false);
+        		objetivo.setNombre(resultSet.getString("nombre_obj"));
+        		objetivo.setDescripcion(resultSet.getString("descripcion_obj"));
+        		objetivo.setFechaFin(resultSet.getDate("fecha_obj").toLocalDate());
+        		objetivo.setCompletado(resultSet.getBoolean("completado_obj"));
+
+                objetivos.add(objetivo);
+            } 
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+		return objetivos;
 	}
 
 //	public static void main(String[] args) {
