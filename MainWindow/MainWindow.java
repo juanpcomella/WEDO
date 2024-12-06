@@ -58,7 +58,7 @@ public class MainWindow extends JFrame {
         panelCentro.add(calendario, BorderLayout.CENTER);
 
 
-        RightSideBar rightSideBar = new RightSideBar();
+        RightSideBar rightSideBar = new RightSideBar(usuario);
         int rsbWidth = (int) (getWidth() * 0.3);
         rightSideBar.setPreferredSize(new Dimension(rsbWidth, getHeight()));
         panelEste.add(rightSideBar, BorderLayout.EAST);

@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 import BaseDeDatos.BDs;
+import StartingWindows.Usuario;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -22,7 +23,7 @@ public class RightSideBar extends JPanel {
     private JPanel habitosPanel;
     private ArrayList<Objetivo> listaObjetivos = new ArrayList<>();
 
-    public RightSideBar() {
+    public RightSideBar(Usuario usuario) {
         setLayout(new GridLayout(3, 1, 5, 5));
         setBackground(new Color(50,70,90));
         setBorder(new LineBorder(new Color(173, 216, 230),10));
@@ -52,9 +53,13 @@ public class RightSideBar extends JPanel {
         añadirObjetivoButton.setForeground(new Color(50,70,90));
         añadirObjetivoButton.setBackground(Color.WHITE);
         añadirObjetivoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
+        
+        BDs.crearTablaObjetivos();
+        for(Objetivo objetivo: BDs.crearListaObjetivos(usuario.getNombreUsuario())) {
+            añadirObjetivo(objetivo.getNombre(), objetivo.getFechaFin().toString());
+        }
         añadirObjetivoButton.addActionListener(e -> {
-            mostrarDialogoAñadirObjetivo();
+            mostrarDialogoAñadirObjetivo(usuario);
         });
         objetivos.add(Box.createVerticalStrut(20));
         objetivos.add(añadirObjetivoButton);
@@ -100,7 +105,7 @@ public class RightSideBar extends JPanel {
     }
     
     //METODOS OBJETIVOS-----------------------------------------------------------------------------------
-    private void mostrarDialogoAñadirObjetivo() {
+    private void mostrarDialogoAñadirObjetivo(Usuario usuario) {
         JPanel dialogPanel = new JPanel();
         dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
 
@@ -123,6 +128,7 @@ public class RightSideBar extends JPanel {
             String fecha = fechaField.getText().trim();
 
             if (!nombre.isEmpty() && !descripcion.isEmpty() && !fecha.isEmpty()) {
+                BDs.insertarObjetivos(usuario.getNombreUsuario(), nombre, descripcion, fecha, false);
                 añadirObjetivo(nombre, fecha);
             } else {
                 JOptionPane.showMessageDialog(this, "Todos los campos deben ser completados.", "Error", JOptionPane.ERROR_MESSAGE);

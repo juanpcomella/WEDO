@@ -1223,7 +1223,7 @@ public class BDs {
         		Objetivo objetivo = new Objetivo(null, null, null, false);
         		objetivo.setNombre(resultSet.getString("nombre_obj"));
         		objetivo.setDescripcion(resultSet.getString("descripcion_obj"));
-        		objetivo.setFechaFin(resultSet.getDate("fecha_obj").toLocalDate());
+        		objetivo.setFechaFin(LocalDate.parse((resultSet.getString("fecha_obj"))));
         		objetivo.setCompletado(resultSet.getBoolean("completado_obj"));
 
                 objetivos.add(objetivo);
