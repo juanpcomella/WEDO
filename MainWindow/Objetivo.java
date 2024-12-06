@@ -1,6 +1,7 @@
 package MainWindow;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class Objetivo {
 	public String nombre;
@@ -9,13 +10,17 @@ public class Objetivo {
 	public int cuantoQueda;
 	public boolean completado;
 	
-	public Objetivo(String nombre, String descripcion, LocalDate fechaFin, int cuantoQueda, boolean completado) {
+	public Objetivo(String nombre, String descripcion, LocalDate fechaFin,boolean completado) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.fechaFin = fechaFin;
-		this.cuantoQueda = cuantoQueda;
 		this.completado = completado;
 	}
+	
+	public int calcularCuantoQueda() {
+        LocalDate hoy = LocalDate.now();
+        return (int) ChronoUnit.DAYS.between(hoy, fechaFin);
+    }
 
 	public String getNombre() {
 		return nombre;
