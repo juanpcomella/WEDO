@@ -58,7 +58,6 @@ public class RightSideBar extends JPanel {
         objetivos.add(añadirObjetivoButton);
 //        objetivos.add(Box.createVerticalStrut(30));
         add(objetivos);
-//        add(new JPanel());
         JPanel habitos = new JPanel();
         habitos.setBackground(new Color(50,70,90));
         habitos.setLayout(new BoxLayout(habitos, BoxLayout.Y_AXIS));
