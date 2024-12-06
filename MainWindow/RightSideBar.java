@@ -88,7 +88,7 @@ public class RightSideBar extends JPanel {
         if (habitosDiarios.isEmpty()) {
             generarHabitosDiarios();
         }
-
+        
         actualizarHabitosPanel();
 
         habitos.add(habitosPanel);
@@ -97,12 +97,6 @@ public class RightSideBar extends JPanel {
         JPanel vacio = new JPanel();
         vacio.setBackground(new Color(50,70,90));
         add(vacio);
-//        
-//        LocalTime horaActual = LocalTime.now();
-//        LocalTime horaObjetivo = LocalTime.MIDNIGHT; 
-//        while(!horaActual.equals(horaObjetivo)) {
-//        	
-//        }
     }
     
     //METODOS OBJETIVOS-----------------------------------------------------------------------------------
