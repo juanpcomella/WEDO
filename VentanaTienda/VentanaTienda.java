@@ -809,12 +809,12 @@ public class VentanaTienda extends JFrame {
         JPanel maestroPanel = new JPanel();
         maestroPanel.add(maestroL);
         
+        maestroPanel.setBackground(Color.red);
+        
         modeloApodos.addRow(new Object[]{maestroPanel, new Object[]{100, icon2}});
         
         
         
-        
-
         for (int i = 0; i < apodosT.getRowCount(); i++) {
             Point celda_comprada = new Point(i, 1); // Crear un Point para la celda en la fila i y columna 1
             estadoCeldasApodo.put(celda_comprada, false); // Añadir al HashMap con valor por defecto false
