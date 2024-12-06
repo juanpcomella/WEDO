@@ -10,6 +10,7 @@ import org.w3c.dom.Text;
 
 import MainWindow.Categorias;
 import MainWindow.Evento;
+import MainWindow.Habito;
 
 public class BDs {
 	public static void crearTablaUsuarios() {
@@ -969,6 +970,157 @@ public class BDs {
 
 		return sigue;
 	}
+	
+	public static void crearTablaHabitosTemporales() {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return;
+		}
+		Connection connection = null;
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
+			// Crear gestores de sentencias
+			Statement statement = connection.createStatement();//crear consultas
+			statement.setQueryTimeout(30);  // poner timeout 30 msg
+			
+			// Ejecutar sentencias SQL (Delete)
+//			statement.executeUpdate("drop table if exists person");
+			
+			// Ejecutar sentencias SQL (Update)
+			statement.executeUpdate("create table if not exists habitos (fecha_hoy string, habito string)");
+
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+	}
+	
+	public static void insertarHabitosTemporales(String fecha, String habito) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return;
+		}
+		Connection connection = null;
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
+			// Crear gestores de sentencias
+			Statement statement = connection.createStatement();//crear consultas
+			statement.setQueryTimeout(30);  // poner timeout 30 msg
+			
+			String sql = "insert into habitos (fecha_hoy, habito) VALUES (?, ?)";
+
+            // Preparar la consulta
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            // Asignar los valores de las variables a los parámetros
+            preparedStatement.setString(1, fecha);     
+            preparedStatement.setString(2, habito);  
+            
+            preparedStatement.executeUpdate();
+
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+	}
+	
+	public static ArrayList<Habito> crearListaHabitos(String fecha) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+		}
+		Connection connection = null;
+		ArrayList<Habito> habitos = new ArrayList<>();
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");//a partir de los ultimo : es donde quieres que se guarden
+			// Crear gestores de sentencias
+			Statement statement = connection.createStatement();//crear consultas
+			statement.setQueryTimeout(30);  // poner timeout 30 msg
+			
+			String sql = "SELECT fecha_hoy, habito FROM habitos WHERE fecha_hoy = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setString(1, fecha);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+        		Habito habito = new Habito(null, null, false);
+        		habito.setFecha(resultSet.getString("fecha_hoy"));
+        		habito.setNombre(resultSet.getString("habito"));     
+                habitos.add(habito);
+            } 
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+		return habitos;
+	}
+	
+	public static void eliminarTodosLosHabitos() {
+	    try {
+	        // Cargar el driver de SQLite
+	        Class.forName("org.sqlite.JDBC");
+	    } catch (ClassNotFoundException e) {
+	        System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+	        return;
+	    }
+
+	    Connection connection = null;
+	    try {
+	        // Crear una conexión a la base de datos
+	        connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuariosYeventos");
+
+	        // Crear gestor de sentencias
+	        Statement statement = connection.createStatement();
+	        statement.setQueryTimeout(30);  // Poner un timeout de 30 segundos
+
+	        // Consulta SQL para eliminar todas las tuplas de la tabla "habitos"
+	        String sql = "DELETE FROM habitos";
+
+	        // Ejecutar la consulta
+	        statement.executeUpdate(sql);
+
+	    } catch (SQLException e) {
+	        System.err.println("Error al eliminar hábitos: " + e.getMessage());
+	    } finally {
+	        try {
+	            if (connection != null) {
+	                connection.close();  // Cerrar la conexión
+	            }
+	        } catch (SQLException e) {
+	            System.err.println("Error al cerrar la conexión: " + e.getMessage());
+	        }
+	    }
+	}
+
 //	public static void main(String[] args) {
 //		crearTablaCodigosDeVerificacionTemporales();
 //	}

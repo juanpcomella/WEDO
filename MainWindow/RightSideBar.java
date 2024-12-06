@@ -3,11 +3,14 @@ package MainWindow;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
+import BaseDeDatos.BDs;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.Timer;
 
@@ -17,7 +20,6 @@ public class RightSideBar extends JPanel {
     private ArrayList<String> habitosDiarios; 
     private JPanel objetivosPanel;
     private JPanel habitosPanel;
-    private static final String ARCHIVO_HABITOS = "BaseDeDatos/habitos_guardados.txt";
     private ArrayList<Objetivo> listaObjetivos = new ArrayList<>();
 
     public RightSideBar() {
@@ -28,7 +30,6 @@ public class RightSideBar extends JPanel {
         // Panel de Objetivos
         JPanel objetivos = new JPanel();
         objetivos.setLayout(new BoxLayout(objetivos, BoxLayout.Y_AXIS));
-//        objetivos.setBackground(Color.WHITE);
         objetivos.setBackground(new Color(50,70,90));
         objetivos.setBorder(new LineBorder(new Color(50,70,90),5));
 
@@ -48,16 +49,20 @@ public class RightSideBar extends JPanel {
         objetivos.add(objetivosScrollPane);
 
         JButton añadirObjetivoButton = new JButton("Añadir Objetivo");
+        añadirObjetivoButton.setForeground(new Color(50,70,90));
+        añadirObjetivoButton.setBackground(Color.WHITE);
         añadirObjetivoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        añadirObjetivoButton.setFont(new Font("Arial", Font.PLAIN, 14));
 
         añadirObjetivoButton.addActionListener(e -> {
             mostrarDialogoAñadirObjetivo();
         });
         objetivos.add(Box.createVerticalStrut(20));
         objetivos.add(añadirObjetivoButton);
-//        objetivos.add(Box.createVerticalStrut(30));
+        
         add(objetivos);
+        
+        //HABITOS-----------------------------------------------------------------------
+        //Panel habitos
         JPanel habitos = new JPanel();
         habitos.setBackground(new Color(50,70,90));
         habitos.setLayout(new BoxLayout(habitos, BoxLayout.Y_AXIS));
@@ -69,13 +74,16 @@ public class RightSideBar extends JPanel {
         habitosLabel.setFont(new Font("Arial", Font.BOLD, 18));
         habitosLabel.setForeground(Color.WHITE);
         habitos.add(habitosLabel);
-
+        
+        //PASO 1 -------------------------------------------------------------------------
+        //lista de todos los habitos (solo el nombre del habito)
         habitosTotales = cargarHabitosDesdeCSV("BaseDeDatos/objetivos_diarios.csv");
+        //--------------------------------------------------------------------------------
+        BDs.crearTablaHabitosTemporales();
         habitosDiarios = cargarHabitosDiarios(); 
         habitosPanel = new JPanel();
         habitosPanel.setLayout(new GridLayout(4, 1, 5, 5));
         habitosPanel.setBackground(new Color(50,70,90));
-//        habitosPanel.setBorder(new LineBorder(new Color(50,70,90),5));
 
         if (habitosDiarios.isEmpty()) {
             generarHabitosDiarios();
@@ -87,11 +95,17 @@ public class RightSideBar extends JPanel {
         add(habitos);
 
         JPanel vacio = new JPanel();
-//        vacio.setBackground(Color.LIGHT_GRAY); 
         vacio.setBackground(new Color(50,70,90));
         add(vacio);
+//        
+//        LocalTime horaActual = LocalTime.now();
+//        LocalTime horaObjetivo = LocalTime.MIDNIGHT; 
+//        while(!horaActual.equals(horaObjetivo)) {
+//        	
+//        }
     }
-
+    
+    //METODOS OBJETIVOS-----------------------------------------------------------------------------------
     private void mostrarDialogoAñadirObjetivo() {
         JPanel dialogPanel = new JPanel();
         dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
@@ -121,7 +135,7 @@ public class RightSideBar extends JPanel {
             }
         }
     }
-
+   
     private void añadirObjetivo(String nombre, String fechaCumplimiento) {
         Objetivo objetivo = new Objetivo(nombre, "Descripción del objetivo", LocalDate.parse(fechaCumplimiento), false);
         objetivo.setCuantoQueda(obtenerCuantoQueda(fechaCumplimiento)); 
@@ -188,15 +202,20 @@ public class RightSideBar extends JPanel {
             return "Fecha inválida";
         }
     }
-
+    //------------------------------------------------------------------------------------------------
+    
+    //METODOS HABITOS---------------------------------------------------------------------------------
+    //PASO 2 --> GENERAR UNA LISTA (habitosDiarios) CON SOLO 4 HABITOS (LOS QUE LUEGO SE PONDRAN EN EL PANEL)
     private void generarHabitosDiarios() {
+    	//habitosTotales = lista de todos los habitos cargados del csv
         if (habitosTotales.size() < 4) {
             habitosDiarios = new ArrayList<>(habitosTotales);
         } else {
             Collections.shuffle(habitosTotales);
+            //habitosDiarios = lista de cuatro habitos aleatorios de habitosTotales
             habitosDiarios = new ArrayList<>(habitosTotales.subList(0, 4));
         }
-        guardarHabitosDiarios();
+        guardarHabitosDiariosEnBD();
     }
 
     private void actualizarHabitosPanel() {
@@ -227,7 +246,8 @@ public class RightSideBar extends JPanel {
         revalidate();
         repaint();
     }
-
+//PARA QUE CAMBIEN LOS HABITOS PASADO UN TIEMPO
+//------------------------------------------------------------------------------
     private void programarActualizacionDiaria() {
         Timer timer = new Timer();
         TimerTask tareaDiaria = new TimerTask() {
@@ -253,36 +273,33 @@ public class RightSideBar extends JPanel {
 
         return medianoche.getTimeInMillis() - ahora.getTimeInMillis();
     }
-
-    private void guardarHabitosDiarios() {
-        try (PrintWriter writer = new PrintWriter(ARCHIVO_HABITOS)) {
+//---------------------------------------------------------------------------------
+    //PASO 3 --> GUARDAMOS LOS 4 HABITOS DE habitosDiarios QUE USAREMOS MAS TARDE EN LA BASE DE DATOS CON LA FECHAS DE "HOY"
+    private void guardarHabitosDiariosEnBD() {
             String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-            writer.println(fechaHoy);
             for (String habito : habitosDiarios) {
-                writer.println(habito);
+            	String nombre_habito;
+                nombre_habito = habito;
+                BDs.insertarHabitosTemporales(fechaHoy, nombre_habito);
             }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error al guardar los hábitos diarios.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }
-
+    //PASO 4 --> COGEMOS DE LA BASE DE DATOS LOS HABITOS CON LA FECHA DE HOY Y METEMOS LOS NOMBRES EN LA LISTA habitos
     private ArrayList<String> cargarHabitosDiarios() {
+    	ArrayList<Habito> habitosConFecha = new ArrayList<>();
         ArrayList<String> habitos = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(ARCHIVO_HABITOS))) {
-            String fechaGuardada = reader.readLine();
             String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-            if (fechaGuardada != null && fechaGuardada.equals(fechaHoy)) {
-                String linea;
-                while ((linea = reader.readLine()) != null) {
-                    habitos.add(linea.trim());
-                }
+            habitosConFecha = BDs.crearListaHabitos(fechaHoy);
+            BDs.eliminarTodosLosHabitos();
+            
+            for(Habito habito: habitosConFecha) {
+            	habitos.add(habito.getNombre());
             }
-        } catch (IOException e) {
 
-        }
         return habitos;
     }
 
+    //PASO 1 --> CARGAR TODOS LOS HABITOS DEL CSV ----------------------------------------------------------
+    //METE EN LA LISTA SOLO LOS NOMBRES DE LOS HABITOS (UNA COLUMNA)
     private ArrayList<String> cargarHabitosDesdeCSV(String archivo) {
         ArrayList<String> habitos = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
@@ -299,4 +316,5 @@ public class RightSideBar extends JPanel {
         }
         return habitos;
     }
+    
 }
