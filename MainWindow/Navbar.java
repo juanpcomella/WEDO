@@ -26,7 +26,7 @@ public class Navbar extends JPanel {
     public Navbar(LeftSideBar leftSideBar, Usuario usuario) {
         Usuario CURRENT_USER = usuario;
         setLayout(new GridBagLayout()); // Cambiar a GridBagLayout
-        setBackground(Color.LIGHT_GRAY);
+        setBackground(new Color(173, 216, 230));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 10, 5, 10); // Espaciado entre componentes
@@ -34,6 +34,8 @@ public class Navbar extends JPanel {
 
         // Botón de menú hamburguesa
         JButton hamburgerMenu = new JButton("≡");
+        hamburgerMenu.setBackground(new Color(50,70,90));
+        hamburgerMenu.setForeground(Color.WHITE);
         hamburgerMenu.setFocusable(false);
         hamburgerMenu.setFocusPainted(false);
         hamburgerMenu.setBorderPainted(false);

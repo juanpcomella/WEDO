@@ -1,6 +1,8 @@
 package MainWindow;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -20,18 +22,20 @@ public class RightSideBar extends JPanel {
 
     public RightSideBar() {
         setLayout(new GridLayout(3, 1, 5, 5));
-        setBackground(Color.LIGHT_GRAY);
+        setBackground(new Color(50,70,90));
+        setBorder(new LineBorder(new Color(173, 216, 230),10));
 
         // Panel de Objetivos
         JPanel objetivos = new JPanel();
         objetivos.setLayout(new BoxLayout(objetivos, BoxLayout.Y_AXIS));
-        objetivos.setBackground(Color.WHITE);
-        objetivos.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+//        objetivos.setBackground(Color.WHITE);
+        objetivos.setBackground(new Color(50,70,90));
+        objetivos.setBorder(new LineBorder(new Color(50,70,90),5));
 
         JLabel objetivosLabel = new JLabel("Objetivos");
         objetivosLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         objetivosLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        objetivosLabel.setForeground(Color.BLACK);
+        objetivosLabel.setForeground(Color.WHITE);
         objetivos.add(objetivosLabel);
 
         objetivosPanel = new JPanel();
@@ -50,12 +54,15 @@ public class RightSideBar extends JPanel {
         añadirObjetivoButton.addActionListener(e -> {
             mostrarDialogoAñadirObjetivo();
         });
-
+        objetivos.add(Box.createVerticalStrut(20));
         objetivos.add(añadirObjetivoButton);
+//        objetivos.add(Box.createVerticalStrut(30));
         add(objetivos);
+//        add(new JPanel());
         JPanel habitos = new JPanel();
+        habitos.setBackground(new Color(50,70,90));
         habitos.setLayout(new BoxLayout(habitos, BoxLayout.Y_AXIS));
-        habitos.setBackground(Color.DARK_GRAY);
+        habitos.setBackground(new Color(50,70,90));
         habitos.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         JLabel habitosLabel = new JLabel("Hábitos");
@@ -68,7 +75,8 @@ public class RightSideBar extends JPanel {
         habitosDiarios = cargarHabitosDiarios(); 
         habitosPanel = new JPanel();
         habitosPanel.setLayout(new GridLayout(4, 1, 5, 5));
-        habitosPanel.setBackground(Color.DARK_GRAY);
+        habitosPanel.setBackground(new Color(50,70,90));
+//        habitosPanel.setBorder(new LineBorder(new Color(50,70,90),5));
 
         if (habitosDiarios.isEmpty()) {
             generarHabitosDiarios();
@@ -80,7 +88,8 @@ public class RightSideBar extends JPanel {
         add(habitos);
 
         JPanel vacio = new JPanel();
-        vacio.setBackground(Color.LIGHT_GRAY); 
+//        vacio.setBackground(Color.LIGHT_GRAY); 
+        vacio.setBackground(new Color(50,70,90));
         add(vacio);
     }
 
