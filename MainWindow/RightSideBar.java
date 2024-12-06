@@ -3,19 +3,17 @@ package MainWindow;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class RightSideBar extends JPanel {
 
-    private List<String> habitosDiarios;
+    private ArrayList<String> habitosTotales; // Lista completa de hábitos desde el CSV
+    private ArrayList<String> habitosDiarios; // Hábitos diarios seleccionados
     private JPanel habitosPanel;
+    private static final String ARCHIVO_HABITOS = "BaseDeDatos/habitos_diarios_actuales.csv";
 
     public RightSideBar() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -72,7 +70,6 @@ public class RightSideBar extends JPanel {
         });
 
         objetivos.add(objetivosButton);
-
         add(objetivos);
 
         // Panel de Hábitos
@@ -87,35 +84,36 @@ public class RightSideBar extends JPanel {
         habitosLabel.setForeground(Color.WHITE);
         habitos.add(habitosLabel);
 
-        habitosDiarios = cargarHabitosDesdeCSV("BaseDeDatos/objetivos_diarios.csv");
-        if (habitosDiarios.size() > 4) {
-            habitosDiarios = seleccionarHabitosAleatorios(habitosDiarios);
-        }
-
+        habitosTotales = cargarHabitosDesdeCSV("BaseDeDatos/objetivos_diarios.csv");
+        habitosDiarios = cargarHabitosDiarios(); // Cargar hábitos si ya existen para el día actual
         habitosPanel = new JPanel();
         habitosPanel.setLayout(new GridLayout(4, 1, 5, 5));
         habitosPanel.setBackground(Color.DARK_GRAY);
 
-        actualizarHabitos();
+        if (habitosDiarios.isEmpty()) {
+            generarHabitosDiarios(); // Generar solo si no hay hábitos guardados para hoy
+        }
+
+        actualizarHabitosPanel(); // Actualizar la interfaz con los hábitos actuales
 
         habitos.add(habitosPanel);
         add(habitos);
 
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                SwingUtilities.invokeLater(() -> actualizarHabitos());
-            }
-        }, 0, 86400000);
+        programarActualizacionDiaria();
     }
 
-    private void actualizarHabitos() {
-        habitosPanel.removeAll();
-
-        if (habitosDiarios.size() > 4) {
-            habitosDiarios = seleccionarHabitosAleatorios(habitosDiarios);
+    private void generarHabitosDiarios() {
+        if (habitosTotales.size() < 4) {
+            habitosDiarios = new ArrayList<>(habitosTotales);
+        } else {
+            Collections.shuffle(habitosTotales);
+            habitosDiarios = new ArrayList<>(habitosTotales.subList(0, 4));
         }
+        guardarHabitosDiarios();
+    }
+
+    private void actualizarHabitosPanel() {
+        habitosPanel.removeAll();
 
         for (String habito : habitosDiarios) {
             JButton habitoButton = new JButton(habito);
@@ -131,7 +129,7 @@ public class RightSideBar extends JPanel {
                         JOptionPane.YES_NO_OPTION
                 );
                 if (respuesta == JOptionPane.YES_OPTION) {
-                    habitoButton.setBackground(Color.GREEN); 
+                    habitoButton.setBackground(Color.GREEN);
                 } else {
                     habitoButton.setBackground(Color.RED);
                 }
@@ -143,15 +141,68 @@ public class RightSideBar extends JPanel {
         repaint();
     }
 
-    private List<String> cargarHabitosDesdeCSV(String archivo) {
-        List<String> habitos = new ArrayList<>();
+    private void programarActualizacionDiaria() {
+        Timer timer = new Timer();
+        TimerTask tareaDiaria = new TimerTask() {
+            @Override
+            public void run() {
+                generarHabitosDiarios();
+                SwingUtilities.invokeLater(() -> actualizarHabitosPanel());
+            }
+        };
+
+        long tiempoRestanteHoy = calcularMilisegundosHastaMedianoche();
+        timer.schedule(tareaDiaria, tiempoRestanteHoy, 86400000);
+    }
+
+    private long calcularMilisegundosHastaMedianoche() {
+        Calendar ahora = Calendar.getInstance();
+        Calendar medianoche = (Calendar) ahora.clone();
+        medianoche.set(Calendar.HOUR_OF_DAY, 0);
+        medianoche.set(Calendar.MINUTE, 0);
+        medianoche.set(Calendar.SECOND, 0);
+        medianoche.set(Calendar.MILLISECOND, 0);
+        medianoche.add(Calendar.DAY_OF_YEAR, 1);
+
+        return medianoche.getTimeInMillis() - ahora.getTimeInMillis();
+    }
+
+    private void guardarHabitosDiarios() {
+        try (PrintWriter writer = new PrintWriter(ARCHIVO_HABITOS)) {
+            String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            writer.println(fechaHoy); // Guardar la fecha actual
+            for (String habito : habitosDiarios) {
+                writer.println(habito);
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error al guardar los hábitos diarios.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private ArrayList<String> cargarHabitosDiarios() {
+    	ArrayList<String> habitos = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(ARCHIVO_HABITOS))) {
+            String fechaGuardada = reader.readLine();
+            String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            if (fechaGuardada != null && fechaGuardada.equals(fechaHoy)) {
+                String linea;
+                while ((linea = reader.readLine()) != null) {
+                    habitos.add(linea.trim());
+                }
+            }
+        } catch (IOException e) {
+            // Si el archivo no existe o hay un error, devolvemos una lista vacía
+        }
+        return habitos;
+    }
+
+    private ArrayList<String> cargarHabitosDesdeCSV(String archivo) {
+    	ArrayList<String> habitos = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
             String linea;
             while ((linea = reader.readLine()) != null) {
-                // Asumiendo que el archivo tiene columnas separadas por comas
                 String[] partes = linea.split(",");
                 if (partes.length > 0) {
-                    // Solo usamos la primera columna
                     habitos.add(partes[0].trim());
                 }
             }
@@ -160,10 +211,5 @@ public class RightSideBar extends JPanel {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
         return habitos;
-    }
-
-    private List<String> seleccionarHabitosAleatorios(List<String> habitos) {
-        Collections.shuffle(habitos);
-        return habitos.subList(0, Math.min(4, habitos.size()));
     }
 }
