@@ -48,15 +48,20 @@ public class RightSideBar extends JPanel {
         objetivos.add(objetivosScrollPane);
 
         JButton añadirObjetivoButton = new JButton("Añadir Objetivo");
+        añadirObjetivoButton.setForeground(new Color(50,70,90));
+        añadirObjetivoButton.setBackground(Color.WHITE);
         añadirObjetivoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        añadirObjetivoButton.setFont(new Font("Arial", Font.PLAIN, 14));
+//        añadirObjetivoButton.setFont(new Font("Arial", Font.PLAIN, 14));
 
         añadirObjetivoButton.addActionListener(e -> {
             mostrarDialogoAñadirObjetivo();
         });
         objetivos.add(Box.createVerticalStrut(20));
         objetivos.add(añadirObjetivoButton);
-//        objetivos.add(Box.createVerticalStrut(30));
+        
+        JPanel espacio = new JPanel();
+        espacio.setPreferredSize(new Dimension(10, 30)); 
+        
         add(objetivos);
         JPanel habitos = new JPanel();
         habitos.setBackground(new Color(50,70,90));
