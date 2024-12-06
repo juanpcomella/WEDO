@@ -11,7 +11,6 @@ import java.util.Timer;
 
 public class RightSideBar extends JPanel {
 
-    private ArrayList<String> objetivos; 
     private ArrayList<String> habitosTotales;
     private ArrayList<String> habitosDiarios; 
     private JPanel objetivosPanel;
@@ -136,7 +135,6 @@ public class RightSideBar extends JPanel {
         for (Objetivo objetivo : listaObjetivos) {
             JLabel objetivoLabel = new JLabel(objetivo.getNombre());
 
-            // Configurar el estilo del JLabel
             objetivoLabel.setFont(new Font("Arial", Font.PLAIN, 14));
             objetivoLabel.setBackground(new Color(179, 229, 252));
             objetivoLabel.setForeground(new Color(30, 136, 229)); 
@@ -149,7 +147,6 @@ public class RightSideBar extends JPanel {
             String mensajeConTiempoRestante = "Quedan " + objetivo.getCuantoQueda() + " días";
             objetivoLabel.setText(objetivo.getNombre() + " - " + mensajeConTiempoRestante);
 
-            // Añadir el JLabel al panel
             objetivosPanel.add(objetivoLabel);
         }
 
