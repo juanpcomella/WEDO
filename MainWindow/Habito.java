@@ -1,16 +1,27 @@
 package MainWindow;
 
 public class Habito {
+	public String fecha;
 	public String nombre;
-	public String descipcion;
+	public String descripcion;
 	public boolean completado;
 	
 	public Habito(String nombre, String descripcion, boolean completado) {
 		this.nombre =nombre;
-		this.descipcion = descripcion;
+		this.descripcion = descripcion;
 		this.completado = completado;
 	}
+	public Habito(String fecha, String nombre) {
+		this.fecha = fecha;
+		this.nombre = nombre;
+	}
 
+	public String getFecha() {
+		return fecha;
+	}
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
+	}
 	public String getNombre() {
 		return nombre;
 	}
@@ -20,11 +31,11 @@ public class Habito {
 	}
 
 	public String getDescipcion() {
-		return descipcion;
+		return descripcion;
 	}
 
 	public void setDescipcion(String descipcion) {
-		this.descipcion = descipcion;
+		this.descripcion = descipcion;
 	}
 
 	public boolean isCompletado() {
