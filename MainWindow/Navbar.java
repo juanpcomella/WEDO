@@ -26,7 +26,7 @@ public class Navbar extends JPanel {
     public Navbar(LeftSideBar leftSideBar, Usuario usuario) {
         Usuario CURRENT_USER = usuario;
         setLayout(new GridBagLayout()); // Cambiar a GridBagLayout
-        setBackground(Color.LIGHT_GRAY);
+        setBackground(new Color(173, 216, 230));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 10, 5, 10); // Espaciado entre componentes
@@ -34,11 +34,13 @@ public class Navbar extends JPanel {
 
         // Botón de menú hamburguesa
         JButton hamburgerMenu = new JButton("≡");
+        hamburgerMenu.setBackground(new Color(50,70,90));
+        hamburgerMenu.setForeground(Color.WHITE);
         hamburgerMenu.setFocusable(false);
         hamburgerMenu.setFocusPainted(false);
         hamburgerMenu.setBorderPainted(false);
         hamburgerMenu.setFont(new Font("Arial", Font.BOLD, 30));
-        hamburgerMenu.setPreferredSize(new Dimension(65, 65));
+        hamburgerMenu.setPreferredSize(new Dimension(55, 55));
         gbc.gridx = 0;
         gbc.weightx = 0; // No se expande horizontalmente
         add(hamburgerMenu, gbc);
@@ -93,7 +95,7 @@ public class Navbar extends JPanel {
         gbc.weightx = 1;
         add(searchTF, gbc);
 
-        ImageIcon searchImage = new ImageIcon(Navbar.class.getResource("/imagenes/lupa.png"));
+        ImageIcon searchImage = new ImageIcon(Navbar.class.getResource("/imagenes/lupaDEF-removebg-preview.png"));
         Image searchImagenEscalada = searchImage.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         ImageIcon searchImagenRedimensionada = new ImageIcon(searchImagenEscalada);
         JButton searchIcon = new JButton(searchImagenRedimensionada);

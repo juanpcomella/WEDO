@@ -39,12 +39,18 @@ public class Calendario extends JPanel {
     private void Calendar(Usuario usuario) {
         setLayout(new BorderLayout());
         JPanel panelArriba = new JPanel(new BorderLayout());
+        panelArriba.setBackground(new Color(173, 216, 230));
         tituloLabel = new JLabel(getMonthYearString(), SwingConstants.CENTER);
         tituloLabel.setFont(new Font("Arial", Font.BOLD, 16));
+//        tituloLabel.setBackground(new Color(173, 216, 230));
         panelArriba.add(tituloLabel, BorderLayout.CENTER);
 
         JButton botonPrevio = new JButton("<");
         JButton botonSiguiente = new JButton(">");
+        botonSiguiente.setBackground(new Color(50,70,90));
+        botonSiguiente.setForeground(Color.WHITE);
+        botonPrevio.setBackground(new Color(50,70,90));
+        botonPrevio.setForeground(Color.WHITE);
 
         botonPrevio.addActionListener(e -> {
             if (esVistaSemanal) {
@@ -65,6 +71,7 @@ public class Calendario extends JPanel {
         });
 
         JPanel mesPanel = new JPanel();
+        mesPanel.setBackground(new Color(173, 216, 230));
         mesPanel.add(botonPrevio);
         mesPanel.add(botonSiguiente);
         panelArriba.add(mesPanel, BorderLayout.WEST);
@@ -72,13 +79,17 @@ public class Calendario extends JPanel {
         add(panelArriba, BorderLayout.NORTH);
 
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        panelBotones.setBackground(new Color(173, 216, 230));
         JButton botonVista = new JButton("Cambiar vista");
+        botonVista.setBackground(new Color(50,70,90));
+        botonVista.setForeground(Color.WHITE);
         botonVista.setPreferredSize(new Dimension(120, 30));
         botonVista.addActionListener(e -> toggleView(usuario));
         panelBotones.add(botonVista);
 
         JButton botonMesActual = new JButton("Hoy");
-        botonMesActual.setBackground(Color.LIGHT_GRAY);
+        botonMesActual.setBackground(new Color(50,70,90));
+        botonMesActual.setForeground(Color.WHITE);
         botonMesActual.addActionListener(e -> irMesActual(usuario));
         panelBotones.add(botonMesActual);
 
@@ -86,6 +97,7 @@ public class Calendario extends JPanel {
 
         diasPanel.setLayout(new GridLayout(0, 7));
         add(diasPanel, BorderLayout.CENTER);
+        diasPanel.setBackground(new Color(173, 216, 230));
 
         actualizarVista(usuario);
     }
@@ -188,7 +200,8 @@ public class Calendario extends JPanel {
             JPanel eventosPanel = new JPanel();
             eventosPanel.setLayout(new GridLayout(5, 0));
             eventosPanel.setOpaque(false);
-            
+        	BDs.crearTablaEventos();
+
             for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())) {
                 if (evento.getFecha().equals(date)) {
                     JLabel eventoLabel = new JLabel(evento.getNombre());
@@ -438,7 +451,6 @@ public class Calendario extends JPanel {
         botonGuardar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	BDs.crearTablaEventos();
                 nombreEv = campoNombre.getText();
                 descripcionEv = texto.getText();
                 categoria = (Categorias) categorias.getSelectedItem();
@@ -562,7 +574,7 @@ public class Calendario extends JPanel {
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> Calendario.interfaz(null));
-    }
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() -> Calendario.interfaz(null));
+//    }
 }

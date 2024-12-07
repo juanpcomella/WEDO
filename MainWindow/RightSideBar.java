@@ -1,31 +1,38 @@
 package MainWindow;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+
+import BaseDeDatos.BDs;
+import StartingWindows.Usuario;
+
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.*;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class RightSideBar extends JPanel {
 
-    private List<String> habitosDiarios;
+    private ArrayList<String> habitosTotales;
+    private ArrayList<String> habitosDiarios; 
+    private JPanel objetivosPanel;
     private JPanel habitosPanel;
+    private ArrayList<Objetivo> listaObjetivos = new ArrayList<>();
 
-    public RightSideBar() {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBackground(Color.LIGHT_GRAY);
+    public RightSideBar(Usuario usuario) {
+        setLayout(new GridLayout(3, 1, 5, 5));
+        setBackground(new Color(50,70,90));
+        setBorder(new LineBorder(new Color(173, 216, 230),10));
 
         // Panel de Objetivos
         JPanel objetivos = new JPanel();
         objetivos.setLayout(new BoxLayout(objetivos, BoxLayout.Y_AXIS));
-        objetivos.setBackground(Color.DARK_GRAY);
-        objetivos.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        objetivos.setBackground(new Color(50,70,90));
+        objetivos.setBorder(new LineBorder(new Color(50,70,90),5));
 
         JLabel objetivosLabel = new JLabel("Objetivos");
         objetivosLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -33,52 +40,38 @@ public class RightSideBar extends JPanel {
         objetivosLabel.setForeground(Color.WHITE);
         objetivos.add(objetivosLabel);
 
-        JTextArea objetivosText = new JTextArea(30, 10);
-        JScrollPane objetivosScrollPane = new JScrollPane(objetivosText);
-        objetivosText.setEditable(false);
-        objetivosText.setFont(new Font("Arial", Font.PLAIN, 18));
-        objetivosText.setLineWrap(true);
-        objetivosText.setWrapStyleWord(true);
+        objetivosPanel = new JPanel();
+        objetivosPanel.setLayout(new BoxLayout(objetivosPanel, BoxLayout.Y_AXIS));
+        objetivosPanel.setBackground(Color.WHITE);
 
-        objetivosText.setText("1. ");
-        objetivosText.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    e.consume();
-                    String[] lines = objetivosText.getText().split("\n");
-                    int lineNumber = lines.length + 1;
-                    objetivosText.append("\n" + lineNumber + ". ");
-                }
-            }
-        });
-
+        JScrollPane objetivosScrollPane = new JScrollPane(objetivosPanel);
+        objetivosScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        objetivosScrollPane.setPreferredSize(new Dimension(300, 200));
         objetivos.add(objetivosScrollPane);
 
-        JButton objetivosButton = new JButton("Editar Objetivos");
-        objetivosButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        objetivosButton.setFont(new Font("Arial", Font.PLAIN, 14));
-        boolean[] objBtnEditable = {false};
-
-        objetivosButton.addActionListener(e -> {
-            if (objBtnEditable[0]) {
-                objetivosText.setEditable(true);
-                objetivosButton.setText("Guardar");
-            } else {
-                objetivosText.setEditable(false);
-                objetivosButton.setText("Editar Objetivos");
-            }
-            objBtnEditable[0] = !objBtnEditable[0];
+        JButton añadirObjetivoButton = new JButton("Añadir Objetivo");
+        añadirObjetivoButton.setForeground(new Color(50,70,90));
+        añadirObjetivoButton.setBackground(Color.WHITE);
+        añadirObjetivoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        BDs.crearTablaObjetivos();
+        for(Objetivo objetivo: BDs.crearListaObjetivos(usuario.getNombreUsuario())) {
+            añadirObjetivo(objetivo.getNombre(), objetivo.getFechaFin().toString());
+        }
+        añadirObjetivoButton.addActionListener(e -> {
+            mostrarDialogoAñadirObjetivo(usuario);
         });
-
-        objetivos.add(objetivosButton);
-
+        objetivos.add(Box.createVerticalStrut(20));
+        objetivos.add(añadirObjetivoButton);
+        
         add(objetivos);
-
-        // Panel de Hábitos
+        
+        //HABITOS-----------------------------------------------------------------------
+        //Panel habitos
         JPanel habitos = new JPanel();
+        habitos.setBackground(new Color(50,70,90));
         habitos.setLayout(new BoxLayout(habitos, BoxLayout.Y_AXIS));
-        habitos.setBackground(Color.DARK_GRAY);
+        habitos.setBackground(new Color(50,70,90));
         habitos.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         JLabel habitosLabel = new JLabel("Hábitos");
@@ -86,36 +79,147 @@ public class RightSideBar extends JPanel {
         habitosLabel.setFont(new Font("Arial", Font.BOLD, 18));
         habitosLabel.setForeground(Color.WHITE);
         habitos.add(habitosLabel);
-
-        habitosDiarios = cargarHabitosDesdeCSV("BaseDeDatos/objetivos_diarios.csv");
-        if (habitosDiarios.size() > 4) {
-            habitosDiarios = seleccionarHabitosAleatorios(habitosDiarios);
-        }
-
+        
+        //PASO 1 -------------------------------------------------------------------------
+        //lista de todos los habitos (solo el nombre del habito)
+        habitosTotales = cargarHabitosDesdeCSV("BaseDeDatos/objetivos_diarios.csv");
+        //--------------------------------------------------------------------------------
+        BDs.crearTablaHabitosTemporales();
+        habitosDiarios = cargarHabitosDiarios(usuario); 
         habitosPanel = new JPanel();
         habitosPanel.setLayout(new GridLayout(4, 1, 5, 5));
-        habitosPanel.setBackground(Color.DARK_GRAY);
+        habitosPanel.setBackground(new Color(50,70,90));
 
-        actualizarHabitos();
+        if (habitosDiarios.isEmpty()) {
+            generarHabitosDiarios(usuario);
+        }
+        
+        actualizarHabitosPanel();
 
         habitos.add(habitosPanel);
         add(habitos);
 
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                SwingUtilities.invokeLater(() -> actualizarHabitos());
+        JPanel vacio = new JPanel();
+        vacio.setBackground(new Color(50,70,90));
+        add(vacio);
+    }
+    
+    //METODOS OBJETIVOS-----------------------------------------------------------------------------------
+    private void mostrarDialogoAñadirObjetivo(Usuario usuario) {
+        JPanel dialogPanel = new JPanel();
+        dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
+
+        JTextField nombreField = new JTextField();
+        JTextField descripcionField = new JTextField();
+        JTextField fechaField = new JTextField();
+
+        dialogPanel.add(new JLabel("Nombre del objetivo:"));
+        dialogPanel.add(nombreField);
+        dialogPanel.add(new JLabel("Descripción del objetivo:"));
+        dialogPanel.add(descripcionField);
+        dialogPanel.add(new JLabel("Fecha de cumplimiento (YYYY-MM-DD):"));
+        dialogPanel.add(fechaField);
+
+        int option = JOptionPane.showConfirmDialog(this, dialogPanel, "Añadir Objetivo", JOptionPane.OK_CANCEL_OPTION);
+
+        if (option == JOptionPane.OK_OPTION) {
+            String nombre = nombreField.getText().trim();
+            String descripcion = descripcionField.getText().trim();
+            String fecha = fechaField.getText().trim();
+
+            if (!nombre.isEmpty() && !descripcion.isEmpty() && !fecha.isEmpty()) {
+                BDs.insertarObjetivos(usuario.getNombreUsuario(), nombre, descripcion, fecha, false);
+                añadirObjetivo(nombre, fecha);
+            } else {
+                JOptionPane.showMessageDialog(this, "Todos los campos deben ser completados.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }, 0, 86400000);
+        }
+    }
+   
+    private void añadirObjetivo(String nombre, String fechaCumplimiento) {
+        Objetivo objetivo = new Objetivo(nombre, "Descripción del objetivo", LocalDate.parse(fechaCumplimiento), false);
+        objetivo.setCuantoQueda(obtenerCuantoQueda(fechaCumplimiento)); 
+
+        listaObjetivos.add(objetivo);
+
+        ordenarObjetivosPorFecha();
+
+        actualizarPanelObjetivos();
     }
 
-    private void actualizarHabitos() {
-        habitosPanel.removeAll();
+    private void ordenarObjetivosPorFecha() {
+        listaObjetivos.sort(Comparator.comparingInt(Objetivo::getCuantoQueda));
+    }
 
-        if (habitosDiarios.size() > 4) {
-            habitosDiarios = seleccionarHabitosAleatorios(habitosDiarios);
+    private void actualizarPanelObjetivos() {
+        objetivosPanel.removeAll();
+
+        for (Objetivo objetivo : listaObjetivos) {
+            JLabel objetivoLabel = new JLabel(objetivo.getNombre());
+
+            objetivoLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+            objetivoLabel.setBackground(new Color(179, 229, 252));
+            objetivoLabel.setForeground(new Color(30, 136, 229)); 
+            objetivoLabel.setOpaque(true); 
+            objetivoLabel.setHorizontalAlignment(SwingConstants.CENTER); 
+            objetivoLabel.setPreferredSize(new Dimension(getWidth(), 40));
+            objetivoLabel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40)); 
+            objetivoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); 
+
+            String mensajeConTiempoRestante = "Quedan " + objetivo.getCuantoQueda() + " días";
+            objetivoLabel.setText(objetivo.getNombre() + " - " + mensajeConTiempoRestante);
+
+            objetivosPanel.add(objetivoLabel);
         }
+
+        revalidate();
+        repaint();
+    }
+
+    private int obtenerCuantoQueda(String fechaCumplimiento) {
+        LocalDate fechaObjetivo = LocalDate.parse(fechaCumplimiento);
+        LocalDate fechaHoy = LocalDate.now();
+        return (int) java.time.temporal.ChronoUnit.DAYS.between(fechaHoy, fechaObjetivo);
+    }
+
+    private String calcularTiempoRestante(String fechaCumplimiento) {
+        try {
+            SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+            Date fechaObjetivo = formatoFecha.parse(fechaCumplimiento);
+            Date fechaHoy = new Date();
+            long diferenciaMillis = fechaObjetivo.getTime() - fechaHoy.getTime();
+            long diasRestantes = diferenciaMillis / (1000 * 60 * 60 * 24);
+
+            if (diasRestantes < 0) {
+                return "¡El objetivo ya pasó!";
+            } else if (diasRestantes == 0) {
+                return "¡Hoy es el día!";
+            } else {
+                return diasRestantes + " días restantes";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Fecha inválida";
+        }
+    }
+    //------------------------------------------------------------------------------------------------
+    
+    //METODOS HABITOS---------------------------------------------------------------------------------
+    //PASO 2 --> GENERAR UNA LISTA (habitosDiarios) CON SOLO 4 HABITOS (LOS QUE LUEGO SE PONDRAN EN EL PANEL)
+    private void generarHabitosDiarios(Usuario usuario) {
+    	//habitosTotales = lista de todos los habitos cargados del csv
+        if (habitosTotales.size() < 4) {
+            habitosDiarios = new ArrayList<>(habitosTotales);
+        } else {
+            Collections.shuffle(habitosTotales);
+            //habitosDiarios = lista de cuatro habitos aleatorios de habitosTotales
+            habitosDiarios = new ArrayList<>(habitosTotales.subList(0, 4));
+        }
+        guardarHabitosDiariosEnBD(usuario);
+    }
+
+    private void actualizarHabitosPanel() {
+        habitosPanel.removeAll();
 
         for (String habito : habitosDiarios) {
             JButton habitoButton = new JButton(habito);
@@ -131,7 +235,7 @@ public class RightSideBar extends JPanel {
                         JOptionPane.YES_NO_OPTION
                 );
                 if (respuesta == JOptionPane.YES_OPTION) {
-                    habitoButton.setBackground(Color.GREEN); 
+                    habitoButton.setBackground(Color.GREEN);
                 } else {
                     habitoButton.setBackground(Color.RED);
                 }
@@ -142,16 +246,72 @@ public class RightSideBar extends JPanel {
         revalidate();
         repaint();
     }
+//PARA QUE CAMBIEN LOS HABITOS PASADO UN TIEMPO
+//------------------------------------------------------------------------------
+    private void programarActualizacionDiaria(Usuario usuario) {
+        Timer timer = new Timer();
+        TimerTask tareaDiaria = new TimerTask() {
+            @Override
+            public void run() {
+                generarHabitosDiarios(usuario);
+                SwingUtilities.invokeLater(() -> actualizarHabitosPanel());
+            }
+        };
 
-    private List<String> cargarHabitosDesdeCSV(String archivo) {
-        List<String> habitos = new ArrayList<>();
+        long tiempoRestanteHoy = calcularMilisegundosHastaMedianoche();
+        timer.schedule(tareaDiaria, tiempoRestanteHoy, 86400000);
+    }
+
+    private long calcularMilisegundosHastaMedianoche() {
+        Calendar ahora = Calendar.getInstance();
+        Calendar medianoche = (Calendar) ahora.clone();
+        medianoche.set(Calendar.HOUR_OF_DAY, 0);
+        medianoche.set(Calendar.MINUTE, 0);
+        medianoche.set(Calendar.SECOND, 0);
+        medianoche.set(Calendar.MILLISECOND, 0);
+        medianoche.add(Calendar.DAY_OF_YEAR, 1);
+
+        return medianoche.getTimeInMillis() - ahora.getTimeInMillis();
+    }
+//---------------------------------------------------------------------------------
+    //PASO 3 --> GUARDAMOS LOS 4 HABITOS DE habitosDiarios QUE USAREMOS MAS TARDE EN LA BASE DE DATOS CON LA FECHAS DE "HOY"
+    private void guardarHabitosDiariosEnBD(Usuario usuario) {
+        String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+//        Habito habitoComprobar;
+//        for(Habito habito : BDs.crearListaHabitos(usuario.getNombreUsuario())){
+//        	habitoComprobar = habito;
+//        }
+    
+            for (String habito : habitosDiarios) {
+            	String nombre_habito;
+                nombre_habito = habito;
+                BDs.insertarHabitosTemporales(usuario.getNombreUsuario(), fechaHoy, nombre_habito);
+            }
+        }
+    //PASO 4 --> COGEMOS DE LA BASE DE DATOS LOS HABITOS CON LA FECHA DE HOY Y DEL USUARIO INDICADO Y METEMOS LOS NOMBRES EN LA LISTA habitos
+    private ArrayList<String> cargarHabitosDiarios(Usuario usuario) {
+    	ArrayList<Habito> habitosConFecha = new ArrayList<>();
+        ArrayList<String> habitos = new ArrayList<>();
+//            String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            habitosConFecha = BDs.crearListaHabitos(usuario.getNombreUsuario());
+            BDs.eliminarTodosLosHabitos();
+            
+            for(Habito habito: habitosConFecha) {
+            	habitos.add(habito.getNombre());
+            }
+
+        return habitos;
+    }
+
+    //PASO 1 --> CARGAR TODOS LOS HABITOS DEL CSV ----------------------------------------------------------
+    //METE EN LA LISTA SOLO LOS NOMBRES DE LOS HABITOS (UNA COLUMNA)
+    private ArrayList<String> cargarHabitosDesdeCSV(String archivo) {
+        ArrayList<String> habitos = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
             String linea;
             while ((linea = reader.readLine()) != null) {
-                // Asumiendo que el archivo tiene columnas separadas por comas
                 String[] partes = linea.split(",");
                 if (partes.length > 0) {
-                    // Solo usamos la primera columna
                     habitos.add(partes[0].trim());
                 }
             }
@@ -161,9 +321,5 @@ public class RightSideBar extends JPanel {
         }
         return habitos;
     }
-
-    private List<String> seleccionarHabitosAleatorios(List<String> habitos) {
-        Collections.shuffle(habitos);
-        return habitos.subList(0, Math.min(4, habitos.size()));
-    }
+    
 }
