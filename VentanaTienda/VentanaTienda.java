@@ -231,7 +231,7 @@ public class VentanaTienda extends JFrame {
         JButton volverB = new JButton("<< Volver");
         panelNorteIcono2.add(volverB, BorderLayout.WEST);
         
-        JLabel labelVacio = new JLabel (" esto es jlabel para centrar");
+        JLabel labelVacio = new JLabel (" esto es jlabel para centrar");//solucion para centrar 
         labelVacio.setForeground(colorPrincipal);
         
         panelNorteIcono2.add(labelVacio, BorderLayout.EAST);
