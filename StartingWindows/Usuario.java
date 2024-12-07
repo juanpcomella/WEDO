@@ -5,7 +5,11 @@ public class Usuario {
 	String nombreUsuario;
 	String correo;
 	String contraseña;
+<<<<<<< HEAD
 	int dinero;
+=======
+	int saldo;
+>>>>>>> branch 'preUpload' of git@github.com:juanpcomella/tempus.git
 
 	public Usuario(String nombreUsuario, String correo, String contraseña, int dinero) {
 		super();
