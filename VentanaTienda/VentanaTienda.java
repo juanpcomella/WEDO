@@ -40,6 +40,8 @@ public class VentanaTienda extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         
         setLayout(new BorderLayout());
+        
+        Color colorPrincipal = new Color(173, 216, 230);
 
         // Marcar el estado de las celdas
         Map<Point, Boolean> estadoCeldasIcono = new HashMap<>();
@@ -208,12 +210,14 @@ public class VentanaTienda extends JFrame {
 
         JLabel dineroL = new JLabel(icon2);
         JPanel panelNorteIcono = new JPanel();
-        panelNorteIcono.setBackground(new Color(255, 215, 0));
+        panelNorteIcono.setBackground(colorPrincipal);
         JLabel stringDinero = new JLabel(dinero);
         panelNorteIcono.add(dineroL);
         panelNorteIcono.add(stringDinero);
         
         JPanel panelNorteIcono2 = new JPanel(new BorderLayout());
+        
+        panelNorteIcono2.setBackground(colorPrincipal);
         
         panelNorteIcono2.add(panelNorteIcono,BorderLayout.CENTER);
         
@@ -224,8 +228,22 @@ public class VentanaTienda extends JFrame {
 
         panelIcono.add(panelNorteIcono2, BorderLayout.NORTH);
         
-        JButton volverB = new JButton("Volver");
+        JButton volverB = new JButton("<< Volver");
         panelNorteIcono2.add(volverB, BorderLayout.WEST);
+        
+        JLabel labelVacio = new JLabel (" esto es jlabel para centrar");
+        labelVacio.setForeground(colorPrincipal);
+        
+        panelNorteIcono2.add(labelVacio, BorderLayout.EAST);
+ 
+        
+        
+        
+        volverB.setForeground(new Color(50, 70, 90));
+        volverB.setFont(new Font("Tahoma", Font.BOLD, 15));
+        volverB.setContentAreaFilled(false);
+        volverB.setBorderPainted(false);
+        volverB.setFocusable(false);
         
         // Asi se puede poner el boton de volver a la izquierda del todo
 
