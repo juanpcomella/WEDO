@@ -80,7 +80,7 @@ public class ProfileWindowOther extends JFrame {
 
         try {
             BufferedImage profileImage = ImageIO.read(new File("imagenes/PERFIL.png"));
-            JLabel profilePictureLabel = new JLabel(new ImageIcon(getCircularImage(profileImage, 200)));
+            JLabel profilePictureLabel = new JLabel(new ImageIcon(getCircularImage(profileImage, 400)));
             profilePicturePanel.add(profilePictureLabel, BorderLayout.CENTER);
         } catch (IOException e) {
             e.printStackTrace();

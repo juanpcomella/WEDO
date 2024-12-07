@@ -167,7 +167,7 @@ public class Navbar extends JPanel {
         shopIcon.setContentAreaFilled(false);
         shopIcon.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                VentanaTienda ventanaTienda = new VentanaTienda();
+                VentanaTienda ventanaTienda = new VentanaTienda(usuario);
                 ventanaTienda.setLocationRelativeTo(null);
                 ventanaTienda.setVisible(true);
                 ((JFrame) SwingUtilities.getWindowAncestor(shopIcon)).dispose();
@@ -195,8 +195,13 @@ public class Navbar extends JPanel {
             profileLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    SwingUtilities.invokeLater(() -> new ProfileWindowSelf(usuario).setVisible(true));
-                    ((JFrame) SwingUtilities.getWindowAncestor(profileLabel)).dispose();
+                    SwingUtilities.invokeLater(() -> {
+                        MiniPerfil miniPerfil = new MiniPerfil(usuario);
+                        int x = profileLabel.getX() - 330;
+                        int y = profileLabel.getY();
+                        miniPerfil.setLocation(x, y);
+                        miniPerfil.setVisible(true);
+                    });
                 }
             });
             gbc.gridx++;
