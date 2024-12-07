@@ -197,7 +197,7 @@ public class Navbar extends JPanel {
                 public void mouseClicked(MouseEvent e) {
                     SwingUtilities.invokeLater(() -> {
                         MiniPerfil miniPerfil = new MiniPerfil(usuario);
-                        int x = profileLabel.getX();
+                        int x = profileLabel.getX() - 330;
                         int y = profileLabel.getY();
                         miniPerfil.setLocation(x, y);
                         miniPerfil.setVisible(true);
