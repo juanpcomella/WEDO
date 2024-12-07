@@ -20,7 +20,6 @@ public class MiniPerfil extends JFrame {
     public MiniPerfil(Usuario usuario) {
         setTitle("Mini Perfil");
         setSize(400, 180);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
