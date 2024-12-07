@@ -1,6 +1,8 @@
 package ProfileWindow;
 
+import BaseDeDatos.BDs;
 import MainWindow.MainWindow;
+import MainWindow.Evento;
 import StartingWindows.Usuario;
 
 import javax.swing.*;
@@ -14,6 +16,7 @@ import java.io.*;
 
 
 import java.awt.geom.Ellipse2D;
+import java.util.ArrayList;
 
 import static BaseDeDatos.BDs.*;
 
@@ -140,7 +143,7 @@ public class ProfileWindowOther extends JFrame {
                     insertarElementosSeguimientos(usuarioActual, usuarioBusqueda);
 
                     // Mostrar confirmación
-                    JOptionPane.showMessageDialog(null, "¡Ahora sigues a " + usuarioBusqueda + "!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "¡Ahora sigues a " + usuarioBusqueda.getNombreUsuario() + "!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception ex) {
                     // Manejar errores
                     JOptionPane.showMessageDialog(null, "Error al seguir al usuario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -281,18 +284,28 @@ public class ProfileWindowOther extends JFrame {
         activityLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
         activityPanel.add(activityLabel, BorderLayout.NORTH);
 
+        // Configuración de la tabla
         String[] activityTableParams = {"Activity", "Date"};
-
         DefaultTableModel tableModel = new DefaultTableModel(activityTableParams, 0);
         JTable activityJTable = new JTable(tableModel);
         activityJTable.setOpaque(false);
-        activityJTable.setBackground(new Color(0,0,0,0));
+        activityJTable.setBackground(new Color(0, 0, 0, 0));
 
         JScrollPane jtableScroll = new JScrollPane(activityJTable);
         jtableScroll.getViewport().setOpaque(false);
         jtableScroll.setOpaque(false);
 
         activityPanel.add(jtableScroll, BorderLayout.CENTER);
+
+// Cargar eventos del usuario
+        cargarEventosEnTabla(usuarioBusqueda.getNombreUsuario(), activityJTable, tableModel);
+
+        rightPanel.add(activityPanel, rightGBC);
+
+        mainPanel.add(rightPanel, gbc);
+
+        // Add main panel to frame
+        add(mainPanel);
 
         rightPanel.add(activityPanel, rightGBC);
 
@@ -314,6 +327,21 @@ public class ProfileWindowOther extends JFrame {
 
         g2d.dispose();
         return output;
+    }
+
+    public void cargarEventosEnTabla(String usuario, JTable tabla, DefaultTableModel tableModel) {
+        tableModel.setRowCount(0);
+
+        ArrayList<Evento> eventos = BDs.crearListaEventosPorUsuario(usuario);
+
+        for (Evento evento : eventos) {
+            String actividad = evento.getNombre();
+            String fecha = evento.getFecha().toString();
+            tableModel.addRow(new Object[]{actividad, fecha});
+        }
+
+        tabla.revalidate();
+        tabla.repaint();
     }
 
     public static void main(String[] args) {

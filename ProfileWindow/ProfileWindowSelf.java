@@ -1,14 +1,15 @@
 package ProfileWindow;
 
+import BaseDeDatos.BDs;
 import MainWindow.MainWindow;
 import StartingWindows.Usuario;
+import MainWindow.Evento;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.table.DefaultTableModel;
@@ -17,6 +18,7 @@ import java.io.*;
 
 
 import java.awt.geom.Ellipse2D;
+import java.util.ArrayList;
 
 public class ProfileWindowSelf extends JFrame {
 
@@ -297,24 +299,27 @@ public class ProfileWindowSelf extends JFrame {
         activityPanel.setBackground(new Color(58, 92, 181));
         activityPanel.setLayout(new BorderLayout());
 
-        JLabel activityLabel = new JLabel("Próximas actividades de {USER}", SwingConstants.CENTER);
+        JLabel activityLabel = new JLabel("Próximas actividades de " + usuario.getNombreUsuario(), SwingConstants.CENTER);
         activityLabel.setForeground(Color.WHITE);
         activityLabel.setFont(new Font("Arial", Font.BOLD, 24));
         activityLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
         activityPanel.add(activityLabel, BorderLayout.NORTH);
 
+        // Configuración de la tabla
         String[] activityTableParams = {"Activity", "Date"};
-
         DefaultTableModel tableModel = new DefaultTableModel(activityTableParams, 0);
         JTable activityJTable = new JTable(tableModel);
         activityJTable.setOpaque(false);
-        activityJTable.setBackground(new Color(0,0,0,0));
+        activityJTable.setBackground(new Color(0, 0, 0, 0));
 
         JScrollPane jtableScroll = new JScrollPane(activityJTable);
         jtableScroll.getViewport().setOpaque(false);
         jtableScroll.setOpaque(false);
 
         activityPanel.add(jtableScroll, BorderLayout.CENTER);
+
+// Cargar eventos del usuario
+        cargarEventosEnTabla(usuario.getNombreUsuario(), activityJTable, tableModel);
 
         rightPanel.add(activityPanel, rightGBC);
 
@@ -337,6 +342,22 @@ public class ProfileWindowSelf extends JFrame {
         g2d.dispose();
         return output;
     }
+
+    public void cargarEventosEnTabla(String usuario, JTable tabla, DefaultTableModel tableModel) {
+        tableModel.setRowCount(0);
+
+        ArrayList<Evento> eventos = BDs.crearListaEventosPorUsuario(usuario);
+
+        for (Evento evento : eventos) {
+            String actividad = evento.getNombre();
+            String fecha = evento.getFecha().toString();
+            tableModel.addRow(new Object[]{actividad, fecha});
+        }
+
+        tabla.revalidate();
+        tabla.repaint();
+    }
+
 
     public static void main(String[] args) {
 
