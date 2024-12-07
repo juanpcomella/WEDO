@@ -231,7 +231,7 @@ public class VentanaTienda extends JFrame {
         JButton volverB = new JButton("<< Volver");
         panelNorteIcono2.add(volverB, BorderLayout.WEST);
         
-        JLabel labelVacio = new JLabel (" esto es jlabel para centrar");//solucion para centrar 
+        JLabel labelVacio = new JLabel ("esto es jlabel para centrar");//solucion para centrar 
         labelVacio.setForeground(colorPrincipal);
         
         panelNorteIcono2.add(labelVacio, BorderLayout.EAST);
@@ -310,6 +310,8 @@ public class VentanaTienda extends JFrame {
                             money -= precio; // Restar el precio al dinero del usuario
                             stringDinero.setText(String.valueOf(money));
                             StringmonyL.setText(String.valueOf(money));
+                            StrApodomoney.setText(String.valueOf(money));
+                            
                             
                             estadoCeldas.put(celda, true);
                             table.setValueAt(comprado, selectedRow, selectedColumn);
@@ -533,8 +535,32 @@ public class VentanaTienda extends JFrame {
         JLabel icoinmony = new JLabel(icon2);
         panelNorteMonedas.add(icoinmony);
         panelNorteMonedas.add(StringmonyL);
-        panelTematica.add(panelNorteMonedas, BorderLayout.NORTH);
-        panelNorteMonedas.setBackground(new Color(255, 215, 0));
+        
+        panelNorteMonedas.setBackground(colorPrincipal);
+    
+        JPanel panelNorteMonedas2 = new JPanel(new BorderLayout());
+        
+        panelNorteMonedas2.setBackground(colorPrincipal);
+        
+        panelNorteMonedas2.add(panelNorteMonedas, BorderLayout.CENTER);
+        
+        JLabel labelVacio3 = new JLabel("esto es jlabel para centrar");
+        
+        labelVacio3.setForeground(colorPrincipal);
+        
+        panelNorteMonedas2.add(labelVacio3,BorderLayout.EAST);
+        
+        JButton volverB3 = new JButton("<< Volver");
+        
+        panelNorteMonedas2.add(volverB3,BorderLayout.WEST);
+        volverB3.setForeground(new Color(50, 70, 90));
+        volverB3.setFont(new Font("Tahoma", Font.BOLD, 15));
+        volverB3.setContentAreaFilled(false);
+        volverB3.setBorderPainted(false);
+        volverB3.setFocusable(false);
+        
+        
+        panelTematica.add(panelNorteMonedas2, BorderLayout.NORTH);
         
  
         
@@ -658,7 +684,7 @@ public class VentanaTienda extends JFrame {
 
         // Configuración del panel superior
         JPanel panelNorteApodo = new JPanel();
-        panelNorteApodo.setBackground(new Color(255, 215, 0));
+        panelNorteApodo.setBackground(colorPrincipal);
         panelNorteApodo.add(new JLabel(icon2)); //Icono
         panelNorteApodo.add(StrApodomoney); // Etiqueta del dinero
         StrApodomoney.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
@@ -666,6 +692,31 @@ public class VentanaTienda extends JFrame {
         stringDinero.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
         
         StringmonyL.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
+        
+        JPanel panelNorteApodo2 = new JPanel(new BorderLayout());        
+        
+        panelNorteApodo2.add(panelNorteApodo, BorderLayout.CENTER);
+        
+        JButton volverB2 = new JButton("<< Volver");
+        
+        
+        volverB2.setForeground(new Color(50, 70, 90));
+        volverB2.setFont(new Font("Tahoma", Font.BOLD, 15));
+        volverB2.setContentAreaFilled(false);
+        volverB2.setBorderPainted(false);
+        volverB2.setFocusable(false);
+        
+        
+        panelNorteApodo2.add(volverB2,BorderLayout.WEST);
+        
+        
+        JLabel labelVacio2 = new JLabel("esto es jlabel para centrar");
+        labelVacio2.setForeground(colorPrincipal);
+        
+        panelNorteApodo2.add(labelVacio2,BorderLayout.EAST);
+
+        
+        panelNorteApodo2.setBackground(colorPrincipal);
 
 
 
@@ -677,7 +728,7 @@ public class VentanaTienda extends JFrame {
 
         // Agregar componentes al panel principal de apodos
         panelApodos.setLayout(new BorderLayout());
-        panelApodos.add(panelNorteApodo, BorderLayout.NORTH);
+        panelApodos.add(panelNorteApodo2, BorderLayout.NORTH);
         panelApodos.add(panelApodosConMargen, BorderLayout.CENTER);
 
         
