@@ -5,7 +5,7 @@ public class Usuario {
 	String nombreUsuario;
 	String correo;
 	String contraseña;
-	int dinero;
+	public int dinero;
 	int saldo;
 
 	public Usuario(String nombreUsuario, String correo, String contraseña, int dinero) {

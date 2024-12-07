@@ -35,7 +35,7 @@ public class VentanaTienda extends JFrame {
     private Map<Point, Boolean> estadoCeldasApodo = new HashMap<>(); //new
 
     private int money;
-    public VentanaTienda(Usuario usuario, Dinero dinero) {
+    public VentanaTienda(Usuario usuario) {
         // Configuración de la ventana principal
         setTitle("Tienda");
         setSize(800, 600);
@@ -115,7 +115,7 @@ public class VentanaTienda extends JFrame {
 
         // Dinero almacenado aquí, luego se hará un parseInt para convertir
         
-        String pasta = String.valueOf(dinero.total);
+        String pasta = String.valueOf(usuario.dinero);
         
 
         // Parseo de dinero
@@ -312,7 +312,7 @@ public class VentanaTienda extends JFrame {
                             comprado.setVerticalAlignment(SwingConstants.CENTER);
                             System.out.println("Compra realizada.");
                             money -= precio; // Restar el precio al dinero del usuario
-                            dinero.total-=precio;
+                            usuario.dinero-=precio;
                             stringDinero.setText(String.valueOf(money));
                             StringmonyL.setText(String.valueOf(money));
                             StrApodomoney.setText(String.valueOf(money));
@@ -947,9 +947,8 @@ public class VentanaTienda extends JFrame {
     }
 
     public static void main(String[] args) {
-    	Usuario usuario = new Usuario(null, null, null);
-    	Dinero dinero = new Dinero(300);
-        VentanaTienda ventana = new VentanaTienda(usuario, dinero);
+    	Usuario usuario = new Usuario(null, null, null,300);
+        VentanaTienda ventana = new VentanaTienda(usuario);
         ventana.setVisible(true);
     }
 }
