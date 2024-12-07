@@ -5,8 +5,10 @@ import StartingWindows.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.table.DefaultTableModel;
@@ -199,14 +201,18 @@ public class ProfileWindowSelf extends JFrame {
         for (int i = 0; i < cantObjetivosDiarios; i++) {
             JPanel box = new JPanel();
             box.setPreferredSize(new Dimension(60, 60));
-            box.setBackground(new Color(244, 100, 93)); // Initially red
+            box.setBackground(new Color(244, 100, 93)); // Inicialmente rojo
 
+            // Configurar el tooltip nativo de Swing
+            box.setToolTipText("<html><b>Información del objetivo</b><br>Este panel representa un objetivo diario.</html>");
+
+            // Añadir el listener para manejar clics en el panel
             box.addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
                     int response = JOptionPane.showConfirmDialog(
                             null,
-                            "Quieres marcar este objetivo completado?",
+                            "¿Quieres marcar este objetivo como completado?",
                             "Confirmar Acción",
                             JOptionPane.YES_NO_OPTION,
                             JOptionPane.QUESTION_MESSAGE
@@ -214,17 +220,17 @@ public class ProfileWindowSelf extends JFrame {
 
                     if (response == JOptionPane.YES_OPTION) {
                         if (box.getBackground().equals(new Color(244, 100, 93))) {
-                            box.setBackground(new Color(197, 229, 191)); // Change to green
+                            box.setBackground(new Color(197, 229, 191)); // Cambiar a verde
                             completedObjectives[0]++;
 
-                            // Check if all tasks are completed
+                            // Verificar si todas las tareas están completas
                             if (completedObjectives[0] == cantObjetivosDiarios) {
-                                streakCount[0]++; // Increment streak counter
-                                streakCountLabel.setText(streakCount[0] + ""); // Update streak label
+                                streakCount[0]++; // Incrementar contador de racha
+                                streakCountLabel.setText(streakCount[0] + ""); // Actualizar etiqueta de racha
 
                                 JOptionPane.showMessageDialog(
                                         null,
-                                        "Felicidades! Haz completado tus tareas de hoy.\nRacha incrementada a " + streakCount[0],
+                                        "¡Felicidades! Has completado tus tareas de hoy.\nRacha incrementada a " + streakCount[0],
                                         "Actualización Racha",
                                         JOptionPane.INFORMATION_MESSAGE
                                 );
@@ -234,8 +240,10 @@ public class ProfileWindowSelf extends JFrame {
                 }
             });
 
+            // Agregar el panel a tu contenedor (por ejemplo, un JPanel principal)
             gridPanel.add(box);
         }
+
 
         contentPanel.add(gridPanel, streakGBC);
 
