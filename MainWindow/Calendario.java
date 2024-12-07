@@ -377,8 +377,6 @@ public class Calendario extends JPanel {
                 }
             });
             
-            
-
             diasPanel.add(diaPanel);
         }
 
@@ -438,6 +436,22 @@ public class Calendario extends JPanel {
 
         panel.add(descripcion);
         panel.add(scroll);
+        
+        JRadioButton publicoButton = new JRadioButton("Público");
+        JRadioButton privadoButton = new JRadioButton("Privado");
+
+        ButtonGroup group = new ButtonGroup();
+        group.add(publicoButton);
+        group.add(privadoButton);
+
+        privadoButton.setSelected(true);
+        
+        JPanel panelPrivacidad = new JPanel();
+        panelPrivacidad.add(publicoButton);
+        panelPrivacidad.add(privadoButton);
+        panel.add(new JLabel("Privacidad:"));
+        panel.add(panelPrivacidad);
+        
 
         JLabel etiquetaCategorias = new JLabel("Categoría:");
         JComboBox<Categorias> categorias = new JComboBox<>(Categorias.values());
