@@ -11,7 +11,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 
+import BaseDeDatos.BDs;
 import MainWindow.MainWindow;
+import MainWindow.Navbar;
 import StartingWindows.Usuario;
 
 import java.awt.*;
@@ -114,12 +116,10 @@ public class VentanaTienda extends JFrame {
 
 
         // Dinero almacenado aquí, luego se hará un parseInt para convertir
+        String dinero = Integer.toString(BDs.getSaldo(usuario.getNombreUsuario()));
         
-        String pasta = String.valueOf(usuario.dinero);
-        
-
         // Parseo de dinero
-        money = Integer.parseInt(pasta);
+        money = Integer.parseInt(dinero);
 
         // Cargar imágenes y redimensionarlas
         ImageIcon icon1 = new ImageIcon("imagenes/Imagen1.png");
@@ -215,7 +215,7 @@ public class VentanaTienda extends JFrame {
         JLabel dineroL = new JLabel(icon2);
         JPanel panelNorteIcono = new JPanel();
         panelNorteIcono.setBackground(colorPrincipal);
-        JLabel stringDinero = new JLabel(pasta);
+        JLabel stringDinero = new JLabel(dinero);
         panelNorteIcono.add(dineroL);
         panelNorteIcono.add(stringDinero);
         
@@ -227,8 +227,8 @@ public class VentanaTienda extends JFrame {
         
         
         
-        JLabel StringmonyL = new JLabel(pasta);
-        JLabel StrApodomoney = new JLabel(pasta);
+        JLabel StringmonyL = new JLabel(dinero);
+        JLabel StrApodomoney = new JLabel(dinero);
 
         panelIcono.add(panelNorteIcono2, BorderLayout.NORTH);
         
@@ -294,6 +294,10 @@ public class VentanaTienda extends JFrame {
                             precio = (Integer) cellData[0];
                         }
                     }
+                    
+//                    String dinero = Integer.toString(BDs.getSaldo(usuario.getNombreUsuario()));                  
+//                    // Parseo de dinero
+//                    money = Integer.parseInt(dinero);
 
                     // Verificar si hay suficiente dinero
                     if (money >= precio) {
@@ -312,7 +316,9 @@ public class VentanaTienda extends JFrame {
                             comprado.setVerticalAlignment(SwingConstants.CENTER);
                             System.out.println("Compra realizada.");
                             money -= precio; // Restar el precio al dinero del usuario
-                            usuario.dinero-=precio;
+                            usuario.setSaldo(money);
+                            BDs.updateSaldo(usuario.getNombreUsuario(),usuario.getSaldo());
+                            Navbar.coinAmountLabel.setText(String.valueOf(usuario.getSaldo()));
                             stringDinero.setText(String.valueOf(money));
                             StringmonyL.setText(String.valueOf(money));
                             StrApodomoney.setText(String.valueOf(money));
@@ -947,7 +953,7 @@ public class VentanaTienda extends JFrame {
     }
 
     public static void main(String[] args) {
-    	Usuario usuario = new Usuario(null, null, null,300);
+    	Usuario usuario = new Usuario(null, null, null);
         VentanaTienda ventana = new VentanaTienda(usuario);
         ventana.setVisible(true);
     }

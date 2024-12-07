@@ -22,8 +22,9 @@ import javax.imageio.ImageIO;
 import static java.lang.Thread.sleep;
 
 public class Navbar extends JPanel {
+	public static JLabel coinAmountLabel;
 
-    public Navbar(LeftSideBar leftSideBar, Usuario usuario) {
+	public Navbar(LeftSideBar leftSideBar, Usuario usuario) {
         Usuario CURRENT_USER = usuario;
         setLayout(new GridBagLayout()); // Cambiar a GridBagLayout
         setBackground(new Color(173, 216, 230));
@@ -150,9 +151,7 @@ public class Navbar extends JPanel {
         gbc.gridx++;
         gbc.weightx = 0;
         add(coinLabel, gbc);
-
-        int coinAmount = 0;
-        JLabel coinAmountLabel = new JLabel(coinAmount + "");
+        coinAmountLabel = new JLabel(Integer.toString(usuario.getSaldo()));
         gbc.gridx++;
         add(coinAmountLabel, gbc);
 

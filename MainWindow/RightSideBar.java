@@ -94,7 +94,7 @@ public class RightSideBar extends JPanel {
             generarHabitosDiarios(usuario);
         }
         
-        actualizarHabitosPanel();
+        actualizarHabitosPanel(usuario);
 
         habitos.add(habitosPanel);
         add(habitos);
@@ -329,7 +329,7 @@ public class RightSideBar extends JPanel {
         guardarHabitosDiariosEnBD(usuario);
     }
 
-    private void actualizarHabitosPanel() {
+    private void actualizarHabitosPanel(Usuario usuario) {
         habitosPanel.removeAll();
 
         for (String habito : habitosDiarios) {
@@ -347,6 +347,12 @@ public class RightSideBar extends JPanel {
                 );
                 if (respuesta == JOptionPane.YES_OPTION) {
                     habitoButton.setBackground(Color.GREEN);
+                    //Suma 10 monedas por habito completado
+                    usuario.setSaldo(usuario.getSaldo()+10);
+                    BDs.updateSaldo(usuario.getNombreUsuario(), usuario.getSaldo());
+                    Navbar.coinAmountLabel.setText(String.valueOf(usuario.getSaldo()));
+                    
+                    
                 } else {
                     habitoButton.setBackground(Color.RED);
                 }
@@ -365,7 +371,7 @@ public class RightSideBar extends JPanel {
             @Override
             public void run() {
                 generarHabitosDiarios(usuario);
-                SwingUtilities.invokeLater(() -> actualizarHabitosPanel());
+                SwingUtilities.invokeLater(() -> actualizarHabitosPanel(usuario));
             }
         };
 
