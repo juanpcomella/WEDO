@@ -65,7 +65,7 @@ public class RightSideBar extends JPanel {
         objetivos.add(añadirObjetivoButton);
         
         add(objetivos);
-        
+
         //HABITOS-----------------------------------------------------------------------
         //Panel habitos
         JPanel habitos = new JPanel();
@@ -128,6 +128,18 @@ public class RightSideBar extends JPanel {
             String fecha = fechaField.getText().trim();
 
             if (!nombre.isEmpty() && !descripcion.isEmpty() && !fecha.isEmpty()) {
+                LocalDate fechaCumplimiento;
+                try {
+                    fechaCumplimiento = LocalDate.parse(fecha);
+                    LocalDate fechaHoy = LocalDate.now();
+                    if (fechaCumplimiento.isBefore(fechaHoy)) {
+                        JOptionPane.showMessageDialog(this, "Fecha incorrecta, introduce una fecha a partir de la actual", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Fecha inválida. Formato esperado: YYYY-MM-DD.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return; 
+                }
                 BDs.insertarObjetivos(usuario.getNombreUsuario(), nombre, descripcion, fecha, false);
                 añadirObjetivo(nombre, fecha);
             } else {
@@ -135,6 +147,7 @@ public class RightSideBar extends JPanel {
             }
         }
     }
+
    
     private void añadirObjetivo(String nombre, String fechaCumplimiento) {
         Objetivo objetivo = new Objetivo(nombre, "Descripción del objetivo", LocalDate.parse(fechaCumplimiento), false);
@@ -168,12 +181,86 @@ public class RightSideBar extends JPanel {
 
             String mensajeConTiempoRestante = "Quedan " + objetivo.getCuantoQueda() + " días";
             objetivoLabel.setText(objetivo.getNombre() + " - " + mensajeConTiempoRestante);
+            
+            objetivoLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    mostrarDetallesObjetivo(objetivo);
+                }
 
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    objetivoLabel.setBackground(new Color(144, 202, 249));
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    objetivoLabel.setBackground(new Color(179, 229, 252));
+                }
+            });
+
+            
             objetivosPanel.add(objetivoLabel);
         }
 
         revalidate();
         repaint();
+    }
+    
+    private void mostrarDetallesObjetivo(Objetivo objetivo) {
+        JDialog dialog = new JDialog((Frame) null, "Detalles del Objetivo", true);
+        dialog.setSize(400, 200);
+        dialog.setLayout(new BorderLayout());
+
+        JPanel contenidoPanel = new JPanel();
+        contenidoPanel.setLayout(new BoxLayout(contenidoPanel, BoxLayout.Y_AXIS));
+        contenidoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JLabel nombreLabel = new JLabel("Nombre: " + objetivo.getNombre());
+        nombreLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        nombreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);      
+
+        JLabel descripcionLabel = new JLabel("<html>Descripción: " + objetivo.getDescripcion() + "</html>");
+        descripcionLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        descripcionLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        descripcionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel fechaFinLabel = new JLabel("Fecha Fin: " + objetivo.getFechaFin());
+        fechaFinLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        fechaFinLabel.setAlignmentX(Component.CENTER_ALIGNMENT); 
+
+        contenidoPanel.add(nombreLabel);
+        contenidoPanel.add(Box.createVerticalStrut(10));
+        contenidoPanel.add(descripcionLabel);
+        contenidoPanel.add(Box.createVerticalStrut(10));
+        contenidoPanel.add(fechaFinLabel);
+
+        JButton eliminarButton = new JButton("Eliminar Objetivo");
+        eliminarButton.setBackground(Color.RED); 
+        eliminarButton.setForeground(Color.WHITE);
+        eliminarButton.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(
+                dialog,
+                "¿Estás seguro de que deseas eliminar este objetivo?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                eliminarObjetivoDePantalla(objetivo);
+                dialog.dispose();
+            }
+        });
+
+        dialog.add(contenidoPanel, BorderLayout.CENTER);
+        dialog.add(eliminarButton, BorderLayout.SOUTH);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    }
+
+    private void eliminarObjetivoDePantalla(Objetivo objetivo) {
+        listaObjetivos.removeIf(o -> o.getNombre().equals(objetivo.getNombre()));
+        actualizarPanelObjetivos();
     }
 
     private int obtenerCuantoQueda(String fechaCumplimiento) {
