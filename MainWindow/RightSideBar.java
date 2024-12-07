@@ -155,9 +155,33 @@ public class RightSideBar extends JPanel {
 
         listaObjetivos.add(objetivo);
 
-        ordenarObjetivosPorFecha();
+        // Usar el método recursivo para ordenar los objetivos
+        ordenarObjetivosPorFechaRecursivo(listaObjetivos, 0);
 
         actualizarPanelObjetivos();
+    }
+    
+    private void ordenarObjetivosPorFechaRecursivo(ArrayList<Objetivo> lista, int index) {
+        // Caso base: si el índice alcanza el final de la lista, termina la recursión
+        if (index == lista.size()) {
+            return;
+        }
+        
+        // Buscar el objetivo con el valor de 'cuantoQueda' mínimo desde el índice actual
+        int minIndex = index;
+        for (int i = index + 1; i < lista.size(); i++) {
+            if (lista.get(i).getCuantoQueda() < lista.get(minIndex).getCuantoQueda()) {
+                minIndex = i;
+            }
+        }
+        
+        // Intercambiar el objetivo en 'index' con el objetivo en 'minIndex'
+        Objetivo temp = lista.get(index);
+        lista.set(index, lista.get(minIndex));
+        lista.set(minIndex, temp);
+
+        // Llamada recursiva para ordenar el siguiente índice
+        ordenarObjetivosPorFechaRecursivo(lista, index + 1);
     }
 
     private void ordenarObjetivosPorFecha() {
