@@ -5,12 +5,14 @@ public class Usuario {
 	String nombreUsuario;
 	String correo;
 	String contraseña;
+	int dinero;
 
-	public Usuario(String nombreUsuario, String correo, String contraseña) {
+	public Usuario(String nombreUsuario, String correo, String contraseña, int dinero) {
 		super();
 		this.nombreUsuario = nombreUsuario;
 		this.correo = correo;
 		this.contraseña = contraseña;
+		this.dinero = dinero;
 	}
 
 	public String getNombreUsuario() {
@@ -35,6 +37,12 @@ public class Usuario {
 
 	public void setContraseña(String contraseña) {
 		this.contraseña = contraseña;
+	}
+	public int getDinero() {
+		return dinero;
+	}
+	public void setDinero(int dinero) {
+		this.dinero = dinero;
 	}
 
 	@Override
