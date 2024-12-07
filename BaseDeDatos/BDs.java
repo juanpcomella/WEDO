@@ -1046,7 +1046,7 @@ public class BDs {
 	}
 	}
 	
-	public static ArrayList<Habito> crearListaHabitos(String usuario, String fecha) {
+	public static ArrayList<Habito> crearListaHabitos(String usuario) {
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
@@ -1064,7 +1064,6 @@ public class BDs {
 			String sql = "SELECT fecha_hoy, habito FROM habitos WHERE username = ? and fecha_hoy = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 	        preparedStatement.setString(1, usuario);
-	        preparedStatement.setString(2, fecha);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {

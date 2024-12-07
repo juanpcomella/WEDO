@@ -276,7 +276,12 @@ public class RightSideBar extends JPanel {
 //---------------------------------------------------------------------------------
     //PASO 3 --> GUARDAMOS LOS 4 HABITOS DE habitosDiarios QUE USAREMOS MAS TARDE EN LA BASE DE DATOS CON LA FECHAS DE "HOY"
     private void guardarHabitosDiariosEnBD(Usuario usuario) {
-            String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+//        Habito habitoComprobar;
+//        for(Habito habito : BDs.crearListaHabitos(usuario.getNombreUsuario())){
+//        	habitoComprobar = habito;
+//        }
+    
             for (String habito : habitosDiarios) {
             	String nombre_habito;
                 nombre_habito = habito;
@@ -287,8 +292,8 @@ public class RightSideBar extends JPanel {
     private ArrayList<String> cargarHabitosDiarios(Usuario usuario) {
     	ArrayList<Habito> habitosConFecha = new ArrayList<>();
         ArrayList<String> habitos = new ArrayList<>();
-            String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-            habitosConFecha = BDs.crearListaHabitos(usuario.getNombreUsuario(), fechaHoy);
+//            String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            habitosConFecha = BDs.crearListaHabitos(usuario.getNombreUsuario());
             BDs.eliminarTodosLosHabitos();
             
             for(Habito habito: habitosConFecha) {
