@@ -12,6 +12,7 @@ public class Evento {
     private LocalTime horaInicio;
     private LocalTime horaFin;
     private boolean todoElDia;
+    private boolean privado;
 
     public Evento(String nombre, String descripcion, Categorias categoria, LocalDate fecha, boolean todoElDia) {
         this.nombre = nombre;
@@ -40,7 +41,17 @@ public class Evento {
         this.horaFin = horaFin;
         this.todoElDia = todoElDia; 
     }
-
+    
+    public Evento(String nombre, String descripcion, Categorias categoria, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, boolean todoElDia, boolean privado) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.categoria = categoria;
+        this.fecha = fecha;
+        this.horaInicio = horaInicio;
+        this.horaFin = horaFin;
+        this.todoElDia = todoElDia; 
+        this.privado = privado;
+    }
 
     public String getNombre() {
         return nombre;
