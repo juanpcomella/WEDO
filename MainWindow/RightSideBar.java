@@ -291,7 +291,7 @@ public class RightSideBar extends JPanel {
     }
     //------------------------------------------------------------------------------------------------
     
-    //METODOS HABITOS---------------------------------------------------------------------------------
+  //METODOS HABITOS---------------------------------------------------------------------------------
     //PASO 2 --> GENERAR UNA LISTA (habitosDiarios) CON SOLO 4 HABITOS (LOS QUE LUEGO SE PONDRAN EN EL PANEL)
     private void generarHabitosDiarios(Usuario usuario) {
     	//habitosTotales = lista de todos los habitos cargados del csv
