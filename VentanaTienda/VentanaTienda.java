@@ -35,7 +35,7 @@ public class VentanaTienda extends JFrame {
     private Map<Point, Boolean> estadoCeldasApodo = new HashMap<>(); //new
 
     private int money;
-    public VentanaTienda(Usuario usuario) {
+    public VentanaTienda(Usuario usuario, Dinero dinero) {
         // Configuración de la ventana principal
         setTitle("Tienda");
         setSize(800, 600);
@@ -114,11 +114,12 @@ public class VentanaTienda extends JFrame {
 
 
         // Dinero almacenado aquí, luego se hará un parseInt para convertir
-        String dinero = "200";
+        
+        String pasta = String.valueOf(dinero.total);
         
 
         // Parseo de dinero
-        money = Integer.parseInt(dinero);
+        money = Integer.parseInt(pasta);
 
         // Cargar imágenes y redimensionarlas
         ImageIcon icon1 = new ImageIcon("imagenes/Imagen1.png");
@@ -214,7 +215,7 @@ public class VentanaTienda extends JFrame {
         JLabel dineroL = new JLabel(icon2);
         JPanel panelNorteIcono = new JPanel();
         panelNorteIcono.setBackground(colorPrincipal);
-        JLabel stringDinero = new JLabel(dinero);
+        JLabel stringDinero = new JLabel(pasta);
         panelNorteIcono.add(dineroL);
         panelNorteIcono.add(stringDinero);
         
@@ -226,8 +227,8 @@ public class VentanaTienda extends JFrame {
         
         
         
-        JLabel StringmonyL = new JLabel(dinero);
-        JLabel StrApodomoney = new JLabel(dinero);
+        JLabel StringmonyL = new JLabel(pasta);
+        JLabel StrApodomoney = new JLabel(pasta);
 
         panelIcono.add(panelNorteIcono2, BorderLayout.NORTH);
         
@@ -311,6 +312,7 @@ public class VentanaTienda extends JFrame {
                             comprado.setVerticalAlignment(SwingConstants.CENTER);
                             System.out.println("Compra realizada.");
                             money -= precio; // Restar el precio al dinero del usuario
+                            dinero.total-=precio;
                             stringDinero.setText(String.valueOf(money));
                             StringmonyL.setText(String.valueOf(money));
                             StrApodomoney.setText(String.valueOf(money));
@@ -946,7 +948,8 @@ public class VentanaTienda extends JFrame {
 
     public static void main(String[] args) {
     	Usuario usuario = new Usuario(null, null, null);
-        VentanaTienda ventana = new VentanaTienda(usuario);
+    	Dinero dinero = new Dinero(300);
+        VentanaTienda ventana = new VentanaTienda(usuario, dinero);
         ventana.setVisible(true);
     }
 }
