@@ -212,10 +212,22 @@ public class VentanaTienda extends JFrame {
         JLabel stringDinero = new JLabel(dinero);
         panelNorteIcono.add(dineroL);
         panelNorteIcono.add(stringDinero);
+        
+        JPanel panelNorteIcono2 = new JPanel(new BorderLayout());
+        
+        panelNorteIcono2.add(panelNorteIcono,BorderLayout.CENTER);
+        
+        
+        
         JLabel StringmonyL = new JLabel(dinero);
         JLabel StrApodomoney = new JLabel(dinero);
 
-        panelIcono.add(panelNorteIcono, BorderLayout.NORTH);
+        panelIcono.add(panelNorteIcono2, BorderLayout.NORTH);
+        
+        JButton volverB = new JButton("Volver");
+        panelNorteIcono2.add(volverB, BorderLayout.WEST);
+        
+        // Asi se puede poner el boton de volver a la izquierda del todo
 
         // Renderizador para la columna de "Icono" (solo imagen)
         iconoT.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
@@ -815,9 +827,11 @@ public class VentanaTienda extends JFrame {
         
         
         
+        
+        
         for (int i = 0; i < apodosT.getRowCount(); i++) {
-            Point celda_comprada = new Point(i, 1); // Crear un Point para la celda en la fila i y columna 1
-            estadoCeldasApodo.put(celda_comprada, false); // Añadir al HashMap con valor por defecto false
+            Point celda_comprada = new Point(i, 1); 
+            estadoCeldasApodo.put(celda_comprada, false); 
         }
 
     }
