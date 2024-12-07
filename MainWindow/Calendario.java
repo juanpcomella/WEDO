@@ -7,6 +7,9 @@ import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.*;
 
 import BaseDeDatos.BDs;
@@ -283,89 +286,83 @@ public class Calendario extends JPanel {
             LocalDate diaActual = startOfWeek.plusDays(i);
 
             JPanel diaPanel = new JPanel();
-            diaPanel.setBackground(new Color(173, 216, 230));
             diaPanel.setLayout(new BorderLayout());
-            //diaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
             diaPanel.setBackground(Color.WHITE);
             diaPanel.setPreferredSize(new Dimension(150, 600));
 
             if (diaActual.equals(hoy)) {
                 diaPanel.setBackground(Color.LIGHT_GRAY);
-            }else {
-            	diaPanel.setBackground(new Color(173, 216, 230));
             }
+
             JLabel diaSemanaLabel = new JLabel(diasSemana[i] + " " + diaActual.getDayOfMonth(), SwingConstants.CENTER);
-            diaSemanaLabel.setBackground(new Color(173, 216, 230));
             diaSemanaLabel.setFont(new Font("Arial", Font.BOLD, 16));
+            diaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
             diaPanel.add(diaSemanaLabel, BorderLayout.NORTH);
 
-            JPanel horasPanel = new JPanel();
-            horasPanel.setLayout(new GridLayout(24, 1));
-            horasPanel.setOpaque(true);
+            // Crear un panel personalizado para las horas y las líneas grises
+            JPanel horasPanel = new JPanel() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
 
-            for (int hora = 0; hora < 24; hora++) {
-                JPanel bloqueHora = new JPanel();
-                bloqueHora.setLayout(null); 
-                bloqueHora.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-                bloqueHora.setBackground(Color.WHITE);
-                bloqueHora.setPreferredSize(new Dimension(150, 25));
-                
-                for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())) {
-                    if (evento.getFecha().equals(diaActual) &&
-                        (evento.getHoraInicio().getHour() <= hora && evento.getHoraFin().getHour() > hora)) {
-
-                        int inicioEvento = evento.getHoraInicio().getHour();
-                        int finEvento = evento.getHoraFin().getHour();
-                        int duracionBloques = finEvento - inicioEvento;
-
-                        JLabel eventoLabel = new JLabel(
-                        	    evento.getNombre() + " " +
-                        	    evento.getHoraInicio() + " - " +
-                        	    evento.getHoraFin()
-                        	);
-
-                        eventoLabel.setOpaque(true);
-                        eventoLabel.setFont(new Font("Arial", Font.BOLD, 12));
-                        eventoLabel.setForeground(Color.WHITE);
-                        eventoLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); 
-                        eventoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-                        eventoLabel.setVerticalAlignment(SwingConstants.NORTH);
-
-                        if (evento.getCategoria().equals(Categorias.Estudios)) {
-                            eventoLabel.setBackground(Color.MAGENTA);
-                        } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
-                            eventoLabel.setBackground(Color.GREEN);
-                        } else if (evento.getCategoria().equals(Categorias.Deporte)) {
-                            eventoLabel.setBackground(Color.CYAN);
-                        } else if (evento.getCategoria().equals(Categorias.Ocio)) {
-                            eventoLabel.setBackground(Color.ORANGE);
-                        }
-
-                        int yPos = (inicioEvento - hora) * 25;
-                        int alturaEvento = duracionBloques * 25;
-                        eventoLabel.setBounds(0, yPos, bloqueHora.getWidth(), alturaEvento);
-
-                        bloqueHora.addComponentListener(new ComponentAdapter() {
-                            @Override
-                            public void componentResized(ComponentEvent e) {
-                                eventoLabel.setBounds(0, yPos, bloqueHora.getWidth(), 25 * duracionBloques);
-                            }
-                        });
-                        
-                        
-                        bloqueHora.add(eventoLabel);
-                        
-                        eventoLabel.addMouseListener(new MouseAdapter() {
-                            @Override
-                            public void mouseClicked(MouseEvent e) {
-                                mostrarEvento(evento, diaActual, usuario);
-                            }
-                        });
-
+                    // Dibujar líneas grises horizontales cada 25 píxeles
+                    g.setColor(Color.LIGHT_GRAY);
+                    for (int y = 25; y < getHeight(); y += 25) {
+                        g.drawLine(0, y, getWidth(), y);
                     }
                 }
+            };
+            horasPanel.setLayout(null); // Usamos 'null' para gestionar la disposición manual de los eventos
 
-                horasPanel.add(bloqueHora);
+            // Agregar los eventos al panel de horas
+            Map<Integer, ArrayList<Evento>> eventosPorHora = new HashMap<>();
+            for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())) {
+                if (evento.getFecha().equals(diaActual)) {
+                    int inicioEvento = evento.getHoraInicio().getHour();
+                    eventosPorHora.computeIfAbsent(inicioEvento, k -> new ArrayList<>()).add(evento);
+                }
+            }
+
+            for (Map.Entry<Integer, ArrayList<Evento>> entry : eventosPorHora.entrySet()) {
+                int horaInicio = entry.getKey();
+                ArrayList<Evento> eventos = entry.getValue();
+
+                int anchoTotal = 150; // Ancho total del panel
+                int anchoPorEvento = anchoTotal / eventos.size(); // Ancho de cada evento
+
+                for (int index = 0; index < eventos.size(); index++) {
+                    Evento evento = eventos.get(index);
+                    int posicionX = index * anchoPorEvento;
+
+                    int duracionEvento = evento.getHoraFin().getHour() - evento.getHoraInicio().getHour();
+                    int altoEvento = duracionEvento * 25;
+
+                    JLabel eventoLabel = new JLabel(
+                            evento.getNombre() + " " +
+                            evento.getHoraInicio() + " - " +
+                            evento.getHoraFin()
+                    );
+                    eventoLabel.setOpaque(true);
+                    eventoLabel.setFont(new Font("Arial", Font.BOLD, 10));
+                    eventoLabel.setForeground(Color.WHITE);
+                    eventoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                    eventoLabel.setVerticalAlignment(SwingConstants.NORTH);
+
+                    // Colorear según categoría
+                    if (evento.getCategoria().equals(Categorias.Estudios)) {
+                        eventoLabel.setBackground(Color.MAGENTA);
+                    } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
+                        eventoLabel.setBackground(Color.GREEN);
+                    } else if (evento.getCategoria().equals(Categorias.Deporte)) {
+                        eventoLabel.setBackground(Color.CYAN);
+                    } else if (evento.getCategoria().equals(Categorias.Ocio)) {
+                        eventoLabel.setBackground(Color.ORANGE);
+                    }
+
+                    int posicionY = horaInicio * 25;
+                    eventoLabel.setBounds(posicionX, posicionY, anchoPorEvento, altoEvento);
+                    horasPanel.add(eventoLabel);
+                }
             }
 
             diaPanel.add(horasPanel, BorderLayout.CENTER);
@@ -376,13 +373,15 @@ public class Calendario extends JPanel {
                     mostrarDialogo(diaActual, usuario);
                 }
             });
-            
+
             diasPanel.add(diaPanel);
         }
 
         diasPanel.revalidate();
         diasPanel.repaint();
     }
+
+
 
     private void mostrarDialogo(LocalDate date, Usuario usuario) {
         JDialog dialog = new JDialog();

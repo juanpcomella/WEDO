@@ -5,6 +5,7 @@ public class Usuario {
 	String nombreUsuario;
 	String correo;
 	String contraseña;
+	int saldo;
 
 	public Usuario(String nombreUsuario, String correo, String contraseña) {
 		super();
