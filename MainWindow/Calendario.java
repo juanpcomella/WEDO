@@ -7,6 +7,9 @@ import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.*;
 
 import BaseDeDatos.BDs;
@@ -299,36 +302,47 @@ public class Calendario extends JPanel {
             diaPanel.add(diaSemanaLabel, BorderLayout.NORTH);
 
             JPanel horasPanel = new JPanel();
-            horasPanel.setLayout(new GridLayout(24, 1));
-            horasPanel.setOpaque(true);
+            horasPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+            horasPanel.setLayout(null); // Usamos 'null' para gestionar el layout de forma manual
 
-            for (int hora = 0; hora < 24; hora++) {
-                JPanel bloqueHora = new JPanel();
-                bloqueHora.setLayout(new GridBagLayout()); // Cambiado para permitir disposición horizontal de eventos
-                bloqueHora.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-                bloqueHora.setBackground(Color.WHITE);
-                bloqueHora.setPreferredSize(new Dimension(150, 25));
+            // Crear un mapa para contar cuántos eventos comienzan en la misma hora
+            Map<Integer, ArrayList<Evento>> eventosPorHora = new HashMap<>();
 
-                // Lista de eventos
-                ArrayList<Evento> eventosEnHora = new ArrayList<>();
-                for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())) {
-                    if (evento.getFecha().equals(diaActual) &&
-                            (evento.getHoraInicio().getHour() <= hora && evento.getHoraFin().getHour() > hora)) {
-                        eventosEnHora.add(evento);
-                    }
-                }
-
-                // Mostrar los eventos como etiquetas de tamaño proporcional
-                int espacioHorizontal = 0; // Espacio horizontal donde se apilarán los eventos
-                for (Evento evento : eventosEnHora) {
+            // Iterar sobre los eventos para este día
+            for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())) {
+                if (evento.getFecha().equals(diaActual)) {
                     int inicioEvento = evento.getHoraInicio().getHour();
                     int finEvento = evento.getHoraFin().getHour();
                     int duracionHoras = finEvento - inicioEvento; // Duración del evento en horas
 
-                    // Calcular el ancho y la altura del JLabel: cada hora representa 25 píxeles de altura
-                    int altoLabel = duracionHoras * 25; // Cada hora = 25 píxeles de altura
-                    int anchoLabel = 150; // El ancho es fijo para cada evento, puedes cambiarlo si deseas
+                    // Almacenar los eventos por hora de inicio
+                    eventosPorHora.computeIfAbsent(inicioEvento, k -> new ArrayList<>()).add(evento);
+                }
+            }
 
+            // Recorrer las horas y distribuir los eventos
+            for (Map.Entry<Integer, ArrayList<Evento>> entry : eventosPorHora.entrySet()) {
+                int horaInicio = entry.getKey();
+                ArrayList<Evento> eventos = entry.getValue();
+
+                // Calcular la altura para cada evento (25px por hora)
+                int altoLabel = 25; // Cada evento ocupará una fila de 25 píxeles de alto (una hora de duración)
+
+                // Calcular el ancho disponible para cada evento (dividir entre el número de eventos en esta hora)
+                int anchoTotal = 150; // Ancho total del bloque de hora
+                int anchoPorEvento = anchoTotal / eventos.size(); // Divide el ancho entre el número de eventos
+
+                // Recorrer los eventos y colocarlos en columnas
+                for (int index = 0; index < eventos.size(); index++) {
+                    Evento evento = eventos.get(index);
+                    int anchoEvento = anchoPorEvento; // Ancho de cada evento
+                    int posicionX = index * anchoEvento; // La posición horizontal depende del índice del evento
+
+                    // Calcular la duración del evento y la altura (25px por hora)
+                    int duracionEvento = evento.getHoraFin().getHour() - evento.getHoraInicio().getHour();
+                    int altoEvento = duracionEvento * 25; // Cada hora ocupa 25 píxeles
+
+                    // Crear el JLabel para el evento
                     JLabel eventoLabel = new JLabel(
                             evento.getNombre() + " " +
                             evento.getHoraInicio() + " - " +
@@ -337,6 +351,7 @@ public class Calendario extends JPanel {
                     eventoLabel.setOpaque(true);
                     eventoLabel.setFont(new Font("Arial", Font.BOLD, 12));
                     eventoLabel.setForeground(Color.WHITE);
+                    eventoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                     eventoLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     eventoLabel.setHorizontalAlignment(SwingConstants.CENTER);
                     eventoLabel.setVerticalAlignment(SwingConstants.NORTH);
@@ -352,20 +367,15 @@ public class Calendario extends JPanel {
                         eventoLabel.setBackground(Color.ORANGE);
                     }
 
-                    // Ajustar la posición y tamaño
-                    GridBagConstraints gbc = new GridBagConstraints();
-                    gbc.gridx = espacioHorizontal;  // Para que los eventos se apilen horizontalmente
-                    gbc.gridy = hora;  // Siempre en la misma fila (hora)
-                    gbc.gridheight = duracionHoras; // Ocupa varias filas dependiendo de la duración
-                    gbc.fill = GridBagConstraints.HORIZONTAL;
-                    gbc.weightx = 1;
-                    eventoLabel.setPreferredSize(new Dimension(anchoLabel, altoLabel)); // Usar el ancho fijo y la altura calculada
-                    bloqueHora.add(eventoLabel, gbc);
+                    // Calcular la posición Y (inicio del evento en coordenada Y)
+                    int posicionY = horaInicio * 25; // Multiplicar la hora de inicio por 25 píxeles (25px por cada hora)
 
-                    espacioHorizontal++; // Incrementar para el próximo evento en la misma hora
+                    // Establecer las propiedades de tamaño y posición
+                    eventoLabel.setBounds(posicionX, posicionY, anchoEvento, altoEvento); // X=posicionX, Y=posicionY, ancho calculado, alto según duración
+                    
+                    // Añadir el evento al panel de horas del día
+                    horasPanel.add(eventoLabel);
                 }
-
-                horasPanel.add(bloqueHora);
             }
 
             diaPanel.add(horasPanel, BorderLayout.CENTER);
@@ -377,7 +387,7 @@ public class Calendario extends JPanel {
                 }
             });
 
-            diasPanel.add(diaPanel);
+            diasPanel.add(diaPanel); // Añadir el panel del día a la vista semanal
         }
 
         diasPanel.revalidate();
