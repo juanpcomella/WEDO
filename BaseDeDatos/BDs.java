@@ -1242,6 +1242,46 @@ public class BDs {
 	}
 		return objetivos;
 	}
+	
+	public static void eliminarObjetivos(String usuario, String nombreObjetivo) {
+	    try {
+	        Class.forName("org.sqlite.JDBC");
+	    } catch (ClassNotFoundException e) {
+	        System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+	        return;
+	    }
+	    Connection connection = null;
+	    try {
+	        // Crear una conexión de BD
+	        connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+	        
+	        // Instrucción SQL para eliminar
+	        String sql = "DELETE FROM objetivos WHERE username = ? and nombre_obj = ?";
+	        
+	        // Preparar la consulta
+	        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        
+	        // Asignar el valor del correo al parámetro
+	        preparedStatement.setString(1, usuario);
+	        preparedStatement.setString(2, nombreObjetivo);
+	        
+	        // Ejecutar la consulta
+	        preparedStatement.executeUpdate();
+//	        System.out.println("Número de filas eliminadas: " + filasAfectadas);
+	        
+	    } catch (SQLException e) {
+	        System.err.println("Error en la operación DELETE: " + e.getMessage());
+	    } finally {
+	        try {
+	            if (connection != null) {
+	                connection.close();
+	            }
+	        } catch (SQLException e) {
+	            // Cierre de conexión fallido
+	            System.err.println("Error cerrando la conexión: " + e.getMessage());
+	        }
+	    }
+	}
 
 //	public static void main(String[] args) {
 //		crearTablaCodigosDeVerificacionTemporales();
