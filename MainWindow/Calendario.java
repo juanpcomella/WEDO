@@ -200,7 +200,8 @@ public class Calendario extends JPanel {
             JPanel eventosPanel = new JPanel();
             eventosPanel.setLayout(new GridLayout(5, 0));
             eventosPanel.setOpaque(false);
-            
+        	BDs.crearTablaEventos();
+
             for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())) {
                 if (evento.getFecha().equals(date)) {
                     JLabel eventoLabel = new JLabel(evento.getNombre());
@@ -450,7 +451,6 @@ public class Calendario extends JPanel {
         botonGuardar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	BDs.crearTablaEventos();
                 nombreEv = campoNombre.getText();
                 descripcionEv = texto.getText();
                 categoria = (Categorias) categorias.getSelectedItem();

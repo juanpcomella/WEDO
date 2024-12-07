@@ -85,13 +85,13 @@ public class RightSideBar extends JPanel {
         habitosTotales = cargarHabitosDesdeCSV("BaseDeDatos/objetivos_diarios.csv");
         //--------------------------------------------------------------------------------
         BDs.crearTablaHabitosTemporales();
-        habitosDiarios = cargarHabitosDiarios(); 
+        habitosDiarios = cargarHabitosDiarios(usuario); 
         habitosPanel = new JPanel();
         habitosPanel.setLayout(new GridLayout(4, 1, 5, 5));
         habitosPanel.setBackground(new Color(50,70,90));
 
         if (habitosDiarios.isEmpty()) {
-            generarHabitosDiarios();
+            generarHabitosDiarios(usuario);
         }
         
         actualizarHabitosPanel();
@@ -206,7 +206,7 @@ public class RightSideBar extends JPanel {
     
     //METODOS HABITOS---------------------------------------------------------------------------------
     //PASO 2 --> GENERAR UNA LISTA (habitosDiarios) CON SOLO 4 HABITOS (LOS QUE LUEGO SE PONDRAN EN EL PANEL)
-    private void generarHabitosDiarios() {
+    private void generarHabitosDiarios(Usuario usuario) {
     	//habitosTotales = lista de todos los habitos cargados del csv
         if (habitosTotales.size() < 4) {
             habitosDiarios = new ArrayList<>(habitosTotales);
@@ -215,7 +215,7 @@ public class RightSideBar extends JPanel {
             //habitosDiarios = lista de cuatro habitos aleatorios de habitosTotales
             habitosDiarios = new ArrayList<>(habitosTotales.subList(0, 4));
         }
-        guardarHabitosDiariosEnBD();
+        guardarHabitosDiariosEnBD(usuario);
     }
 
     private void actualizarHabitosPanel() {
@@ -248,12 +248,12 @@ public class RightSideBar extends JPanel {
     }
 //PARA QUE CAMBIEN LOS HABITOS PASADO UN TIEMPO
 //------------------------------------------------------------------------------
-    private void programarActualizacionDiaria() {
+    private void programarActualizacionDiaria(Usuario usuario) {
         Timer timer = new Timer();
         TimerTask tareaDiaria = new TimerTask() {
             @Override
             public void run() {
-                generarHabitosDiarios();
+                generarHabitosDiarios(usuario);
                 SwingUtilities.invokeLater(() -> actualizarHabitosPanel());
             }
         };
@@ -275,20 +275,20 @@ public class RightSideBar extends JPanel {
     }
 //---------------------------------------------------------------------------------
     //PASO 3 --> GUARDAMOS LOS 4 HABITOS DE habitosDiarios QUE USAREMOS MAS TARDE EN LA BASE DE DATOS CON LA FECHAS DE "HOY"
-    private void guardarHabitosDiariosEnBD() {
+    private void guardarHabitosDiariosEnBD(Usuario usuario) {
             String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             for (String habito : habitosDiarios) {
             	String nombre_habito;
                 nombre_habito = habito;
-                BDs.insertarHabitosTemporales(fechaHoy, nombre_habito);
+                BDs.insertarHabitosTemporales(usuario.getNombreUsuario(), fechaHoy, nombre_habito);
             }
         }
-    //PASO 4 --> COGEMOS DE LA BASE DE DATOS LOS HABITOS CON LA FECHA DE HOY Y METEMOS LOS NOMBRES EN LA LISTA habitos
-    private ArrayList<String> cargarHabitosDiarios() {
+    //PASO 4 --> COGEMOS DE LA BASE DE DATOS LOS HABITOS CON LA FECHA DE HOY Y DEL USUARIO INDICADO Y METEMOS LOS NOMBRES EN LA LISTA habitos
+    private ArrayList<String> cargarHabitosDiarios(Usuario usuario) {
     	ArrayList<Habito> habitosConFecha = new ArrayList<>();
         ArrayList<String> habitos = new ArrayList<>();
             String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-            habitosConFecha = BDs.crearListaHabitos(fechaHoy);
+            habitosConFecha = BDs.crearListaHabitos(usuario.getNombreUsuario(), fechaHoy);
             BDs.eliminarTodosLosHabitos();
             
             for(Habito habito: habitosConFecha) {
