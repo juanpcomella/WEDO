@@ -258,13 +258,16 @@ public class Calendario extends JPanel {
         JPanel horasPanelIzquierda = new JPanel();
         horasPanelIzquierda.setLayout(new GridLayout(24, 1));
         horasPanelIzquierda.setPreferredSize(new Dimension(60, 600));
+        horasPanelIzquierda.setBackground(new Color(173, 216, 230));
 
         for (int hora = 0; hora < 24; hora++) {
             JPanel horaContainer = new JPanel(new GridBagLayout());
             JLabel horaLabel = new JLabel(String.format("%02d:00", hora));
             horaLabel.setFont(new Font("Arial", Font.BOLD, 12));
             horaLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            horaLabel.setBackground(new Color(173, 216, 230));
             horaContainer.add(horaLabel);
+            horaContainer.setBackground(new Color(173, 216, 230));
             horasPanelIzquierda.add(horaContainer);
         }
 
@@ -272,13 +275,15 @@ public class Calendario extends JPanel {
         LocalDate startOfWeek = seleccionado.with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
         LocalDate hoy = LocalDate.now();
 
-        diasPanel.setLayout(new GridLayout(1, 8)); 
+        diasPanel.setLayout(new GridLayout(1, 8));
+        diasPanel.setBackground(new Color(173, 216, 230));
         diasPanel.add(horasPanelIzquierda);
 
         for (int i = 0; i < 7; i++) {
             LocalDate diaActual = startOfWeek.plusDays(i);
 
             JPanel diaPanel = new JPanel();
+            diaPanel.setBackground(new Color(173, 216, 230));
             diaPanel.setLayout(new BorderLayout());
             //diaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
             diaPanel.setBackground(Color.WHITE);
@@ -286,8 +291,11 @@ public class Calendario extends JPanel {
 
             if (diaActual.equals(hoy)) {
                 diaPanel.setBackground(Color.LIGHT_GRAY);
+            }else {
+            	diaPanel.setBackground(new Color(173, 216, 230));
             }
             JLabel diaSemanaLabel = new JLabel(diasSemana[i] + " " + diaActual.getDayOfMonth(), SwingConstants.CENTER);
+            diaSemanaLabel.setBackground(new Color(173, 216, 230));
             diaSemanaLabel.setFont(new Font("Arial", Font.BOLD, 16));
             diaPanel.add(diaSemanaLabel, BorderLayout.NORTH);
 
