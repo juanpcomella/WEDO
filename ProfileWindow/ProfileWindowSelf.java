@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.io.*;
 
@@ -29,6 +30,7 @@ public class ProfileWindowSelf extends JFrame {
         setLocationRelativeTo(null);
 
         JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setBackground(new Color(50, 70, 90));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.BOTH;
@@ -40,7 +42,7 @@ public class ProfileWindowSelf extends JFrame {
         gbc.weighty = 1.0;
 
         JPanel leftPanel = new JPanel(new GridBagLayout());
-        leftPanel.setBackground(Color.WHITE);
+        leftPanel.setBackground(new Color(173, 216, 230));
 
         GridBagConstraints leftGBC = new GridBagConstraints();
         leftGBC.insets = new Insets(5, 5, 5, 5);
@@ -99,7 +101,7 @@ public class ProfileWindowSelf extends JFrame {
         leftGBC.anchor = GridBagConstraints.CENTER;
 
         JPanel profilePicturePanel = new JPanel(new BorderLayout());
-        profilePicturePanel.setBackground(Color.WHITE);
+        profilePicturePanel.setBackground(new Color(173, 216, 230));
 
         try {
             BufferedImage profileImage = ImageIO.read(new File("imagenes/PERFIL.png"));
@@ -121,6 +123,7 @@ public class ProfileWindowSelf extends JFrame {
         JLabel usernameLabel = new JLabel(""+usuario.getNombreUsuario(), SwingConstants.CENTER);
         usernameLabel.setFont(new Font("Arial", Font.BOLD, 48));
         usernamePanel.add(usernameLabel);
+        usernamePanel.setBackground(new Color(173, 216, 230));
         leftPanel.add(usernamePanel, leftGBC);
 
         // Left Panel - Description Row
@@ -132,6 +135,7 @@ public class ProfileWindowSelf extends JFrame {
         JLabel descriptionLabel = new JLabel("Alguna descripción o algún dato noc");
         descriptionLabel.setFont(new Font("Arial", Font.BOLD, 24));
         descriptionPanel.add(descriptionLabel);
+        descriptionPanel.setBackground(new Color(173, 216, 230));
         leftPanel.add(descriptionPanel, leftGBC);
 
 
@@ -144,7 +148,7 @@ public class ProfileWindowSelf extends JFrame {
         gbc.weightx = 0.5;
         gbc.weighty = 1.0;
         JPanel rightPanel = new JPanel(new GridBagLayout());
-        rightPanel.setBackground(Color.WHITE);
+        rightPanel.setBackground(new Color(50, 70, 90));
 
         GridBagConstraints rightGBC = new GridBagConstraints();
         rightGBC.insets = new Insets(5, 5, 5, 5);
@@ -156,16 +160,17 @@ public class ProfileWindowSelf extends JFrame {
         rightGBC.gridy = 0;
         rightGBC.weighty = 0.333;
         JPanel dailyStreakPanel = new JPanel(new BorderLayout());
-        dailyStreakPanel.setBackground(new Color(58, 92, 181));
+        dailyStreakPanel.setBackground(new Color(173, 216, 230));
 
         JLabel streakTitleLabel = new JLabel("Racha de Objetivos Diarios", SwingConstants.CENTER);
         streakTitleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         streakTitleLabel.setForeground(Color.WHITE);
         streakTitleLabel.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
+        streakTitleLabel.setBackground(new Color(173, 216, 230));
         dailyStreakPanel.add(streakTitleLabel, BorderLayout.NORTH);
 
         JPanel contentPanel = new JPanel(new GridBagLayout());
-        contentPanel.setBackground(new Color(58, 92, 181));
+        contentPanel.setBackground(new Color(173, 216, 230));
         GridBagConstraints streakGBC = new GridBagConstraints();
         streakGBC.insets = new Insets(5, 5, 5, 5);
 
@@ -195,7 +200,7 @@ public class ProfileWindowSelf extends JFrame {
 
         streakGBC.anchor = GridBagConstraints.CENTER;
         JPanel gridPanel = new JPanel(new GridLayout(1, 4, 10, 10));
-        gridPanel.setBackground(new Color(58, 92, 181));
+        gridPanel.setBackground(new Color(173, 216, 230));
 
         int cantObjetivosDiarios = 4;
         final int[] completedObjectives = {0};
@@ -258,7 +263,7 @@ public class ProfileWindowSelf extends JFrame {
         rightGBC.weighty = 0.333;
 
         JPanel progressPanel = new JPanel();
-        progressPanel.setBackground(new Color(58, 92, 181));
+        progressPanel.setBackground(new Color(173, 216, 230));
         progressPanel.setLayout(new BoxLayout(progressPanel, BoxLayout.Y_AXIS));
 
         progressPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -296,7 +301,7 @@ public class ProfileWindowSelf extends JFrame {
         rightGBC.gridy = 2;
         rightGBC.weighty = 0.333;
         JPanel activityPanel = new JPanel();
-        activityPanel.setBackground(new Color(58, 92, 181));
+        activityPanel.setBackground(new Color(173, 216, 230));
         activityPanel.setLayout(new BorderLayout());
 
         JLabel activityLabel = new JLabel("Próximas actividades de " + usuario.getNombreUsuario(), SwingConstants.CENTER);
@@ -310,12 +315,12 @@ public class ProfileWindowSelf extends JFrame {
         DefaultTableModel tableModel = new DefaultTableModel(activityTableParams, 0);
         JTable activityJTable = new JTable(tableModel);
         activityJTable.setOpaque(false);
-        activityJTable.setBackground(new Color(0, 0, 0, 0));
+        activityJTable.setBackground(Color.WHITE);
 
         JScrollPane jtableScroll = new JScrollPane(activityJTable);
         jtableScroll.getViewport().setOpaque(false);
         jtableScroll.setOpaque(false);
-
+        
         activityPanel.add(jtableScroll, BorderLayout.CENTER);
 
 // Cargar eventos del usuario
