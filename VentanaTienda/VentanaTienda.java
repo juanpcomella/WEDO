@@ -11,6 +11,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 
+import MainWindow.MainWindow;
+import StartingWindows.Usuario;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,7 +35,7 @@ public class VentanaTienda extends JFrame {
     private Map<Point, Boolean> estadoCeldasApodo = new HashMap<>(); //new
 
     private int money;
-    public VentanaTienda() {
+    public VentanaTienda(Usuario usuario) {
         // Configuración de la ventana principal
         setTitle("Tienda");
         setSize(800, 600);
@@ -560,6 +563,8 @@ public class VentanaTienda extends JFrame {
         volverB3.setFocusable(false);
         
         
+        
+        
         panelTematica.add(panelNorteMonedas2, BorderLayout.NORTH);
         
  
@@ -902,6 +907,29 @@ public class VentanaTienda extends JFrame {
             Point celda_comprada = new Point(i, 1); 
             estadoCeldasApodo.put(celda_comprada, false); 
         }
+        
+        volverB.addActionListener(e ->{
+        	MainWindow mainWindow = new MainWindow(usuario);
+            mainWindow.setVisible(true);
+            dispose();
+        	
+        });
+        
+        volverB2.addActionListener(e ->{
+        	MainWindow mainWindow = new MainWindow(usuario);
+            mainWindow.setVisible(true);
+            dispose();
+        	
+        });
+        
+        volverB3.addActionListener(e ->{
+        	MainWindow mainWindow = new MainWindow(usuario);
+            mainWindow.setVisible(true);
+            dispose();
+        	
+        });
+        	
+        
 
     }
     
@@ -917,7 +945,8 @@ public class VentanaTienda extends JFrame {
     }
 
     public static void main(String[] args) {
-        VentanaTienda ventana = new VentanaTienda();
+    	Usuario usuario = new Usuario(null, null, null);
+        VentanaTienda ventana = new VentanaTienda(usuario);
         ventana.setVisible(true);
     }
 }
