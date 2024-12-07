@@ -285,14 +285,13 @@ public class Calendario extends JPanel {
             JPanel diaPanel = new JPanel();
             diaPanel.setBackground(new Color(173, 216, 230));
             diaPanel.setLayout(new BorderLayout());
-            //diaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
             diaPanel.setBackground(Color.WHITE);
             diaPanel.setPreferredSize(new Dimension(150, 600));
 
             if (diaActual.equals(hoy)) {
                 diaPanel.setBackground(Color.LIGHT_GRAY);
-            }else {
-            	diaPanel.setBackground(new Color(173, 216, 230));
+            } else {
+                diaPanel.setBackground(new Color(173, 216, 230));
             }
             JLabel diaSemanaLabel = new JLabel(diasSemana[i] + " " + diaActual.getDayOfMonth(), SwingConstants.CENTER);
             diaSemanaLabel.setBackground(new Color(173, 216, 230));
@@ -305,64 +304,65 @@ public class Calendario extends JPanel {
 
             for (int hora = 0; hora < 24; hora++) {
                 JPanel bloqueHora = new JPanel();
-                bloqueHora.setLayout(null); 
+                bloqueHora.setLayout(new GridBagLayout()); // Cambiado para permitir disposición horizontal de eventos
                 bloqueHora.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
                 bloqueHora.setBackground(Color.WHITE);
                 bloqueHora.setPreferredSize(new Dimension(150, 25));
-                
+
+                // Lista de eventos
+                ArrayList<Evento> eventosEnHora = new ArrayList<>();
                 for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())) {
                     if (evento.getFecha().equals(diaActual) &&
-                        (evento.getHoraInicio().getHour() <= hora && evento.getHoraFin().getHour() > hora)) {
-
-                        int inicioEvento = evento.getHoraInicio().getHour();
-                        int finEvento = evento.getHoraFin().getHour();
-                        int duracionBloques = finEvento - inicioEvento;
-
-                        JLabel eventoLabel = new JLabel(
-                        	    evento.getNombre() + " " +
-                        	    evento.getHoraInicio() + " - " +
-                        	    evento.getHoraFin()
-                        	);
-
-                        eventoLabel.setOpaque(true);
-                        eventoLabel.setFont(new Font("Arial", Font.BOLD, 12));
-                        eventoLabel.setForeground(Color.WHITE);
-                        eventoLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); 
-                        eventoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-                        eventoLabel.setVerticalAlignment(SwingConstants.NORTH);
-
-                        if (evento.getCategoria().equals(Categorias.Estudios)) {
-                            eventoLabel.setBackground(Color.MAGENTA);
-                        } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
-                            eventoLabel.setBackground(Color.GREEN);
-                        } else if (evento.getCategoria().equals(Categorias.Deporte)) {
-                            eventoLabel.setBackground(Color.CYAN);
-                        } else if (evento.getCategoria().equals(Categorias.Ocio)) {
-                            eventoLabel.setBackground(Color.ORANGE);
-                        }
-
-                        int yPos = (inicioEvento - hora) * 25;
-                        int alturaEvento = duracionBloques * 25;
-                        eventoLabel.setBounds(0, yPos, bloqueHora.getWidth(), alturaEvento);
-
-                        bloqueHora.addComponentListener(new ComponentAdapter() {
-                            @Override
-                            public void componentResized(ComponentEvent e) {
-                                eventoLabel.setBounds(0, yPos, bloqueHora.getWidth(), 25 * duracionBloques);
-                            }
-                        });
-                        
-                        
-                        bloqueHora.add(eventoLabel);
-                        
-                        eventoLabel.addMouseListener(new MouseAdapter() {
-                            @Override
-                            public void mouseClicked(MouseEvent e) {
-                                mostrarEvento(evento, diaActual, usuario);
-                            }
-                        });
-
+                            (evento.getHoraInicio().getHour() <= hora && evento.getHoraFin().getHour() > hora)) {
+                        eventosEnHora.add(evento);
                     }
+                }
+
+                // Mostrar los eventos como etiquetas de tamaño proporcional
+                int espacioHorizontal = 0; // Espacio horizontal donde se apilarán los eventos
+                for (Evento evento : eventosEnHora) {
+                    int inicioEvento = evento.getHoraInicio().getHour();
+                    int finEvento = evento.getHoraFin().getHour();
+                    int duracionHoras = finEvento - inicioEvento; // Duración del evento en horas
+
+                    // Calcular el ancho y la altura del JLabel: cada hora representa 25 píxeles de altura
+                    int altoLabel = duracionHoras * 25; // Cada hora = 25 píxeles de altura
+                    int anchoLabel = 150; // El ancho es fijo para cada evento, puedes cambiarlo si deseas
+
+                    JLabel eventoLabel = new JLabel(
+                            evento.getNombre() + " " +
+                            evento.getHoraInicio() + " - " +
+                            evento.getHoraFin()
+                    );
+                    eventoLabel.setOpaque(true);
+                    eventoLabel.setFont(new Font("Arial", Font.BOLD, 12));
+                    eventoLabel.setForeground(Color.WHITE);
+                    eventoLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+                    eventoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                    eventoLabel.setVerticalAlignment(SwingConstants.NORTH);
+
+                    // Colorear según categoría
+                    if (evento.getCategoria().equals(Categorias.Estudios)) {
+                        eventoLabel.setBackground(Color.MAGENTA);
+                    } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
+                        eventoLabel.setBackground(Color.GREEN);
+                    } else if (evento.getCategoria().equals(Categorias.Deporte)) {
+                        eventoLabel.setBackground(Color.CYAN);
+                    } else if (evento.getCategoria().equals(Categorias.Ocio)) {
+                        eventoLabel.setBackground(Color.ORANGE);
+                    }
+
+                    // Ajustar la posición y tamaño
+                    GridBagConstraints gbc = new GridBagConstraints();
+                    gbc.gridx = espacioHorizontal;  // Para que los eventos se apilen horizontalmente
+                    gbc.gridy = hora;  // Siempre en la misma fila (hora)
+                    gbc.gridheight = duracionHoras; // Ocupa varias filas dependiendo de la duración
+                    gbc.fill = GridBagConstraints.HORIZONTAL;
+                    gbc.weightx = 1;
+                    eventoLabel.setPreferredSize(new Dimension(anchoLabel, altoLabel)); // Usar el ancho fijo y la altura calculada
+                    bloqueHora.add(eventoLabel, gbc);
+
+                    espacioHorizontal++; // Incrementar para el próximo evento en la misma hora
                 }
 
                 horasPanel.add(bloqueHora);
@@ -376,13 +376,15 @@ public class Calendario extends JPanel {
                     mostrarDialogo(diaActual, usuario);
                 }
             });
-            
+
             diasPanel.add(diaPanel);
         }
 
         diasPanel.revalidate();
         diasPanel.repaint();
     }
+
+
 
     private void mostrarDialogo(LocalDate date, Usuario usuario) {
         JDialog dialog = new JDialog();

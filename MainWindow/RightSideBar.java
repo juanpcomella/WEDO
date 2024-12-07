@@ -56,7 +56,7 @@ public class RightSideBar extends JPanel {
         
         BDs.crearTablaObjetivos();
         for(Objetivo objetivo: BDs.crearListaObjetivos(usuario.getNombreUsuario())) {
-            añadirObjetivo(objetivo.getNombre(), objetivo.getFechaFin().toString());
+            añadirObjetivo(objetivo.getNombre(), objetivo.getFechaFin().toString(), usuario);
         }
         añadirObjetivoButton.addActionListener(e -> {
             mostrarDialogoAñadirObjetivo(usuario);
@@ -141,7 +141,7 @@ public class RightSideBar extends JPanel {
                     return; 
                 }
                 BDs.insertarObjetivos(usuario.getNombreUsuario(), nombre, descripcion, fecha, false);
-                añadirObjetivo(nombre, fecha);
+                añadirObjetivo(nombre, fecha, usuario);
             } else {
                 JOptionPane.showMessageDialog(this, "Todos los campos deben ser completados.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -149,7 +149,7 @@ public class RightSideBar extends JPanel {
     }
 
    
-    private void añadirObjetivo(String nombre, String fechaCumplimiento) {
+    private void añadirObjetivo(String nombre, String fechaCumplimiento, Usuario usuario) {
         Objetivo objetivo = new Objetivo(nombre, "Descripción del objetivo", LocalDate.parse(fechaCumplimiento), false);
         objetivo.setCuantoQueda(obtenerCuantoQueda(fechaCumplimiento)); 
 
@@ -158,7 +158,7 @@ public class RightSideBar extends JPanel {
         // Usar el método recursivo para ordenar los objetivos
         ordenarObjetivosPorFechaRecursivo(listaObjetivos, 0);
 
-        actualizarPanelObjetivos();
+        actualizarPanelObjetivos(usuario);
     }
     
     private void ordenarObjetivosPorFechaRecursivo(ArrayList<Objetivo> lista, int index) {
@@ -188,7 +188,7 @@ public class RightSideBar extends JPanel {
         listaObjetivos.sort(Comparator.comparingInt(Objetivo::getCuantoQueda));
     }
 
-    private void actualizarPanelObjetivos() {
+    private void actualizarPanelObjetivos(Usuario usuario) {
         objetivosPanel.removeAll();
 
         for (Objetivo objetivo : listaObjetivos) {
@@ -209,7 +209,7 @@ public class RightSideBar extends JPanel {
             objetivoLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    mostrarDetallesObjetivo(objetivo);
+                    mostrarDetallesObjetivo(objetivo, usuario);
                 }
 
                 @Override
@@ -231,7 +231,7 @@ public class RightSideBar extends JPanel {
         repaint();
     }
     
-    private void mostrarDetallesObjetivo(Objetivo objetivo) {
+    private void mostrarDetallesObjetivo(Objetivo objetivo, Usuario usuario) {
         JDialog dialog = new JDialog((Frame) null, "Detalles del Objetivo", true);
         dialog.setSize(400, 200);
         dialog.setLayout(new BorderLayout());
@@ -259,7 +259,7 @@ public class RightSideBar extends JPanel {
         contenidoPanel.add(Box.createVerticalStrut(10));
         contenidoPanel.add(fechaFinLabel);
 
-        JButton eliminarButton = new JButton("Eliminar Objetivo");
+        JButton eliminarButton = new JButton("Eliminar objetivo");
         eliminarButton.setBackground(Color.RED); 
         eliminarButton.setForeground(Color.WHITE);
         eliminarButton.addActionListener(e -> {
@@ -271,7 +271,8 @@ public class RightSideBar extends JPanel {
             );
 
             if (confirm == JOptionPane.YES_OPTION) {
-                eliminarObjetivoDePantalla(objetivo);
+            	BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
+                eliminarObjetivoDePantalla(objetivo, usuario);
                 dialog.dispose();
             }
         });
@@ -282,9 +283,9 @@ public class RightSideBar extends JPanel {
         dialog.setVisible(true);
     }
 
-    private void eliminarObjetivoDePantalla(Objetivo objetivo) {
+    private void eliminarObjetivoDePantalla(Objetivo objetivo, Usuario usuario) {
         listaObjetivos.removeIf(o -> o.getNombre().equals(objetivo.getNombre()));
-        actualizarPanelObjetivos();
+        actualizarPanelObjetivos(usuario);
     }
 
     private int obtenerCuantoQueda(String fechaCumplimiento) {
