@@ -61,9 +61,9 @@ public class Evento {
         return descripcion;
     }
 
-    public boolean esTodoElDia() {
-		return todoElDia;
-	}
+    public boolean esEventoTodoElDia() {
+        return LocalTime.of(0, 0).equals(horaInicio) && LocalTime.of(23, 59).equals(horaFin);
+    }
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
