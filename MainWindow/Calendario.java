@@ -211,13 +211,12 @@ public class Calendario extends JPanel {
                 	if (!evento.esTodoElDia()) {
                 	    JLabel eventoLabelTodoElDia = new JLabel();
                 	    eventoLabelTodoElDia.setOpaque(true);
-                	    eventoLabelTodoElDia.setPreferredSize(new Dimension(10, 10)); // Ajusta el tamaño del cuadrado
+                	    eventoLabelTodoElDia.setPreferredSize(new Dimension(10, 10));
                 	    eventoLabelTodoElDia.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 	    eventoLabelTodoElDia.setFont(new Font("Arial", Font.BOLD, 8));
                 	    eventoLabelTodoElDia.setBackground(Color.RED);
 
-                	    // Cambiar el diseño de `diaPanel` a un FlowLayout alineado a la derecha
-                	    diaPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 2, 2)); // Margen horizontal y vertical pequeños
+                	    diaPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 2, 2)); 
                 	    diaPanel.add(eventoLabelTodoElDia);
 
                 	    // Listener para manejar clics en el evento
