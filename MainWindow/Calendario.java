@@ -286,73 +286,65 @@ public class Calendario extends JPanel {
             LocalDate diaActual = startOfWeek.plusDays(i);
 
             JPanel diaPanel = new JPanel();
-            diaPanel.setBackground(new Color(173, 216, 230));
             diaPanel.setLayout(new BorderLayout());
             diaPanel.setBackground(Color.WHITE);
             diaPanel.setPreferredSize(new Dimension(150, 600));
 
             if (diaActual.equals(hoy)) {
                 diaPanel.setBackground(Color.LIGHT_GRAY);
-            } else {
-                diaPanel.setBackground(new Color(173, 216, 230));
             }
+
             JLabel diaSemanaLabel = new JLabel(diasSemana[i] + " " + diaActual.getDayOfMonth(), SwingConstants.CENTER);
-            diaSemanaLabel.setBackground(new Color(173, 216, 230));
             diaSemanaLabel.setFont(new Font("Arial", Font.BOLD, 16));
+            diaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
             diaPanel.add(diaSemanaLabel, BorderLayout.NORTH);
 
-            JPanel horasPanel = new JPanel();
-            horasPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-            horasPanel.setLayout(null); // Usamos 'null' para gestionar el layout de forma manual
+            // Crear un panel personalizado para las horas y las líneas grises
+            JPanel horasPanel = new JPanel() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
 
-            // Crear un mapa para contar cuántos eventos comienzan en la misma hora
+                    // Dibujar líneas grises horizontales cada 25 píxeles
+                    g.setColor(Color.LIGHT_GRAY);
+                    for (int y = 25; y < getHeight(); y += 25) {
+                        g.drawLine(0, y, getWidth(), y);
+                    }
+                }
+            };
+            horasPanel.setLayout(null); // Usamos 'null' para gestionar la disposición manual de los eventos
+
+            // Agregar los eventos al panel de horas
             Map<Integer, ArrayList<Evento>> eventosPorHora = new HashMap<>();
-
-            // Iterar sobre los eventos para este día
             for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())) {
                 if (evento.getFecha().equals(diaActual)) {
                     int inicioEvento = evento.getHoraInicio().getHour();
-                    int finEvento = evento.getHoraFin().getHour();
-                    int duracionHoras = finEvento - inicioEvento; // Duración del evento en horas
-
-                    // Almacenar los eventos por hora de inicio
                     eventosPorHora.computeIfAbsent(inicioEvento, k -> new ArrayList<>()).add(evento);
                 }
             }
 
-            // Recorrer las horas y distribuir los eventos
             for (Map.Entry<Integer, ArrayList<Evento>> entry : eventosPorHora.entrySet()) {
                 int horaInicio = entry.getKey();
                 ArrayList<Evento> eventos = entry.getValue();
 
-                // Calcular la altura para cada evento (25px por hora)
-                int altoLabel = 25; // Cada evento ocupará una fila de 25 píxeles de alto (una hora de duración)
+                int anchoTotal = 150; // Ancho total del panel
+                int anchoPorEvento = anchoTotal / eventos.size(); // Ancho de cada evento
 
-                // Calcular el ancho disponible para cada evento (dividir entre el número de eventos en esta hora)
-                int anchoTotal = 150; // Ancho total del bloque de hora
-                int anchoPorEvento = anchoTotal / eventos.size(); // Divide el ancho entre el número de eventos
-
-                // Recorrer los eventos y colocarlos en columnas
                 for (int index = 0; index < eventos.size(); index++) {
                     Evento evento = eventos.get(index);
-                    int anchoEvento = anchoPorEvento; // Ancho de cada evento
-                    int posicionX = index * anchoEvento; // La posición horizontal depende del índice del evento
+                    int posicionX = index * anchoPorEvento;
 
-                    // Calcular la duración del evento y la altura (25px por hora)
                     int duracionEvento = evento.getHoraFin().getHour() - evento.getHoraInicio().getHour();
-                    int altoEvento = duracionEvento * 25; // Cada hora ocupa 25 píxeles
+                    int altoEvento = duracionEvento * 25;
 
-                    // Crear el JLabel para el evento
                     JLabel eventoLabel = new JLabel(
                             evento.getNombre() + " " +
                             evento.getHoraInicio() + " - " +
                             evento.getHoraFin()
                     );
                     eventoLabel.setOpaque(true);
-                    eventoLabel.setFont(new Font("Arial", Font.BOLD, 12));
+                    eventoLabel.setFont(new Font("Arial", Font.BOLD, 10));
                     eventoLabel.setForeground(Color.WHITE);
-                    eventoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                    eventoLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     eventoLabel.setHorizontalAlignment(SwingConstants.CENTER);
                     eventoLabel.setVerticalAlignment(SwingConstants.NORTH);
 
@@ -367,13 +359,8 @@ public class Calendario extends JPanel {
                         eventoLabel.setBackground(Color.ORANGE);
                     }
 
-                    // Calcular la posición Y (inicio del evento en coordenada Y)
-                    int posicionY = horaInicio * 25; // Multiplicar la hora de inicio por 25 píxeles (25px por cada hora)
-
-                    // Establecer las propiedades de tamaño y posición
-                    eventoLabel.setBounds(posicionX, posicionY, anchoEvento, altoEvento); // X=posicionX, Y=posicionY, ancho calculado, alto según duración
-                    
-                    // Añadir el evento al panel de horas del día
+                    int posicionY = horaInicio * 25;
+                    eventoLabel.setBounds(posicionX, posicionY, anchoPorEvento, altoEvento);
                     horasPanel.add(eventoLabel);
                 }
             }
@@ -387,7 +374,7 @@ public class Calendario extends JPanel {
                 }
             });
 
-            diasPanel.add(diaPanel); // Añadir el panel del día a la vista semanal
+            diasPanel.add(diaPanel);
         }
 
         diasPanel.revalidate();

@@ -311,6 +311,7 @@ public class VentanaLoginDef extends JFrame {
                 	}else {
                 		usuario.setCorreo(BDs.getEmail(usernameUser));
                 	}
+                    usuario.setSaldo(BDs.getSaldo(usuario.getNombreUsuario()));
                   	MainWindow mw = new MainWindow(usuario);
                     mw.setVisible(true);
                     dispose();

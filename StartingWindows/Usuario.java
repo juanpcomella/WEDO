@@ -5,6 +5,7 @@ public class Usuario {
 	String nombreUsuario;
 	String correo;
 	String contraseña;
+	int saldo;
 
 	public Usuario(String nombreUsuario, String correo, String contraseña) {
 		super();
@@ -12,6 +13,17 @@ public class Usuario {
 		this.correo = correo;
 		this.contraseña = contraseña;
 	}
+	
+
+	public int getSaldo() {
+		return saldo;
+	}
+
+
+	public void setSaldo(int saldo) {
+		this.saldo = saldo;
+	}
+
 
 	public String getNombreUsuario() {
 		return nombreUsuario;

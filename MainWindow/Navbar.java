@@ -22,6 +22,7 @@ import javax.imageio.ImageIO;
 import static java.lang.Thread.sleep;
 
 public class Navbar extends JPanel {
+	public static JLabel coinAmountLabel;
 
     public Navbar(LeftSideBar leftSideBar, Usuario usuario, JFrame mw) {
         Usuario CURRENT_USER = usuario;
@@ -145,14 +146,19 @@ public class Navbar extends JPanel {
         gbc.gridx++;
         add(Box.createHorizontalStrut(20), gbc);
 
-        JLabel coinLabel = new JLabel("\uD83E\uDE99");
+        ImageIcon iconoMonedaDefault = new ImageIcon("imagenes/coin_sin_fondo.png");
+        Image img = iconoMonedaDefault.getImage(); // Obtener la imagen del ícono
+        Image resizedImg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH); // Escalar la imagen
+        ImageIcon resizedIcon = new ImageIcon(resizedImg); // Crear un nuevo ImageIcon
+
+        JLabel coinLabel = new JLabel(resizedIcon);
         coinLabel.setFont(new Font("Arial", Font.BOLD, 30));
         gbc.gridx++;
         gbc.weightx = 0;
         add(coinLabel, gbc);
-
-        int coinAmount = 0;
-        JLabel coinAmountLabel = new JLabel(coinAmount + "");
+        coinAmountLabel = new JLabel(Integer.toString(usuario.getSaldo()));
+        coinAmountLabel.setFont(new Font("Arial",Font.BOLD,20));
+        coinAmountLabel.setForeground(new Color(50, 70, 90));
         gbc.gridx++;
         add(coinAmountLabel, gbc);
 

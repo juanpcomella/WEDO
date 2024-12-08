@@ -11,7 +11,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 
+import BaseDeDatos.BDs;
 import MainWindow.MainWindow;
+import MainWindow.Navbar;
 import StartingWindows.Usuario;
 
 import java.awt.*;
@@ -114,9 +116,8 @@ public class VentanaTienda extends JFrame {
 
 
         // Dinero almacenado aquí, luego se hará un parseInt para convertir
-        String dinero = "200";
+        String dinero = Integer.toString(BDs.getSaldo(usuario.getNombreUsuario()));
         
-
         // Parseo de dinero
         money = Integer.parseInt(dinero);
 
@@ -293,6 +294,10 @@ public class VentanaTienda extends JFrame {
                             precio = (Integer) cellData[0];
                         }
                     }
+                    
+//                    String dinero = Integer.toString(BDs.getSaldo(usuario.getNombreUsuario()));                  
+//                    // Parseo de dinero
+//                    money = Integer.parseInt(dinero);
 
                     // Verificar si hay suficiente dinero
                     if (money >= precio) {
@@ -311,6 +316,9 @@ public class VentanaTienda extends JFrame {
                             comprado.setVerticalAlignment(SwingConstants.CENTER);
                             System.out.println("Compra realizada.");
                             money -= precio; // Restar el precio al dinero del usuario
+                            usuario.setSaldo(money);
+                            BDs.updateSaldo(usuario.getNombreUsuario(),usuario.getSaldo());
+                            Navbar.coinAmountLabel.setText(String.valueOf(usuario.getSaldo()));
                             stringDinero.setText(String.valueOf(money));
                             StringmonyL.setText(String.valueOf(money));
                             StrApodomoney.setText(String.valueOf(money));
@@ -895,7 +903,7 @@ public class VentanaTienda extends JFrame {
         JPanel maestroPanel = new JPanel();
         maestroPanel.add(maestroL);
         
-        maestroPanel.setBackground(Color.red); //asi se colorean aunque sea por separado
+        //maestroPanel.setBackground(Color.red); // Asi se colorean aunque sea por separado
         
         modeloApodos.addRow(new Object[]{maestroPanel, new Object[]{100, icon2}});
         
