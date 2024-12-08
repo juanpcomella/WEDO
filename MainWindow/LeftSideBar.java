@@ -45,8 +45,13 @@ public class LeftSideBar extends JPanel {
                 panel.repaint();
             }
         });
-
-        add(panel); // Añadir el panel a la barra lateral
+        
+        //CAMBIO DE COLOR MOMENTANEO
+        panel.setBackground(Color.red);
+        
+        add(new JScrollPane(panel)); // Añadir el panel a la barra lateral
+        
+        //hasta aqui mi codigo
     }
 
     public static void main(String[] args) {

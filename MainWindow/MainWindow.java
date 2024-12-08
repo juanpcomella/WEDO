@@ -49,7 +49,7 @@ public class MainWindow extends JFrame {
         leftSideBar.setPreferredSize(new Dimension(0, getHeight()));
         panelOeste.add(leftSideBar, BorderLayout.CENTER);
 
-        Navbar navbar = new Navbar(leftSideBar, usuario);
+        Navbar navbar = new Navbar(leftSideBar, usuario, this);
         int navbarHeight = (int) (getHeight() * 0.1);
         navbar.setPreferredSize(new Dimension(getWidth(), navbarHeight));
         panelNorte.add(navbar, BorderLayout.CENTER);
