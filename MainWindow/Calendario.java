@@ -208,6 +208,7 @@ public class Calendario extends JPanel {
 
             for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())) {
                 if (evento.getFecha().equals(date)) {
+                	System.out.println(evento.esTodoElDia());
                 	if (!evento.esTodoElDia()) {
                 	    JLabel eventoLabelTodoElDia = new JLabel();
                 	    eventoLabelTodoElDia.setOpaque(true);
@@ -505,8 +506,12 @@ public class Calendario extends JPanel {
 
                 horaInicioEv = LocalTime.of(horaInicio, minutoInicio);
                 horaFinEv  = LocalTime.of(horaFin, minutoFin);
-
-                todoElDiaEv = todoElDiaCheckBox.isSelected();
+                
+                if(todoElDiaCheckBox.isSelected()) {
+                	todoElDiaEv = true;
+                }else {
+                	todoElDiaEv = false;
+                }
 
                 if (nombreEv.isEmpty()) {
                     JOptionPane.showMessageDialog(dialog, "Por favor, ingresa un nombre para el evento.");
