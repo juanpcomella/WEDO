@@ -56,7 +56,7 @@ public class RightSideBar extends JPanel {
         
         BDs.crearTablaObjetivos();
         for(Objetivo objetivo: BDs.crearListaObjetivos(usuario.getNombreUsuario())) {
-            añadirObjetivo(objetivo.getNombre(), objetivo.getFechaFin().toString(), usuario);
+            añadirObjetivo(objetivo.getNombre(),objetivo.getDescripcion(), objetivo.getFechaFin().toString(), usuario);
         }
         añadirObjetivoButton.addActionListener(e -> {
             mostrarDialogoAñadirObjetivo(usuario);
@@ -127,7 +127,7 @@ public class RightSideBar extends JPanel {
             String descripcion = descripcionField.getText().trim();
             String fecha = fechaField.getText().trim();
 
-            if (!nombre.isEmpty() && !descripcion.isEmpty() && !fecha.isEmpty()) {
+            if (!nombre.isEmpty() && !fecha.isEmpty()) {
                 LocalDate fechaCumplimiento;
                 try {
                     fechaCumplimiento = LocalDate.parse(fecha);
@@ -141,7 +141,7 @@ public class RightSideBar extends JPanel {
                     return; 
                 }
                 BDs.insertarObjetivos(usuario.getNombreUsuario(), nombre, descripcion, fecha, false);
-                añadirObjetivo(nombre, fecha, usuario);
+                añadirObjetivo(nombre, descripcion, fecha, usuario);
             } else {
                 JOptionPane.showMessageDialog(this, "Todos los campos deben ser completados.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -149,8 +149,8 @@ public class RightSideBar extends JPanel {
     }
 
    
-    private void añadirObjetivo(String nombre, String fechaCumplimiento, Usuario usuario) {
-        Objetivo objetivo = new Objetivo(nombre, "Descripción del objetivo", LocalDate.parse(fechaCumplimiento), false);
+    private void añadirObjetivo(String nombre,String descripcion, String fechaCumplimiento, Usuario usuario) {
+        Objetivo objetivo = new Objetivo(nombre, descripcion, LocalDate.parse(fechaCumplimiento), false);
         objetivo.setCuantoQueda(obtenerCuantoQueda(fechaCumplimiento)); 
 
         listaObjetivos.add(objetivo);

@@ -45,7 +45,7 @@ public class MainWindow extends JFrame {
         JPanel panelSur = new JPanel();
         panelSur.setLayout(new BorderLayout());
 
-        LeftSideBar leftSideBar = new LeftSideBar();
+        LeftSideBar leftSideBar = new LeftSideBar(usuario);
         leftSideBar.setPreferredSize(new Dimension(0, getHeight()));
         panelOeste.add(leftSideBar, BorderLayout.CENTER);
 
