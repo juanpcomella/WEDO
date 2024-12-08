@@ -903,7 +903,7 @@ public class VentanaTienda extends JFrame {
         JPanel maestroPanel = new JPanel();
         maestroPanel.add(maestroL);
         
-        maestroPanel.setBackground(Color.red); //asi se colorean aunque sea por separado
+        //maestroPanel.setBackground(Color.red); // Asi se colorean aunque sea por separado
         
         modeloApodos.addRow(new Object[]{maestroPanel, new Object[]{100, icon2}});
         
