@@ -2,6 +2,9 @@ package MainWindow;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 import javax.swing.*;
 import javax.swing.text.*;
 
@@ -9,13 +12,17 @@ public class Notas extends JFrame {
 	int numero_vistas;
     public Notas(String titulo) {
         // Configuración de la ventana
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(new Dimension(500, 700));
         setLayout(new BorderLayout());
-
+        
+        
+        
         // Título
-        JLabel tituloL = new JLabel(titulo);
+        JTextField tituloL = new JTextField(titulo);
         tituloL.setFont(new Font("Arial", Font.BOLD, 50));
+        
+        
         add(tituloL, BorderLayout.NORTH);
 
         // JTextPane para los apuntes
@@ -24,24 +31,36 @@ public class Notas extends JFrame {
         add(new JScrollPane(apuntePane), BorderLayout.CENTER); // Añadir con scroll
         apuntePane.setPreferredSize(new Dimension(400, 700));
 
+        JButton limpiarB = new JButton("Limpiar");
+        limpiarB.addActionListener(e -> {
+        	apuntePane.setText(" ");
+        	
+        });
+        
+        
         // Botón para subrayar
-        JButton underlineButton = new JButton("Subrayar");
+        JButton underlineButton = new JButton("(Des)Subrayar");
         underlineButton.addActionListener((ActionEvent e) -> {
             // Obtener texto seleccionado
             int start = apuntePane.getSelectionStart();
             int end = apuntePane.getSelectionEnd();
 
-            if (start != end) { // Asegurarse de que haya texto seleccionado
+            if (start != end) { // Ver si hay txt subrayado
                 StyledDocument doc = apuntePane.getStyledDocument();
-                Style style = apuntePane.addStyle("UnderlineStyle", null);
+                Element element = doc.getCharacterElement(start);
+                AttributeSet as = element.getAttributes();
 
-                // Aplicar subrayado
-                StyleConstants.setUnderline(style, true);
+                boolean isUnderlined = StyleConstants.isUnderline(as); // Ver si esta subrayado o no (true o false)
+
+                Style style = apuntePane.addStyle("UnderlineStyle", null);
+                StyleConstants.setUnderline(style, !isUnderlined); // Aplica el efecto contrario al que está actualmente
+
                 doc.setCharacterAttributes(start, end - start, style, false);
             } else {
                 JOptionPane.showMessageDialog(this, "Por favor selecciona texto para subrayar.", "Texto no seleccionado", JOptionPane.WARNING_MESSAGE);
             }
         });
+        
         
         //Colores principales: 
         Color colorTurquesa = new Color(173, 216, 230);
@@ -100,17 +119,43 @@ public class Notas extends JFrame {
         }
         
         });
+        
+        ArrayList<String> fontList = new ArrayList<>();
+        fontList.add("Arial");
+        fontList.add("Calibri");
+        fontList.add("Times New Roman");
+        fontList.add("Verdana");
+        fontList.add("Tahoma");
+        fontList.add("Courier New");
+        fontList.add("Georgia");
+
+        // Crear JComboBox con las fuentes
+        JComboBox<String> fontComboBox = new JComboBox<>(fontList.toArray(new String[0]));
+        
+        fontComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedFont = (String) fontComboBox.getSelectedItem();
+                if (selectedFont != null) {
+                    apuntePane.setFont(new Font(selectedFont, Font.PLAIN, 20));
+                }
+            }
+        });
 
         // Panel inferior para el botón
         JPanel panelInferior = new JPanel();
         panelInferior.setLayout(new FlowLayout(FlowLayout.CENTER));
+        underlineButton.setPreferredSize(new Dimension(130,25));
         panelInferior.add(underlineButton);
         panelInferior.add(cambiarVista);
+        panelInferior.add(limpiarB);
+        panelInferior.add(fontComboBox);
         add(panelInferior, BorderLayout.SOUTH);
+        
     }
 
     public static void main(String[] args) {
-        Notas notas = new Notas(null);
+        Notas notas = new Notas("Titulo");
         notas.setVisible(true);
     }
 }
