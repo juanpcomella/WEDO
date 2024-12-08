@@ -7,14 +7,14 @@ import javax.swing.text.*;
 
 public class Notas extends JFrame {
 	int numero_vistas;
-    public Notas() {
+    public Notas(String titulo) {
         // Configuración de la ventana
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(new Dimension(500, 700));
         setLayout(new BorderLayout());
 
         // Título
-        JLabel tituloL = new JLabel("Título");
+        JLabel tituloL = new JLabel(titulo);
         tituloL.setFont(new Font("Arial", Font.BOLD, 50));
         add(tituloL, BorderLayout.NORTH);
 
@@ -110,7 +110,7 @@ public class Notas extends JFrame {
     }
 
     public static void main(String[] args) {
-        Notas notas = new Notas();
+        Notas notas = new Notas(null);
         notas.setVisible(true);
     }
 }
