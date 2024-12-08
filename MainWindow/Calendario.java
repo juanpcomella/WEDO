@@ -299,6 +299,7 @@ public class Calendario extends JPanel {
             diaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
             diaPanel.add(diaSemanaLabel, BorderLayout.NORTH);
 
+
             JPanel horasPanel = new JPanel() {
                 @Override
                 protected void paintComponent(Graphics g) {
