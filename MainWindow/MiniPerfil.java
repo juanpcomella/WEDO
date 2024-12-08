@@ -17,7 +17,7 @@ import java.io.IOException;
 
 public class MiniPerfil extends JFrame {
 
-    public MiniPerfil(Usuario usuario) {
+    public MiniPerfil(Usuario usuario, JFrame mw) {
         setTitle("Mini Perfil");
         setSize(400, 180);
         setLocationRelativeTo(null);
@@ -59,7 +59,8 @@ public class MiniPerfil extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 ProfileWindowSelf perfil = new ProfileWindowSelf(usuario);
                 perfil.setVisible(true);
-                ((JFrame) SwingUtilities.getWindowAncestor(usuarioLabel)).dispose();
+                mw.dispose();
+                dispose();
             }
         });
 
@@ -84,11 +85,5 @@ public class MiniPerfil extends JFrame {
 
         g2d.dispose();
         return output;
-    }
-
-    public static void main(String[] args) {
-        Usuario user = new Usuario("Prueba", "Prueba@prueba.com", "");
-        MiniPerfil miniPerfil = new MiniPerfil(user);
-        miniPerfil.setVisible(true);
     }
 }

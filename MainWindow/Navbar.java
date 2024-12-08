@@ -23,7 +23,7 @@ import static java.lang.Thread.sleep;
 
 public class Navbar extends JPanel {
 
-    public Navbar(LeftSideBar leftSideBar, Usuario usuario) {
+    public Navbar(LeftSideBar leftSideBar, Usuario usuario, JFrame mw) {
         Usuario CURRENT_USER = usuario;
         setLayout(new GridBagLayout()); // Cambiar a GridBagLayout
         setBackground(new Color(173, 216, 230));
@@ -196,7 +196,7 @@ public class Navbar extends JPanel {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     SwingUtilities.invokeLater(() -> {
-                        MiniPerfil miniPerfil = new MiniPerfil(usuario);
+                        MiniPerfil miniPerfil = new MiniPerfil(usuario, mw);
                         int x = profileLabel.getX() - 330;
                         int y = profileLabel.getY();
                         miniPerfil.setLocation(x, y);

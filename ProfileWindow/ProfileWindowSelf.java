@@ -304,7 +304,7 @@ public class ProfileWindowSelf extends JFrame {
         activityPanel.setBackground(new Color(173, 216, 230));
         activityPanel.setLayout(new BorderLayout());
 
-        JLabel activityLabel = new JLabel("Próximas actividades de " + usuario.getNombreUsuario(), SwingConstants.CENTER);
+        JLabel activityLabel = new JLabel("Tus próximas actividades", SwingConstants.CENTER);
         activityLabel.setForeground(Color.WHITE);
         activityLabel.setFont(new Font("Arial", Font.BOLD, 24));
         activityLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
