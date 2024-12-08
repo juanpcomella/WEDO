@@ -41,10 +41,11 @@ public class Habito {
 	public boolean isCompletado() {
 		return completado;
 	}
-
 	public void setCompletado(boolean completado) {
 		this.completado = completado;
 	}
+
+
 	
 	
 }

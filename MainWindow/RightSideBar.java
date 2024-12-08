@@ -17,8 +17,8 @@ import java.util.Timer;
 
 public class RightSideBar extends JPanel {
 
-    private ArrayList<String> habitosTotales;
-    private ArrayList<String> habitosDiarios; 
+    private ArrayList<String> habitosTotales = new ArrayList<>();
+    private ArrayList<String> habitosDiarios = new ArrayList<>(); 
     private JPanel objetivosPanel;
     private JPanel habitosPanel;
     private ArrayList<Objetivo> listaObjetivos = new ArrayList<>();
@@ -82,20 +82,35 @@ public class RightSideBar extends JPanel {
         
         //PASO 1 -------------------------------------------------------------------------
         //lista de todos los habitos (solo el nombre del habito)
-        habitosTotales = cargarHabitosDesdeCSV("BaseDeDatos/objetivos_diarios.csv");
-        //--------------------------------------------------------------------------------
         BDs.crearTablaHabitosTemporales();
-        habitosDiarios = cargarHabitosDiarios(usuario); 
         habitosPanel = new JPanel();
         habitosPanel.setLayout(new GridLayout(4, 1, 5, 5));
         habitosPanel.setBackground(new Color(50,70,90));
-
-        if (habitosDiarios.isEmpty()) {
-            generarHabitosDiarios(usuario);
+        if(BDs.contarHabitos() == 0) {
+            habitosTotales = cargarHabitosDesdeCSV("BaseDeDatos/objetivos_diarios.csv");
+            habitosDiarios = generarHabitosDiarios(usuario);//lista de 4 habitos
+            guardarHabitosDiariosEnBD(usuario);
+            actualizarHabitosPanel(usuario);
+        }else {
+        if(checkearCambioHabitos(usuario)) {
+            habitosTotales = cargarHabitosDesdeCSV("BaseDeDatos/objetivos_diarios.csv");
+            habitosDiarios = generarHabitosDiarios(usuario);//lista de 4 habitos
+            guardarHabitosDiariosEnBD(usuario);
+            actualizarHabitosPanel(usuario);
+        }else {
+            String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        	for(Habito habito : BDs.crearListaHabitos(usuario.getNombreUsuario(), fechaHoy)) {
+        		System.out.println(habito.getNombre());
+        		habitosDiarios.add(habito.getNombre());
+        	}
+            actualizarHabitosPanel(usuario);
+        }
         }
         
-        actualizarHabitosPanel(usuario);
 
+        //--------------------------------------------------------------------------------
+
+        
         habitos.add(habitosPanel);
         add(habitos);
 
@@ -316,110 +331,7 @@ public class RightSideBar extends JPanel {
     }
     //------------------------------------------------------------------------------------------------
   //METODOS HABITOS---------------------------------------------------------------------------------
-    //PASO 2 --> GENERAR UNA LISTA (habitosDiarios) CON SOLO 4 HABITOS (LOS QUE LUEGO SE PONDRAN EN EL PANEL)
-    private void generarHabitosDiarios(Usuario usuario) {
-    	//habitosTotales = lista de todos los habitos cargados del csv
-        if (habitosTotales.size() < 4) {
-            habitosDiarios = new ArrayList<>(habitosTotales);
-        } else {
-            Collections.shuffle(habitosTotales);
-            //habitosDiarios = lista de cuatro habitos aleatorios de habitosTotales
-            habitosDiarios = new ArrayList<>(habitosTotales.subList(0, 4));
-        }
-        guardarHabitosDiariosEnBD(usuario);
-    }
-
-    private void actualizarHabitosPanel(Usuario usuario) {
-        habitosPanel.removeAll();
-
-        for (String habito : habitosDiarios) {
-            JButton habitoButton = new JButton(habito);
-            habitoButton.setFont(new Font("Arial", Font.PLAIN, 12));
-            habitoButton.setBackground(Color.RED);
-            habitoButton.setForeground(Color.WHITE);
-
-            habitoButton.addActionListener(e -> {
-                int respuesta = JOptionPane.showConfirmDialog(
-                        this,
-                        "¿Has completado el hábito: " + habito + "?",
-                        "Completar Hábito",
-                        JOptionPane.YES_NO_OPTION
-                );
-                if (respuesta == JOptionPane.YES_OPTION) {
-                    habitoButton.setBackground(Color.GREEN);
-                    //Suma 10 monedas por habito completado
-                    usuario.setSaldo(usuario.getSaldo()+10);
-                    BDs.updateSaldo(usuario.getNombreUsuario(), usuario.getSaldo());
-                    Navbar.coinAmountLabel.setText(String.valueOf(usuario.getSaldo()));
-                    
-                    
-                } else {
-                    habitoButton.setBackground(Color.RED);
-                }
-            });
-
-            habitosPanel.add(habitoButton);
-        }
-        revalidate();
-        repaint();
-    }
-//PARA QUE CAMBIEN LOS HABITOS PASADO UN TIEMPO
-//------------------------------------------------------------------------------
-    private void programarActualizacionDiaria(Usuario usuario) {
-        Timer timer = new Timer();
-        TimerTask tareaDiaria = new TimerTask() {
-            @Override
-            public void run() {
-                generarHabitosDiarios(usuario);
-                SwingUtilities.invokeLater(() -> actualizarHabitosPanel(usuario));
-            }
-        };
-
-        long tiempoRestanteHoy = calcularMilisegundosHastaMedianoche();
-        timer.schedule(tareaDiaria, tiempoRestanteHoy, 86400000);
-    }
-
-    private long calcularMilisegundosHastaMedianoche() {
-        Calendar ahora = Calendar.getInstance();
-        Calendar medianoche = (Calendar) ahora.clone();
-        medianoche.set(Calendar.HOUR_OF_DAY, 0);
-        medianoche.set(Calendar.MINUTE, 0);
-        medianoche.set(Calendar.SECOND, 0);
-        medianoche.set(Calendar.MILLISECOND, 0);
-        medianoche.add(Calendar.DAY_OF_YEAR, 1);
-
-        return medianoche.getTimeInMillis() - ahora.getTimeInMillis();
-    }
-//---------------------------------------------------------------------------------
-    //PASO 3 --> GUARDAMOS LOS 4 HABITOS DE habitosDiarios QUE USAREMOS MAS TARDE EN LA BASE DE DATOS CON LA FECHAS DE "HOY"
-    private void guardarHabitosDiariosEnBD(Usuario usuario) {
-        String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-//        Habito habitoComprobar;
-//        for(Habito habito : BDs.crearListaHabitos(usuario.getNombreUsuario())){
-//        	habitoComprobar = habito;
-//        }
     
-            for (String habito : habitosDiarios) {
-            	String nombre_habito;
-                nombre_habito = habito;
-                BDs.insertarHabitosTemporales(usuario.getNombreUsuario(), fechaHoy, nombre_habito);
-            }
-        }
-    //PASO 4 --> COGEMOS DE LA BASE DE DATOS LOS HABITOS CON LA FECHA DE HOY Y DEL USUARIO INDICADO Y METEMOS LOS NOMBRES EN LA LISTA habitos
-    private ArrayList<String> cargarHabitosDiarios(Usuario usuario) {
-    	ArrayList<Habito> habitosConFecha = new ArrayList<>();
-        ArrayList<String> habitos = new ArrayList<>();
-//            String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-            habitosConFecha = BDs.crearListaHabitos(usuario.getNombreUsuario());
-            BDs.eliminarTodosLosHabitos();
-            
-            for(Habito habito: habitosConFecha) {
-            	habitos.add(habito.getNombre());
-            }
-
-        return habitos;
-    }
-
     //PASO 1 --> CARGAR TODOS LOS HABITOS DEL CSV ----------------------------------------------------------
     //METE EN LA LISTA SOLO LOS NOMBRES DE LOS HABITOS (UNA COLUMNA)
     private ArrayList<String> cargarHabitosDesdeCSV(String archivo) {
@@ -438,5 +350,119 @@ public class RightSideBar extends JPanel {
         }
         return habitos;
     }
+    //--------------------------------------------------------------------------------------------------------------
+    //PASO 2 --> GENERAR UNA LISTA (habitosDiarios) CON SOLO 4 HABITOS (LOS QUE LUEGO SE PONDRAN EN EL PANEL)
+    //METODO PARA CONSEGUIR 4 ELEMENTOS ALEATORIOS DE LA LISTA ORIGINAL
+    public static ArrayList<String> obtenerElementosAleatorios(ArrayList<String> listaOriginal, int cantidad) {
+        ArrayList<String> listaCopia = new ArrayList<>(listaOriginal);
+        
+        Collections.shuffle(listaCopia);
+        
+        ArrayList<String> listaAleatoria = new ArrayList<>();
+        for (int i = 0; i < cantidad; i++) {
+            listaAleatoria.add(listaCopia.get(i));
+        }
+        
+        return listaAleatoria;
+    }
+    private ArrayList<String> generarHabitosDiarios(Usuario usuario) {
+    	//habitosTotales = lista de todos los habitos cargados del csv
+        habitosDiarios = obtenerElementosAleatorios(habitosTotales, 4);
+        return habitosDiarios;
+    }
+    //-----------------------------------------------------------------------------------------------------------------
+    
+    //PASO 3 --> GUARDAMOS LOS 4 HABITOS DE habitosDiarios QUE USAREMOS MAS TARDE EN LA BASE DE DATOS CON LA FECHAS DE "HOY"
+    private void guardarHabitosDiariosEnBD(Usuario usuario) {
+    	BDs.eliminarTodosLosHabitos();
+        String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+            for (String habito : habitosDiarios) {
+            	String nombre_habito;
+                nombre_habito = habito;
+                BDs.insertarHabitosTemporales(usuario.getNombreUsuario(), fechaHoy, nombre_habito);
+            }
+        }
+    //---------------------------------------------------------------------------------------------------------------------------------------
+    
+    private boolean checkearCambioHabitos(Usuario usuario) {
+        String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+    	ArrayList<Habito> habitosActuales = BDs.crearListaHabitos(usuario.getNombreUsuario(), fechaHoy);
+    	boolean cambio = false;
+    	for(Habito habito : habitosActuales) {
+    		if(habito.getFecha().equals(fechaHoy)) {
+    			cambio = false;
+    		}else {
+    			cambio = true;
+    		}
+    	}
+    	return cambio;
+    }
+
+    private void actualizarHabitosPanel(Usuario usuario) {
+        habitosPanel.removeAll();
+        String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+        for (String habito : habitosDiarios) {
+            JButton habitoButton = new JButton(habito);
+            habitoButton.setFont(new Font("Arial", Font.PLAIN, 12));
+            for(Habito habitoComprobarCompletado : BDs.crearListaHabitos(usuario.getNombreUsuario(), fechaHoy)) {
+            	if(habitoComprobarCompletado.getNombre().equals(habito)) {
+            		if(BDs.seleccionarHabitoCompletado(usuario.getNombreUsuario(), habito) == true){
+            			habitoButton.setBackground(Color.GREEN);
+                        habitoButton.setForeground(Color.WHITE);
+            		}else {
+            	        habitoButton.setBackground(Color.RED);
+            	        habitoButton.setForeground(Color.WHITE);
+            	        habitoButton.addActionListener(e -> {
+                            int respuesta = JOptionPane.showConfirmDialog(
+                                    this,
+                                    "¿Has completado el hábito: " + habito + "?",
+                                    "Completar Hábito",
+                                    JOptionPane.YES_NO_OPTION
+                            );
+                            if (respuesta == JOptionPane.YES_OPTION) {
+                                habitoButton.setBackground(Color.GREEN);
+                                for(Habito habitoLista : BDs.crearListaHabitos(usuario.getNombreUsuario(), fechaHoy)) {
+                                	if(habitoLista.getNombre().equals(habito)) {
+                                		habitoLista.setCompletado(true);
+                                		BDs.updateCompletadoHabito(usuario.getNombreUsuario(), habito, true);
+                                	}
+                                }
+                                //Suma 10 monedas por habito completado
+                                usuario.setSaldo(usuario.getSaldo()+10);
+                                BDs.updateSaldo(usuario.getNombreUsuario(), usuario.getSaldo());
+                                Navbar.coinAmountLabel.setText(String.valueOf(usuario.getSaldo()));
+                                
+                                
+                            } else {
+                                habitoButton.setBackground(Color.RED);
+                            }
+                        });
+            		}
+            	}
+            }            
+            habitosPanel.add(habitoButton);
+        }
+        revalidate();
+        repaint();
+    }
+ 
+    //PASO 4 --> COGEMOS DE LA BASE DE DATOS LOS HABITOS CON LA FECHA DE HOY Y DEL USUARIO INDICADO Y METEMOS LOS NOMBRES EN LA LISTA habitos
+//    private ArrayList<String> cargarHabitosDiarios(Usuario usuario) {
+//    	ArrayList<Habito> habitosConFecha = new ArrayList<>();
+//        ArrayList<String> habitos = new ArrayList<>();
+////            String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+//            habitosConFecha = BDs.crearListaHabitos(usuario.getNombreUsuario());
+//            BDs.eliminarTodosLosHabitos();
+//            
+//            for(Habito habito: habitosConFecha) {
+//            	habitos.add(habito.getNombre());
+//            }
+//
+//        return habitos;
+//    }
+
+   
     
 }

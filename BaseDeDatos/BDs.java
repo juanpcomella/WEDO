@@ -1101,7 +1101,7 @@ public class BDs {
 //			statement.executeUpdate("drop table if exists person");
 			
 			// Ejecutar sentencias SQL (Update)
-			statement.executeUpdate("create table if not exists habitos (username string, fecha_hoy string, habito string)");
+			statement.executeUpdate("create table if not exists habitos (username string, fecha_hoy string, habito string, completado boolean)");
 
 		} catch(SQLException e) {
 			System.err.println(e.getMessage());
@@ -1156,7 +1156,7 @@ public class BDs {
 	}
 	}
 	
-	public static ArrayList<Habito> crearListaHabitos(String usuario) {
+	public static ArrayList<Habito> crearListaHabitos(String usuario, String fecha) {
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
@@ -1174,6 +1174,7 @@ public class BDs {
 			String sql = "SELECT fecha_hoy, habito FROM habitos WHERE username = ? and fecha_hoy = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 	        preparedStatement.setString(1, usuario);
+	        preparedStatement.setString(2, fecha);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -1194,6 +1195,115 @@ public class BDs {
 			}
 	}
 		return habitos;
+	}
+	
+	public static boolean seleccionarHabitoCompletado(String usuario, String nombreHabito) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+		}
+		Connection connection = null;
+		boolean completado = false;
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");//a partir de los ultimo : es donde quieres que se guarden
+			// Crear gestores de sentencias
+			Statement statement = connection.createStatement();//crear consultas
+			statement.setQueryTimeout(30);  // poner timeout 30 msg
+			
+			String sql = "SELECT completado FROM habitos WHERE username = ? and habito = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setString(1, usuario);
+	        preparedStatement.setString(2, nombreHabito);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+        		completado = resultSet.getBoolean("completado");
+            } 
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+		return completado;
+	}
+	
+	public static void updateCompletadoHabito(String usuario, String nombreHabito, boolean completado) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+		}
+		Connection connection = null;
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");//a partir de los ultimo : es donde quieres que se guarden
+			// Crear gestores de sentencias
+			
+	        String sql = "UPDATE habitos SET completado = ? WHERE username = ? and habito = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setBoolean(1, completado);
+	        preparedStatement.setString(2, usuario);
+	        preparedStatement.setString(3, nombreHabito);
+	        
+	        preparedStatement.executeUpdate(); // Ejecutar la actualización
+
+
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+		
+	
+	}
+	
+	public static int contarHabitos() {
+	    int totalHabitos = 0;
+	    Connection connection = null;
+	    try {
+	        // Registrar el driver SQLite
+	        Class.forName("org.sqlite.JDBC");
+	        
+	        // Conectar a la base de datos
+	        connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+	        
+	        // Consulta SQL para contar todos los elementos de la tabla
+	        String sql = "SELECT COUNT(*) AS total FROM habitos";
+	        Statement statement = connection.createStatement();
+	        ResultSet resultSet = statement.executeQuery(sql);
+	        
+	        // Recuperar el total de hábitos
+	        if (resultSet.next()) {
+	            totalHabitos = resultSet.getInt("total");
+	        }
+	    } catch (ClassNotFoundException e) {
+	        System.err.println("ERROR: Driver SQLite para JDBC no encontrado.");
+	    } catch (SQLException e) {
+	        System.err.println(e.getMessage());
+	    } finally {
+	        try {
+	            if (connection != null) {
+	                connection.close();
+	            }
+	        } catch (SQLException e) {
+	            System.err.println("Error al cerrar la conexión: " + e.getMessage());
+	        }
+	    }
+	    return totalHabitos;
 	}
 	
 	public static void eliminarTodosLosHabitos() {
