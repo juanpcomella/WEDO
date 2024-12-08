@@ -197,8 +197,9 @@ public class Calendario extends JPanel {
             } else {
                 diaPanel.setBackground(Color.WHITE);
             }
-
+            
             diaPanel.add(diaLabel, BorderLayout.NORTH);
+            
 
             JPanel eventosPanel = new JPanel();
             eventosPanel.setLayout(new GridLayout(5, 0));
@@ -207,30 +208,53 @@ public class Calendario extends JPanel {
 
             for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())) {
                 if (evento.getFecha().equals(date)) {
-                    JLabel eventoLabel = new JLabel(evento.getNombre());
-                    eventoLabel.setOpaque(true);
-                    eventoLabel.setPreferredSize(new Dimension(8, 8));
-                    eventoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                    eventoLabel.setFont(new Font("Arial", Font.BOLD, 8));
+                	if (!evento.esTodoElDia()) {
+                	    JLabel eventoLabelTodoElDia = new JLabel();
+                	    eventoLabelTodoElDia.setOpaque(true);
+                	    eventoLabelTodoElDia.setPreferredSize(new Dimension(10, 10)); // Ajusta el tamaño del cuadrado
+                	    eventoLabelTodoElDia.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                	    eventoLabelTodoElDia.setFont(new Font("Arial", Font.BOLD, 8));
+                	    eventoLabelTodoElDia.setBackground(Color.RED);
 
-                    if (evento.getCategoria().equals(Categorias.Estudios)) {
-                        eventoLabel.setBackground(Color.MAGENTA);
-                    } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
-                        eventoLabel.setBackground(Color.GREEN);
-                    } else if (evento.getCategoria().equals(Categorias.Deporte)) {
-                        eventoLabel.setBackground(Color.CYAN);
-                    } else if (evento.getCategoria().equals(Categorias.Ocio)) {
-                        eventoLabel.setBackground(Color.ORANGE);
-                    }
+                	    // Cambiar el diseño de `diaPanel` a un FlowLayout alineado a la derecha
+                	    diaPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 2, 2)); // Margen horizontal y vertical pequeños
+                	    diaPanel.add(eventoLabelTodoElDia);
 
-                    eventoLabel.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                            mostrarEvento(evento, date, usuario);
-                        }
-                    });
+                	    // Listener para manejar clics en el evento
+                	    eventoLabelTodoElDia.addMouseListener(new MouseAdapter() {
+                	        @Override
+                	        public void mouseClicked(MouseEvent e) {
+                	            mostrarEvento(evento, date, usuario);
+                	        }
+                	    });
+                                     
+						
+					}else {
+						JLabel eventoLabel = new JLabel(evento.getNombre());
+	                    eventoLabel.setOpaque(true);
+	                    eventoLabel.setPreferredSize(new Dimension(8, 8));
+	                    eventoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+	                    eventoLabel.setFont(new Font("Arial", Font.BOLD, 8));
 
-                    eventosPanel.add(eventoLabel);
+	                    if (evento.getCategoria().equals(Categorias.Estudios)) {
+	                        eventoLabel.setBackground(Color.MAGENTA);
+	                    } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
+	                        eventoLabel.setBackground(Color.GREEN);
+	                    } else if (evento.getCategoria().equals(Categorias.Deporte)) {
+	                        eventoLabel.setBackground(Color.CYAN);
+	                    } else if (evento.getCategoria().equals(Categorias.Ocio)) {
+	                        eventoLabel.setBackground(Color.ORANGE);
+	                    }
+
+	                    eventoLabel.addMouseListener(new MouseAdapter() {
+	                        @Override
+	                        public void mouseClicked(MouseEvent e) {
+	                            mostrarEvento(evento, date, usuario);
+	                        }
+	                    });
+
+	                    eventosPanel.add(eventoLabel);
+					}
                 }
             }
 
@@ -299,20 +323,22 @@ public class Calendario extends JPanel {
             diaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
             diaPanel.add(diaSemanaLabel, BorderLayout.NORTH);
 
-
+            // Crear un panel personalizado para las horas y las líneas grises
             JPanel horasPanel = new JPanel() {
                 @Override
                 protected void paintComponent(Graphics g) {
                     super.paintComponent(g);
 
+                    // Dibujar líneas grises horizontales cada 25 píxeles
                     g.setColor(Color.LIGHT_GRAY);
                     for (int y = 25; y < getHeight(); y += 25) {
                         g.drawLine(0, y, getWidth(), y);
                     }
                 }
             };
-            horasPanel.setLayout(null); 
+            horasPanel.setLayout(null); // Usamos 'null' para gestionar la disposición manual de los eventos
 
+            // Agregar los eventos al panel de horas
             Map<Integer, ArrayList<Evento>> eventosPorHora = new HashMap<>();
             for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())) {
                 if (evento.getFecha().equals(diaActual)) {
@@ -325,8 +351,8 @@ public class Calendario extends JPanel {
                 int horaInicio = entry.getKey();
                 ArrayList<Evento> eventos = entry.getValue();
 
-                int anchoTotal = 150; 
-                int anchoPorEvento = anchoTotal / eventos.size();
+                int anchoTotal = 150; // Ancho total del panel
+                int anchoPorEvento = anchoTotal / eventos.size(); // Ancho de cada evento
 
                 for (int index = 0; index < eventos.size(); index++) {
                     Evento evento = eventos.get(index);
@@ -346,6 +372,7 @@ public class Calendario extends JPanel {
                     eventoLabel.setHorizontalAlignment(SwingConstants.CENTER);
                     eventoLabel.setVerticalAlignment(SwingConstants.NORTH);
 
+                    // Colorear según categoría
                     if (evento.getCategoria().equals(Categorias.Estudios)) {
                         eventoLabel.setBackground(Color.MAGENTA);
                     } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
@@ -359,13 +386,6 @@ public class Calendario extends JPanel {
                     int posicionY = horaInicio * 25;
                     eventoLabel.setBounds(posicionX, posicionY, anchoPorEvento, altoEvento);
                     horasPanel.add(eventoLabel);
-                    
-                    eventoLabel.addMouseListener(new MouseAdapter() {
-                    	@Override
-                        public void mouseClicked(MouseEvent e) {
-                            mostrarEvento(evento, diaActual, usuario);
-                        }
-					});
                 }
             }
 
@@ -563,7 +583,7 @@ public class Calendario extends JPanel {
             	    categoria = evento.getCategoria();
             	    horaInicioEv = evento.getHoraInicio();
             	    horaFinEv = evento.getHoraFin();
-            	    todoElDiaEv = evento.isTodoElDia();
+            	    todoElDiaEv = evento.esTodoElDia();
 
                 int confirmacion = JOptionPane.showConfirmDialog(dialog, "¿Estás seguro de eliminar este evento?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
                 if (confirmacion == JOptionPane.YES_OPTION) {

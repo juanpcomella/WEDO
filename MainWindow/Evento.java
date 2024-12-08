@@ -61,7 +61,7 @@ public class Evento {
         return descripcion;
     }
 
-    public boolean isTodoElDia() {
+    public boolean esTodoElDia() {
 		return todoElDia;
 	}
 
@@ -105,9 +105,6 @@ public class Evento {
         return horaFin;
     }
 
-    public boolean esTodoElDia() {
-        return todoElDia;
-    }
 
     public void setTodoElDia(boolean todoElDia) {
         this.todoElDia = todoElDia;
