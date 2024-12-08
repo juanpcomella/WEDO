@@ -299,22 +299,19 @@ public class Calendario extends JPanel {
             diaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
             diaPanel.add(diaSemanaLabel, BorderLayout.NORTH);
 
-            // Crear un panel personalizado para las horas y las líneas grises
             JPanel horasPanel = new JPanel() {
                 @Override
                 protected void paintComponent(Graphics g) {
                     super.paintComponent(g);
 
-                    // Dibujar líneas grises horizontales cada 25 píxeles
                     g.setColor(Color.LIGHT_GRAY);
                     for (int y = 25; y < getHeight(); y += 25) {
                         g.drawLine(0, y, getWidth(), y);
                     }
                 }
             };
-            horasPanel.setLayout(null); // Usamos 'null' para gestionar la disposición manual de los eventos
+            horasPanel.setLayout(null); 
 
-            // Agregar los eventos al panel de horas
             Map<Integer, ArrayList<Evento>> eventosPorHora = new HashMap<>();
             for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())) {
                 if (evento.getFecha().equals(diaActual)) {
@@ -327,8 +324,8 @@ public class Calendario extends JPanel {
                 int horaInicio = entry.getKey();
                 ArrayList<Evento> eventos = entry.getValue();
 
-                int anchoTotal = 150; // Ancho total del panel
-                int anchoPorEvento = anchoTotal / eventos.size(); // Ancho de cada evento
+                int anchoTotal = 150; 
+                int anchoPorEvento = anchoTotal / eventos.size();
 
                 for (int index = 0; index < eventos.size(); index++) {
                     Evento evento = eventos.get(index);
@@ -348,7 +345,6 @@ public class Calendario extends JPanel {
                     eventoLabel.setHorizontalAlignment(SwingConstants.CENTER);
                     eventoLabel.setVerticalAlignment(SwingConstants.NORTH);
 
-                    // Colorear según categoría
                     if (evento.getCategoria().equals(Categorias.Estudios)) {
                         eventoLabel.setBackground(Color.MAGENTA);
                     } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
@@ -362,6 +358,13 @@ public class Calendario extends JPanel {
                     int posicionY = horaInicio * 25;
                     eventoLabel.setBounds(posicionX, posicionY, anchoPorEvento, altoEvento);
                     horasPanel.add(eventoLabel);
+                    
+                    eventoLabel.addMouseListener(new MouseAdapter() {
+                    	@Override
+                        public void mouseClicked(MouseEvent e) {
+                            mostrarEvento(evento, diaActual, usuario);
+                        }
+					});
                 }
             }
 
