@@ -1039,6 +1039,48 @@ public class BDs {
 
 		return sigue;
 	}
+	public static ArrayList<Usuario> crearListaSeguimientosPorUsuario(String seguidor) {
+		ArrayList<Usuario> listaSeguimientos = new ArrayList<>();
+
+		try {
+			// Cargar el driver JDBC
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return listaSeguimientos;
+		}
+
+		Connection connection = null;
+		try {
+			// Conectar a la base de datos
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+
+			// Consulta SQL para obtener los usuarios seguidos
+			String sql = "SELECT seguido FROM seguimientos WHERE seguidor = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, seguidor);
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			// Crear objetos Usuario y agregarlos a la lista
+			while (resultSet.next()) {
+				String nombreSeguido = resultSet.getString("seguido");
+				Usuario seguido = new Usuario(nombreSeguido, "", ""); // Ajusta los parámetros según tu clase Usuario
+				listaSeguimientos.add(seguido);
+			}
+		} catch (SQLException e) {
+			System.err.println("Error SQL: " + e.getMessage());
+		} finally {
+			try {
+				if (connection != null) connection.close();
+			} catch (SQLException e) {
+				System.err.println("Error al cerrar la conexión: " + e.getMessage());
+			}
+		}
+
+		return listaSeguimientos;
+	}
+
 	//AQUI EMPIEZAN LOS METODOS DE LOS HABITOS
 	public static void crearTablaHabitosTemporales() {
 		try {
