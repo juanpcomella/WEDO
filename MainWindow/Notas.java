@@ -25,18 +25,22 @@ public class Notas extends JFrame {
         apuntePane.setPreferredSize(new Dimension(400, 700));
 
         // Botón para subrayar
-        JButton underlineButton = new JButton("Subrayar");
+        JButton underlineButton = new JButton("Subrayar/Quitar Subrayado");
         underlineButton.addActionListener((ActionEvent e) -> {
             // Obtener texto seleccionado
             int start = apuntePane.getSelectionStart();
             int end = apuntePane.getSelectionEnd();
 
-            if (start != end) { // Asegurarse de que haya texto seleccionado
+            if (start != end) { // Ver si hay txt subrayado
                 StyledDocument doc = apuntePane.getStyledDocument();
-                Style style = apuntePane.addStyle("UnderlineStyle", null);
+                Element element = doc.getCharacterElement(start);
+                AttributeSet as = element.getAttributes();
 
-                // Aplicar subrayado
-                StyleConstants.setUnderline(style, true);
+                boolean isUnderlined = StyleConstants.isUnderline(as); // Ver si esta subrayado o no (true o false)
+
+                Style style = apuntePane.addStyle("UnderlineStyle", null);
+                StyleConstants.setUnderline(style, !isUnderlined); // Aplica el efecto contrario al que está actualmente
+
                 doc.setCharacterAttributes(start, end - start, style, false);
             } else {
                 JOptionPane.showMessageDialog(this, "Por favor selecciona texto para subrayar.", "Texto no seleccionado", JOptionPane.WARNING_MESSAGE);
