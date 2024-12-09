@@ -49,7 +49,7 @@ public class Evento {
         this.fecha = fecha;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
-        this.todoElDia = todoElDia; 
+        this.todoElDia = todoElDia;
         this.privado = privado;
     }
 
@@ -87,7 +87,7 @@ public class Evento {
 
 	public void setHoraFin(LocalTime horaFin) {
 		this.horaFin = horaFin;
-	}
+    }
 
 	public Categorias getCategoria() {
         return categoria;
@@ -108,6 +108,10 @@ public class Evento {
 
     public void setTodoElDia(boolean todoElDia) {
         this.todoElDia = todoElDia;
+    }
+
+    public void setPrivado(boolean privado) {
+        this.privado = privado;
     }
 
     public int getDuracionEnMinutos() {
