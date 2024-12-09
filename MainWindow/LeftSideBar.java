@@ -17,8 +17,8 @@ import java.util.Map;
 
 
 public class LeftSideBar extends JPanel {
-	String strVacio;
-	String input;
+	//String strVacio;
+	//String input;
 	Notas nota;
     public LeftSideBar(Usuario usuario) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -51,11 +51,11 @@ public class LeftSideBar extends JPanel {
         Map<JButton, Notas> notasMap = new HashMap<>();
 
         button1.addActionListener(e -> {
-            input = JOptionPane.showInputDialog(null, "Escribe el título de la página:", "Crear Página", JOptionPane.QUESTION_MESSAGE);
+            String input = JOptionPane.showInputDialog(null, "Escribe el título de la página:", "Crear Página", JOptionPane.QUESTION_MESSAGE);
             
             if (input != null && !input.trim().isEmpty()) {
                 JButton botonPagina = new JButton(input);
-                strVacio = "";
+                String strVacio = "";
                 botonPagina.addActionListener(a -> {
                     nota = notasMap.get(botonPagina);
                     if (nota==null) {
@@ -70,8 +70,11 @@ public class LeftSideBar extends JPanel {
                 	        nota.txt_editado = nota.apuntePane.getText();
 
                 	        // Asignar los valores actualizados a las variables externas
-                	        input = nota.titulo_editado;
-                	        strVacio = nota.txt_editado;
+                	        botonPagina.setText(nota.titulo_editado);
+                	        notasMap.put(botonPagina, nota);
+                	        
+                	        
+                	        
                 	        
                 		}
 					});
