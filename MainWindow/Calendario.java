@@ -38,6 +38,7 @@ public class Calendario extends JPanel {
     LocalTime horaInicioEv;
     LocalTime horaFinEv;
     boolean todoElDiaEv;
+    boolean esPrivado;
 
     private void Calendar(Usuario usuario) {
         setLayout(new BorderLayout());
