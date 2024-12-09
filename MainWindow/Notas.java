@@ -3,6 +3,8 @@ package MainWindow;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -162,6 +164,7 @@ public class Notas extends JFrame {
         panelInferior.add(cambiarVista);
         panelInferior.add(limpiarB);
         panelInferior.add(fontComboBox);
+        panelInferior.setBackground(colorTurquesa);
         add(panelInferior, BorderLayout.SOUTH);
         
         titulo_editado=tituloL.getText();
@@ -176,6 +179,9 @@ public class Notas extends JFrame {
         JButton createN = new JButton("+");
         createN.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelCrear.add(createN);
+        panelCrear.setBackground(colorTurquesa);
+        //createN.setBackground(azulOscuro);
+        //createN.setForeground(colorTurquesa);
         
         panelCrear.add(Box.createVerticalStrut(10));
 
@@ -190,6 +196,8 @@ String input = JOptionPane.showInputDialog(null, "Escribe el título de la pági
             
             if (input != null && !input.trim().isEmpty()) {
                 JButton botonPagina = new JButton(input);
+                //botonPagina.setBackground(azulOscuro);
+                //botonPagina.setForeground(colorTurquesa);
                 String strVacio = "";
                 botonPagina.addActionListener(a -> {
                     nota = notasMap.get(botonPagina);
@@ -209,6 +217,23 @@ String input = JOptionPane.showInputDialog(null, "Escribe el título de la pági
                             notasMap.put(botonPagina, nota);
                         }
                     });
+                });
+                botonPagina.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        // Detectar si se hizo clic derecho
+                        if (SwingUtilities.isRightMouseButton(e)) {
+                            int respuesta = JOptionPane.showConfirmDialog(null, 
+                            		"¿Desea eliminar la nota seleccionada?", "Eliminar nota",
+                            		JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                            if (respuesta==JOptionPane.YES_OPTION) {
+                            	panelCrear.remove(botonPagina);
+                            	panelCrear.repaint();
+                            	
+                            }
+                            
+                        }
+                    }
                 });
                 
                 // Diseño del botón

@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -48,6 +50,7 @@ public class LeftSideBar extends JPanel {
 
         // Crear un mapa de notas
         Map<JButton, Notas> notasMap = new HashMap<>();
+        
 
         // Acción para crear nuevas páginas
         button1.addActionListener(e -> {
@@ -76,6 +79,25 @@ public class LeftSideBar extends JPanel {
                     });
                 });
                 
+                botonPagina.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        // Detectar si se hizo clic derecho
+                        if (SwingUtilities.isRightMouseButton(e)) {
+                            int respuesta = JOptionPane.showConfirmDialog(null, 
+                            		"¿Desea eliminar la nota seleccionada?", "Eliminar nota",
+                            		JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                            if (respuesta==JOptionPane.YES_OPTION) {
+                            	panel.remove(botonPagina);
+                            	panel.repaint();
+                            	
+                            }
+                            
+                        }
+                    }
+                });
+                
+                
                 // Diseño del botón
                 botonPagina.setPreferredSize(new Dimension(80, 30));
                 botonPagina.setMaximumSize(new Dimension(80, 30));
@@ -91,8 +113,15 @@ public class LeftSideBar extends JPanel {
                 panel.add(Box.createVerticalStrut(10)); // Espacio entre botones
                 panel.revalidate();
                 panel.repaint();
+                
+                
+                
             }
         });
+        
+        
+        
+        
 
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); // Desactivar la barra de desplazamiento horizontal
