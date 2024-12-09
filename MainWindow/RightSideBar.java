@@ -429,18 +429,15 @@ public class RightSideBar extends JPanel {
         String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		
         for (String habito : habitosDiarios) {
-    		System.out.println(BDs.seleccionarHabitoCompletado(usuario.getNombreUsuario(), "Jugar un juego de mesa con alguien"));
             JButton habitoButton = new JButton(habito);
             habitoButton.setFont(new Font("Arial", Font.PLAIN, 12));
             for(Habito habitoComprobarCompletado : BDs.crearListaHabitos(usuario.getNombreUsuario(), fechaHoy)) {
 
             	if(habitoComprobarCompletado.getNombre().equals(habito)) {
-            		System.out.println(habitoComprobarCompletado.isCompletado());
             		if(habitoComprobarCompletado.isCompletado()){
             			habitoButton.setBackground(Color.GREEN);
                         habitoButton.setForeground(Color.WHITE);
             		}else {
-            			System.out.println("si");
             	        habitoButton.setBackground(Color.RED);
             	        habitoButton.setForeground(Color.WHITE);
             	        habitoButton.addActionListener(e -> {

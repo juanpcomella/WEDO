@@ -625,6 +625,53 @@ public class BDs {
 		return eventos;
 	}
 	
+//aaaaaaaa
+	public static ArrayList<Evento> crearListaEventosPublicosPorUsuario(String usuario) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+		}
+		Connection connection = null;
+		ArrayList<Evento> eventos = new ArrayList<>();
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+			// Crear gestores de sentencias
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30);  // Timeout de 30 ms
+
+			// Consulta SQL actualizada para filtrar eventos públicos
+			String sql = "SELECT nombreEvento, descripcionEv, categoriaEv, fechaEv, horaInicioEv, horaFinEv, todoElDiaEv, esPrivado FROM eventos WHERE username = ? AND publico = 1"; // Filtrar eventos públicos
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, usuario);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				Evento evento = new Evento(usuario, usuario, null, null, null, null, false, false);
+				evento.setNombre(resultSet.getString("nombreEvento"));
+				evento.setDescripcion(resultSet.getString("descripcionEv"));
+				evento.setCategoria(Categorias.valueOf(resultSet.getString("categoriaEv")));
+				evento.setFecha(LocalDate.parse(resultSet.getString("fechaEv")));
+				evento.setHoraInicio(LocalTime.parse(resultSet.getString("horaInicioEv")));
+				evento.setHoraFin(LocalTime.parse(resultSet.getString("horaFinEv")));
+				evento.setTodoElDia(Boolean.parseBoolean(resultSet.getString("todoElDiaEv")));
+				evento.setPrivado(Boolean.parseBoolean(resultSet.getString("esPrivado")));
+				eventos.add(evento);
+			}
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if (connection != null) connection.close();
+			} catch (SQLException e) {
+				System.err.println(e);
+			}
+		}
+		return eventos;
+	}
+
+
 	public static void eliminarEventos(String usuario, String nombre, String descripcion, String categoria, String fecha, String horaInicio, String horaFin, boolean todoElDia) {
 		try {
 			Class.forName("org.sqlite.JDBC");
