@@ -461,7 +461,6 @@ public class Calendario extends JPanel {
             diaPanel.add(horasPanel, BorderLayout.CENTER);
             diasPanel.add(diaPanel);
         }
-
         diasPanel.revalidate();
         diasPanel.repaint();
     }
