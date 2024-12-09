@@ -533,7 +533,7 @@ public class BDs {
 	}
 	}
 	
-	public static void insertarEventos(String usuario, String nombre, String descripcion, String categoria, String fecha, String horaInicio, String horaFin, boolean todoElDia) {
+	public static void insertarEventos(String usuario, String nombre, String descripcion, String categoria, String fecha, String horaInicio, String horaFin, boolean todoElDia) { // agregarle uno más (privado)
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
@@ -562,6 +562,7 @@ public class BDs {
             preparedStatement.setString(6, horaInicio);
             preparedStatement.setString(7, horaFin);
             preparedStatement.setBoolean(8, todoElDia);
+			//preparedStatement.setBoolean(9, esPrivado);
           
             preparedStatement.executeUpdate();
 
@@ -593,13 +594,13 @@ public class BDs {
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
 			
-			String sql = "SELECT nombreEvento, descripcionEv, categoriaEv, fechaEv, horaInicioEv, horaFinEv, todoElDiaEv  FROM eventos WHERE username = ?";
+			String sql = "SELECT nombreEvento, descripcionEv, categoriaEv, fechaEv, horaInicioEv, horaFinEv, todoElDiaEv FROM eventos WHERE username = ?"; // agregarle uno más (privado)
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 	        preparedStatement.setString(1, usuario);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-        		Evento evento = new Evento(usuario, usuario, null, null, null, null, false);
+        		Evento evento = new Evento(usuario, usuario, null, null, null, null, false); // agregarle uno más (privado)
                 evento.setNombre(resultSet.getString("nombreEvento"));
                 evento.setDescripcion(resultSet.getString("descripcionEv"));
                 evento.setCategoria(Categorias.valueOf(resultSet.getString("categoriaEv")));
@@ -607,6 +608,7 @@ public class BDs {
                 evento.setHoraInicio(LocalTime.parse(resultSet.getString("horaInicioEv")));
                 evento.setHoraFin(LocalTime.parse(resultSet.getString("horaFinEv")));
                 evento.setTodoElDia(Boolean.parseBoolean(resultSet.getString("todoElDiaEv")));
+				//evento.setPrivado(Boolean.parseBoolean(resultSet.getString("esPrivado")));
                 eventos.add(evento);
 
             } 
@@ -623,7 +625,52 @@ public class BDs {
 	}
 		return eventos;
 	}
-	
+
+	public static ArrayList<Evento> crearListaEventosPublicosPorUsuario(String usuario) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+		}
+		Connection connection = null;
+		ArrayList<Evento> eventos = new ArrayList<>();
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+			// Crear gestores de sentencias
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30);  // Timeout de 30 ms
+
+			// Consulta SQL actualizada para filtrar eventos públicos
+			String sql = "SELECT nombreEvento, descripcionEv, categoriaEv, fechaEv, horaInicioEv, horaFinEv, todoElDiaEv, esPrivado FROM eventos WHERE username = ? AND publico = 1"; // Filtrar eventos públicos
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, usuario);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				Evento evento = new Evento(usuario, usuario, null, null, null, null, false, false);
+				evento.setNombre(resultSet.getString("nombreEvento"));
+				evento.setDescripcion(resultSet.getString("descripcionEv"));
+				evento.setCategoria(Categorias.valueOf(resultSet.getString("categoriaEv")));
+				evento.setFecha(LocalDate.parse(resultSet.getString("fechaEv")));
+				evento.setHoraInicio(LocalTime.parse(resultSet.getString("horaInicioEv")));
+				evento.setHoraFin(LocalTime.parse(resultSet.getString("horaFinEv")));
+				evento.setTodoElDia(Boolean.parseBoolean(resultSet.getString("todoElDiaEv")));
+				evento.setPrivado(Boolean.parseBoolean(resultSet.getString("esPrivado")));
+				eventos.add(evento);
+			}
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if (connection != null) connection.close();
+			} catch (SQLException e) {
+				System.err.println(e);
+			}
+		}
+		return eventos;
+	}
+
 	public static void eliminarEventos(String usuario, String nombre, String descripcion, String categoria, String fecha, String horaInicio, String horaFin, boolean todoElDia) {
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -1171,7 +1218,7 @@ public class BDs {
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
 			
-			String sql = "SELECT fecha_hoy, habito FROM habitos WHERE username = ? and fecha_hoy = ?";
+			String sql = "SELECT fecha_hoy, habito, completado FROM habitos WHERE username = ? and fecha_hoy = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 	        preparedStatement.setString(1, usuario);
 	        preparedStatement.setString(2, fecha);
@@ -1180,7 +1227,8 @@ public class BDs {
             while (resultSet.next()) {
         		Habito habito = new Habito(null, null, false);
         		habito.setFecha(resultSet.getString("fecha_hoy"));
-        		habito.setNombre(resultSet.getString("habito"));     
+        		habito.setNombre(resultSet.getString("habito")); 
+        		habito.setCompletado(resultSet.getBoolean("completado"));
                 habitos.add(habito);
             } 
 		} catch(SQLException e) {

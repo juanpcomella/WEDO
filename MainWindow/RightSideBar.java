@@ -99,14 +99,22 @@ public class RightSideBar extends JPanel {
             actualizarHabitosPanel(usuario);
         }else {
             String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+    		habitosDiarios.clear();
         	for(Habito habito : BDs.crearListaHabitos(usuario.getNombreUsuario(), fechaHoy)) {
-        		System.out.println(habito.getNombre());
+//        		System.out.println(habito.getNombre());
+//        		System.out.println(habito.getFecha());
         		habitosDiarios.add(habito.getNombre());
         	}
+            guardarHabitosDiariosEnBD(usuario);
             actualizarHabitosPanel(usuario);
         }
         }
-        
+        String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+//        for(Habito habito : BDs.crearListaHabitos(usuario.getNombreUsuario(), fechaHoy)) {
+//        	System.out.println(habito.getNombre());
+//        }
+//        System.out.println(checkearCambioHabitos(usuario));
+//        System.out.println(BDs.contarHabitos());
 
         //--------------------------------------------------------------------------------
 
@@ -402,16 +410,20 @@ public class RightSideBar extends JPanel {
     private void actualizarHabitosPanel(Usuario usuario) {
         habitosPanel.removeAll();
         String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-
+		
         for (String habito : habitosDiarios) {
+    		System.out.println(BDs.seleccionarHabitoCompletado(usuario.getNombreUsuario(), "Jugar un juego de mesa con alguien"));
             JButton habitoButton = new JButton(habito);
             habitoButton.setFont(new Font("Arial", Font.PLAIN, 12));
             for(Habito habitoComprobarCompletado : BDs.crearListaHabitos(usuario.getNombreUsuario(), fechaHoy)) {
+//            	System.out.println(habitoComprobarCompletado.isCompletado());
+//        		System.out.println(BDs.seleccionarHabitoCompletado(usuario.getNombreUsuario(), habito)+"*****");
             	if(habitoComprobarCompletado.getNombre().equals(habito)) {
-            		if(BDs.seleccionarHabitoCompletado(usuario.getNombreUsuario(), habito) == true){
+            		if(BDs.seleccionarHabitoCompletado(usuario.getNombreUsuario(), habito)){
             			habitoButton.setBackground(Color.GREEN);
                         habitoButton.setForeground(Color.WHITE);
             		}else {
+            			System.out.println("si");
             	        habitoButton.setBackground(Color.RED);
             	        habitoButton.setForeground(Color.WHITE);
             	        habitoButton.addActionListener(e -> {
@@ -423,10 +435,20 @@ public class RightSideBar extends JPanel {
                             );
                             if (respuesta == JOptionPane.YES_OPTION) {
                                 habitoButton.setBackground(Color.GREEN);
+                                BDs.updateCompletadoHabito(usuario.getNombreUsuario(), habito, true);
                                 for(Habito habitoLista : BDs.crearListaHabitos(usuario.getNombreUsuario(), fechaHoy)) {
+                                	System.out.println(habitoLista.getNombre());
+//                            		System.out.println(habito);
                                 	if(habitoLista.getNombre().equals(habito)) {
+                                		System.out.println("igual");
+                                		System.out.println(BDs.seleccionarHabitoCompletado(usuario.getNombreUsuario(), habito));
+//                                		for(Habito h : BDs.crearListaHabitos(usuario.getNombreUsuario(), fechaHoy)) {
+//                                			System.out.println(h.isCompletado());
+//                                		}
+                                		System.out.println(habito);
                                 		habitoLista.setCompletado(true);
                                 		BDs.updateCompletadoHabito(usuario.getNombreUsuario(), habito, true);
+                                		System.out.println(BDs.seleccionarHabitoCompletado(usuario.getNombreUsuario(), "Jugar un juego de mesa con alguien"));
                                 	}
                                 }
                                 //Suma 10 monedas por habito completado
@@ -435,13 +457,11 @@ public class RightSideBar extends JPanel {
                                 Navbar.coinAmountLabel.setText(String.valueOf(usuario.getSaldo()));
                                 
                                 
-                            } else {
-                                habitoButton.setBackground(Color.RED);
-                            }
+                            } 
                         });
             		}
             	}
-            }            
+            }  
             habitosPanel.add(habitoButton);
         }
         revalidate();
