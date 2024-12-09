@@ -1171,7 +1171,7 @@ public class BDs {
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
 			
-			String sql = "SELECT fecha_hoy, habito FROM habitos WHERE username = ? and fecha_hoy = ?";
+			String sql = "SELECT fecha_hoy, habito, completado FROM habitos WHERE username = ? and fecha_hoy = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 	        preparedStatement.setString(1, usuario);
 	        preparedStatement.setString(2, fecha);
@@ -1180,7 +1180,8 @@ public class BDs {
             while (resultSet.next()) {
         		Habito habito = new Habito(null, null, false);
         		habito.setFecha(resultSet.getString("fecha_hoy"));
-        		habito.setNombre(resultSet.getString("habito"));     
+        		habito.setNombre(resultSet.getString("habito")); 
+        		habito.setCompletado(resultSet.getBoolean("completado"));
                 habitos.add(habito);
             } 
 		} catch(SQLException e) {
