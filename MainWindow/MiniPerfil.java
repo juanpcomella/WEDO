@@ -6,10 +6,7 @@ import StartingWindows.Usuario;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -20,8 +17,23 @@ public class MiniPerfil extends JFrame {
     public MiniPerfil(Usuario usuario, JFrame mw) {
         setTitle("Mini Perfil");
         setSize(400, 180);
+        setUndecorated(true); // Remove window decorations
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
+
+        // Add MouseListener to detect clicks outside the window
+        addWindowFocusListener(new WindowFocusListener() {
+            @Override
+            public void windowGainedFocus(WindowEvent e) {
+                // Do nothing when gaining focus
+            }
+
+            @Override
+            public void windowLostFocus(WindowEvent e) {
+                // Close the MiniPerfil when losing focus
+                dispose();
+            }
+        });
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(1, 2));
@@ -63,7 +75,6 @@ public class MiniPerfil extends JFrame {
                 dispose();
             }
         });
-
 
         rightPanel.add(usuarioLabel);
         rightPanel.add(irPerfil);

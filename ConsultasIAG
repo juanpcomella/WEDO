@@ -81,3 +81,18 @@ búsqueda he descubierto que lo que habia que hacer era generar una contraseña 
 de la recuperación de contraseña funciona, con un único pero: cada vez que se ejecute el código, como el correo desde el que se envía el mensaje está vinculado a mi teléfono, y se pide
 una verificación de doble factor, es necesario que acepte la solicitud de realizar el mensaje desde mi móvil.
 -------------------------------------------------------------------
+Consulta para centrar elementos dentro de un default table model (se utilizó default table model ya que se está generando
+una tabla por cada usuario, en vez de una constante)
+Q: how can I make the contents inside a table centered?
+A: To center the contents inside the cells of a JTable, you can use a custom cell renderer. This involves creating a
+DefaultTableCellRenderer and setting it to align the text or components in each cell to the center.
+// Custom Renderer for Center Alignment
+DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+// Apply the Renderer to All Columns
+for (int i = 0; i < activityJTable.getColumnCount(); i++) {
+    activityJTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+}
+-------------------------------------------------------------------
+
