@@ -225,7 +225,7 @@ public class Calendario extends JPanel {
                         eventoLabelTodoElDia.addMouseListener(new MouseAdapter() {
                             @Override
                             public void mouseClicked(MouseEvent e) {
-                                mostrarEvento(evento, date, usuario);
+                                mostrarEventoTodoElDia(evento, date, usuario);
                             }
                         });
                     } else {
@@ -363,16 +363,33 @@ public class Calendario extends JPanel {
                     int duracionEvento = evento.getHoraFin().getHour() - evento.getHoraInicio().getHour();
                     int altoEvento = duracionEvento * 25;
                     if (evento.esEventoTodoElDia()) {
-                        JLabel eventoLabelTodoElDia = new JLabel("   ");
-                        eventoLabelTodoElDia.setOpaque(true);
-                        eventoLabelTodoElDia.setPreferredSize(new Dimension(10, 10));
-                        eventoLabelTodoElDia.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                        eventoLabelTodoElDia.setFont(new Font("Arial", Font.BOLD, 8));
-                        eventoLabelTodoElDia.setBackground(Color.RED);
-                        if (index > 0) {
-                            panelEventosTodoElDia.add(Box.createVerticalStrut(5));
-                        }
-                        panelEventosTodoElDia.add(eventoLabelTodoElDia);
+                    	JPanel eventoLabelTodoElDia = new JPanel() {
+                    	    @Override
+                    	    protected void paintComponent(Graphics g) {
+                    	        super.paintComponent(g);
+                    	        Graphics2D g2d = (Graphics2D) g;
+                    	        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    	        g2d.setColor(Color.RED);
+                    	        g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+                    	        g2d.setColor(Color.BLACK);
+                    	        g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 10, 10);
+                    	    }
+                    	};
+                    	eventoLabelTodoElDia.setOpaque(false);
+                    	eventoLabelTodoElDia.setPreferredSize(new Dimension(10, 10));
+
+                    	if (index > 0) {
+                    	    panelEventosTodoElDia.add(Box.createVerticalStrut(5));
+                    	}
+                    	panelEventosTodoElDia.add(eventoLabelTodoElDia);
+
+                    	eventoLabelTodoElDia.addMouseListener(new MouseAdapter() {
+                    	    @Override
+                    	    public void mouseClicked(MouseEvent e) {
+                    	        mostrarEventoTodoElDia(evento, diaActual, usuario);
+                    	    }
+                    	});
+
                     } else {
                         JLabel eventoLabel = new JLabel(
                             evento.getNombre() + " " +
@@ -427,25 +444,31 @@ public class Calendario extends JPanel {
     }
 
 
-    private void mostrarDialogo(LocalDate date, Usuario usuario) {
+    private void mostrarDialogo(LocalDate date, Usuario usuario) { 
         JDialog dialog = new JDialog();
         dialog.setTitle("Añadir evento para " + date.toString());
         dialog.setSize(400, 350);
         dialog.setLocationRelativeTo(this);
 
         JPanel panel = new JPanel();
+        panel.setBackground(new Color(173, 216, 230));
         panel.setLayout(new GridLayout(0, 2, 10, 10));
 
         JLabel etiquetaNombre = new JLabel("Nombre del evento:");
+        etiquetaNombre.setOpaque(true);
+        etiquetaNombre.setBackground(new Color(173, 216, 230));
         JTextField campoNombre = new JTextField();
         panel.add(etiquetaNombre);
         panel.add(campoNombre);
 
         panel.add(new JLabel());
         JCheckBox todoElDiaCheckBox = new JCheckBox("Todo el día");
+        todoElDiaCheckBox.setBackground(new Color(173, 216, 230));
         panel.add(todoElDiaCheckBox);
 
         JLabel fechaInicio = new JLabel("Hora de inicio:");
+        fechaInicio.setOpaque(true);
+        fechaInicio.setBackground(new Color(173, 216, 230));
         Integer[] horasArray = new Integer[25];
         for (int i = 0; i < 25; i++) {
             horasArray[i] = i;
@@ -453,8 +476,9 @@ public class Calendario extends JPanel {
         String[] minutosArray = {"00", "15", "30", "45"};
         JComboBox<Integer> horas = new JComboBox<>(horasArray);
         JComboBox<String> minutos = new JComboBox<>(minutosArray);
-        
+
         JPanel panelHoraInicio = new JPanel();
+        panelHoraInicio.setBackground(new Color(173, 216, 230));
         panelHoraInicio.add(horas);
         panelHoraInicio.add(minutos);
 
@@ -462,10 +486,13 @@ public class Calendario extends JPanel {
         panel.add(panelHoraInicio);
 
         JLabel fechaFinal = new JLabel("Hora de finalización:");
+        fechaFinal.setOpaque(true);
+        fechaFinal.setBackground(new Color(173, 216, 230));
         JComboBox<Integer> horasFinal = new JComboBox<>(horasArray);
         JComboBox<String> minutosFinal = new JComboBox<>(minutosArray);
 
         JPanel panelHoraFinal = new JPanel();
+        panelHoraFinal.setBackground(new Color(173, 216, 230));
         panelHoraFinal.add(horasFinal);
         panelHoraFinal.add(minutosFinal);
 
@@ -473,30 +500,41 @@ public class Calendario extends JPanel {
         panel.add(panelHoraFinal);
 
         JLabel descripcion = new JLabel("Breve descripción:");
+        descripcion.setOpaque(true);
+        descripcion.setBackground(new Color(173, 216, 230));
         JTextArea texto = new JTextArea(4, 20);
         texto.setLineWrap(true);
         JScrollPane scroll = new JScrollPane(texto);
 
         panel.add(descripcion);
         panel.add(scroll);
-        
+
         JRadioButton publicoButton = new JRadioButton("Público");
         JRadioButton privadoButton = new JRadioButton("Privado");
+
+        publicoButton.setBackground(new Color(173, 216, 230));
+        privadoButton.setBackground(new Color(173, 216, 230));
 
         ButtonGroup group = new ButtonGroup();
         group.add(publicoButton);
         group.add(privadoButton);
 
         privadoButton.setSelected(true);
-        
+
         JPanel panelPrivacidad = new JPanel();
+        panelPrivacidad.setBackground(new Color(173, 216, 230));
         panelPrivacidad.add(publicoButton);
         panelPrivacidad.add(privadoButton);
-        panel.add(new JLabel("Privacidad:"));
+
+        JLabel privacidadLabel = new JLabel("Privacidad:");
+        privacidadLabel.setOpaque(true);
+        privacidadLabel.setBackground(new Color(173, 216, 230));
+        panel.add(privacidadLabel);
         panel.add(panelPrivacidad);
-        
 
         JLabel etiquetaCategorias = new JLabel("Categoría:");
+        etiquetaCategorias.setOpaque(true);
+        etiquetaCategorias.setBackground(new Color(173, 216, 230));
         JComboBox<Categorias> categorias = new JComboBox<>(Categorias.values());
         panel.add(etiquetaCategorias);
         panel.add(categorias);
@@ -518,12 +556,10 @@ public class Calendario extends JPanel {
                 categoria = (Categorias) categorias.getSelectedItem();
 
                 if (todoElDiaCheckBox.isSelected()) {
-                    // Asignar valores predeterminados para eventos de todo el día
                     todoElDiaEv = true;
-                    horaInicioEv = LocalTime.of(0, 0); // Inicio del día
-                    horaFinEv = LocalTime.of(23, 59); // Fin del día
+                    horaInicioEv = LocalTime.of(0, 0); 
+                    horaFinEv = LocalTime.of(23, 59);
                 } else {
-                    // Obtener valores seleccionados en los combos de hora y minuto
                     int horaInicio = (int) horas.getSelectedItem();
                     int minutoInicio = Integer.parseInt((String) minutos.getSelectedItem());
                     int horaFin = (int) horasFinal.getSelectedItem();
@@ -554,8 +590,6 @@ public class Calendario extends JPanel {
             }
         });
 
-
-
         panel.add(new JLabel());
         panel.add(botonGuardar);
 
@@ -563,12 +597,14 @@ public class Calendario extends JPanel {
         dialog.setVisible(true);
     }
 
+
     private void mostrarEvento(Evento evento, LocalDate date, Usuario usuario) {
         JDialog dialog = new JDialog();
         dialog.setTitle("Evento para el " + date.toString());
         dialog.setSize(500, 400); 
         dialog.setLocationRelativeTo(this);
         JPanel panel = new JPanel();
+        panel.setBackground(new Color(173, 216, 230));
         panel.setLayout(new GridLayout(6, 1, 10, 10));
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -636,6 +672,75 @@ public class Calendario extends JPanel {
         JPanel panelBoton = new JPanel();
         panelBoton.setLayout(new BoxLayout(panelBoton, BoxLayout.X_AXIS)); 
         panelBoton.add(Box.createHorizontalGlue()); 
+        panelBoton.setBackground(new Color(173, 216, 230));
+        panelBoton.add(botonEliminar);
+        panelBoton.add(Box.createHorizontalGlue()); 
+ 
+        panel.add(panelBoton);
+
+        dialog.getContentPane().add(panel);
+        dialog.setVisible(true);
+    }
+    
+    private void mostrarEventoTodoElDia(Evento evento, LocalDate date, Usuario usuario) {
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Evento para el " + date.toString());
+        dialog.setSize(300, 200); 
+        dialog.setLocationRelativeTo(this);
+        JPanel panel = new JPanel();
+        panel.setBackground(new Color(173, 216, 230));
+        panel.setLayout(new GridLayout(4, 1, 10, 10));
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        JLabel labelNombre = new JLabel("Nombre evento:");
+        JLabel labelNombreEvento = new JLabel(evento.getNombre());
+        panel.add(labelNombre);
+        panel.add(labelNombreEvento);
+
+        JLabel labelDescripcion = new JLabel("Descripción del evento:");
+        JLabel labelDescripcionEvento = new JLabel(evento.getDescripcion());
+        panel.add(labelDescripcion);
+        panel.add(labelDescripcionEvento);
+
+        JLabel labelFecha = new JLabel("Fecha del evento:");
+        JLabel labelFechaEvento = new JLabel(evento.getFecha().format(formatter));
+        panel.add(labelFecha);
+        panel.add(labelFechaEvento);
+        
+        JButton botonEliminar = new JButton("Eliminar evento");
+        botonEliminar.setBackground(Color.RED); 
+        botonEliminar.setForeground(Color.WHITE);
+        botonEliminar.setFocusPainted(false); 
+        botonEliminar.setFont(new Font("Arial", Font.BOLD, 12));
+
+        botonEliminar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	    nombreEv = evento.getNombre();
+            	    descripcionEv = evento.getDescripcion();
+            	    categoria = evento.getCategoria();
+            	    horaInicioEv = evento.getHoraInicio();
+            	    horaFinEv = evento.getHoraFin();
+            	    todoElDiaEv = evento.esEventoTodoElDia();
+
+                int confirmacion = JOptionPane.showConfirmDialog(dialog, "¿Estás seguro de eliminar este evento?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+                if (confirmacion == JOptionPane.YES_OPTION) {
+                	
+                	//aqui va lo de borrar el evento de la bbdd
+                    BDs.eliminarEventos(usuario.getNombreUsuario(), nombreEv, descripcionEv, categoria.toString(), date.toString(), horaInicioEv.toString(), horaFinEv.toString(), todoElDiaEv);
+                    
+                	JOptionPane.showMessageDialog(dialog, "Evento eliminado.");
+                    actualizarVista(usuario);
+                    dialog.dispose(); 
+                }
+            }
+        });
+
+        JPanel panelBoton = new JPanel();
+        panelBoton.setLayout(new BoxLayout(panelBoton, BoxLayout.X_AXIS)); 
+        panelBoton.add(Box.createHorizontalGlue()); 
+        panelBoton.setBackground(new Color(173, 216, 230));
         panelBoton.add(botonEliminar);
         panelBoton.add(Box.createHorizontalGlue()); 
  
