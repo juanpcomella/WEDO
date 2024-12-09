@@ -50,6 +50,8 @@ public class LeftSideBar extends JPanel {
 
         Map<JButton, Notas> notasMap = new HashMap<>();
 
+        
+        
         button1.addActionListener(e -> {
             String input = JOptionPane.showInputDialog(null, "Escribe el título de la página:", "Crear Página", JOptionPane.QUESTION_MESSAGE);
             
