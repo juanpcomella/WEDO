@@ -626,7 +626,7 @@ public class BDs {
 	}
 		return eventos;
 	}
-
+//aaaaaaaa
 	public static ArrayList<Evento> crearListaEventosPublicosPorUsuario(String usuario) {
 		try {
 			Class.forName("org.sqlite.JDBC");
