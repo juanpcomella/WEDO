@@ -222,7 +222,7 @@ public class RightSideBar extends JPanel {
 
         for (Objetivo objetivo : listaObjetivos) {
             JLabel objetivoLabel = new JLabel(objetivo.getNombre());
-
+            int cuantoFalta = objetivo.getCuantoQueda();
             objetivoLabel.setFont(new Font("Arial", Font.PLAIN, 14));
             objetivoLabel.setBackground(new Color(179, 229, 252));
             objetivoLabel.setForeground(new Color(30, 136, 229)); 
@@ -231,6 +231,20 @@ public class RightSideBar extends JPanel {
             objetivoLabel.setPreferredSize(new Dimension(getWidth(), 40));
             objetivoLabel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40)); 
             objetivoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); 
+            
+            if(cuantoFalta < 0) {
+            	int confirm = JOptionPane.showConfirmDialog(
+                        objetivosPanel,
+                        "Ha llegado el día, ¿has completado tu objetivo?",
+                        "",
+                        JOptionPane.YES_NO_OPTION
+                    );
+            	 if (confirm == JOptionPane.YES_OPTION) {
+                 	BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
+                     eliminarObjetivoDePantalla(objetivo, usuario);
+                     JOptionPane.showMessageDialog(null, "¡Felicidades!");
+                 }
+            }
 
             String mensajeConTiempoRestante = "Quedan " + objetivo.getCuantoQueda() + " días";
             objetivoLabel.setText(objetivo.getNombre() + " - " + mensajeConTiempoRestante);
