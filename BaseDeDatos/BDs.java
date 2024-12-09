@@ -1732,6 +1732,78 @@ public class BDs {
 		}
 		return items;
 	}
+	public boolean itemExiste(String nombreItem) {
+		try {
+			// Cargar el driver JDBC
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return false; // En caso de error, asumimos que no existe
+		}
+		Connection connection = null;
+		boolean existe = false;
+		try {
+			// Conectar a la base de datos
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+
+			// Consulta SQL para verificar existencia
+			String sql = "SELECT COUNT(*) AS total FROM items WHERE nombreItem = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, nombreItem);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			// Verificar si el ítem existe
+			if (resultSet.next()) {
+				existe = resultSet.getInt("total") > 0;
+			}
+		} catch (SQLException e) {
+			System.err.println("Error SQL: " + e.getMessage());
+		} finally {
+			try {
+				if (connection != null)
+					connection.close();
+			} catch (SQLException e) {
+				System.err.println("Error al cerrar la conexión: " + e.getMessage());
+			}
+		}
+		return existe;
+	}
+	public ArrayList<Item> obtenerItemsPorTipo(String tipoItem) {
+		ArrayList<Item> items = new ArrayList<>();
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+		}
+		Connection connection = null;
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+			String sql = "SELECT nombreItem, precioItem, tipoItem, contenido FROM items WHERE tipoItem = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, tipoItem);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				items.add(new Item(
+						resultSet.getString("nombreItem"),
+						resultSet.getInt("precioItem"),
+						resultSet.getString("tipoItem"),
+						resultSet.getString("contenido")
+				));
+			}
+		} catch (SQLException e) {
+			System.err.println("Error SQL: " + e.getMessage());
+		} finally {
+			try {
+				if (connection != null)
+					connection.close();
+			} catch (SQLException e) {
+				System.err.println("Error al cerrar la conexión: " + e.getMessage());
+			}
+		}
+		return items;
+	}
+
 
 	// MÉTODOS PARA LOS ITEMS QUE HAZ COMPRADO.
 	public void crearTablaCompras() {
