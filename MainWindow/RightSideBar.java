@@ -150,7 +150,7 @@ public class RightSideBar extends JPanel {
             String descripcion = descripcionField.getText().trim();
             String fecha = fechaField.getText().trim();
 
-            if (!nombre.isEmpty() && !descripcion.isEmpty() && !fecha.isEmpty()) {
+            if (!nombre.isEmpty() && !fecha.isEmpty()) {
                 LocalDate fechaCumplimiento;
                 try {
                     fechaCumplimiento = LocalDate.parse(fecha);
