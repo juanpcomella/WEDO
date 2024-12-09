@@ -6,6 +6,9 @@ import StartingWindows.VentanaBienvenida;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import BaseDeDatos.BDs;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
@@ -16,16 +19,15 @@ import java.io.IOException;
 public class MiniPerfil extends JFrame {
 
     public MiniPerfil(Usuario usuario, JFrame mw) {
-        setTitle("Mini Perfil");
-        setSize(400, 220);
+    	setTitle("Mini Perfil");
+        setSize(350, 250); 
         setUndecorated(true);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-
+        
         addWindowFocusListener(new WindowFocusListener() {
             @Override
-            public void windowGainedFocus(WindowEvent e) {
-            }
+            public void windowGainedFocus(WindowEvent e) {}
 
             @Override
             public void windowLostFocus(WindowEvent e) {
@@ -34,16 +36,17 @@ public class MiniPerfil extends JFrame {
         });
 
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(1, 2));
+        mainPanel.setLayout(new BorderLayout());
         mainPanel.setBackground(new Color(173, 216, 230));
-        add(mainPanel);
-
-        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
+        add(mainPanel, BorderLayout.CENTER);
+        mainPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10)); 
         leftPanel.setBackground(new Color(173, 216, 230));
 
         try {
             BufferedImage profileImage = ImageIO.read(new File("imagenes/PERFIL.png"));
-            ImageIcon profileIcon = new ImageIcon(getCircularImage(profileImage, 80));
+            ImageIcon profileIcon = new ImageIcon(getCircularImage(profileImage, 70)); 
             JLabel profileLabel = new JLabel(profileIcon);
             profileLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
             profileLabel.addMouseListener(new MouseAdapter() {
@@ -60,23 +63,49 @@ public class MiniPerfil extends JFrame {
             leftPanel.add(errorLabel);
         }
 
-        mainPanel.add(leftPanel);
+        mainPanel.add(leftPanel, BorderLayout.WEST);
 
         JPanel rightPanel = new JPanel();
-        rightPanel.setBackground(new Color(173, 216, 230));
         rightPanel.setLayout(new BorderLayout());
-        mainPanel.add(rightPanel);
+        rightPanel.setBackground(new Color(173, 216, 230));
+        mainPanel.add(rightPanel, BorderLayout.CENTER);
 
         JLabel usuarioLabel = new JLabel(usuario.getNombreUsuario(), SwingConstants.CENTER);
-        usuarioLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        usuarioLabel.setFont(new Font("Arial", Font.BOLD, 18)); 
         usuarioLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         rightPanel.add(usuarioLabel, BorderLayout.NORTH);
 
-        JPanel middlePanel = new JPanel(new GridLayout(1, 2, 10, 0));
-        middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        JPanel middlePanel = new JPanel();
+        middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
         middlePanel.setBackground(new Color(173, 216, 230));
 
-        JButton botonCerrarSesion = new JButton("Cerrar Sesión");
+        JPanel countPanel = new JPanel(new GridLayout(1, 2));
+        countPanel.setBackground(new Color(173, 216, 230));
+
+        /*
+        int cuentaSeguidores = BDs.obtenerCuentaSeguidores(usuario.getNombreUsuario());
+        int cuentaSeguidos = BDs.obtenerCuentaSiguiendo(usuario.getNombreUsuario());
+
+        JLabel seguidoresLabel = new JLabel(cuentaSeguidores + " seguidores", SwingConstants.CENTER);
+        seguidoresLabel.setFont(new Font("Arial", Font.BOLD, 16));  // Texto más pequeño
+        countPanel.add(seguidoresLabel);
+
+        JLabel seguidosLabel = new JLabel(cuentaSeguidos + " seguidos", SwingConstants.CENTER);
+        seguidosLabel.setFont(new Font("Arial", Font.BOLD, 16));  // Texto más pequeño
+        countPanel.add(seguidosLabel);
+        */
+
+        middlePanel.add(countPanel);
+
+        middlePanel.add(Box.createVerticalStrut(10));  
+
+        JPanel botonesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        botonesPanel.setBackground(new Color(173, 216, 230));
+
+        JButton botonCerrarSesion = new JButton("Cerrar sesión");
+        botonCerrarSesion.setPreferredSize(new Dimension(200, 40)); 
+        botonCerrarSesion.setBackground(Color.GRAY);  
+        botonCerrarSesion.setForeground(Color.WHITE);  
         botonCerrarSesion.addActionListener(e -> {
             VentanaBienvenida ventanaBienvenida = new VentanaBienvenida();
             ventanaBienvenida.setVisible(true);
@@ -84,8 +113,9 @@ public class MiniPerfil extends JFrame {
         });
 
         JButton botonEliminarCuenta = new JButton("Eliminar cuenta");
-        botonEliminarCuenta.setBackground(Color.RED);
-        botonEliminarCuenta.setForeground(Color.WHITE);
+        botonEliminarCuenta.setPreferredSize(new Dimension(200, 40));  
+        botonEliminarCuenta.setBackground(Color.RED);  
+        botonEliminarCuenta.setForeground(Color.WHITE); 
         botonEliminarCuenta.addActionListener(e -> {
             int confirmacion = JOptionPane.showConfirmDialog(
                 null,
@@ -102,21 +132,23 @@ public class MiniPerfil extends JFrame {
             }
         });
 
-        middlePanel.add(botonCerrarSesion);
-        middlePanel.add(botonEliminarCuenta);
+        botonesPanel.add(botonCerrarSesion);
+        botonesPanel.add(botonEliminarCuenta);
+        middlePanel.add(botonesPanel);
+
         rightPanel.add(middlePanel, BorderLayout.CENTER);
 
-        JPanel bottomPanel = new JPanel();
-        bottomPanel.setBackground(new Color(173, 216, 230));
-        bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-
         JButton irPerfil = new JButton("Ver tu perfil");
+        irPerfil.setPreferredSize(new Dimension(200, 40));
         irPerfil.addActionListener(e -> {
             ProfileWindowSelf perfil = new ProfileWindowSelf(usuario);
             perfil.setVisible(true);
             mw.dispose();
             dispose();
         });
+
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 10));
+        bottomPanel.setBackground(new Color(173, 216, 230));
         bottomPanel.add(irPerfil);
 
         rightPanel.add(bottomPanel, BorderLayout.SOUTH);
