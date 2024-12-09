@@ -373,7 +373,7 @@ public class ProfileWindowOther extends JFrame {
     public void cargarEventosEnTabla(String usuario, JTable tabla, DefaultTableModel tableModel) {
         tableModel.setRowCount(0);
 
-        ArrayList<Evento> eventos = BDs.crearListaEventosPorUsuario(usuario);
+        ArrayList<Evento> eventos = BDs.crearListaEventosPublicosPorUsuario(usuario);
 
         for (Evento evento : eventos) {
             String actividad = evento.getNombre();

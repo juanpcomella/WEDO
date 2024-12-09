@@ -591,6 +591,12 @@ public class Calendario extends JPanel {
                     horaFinEv = LocalTime.of(horaFin, minutoFin);
                     todoElDiaEv = false;
                 }
+                boolean esPublico = false;
+                if(publicoButton.isSelected()) {
+                	esPublico = true;
+                }else {
+                	esPublico = false;
+                }
 
                 if (nombreEv.isEmpty()) {
                     JOptionPane.showMessageDialog(dialog, "Por favor, ingresa un nombre para el evento.");
@@ -605,7 +611,8 @@ public class Calendario extends JPanel {
                         date.toString(),
                         horaInicioEv.toString(),
                         horaFinEv.toString(),
-                        todoElDiaEv
+                        todoElDiaEv,
+                        esPublico
                     );
                     JOptionPane.showMessageDialog(dialog, "Evento guardado.");
                     actualizarVista(usuario);

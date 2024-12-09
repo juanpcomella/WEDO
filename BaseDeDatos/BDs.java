@@ -519,7 +519,7 @@ public class BDs {
 			
 			// Ejecutar sentencias SQL (Update)
 			statement.executeUpdate("create table if not exists eventos (username string, nombreEvento string, descripcionEv string, categoriaEv string, fechaEv string, "
-					+ "horaInicioEv string, horaFinEv string, todoElDiaEv boolean)");
+					+ "horaInicioEv string, horaFinEv string, todoElDiaEv boolean, esPublico boolean)");
 
 		} catch(SQLException e) {
 			System.err.println(e.getMessage());
@@ -534,7 +534,7 @@ public class BDs {
 	}
 	}
 	
-	public static void insertarEventos(String usuario, String nombre, String descripcion, String categoria, String fecha, String horaInicio, String horaFin, boolean todoElDia) {
+	public static void insertarEventos(String usuario, String nombre, String descripcion, String categoria, String fecha, String horaInicio, String horaFin, boolean todoElDia, boolean esPublico) {
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
@@ -549,7 +549,7 @@ public class BDs {
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
 			
-			String sql = "insert into eventos (username, nombreEvento, descripcionEv, categoriaEv, fechaEv, horaInicioEv, horaFinEv, todoElDiaEv) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+			String sql = "insert into eventos (username, nombreEvento, descripcionEv, categoriaEv, fechaEv, horaInicioEv, horaFinEv, todoElDiaEv, esPublico) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             // Preparar la consulta
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -563,6 +563,7 @@ public class BDs {
             preparedStatement.setString(6, horaInicio);
             preparedStatement.setString(7, horaFin);
             preparedStatement.setBoolean(8, todoElDia);
+            preparedStatement.setBoolean(9, esPublico);
           
             preparedStatement.executeUpdate();
 
@@ -642,7 +643,7 @@ public class BDs {
 			statement.setQueryTimeout(30);  // Timeout de 30 ms
 
 			// Consulta SQL actualizada para filtrar eventos públicos
-			String sql = "SELECT nombreEvento, descripcionEv, categoriaEv, fechaEv, horaInicioEv, horaFinEv, todoElDiaEv, esPrivado FROM eventos WHERE username = ? AND publico = 1"; // Filtrar eventos públicos
+			String sql = "SELECT nombreEvento, descripcionEv, categoriaEv, fechaEv, horaInicioEv, horaFinEv, todoElDiaEv, esPublico FROM eventos WHERE username = ? AND esPublico = true"; // Filtrar eventos públicos
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setString(1, usuario);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -656,7 +657,7 @@ public class BDs {
 				evento.setHoraInicio(LocalTime.parse(resultSet.getString("horaInicioEv")));
 				evento.setHoraFin(LocalTime.parse(resultSet.getString("horaFinEv")));
 				evento.setTodoElDia(Boolean.parseBoolean(resultSet.getString("todoElDiaEv")));
-				evento.setPrivado(Boolean.parseBoolean(resultSet.getString("esPrivado")));
+				evento.setPrivado(Boolean.parseBoolean(resultSet.getString("esPublico")));
 				eventos.add(evento);
 			}
 		} catch (SQLException e) {
