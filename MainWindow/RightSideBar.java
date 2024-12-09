@@ -83,25 +83,28 @@ public class RightSideBar extends JPanel {
         //PASO 1 -------------------------------------------------------------------------
         //lista de todos los habitos (solo el nombre del habito)
         BDs.crearTablaHabitosTemporales();
+        String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         habitosPanel = new JPanel();
         habitosPanel.setLayout(new GridLayout(4, 1, 5, 5));
         habitosPanel.setBackground(new Color(50,70,90));
-        if(BDs.contarHabitos() == 0) {
-        	System.out.println(1);
+//        System.out.println(BDs.contarHabitos(usuario.getNombreUsuario()));
+        if(BDs.contarHabitos(usuario.getNombreUsuario(), fechaHoy) == 0) {
+        	System.out.println(11);
             habitosTotales = cargarHabitosDesdeCSV("BaseDeDatos/objetivos_diarios.csv");
             habitosDiarios = generarHabitosDiarios(usuario);//lista de 4 habitos
             guardarHabitosDiariosEnBD(usuario);
+//            System.out.println(BDs.contarHabitos(usuario.getNombreUsuario())+"****");
             actualizarHabitosPanel(usuario);
+//            System.out.println(BDs.contarHabitos(usuario.getNombreUsuario()));
         }else {
         if(checkearCambioHabitos(usuario)) {
-        	System.out.println(2.1);
+        	System.out.println(22.1);
             habitosTotales = cargarHabitosDesdeCSV("BaseDeDatos/objetivos_diarios.csv");
             habitosDiarios = generarHabitosDiarios(usuario);//lista de 4 habitos
             guardarHabitosDiariosEnBD(usuario);
             actualizarHabitosPanel(usuario);
         }else {
-        	System.out.println(2.2);
-            String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        	System.out.println(22.2);
     		habitosDiarios.clear();
         	for(Habito habito : BDs.crearListaHabitos(usuario.getNombreUsuario(), fechaHoy)) {
 //        		System.out.println(habito.isCompletado());
@@ -109,10 +112,10 @@ public class RightSideBar extends JPanel {
 //        		System.out.println(habito.getFecha());
         		habitosDiarios.add(habito.getNombre());
         	}
+        	System.out.println(habitosDiarios.size());
             actualizarHabitosPanel(usuario);
         }
         }
-        String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 //        for(Habito habito : BDs.crearListaHabitos(usuario.getNombreUsuario(), fechaHoy)) {
 //        	System.out.println(habito.getNombre());
 //        }
@@ -219,7 +222,7 @@ public class RightSideBar extends JPanel {
 
         for (Objetivo objetivo : listaObjetivos) {
             JLabel objetivoLabel = new JLabel(objetivo.getNombre());
-
+            int cuantoFalta = objetivo.getCuantoQueda();
             objetivoLabel.setFont(new Font("Arial", Font.PLAIN, 14));
             objetivoLabel.setBackground(new Color(179, 229, 252));
             objetivoLabel.setForeground(new Color(30, 136, 229)); 
@@ -228,6 +231,20 @@ public class RightSideBar extends JPanel {
             objetivoLabel.setPreferredSize(new Dimension(getWidth(), 40));
             objetivoLabel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40)); 
             objetivoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); 
+            
+            if(cuantoFalta < 0) {
+            	int confirm = JOptionPane.showConfirmDialog(
+                        objetivosPanel,
+                        "Ha llegado el día, ¿has completado tu objetivo?",
+                        "",
+                        JOptionPane.YES_NO_OPTION
+                    );
+            	 if (confirm == JOptionPane.YES_OPTION) {
+                 	BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
+                     eliminarObjetivoDePantalla(objetivo, usuario);
+                     JOptionPane.showMessageDialog(null, "¡Felicidades!");
+                 }
+            }
 
             String mensajeConTiempoRestante = "Quedan " + objetivo.getCuantoQueda() + " días";
             objetivoLabel.setText(objetivo.getNombre() + " - " + mensajeConTiempoRestante);
@@ -384,12 +401,13 @@ public class RightSideBar extends JPanel {
     
     //PASO 3 --> GUARDAMOS LOS 4 HABITOS DE habitosDiarios QUE USAREMOS MAS TARDE EN LA BASE DE DATOS CON LA FECHAS DE "HOY"
     private void guardarHabitosDiariosEnBD(Usuario usuario) {
-    	BDs.eliminarTodosLosHabitos();
+    	BDs.eliminarTodosLosHabitos(usuario.getNombreUsuario());
         String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
             for (String habito : habitosDiarios) {
             	String nombre_habito;
                 nombre_habito = habito;
+                
                 BDs.insertarHabitosTemporales(usuario.getNombreUsuario(), fechaHoy, nombre_habito);
             }
         }
