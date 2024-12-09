@@ -1,16 +1,18 @@
 package VentanaTienda;
 
+import javax.swing.*;
+
 public class Item {
     private String nombreItem;
     private int precioItem;
-    private String tipoItem;
-    private String rutaItem;
+    private String tipoItem; // "foto" o "label"
+    private String contenido; // Ruta de foto o texto del label
 
-    public Item(String nombreItem, int precioItem, String tipoItem, String rutaItem) {
+    public Item(String nombreItem, int precioItem, String tipoItem, String contenido) {
         this.nombreItem = nombreItem;
         this.precioItem = precioItem;
         this.tipoItem = tipoItem;
-        this.rutaItem = rutaItem;
+        this.contenido = contenido;
     }
 
     public String getNombreItem() {
@@ -37,11 +39,20 @@ public class Item {
         this.tipoItem = tipoItem;
     }
 
-    public String getRutaItem() {
-        return rutaItem;
+    public String getContenido() {
+        return contenido;
     }
 
-    public void setRutaItem(String rutaItem) {
-        this.rutaItem = rutaItem;
+    public void setContenido(String contenido) {
+        this.contenido = contenido;
+    }
+
+    public Object getRepresentacionVisual() {
+        if (tipoItem.equals("foto")) {
+            return new ImageIcon(contenido); // Representación como ImageIcon
+        } else if (tipoItem.equals("label")) {
+            return new JLabel(contenido); // Representación como JLabel
+        }
+        return null;
     }
 }

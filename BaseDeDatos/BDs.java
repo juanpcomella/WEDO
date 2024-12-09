@@ -1640,7 +1640,7 @@ public class BDs {
 					"nombreItem STRING, " +
 					"precioItem INTEGER, " +
 					"tipoItem STRING, " +
-					"rutaItem STRING)";
+					"contenido STRING)";
 			statement.executeUpdate(sql);
 			System.out.println("Tabla 'items' creada o ya existente.");
 		} catch (SQLException e) {
@@ -1655,7 +1655,7 @@ public class BDs {
 		}
 	}
 
-	public void insertarItem(String username, String nombreItem, int precioItem, String tipoItem, String rutaItem) {
+	public void insertarItem(String username, String nombreItem, int precioItem, String tipoItem, String contenido) {
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
@@ -1665,14 +1665,14 @@ public class BDs {
 		Connection connection = null;
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
-			String sql = "INSERT INTO items (username, nombreItem, precioItem, tipoItem, rutaItem) VALUES (?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO items (username, nombreItem, precioItem, tipoItem, contenido) VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
 			preparedStatement.setString(1, username);
 			preparedStatement.setString(2, nombreItem);
 			preparedStatement.setInt(3, precioItem);
 			preparedStatement.setString(4, tipoItem);
-			preparedStatement.setString(5, rutaItem);
+			preparedStatement.setString(5, contenido);
 
 			preparedStatement.executeUpdate();
 			System.out.println("Item insertado correctamente.");
@@ -1688,29 +1688,33 @@ public class BDs {
 		}
 	}
 
-
 	public static ArrayList<Item> crearListaItems(String username) {
+		ArrayList<Item> items = new ArrayList<>();
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
 			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
 		}
 		Connection connection = null;
-		ArrayList<Item> items = new ArrayList<>();
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
-			String sql = "SELECT nombreItem, precioItem, tipoItem, rutaItem FROM items WHERE username = ?";
+			String sql = "SELECT nombreItem, precioItem, tipoItem, contenido FROM items WHERE username = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setString(1, username);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
+				String tipoItem = resultSet.getString("tipoItem");
+				String contenido = resultSet.getString("contenido");
+
+				// Crear el objeto Item
 				Item item = new Item(
 						resultSet.getString("nombreItem"),
 						resultSet.getInt("precioItem"),
-						resultSet.getString("tipoItem"),
-						resultSet.getString("rutaItem")
+						tipoItem,
+						contenido
 				);
+
 				items.add(item);
 			}
 		} catch (SQLException e) {
@@ -1745,7 +1749,7 @@ public class BDs {
 					"nombreItem STRING, " +
 					"precioItem INTEGER, " +
 					"tipoItem STRING, " +
-					"rutaItem STRING)";
+					"contenido STRING)";
 			statement.executeUpdate(sql);
 			System.out.println("Tabla 'purchased_items' creada o ya existente.");
 		} catch (SQLException e) {
@@ -1759,7 +1763,8 @@ public class BDs {
 			}
 		}
 	}
-	public void insertarCompra(String username, String nombreItem, int precioItem, String tipoItem, String rutaItem) {
+
+	public void insertarCompra(String username, String nombreItem, int precioItem, String tipoItem, String contenido) {
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
@@ -1769,14 +1774,14 @@ public class BDs {
 		Connection connection = null;
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
-			String sql = "INSERT INTO purchased_items (username, nombreItem, precioItem, tipoItem, rutaItem) VALUES (?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO purchased_items (username, nombreItem, precioItem, tipoItem, contenido) VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
 			preparedStatement.setString(1, username);
 			preparedStatement.setString(2, nombreItem);
 			preparedStatement.setInt(3, precioItem);
 			preparedStatement.setString(4, tipoItem);
-			preparedStatement.setString(5, rutaItem);
+			preparedStatement.setString(5, contenido);
 
 			preparedStatement.executeUpdate();
 			System.out.println("Compra insertada correctamente.");
@@ -1791,6 +1796,7 @@ public class BDs {
 			}
 		}
 	}
+
 	public static ArrayList<Item> crearListaCompras(String username) {
 		ArrayList<Item> compras = new ArrayList<>();
 		try {
@@ -1801,18 +1807,23 @@ public class BDs {
 		Connection connection = null;
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
-			String sql = "SELECT nombreItem, precioItem, tipoItem, rutaItem FROM purchased_items WHERE username = ?";
+			String sql = "SELECT nombreItem, precioItem, tipoItem, contenido FROM purchased_items WHERE username = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setString(1, username);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
+				String tipoItem = resultSet.getString("tipoItem");
+				String contenido = resultSet.getString("contenido");
+
+				// Crear el objeto Item
 				Item item = new Item(
 						resultSet.getString("nombreItem"),
 						resultSet.getInt("precioItem"),
-						resultSet.getString("tipoItem"),
-						resultSet.getString("rutaItem")
+						tipoItem,
+						contenido
 				);
+
 				compras.add(item);
 			}
 		} catch (SQLException e) {
