@@ -155,7 +155,7 @@ public class LeftSideBar extends JPanel {
 
         panel2.revalidate();
         panel2.repaint();
-    }
+    }}
     /*
     public static void main(String[] args) {
         JFrame frame = new JFrame("Left Sidebar Example");
@@ -165,5 +165,5 @@ public class LeftSideBar extends JPanel {
         frame.setVisible(true);
     }
      */
-}
+
 
