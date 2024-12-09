@@ -16,8 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LeftSideBar extends JPanel {
-    //String strVacio;
-    //String input;
     Notas nota;
 
     public LeftSideBar(Usuario usuario) {
@@ -25,11 +23,11 @@ public class LeftSideBar extends JPanel {
         setBackground(new Color(173, 216, 230));
 
         JPanel panel = new JPanel();
-        setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // Usar BoxLayout para apilar los botones verticalmente
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // Usar BoxLayout para apilar los botones verticalmente
         panel.setBackground(new Color(50, 70, 90));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel.setBorder(new LineBorder(new Color(173, 216, 230), 10));
-        
+
         // Botón "+" en la parte superior
         JButton button1 = new JButton("+");
         button1.setBackground(new Color(173, 216, 230));
@@ -39,12 +37,11 @@ public class LeftSideBar extends JPanel {
         button1.setMinimumSize(new Dimension(100, 30));
         button1.setAlignmentX(Component.CENTER_ALIGNMENT); // Asegura que el botón "+" esté centrado
         
-        // Agregar el botón "+" al panel
-        JPanel buttonPanel1 = new JPanel();
-        buttonPanel1.setLayout(new FlowLayout(FlowLayout.CENTER)); // Centra el botón dentro del panel
-        buttonPanel1.setOpaque(false); // Hacer que el panel sea transparente
-        buttonPanel1.add(button1);
-        panel.add(buttonPanel1);
+        // Añadir el botón "+" al panel
+        panel.add(button1);
+
+        // Espacio entre el button1 y el primer botonPagina
+        panel.add(Box.createVerticalStrut(10)); // Añadir espacio vertical de 10 píxeles
 
         Color colorTurquesa = new Color(173, 216, 230);
         Color azulOscuro = new Color(50, 70, 90);
@@ -90,7 +87,6 @@ public class LeftSideBar extends JPanel {
                 botonPagina.setAlignmentX(Component.CENTER_ALIGNMENT); // Centra el botón
 
                 // Añadir el botón creado al panel
-                panel.add(Box.createVerticalGlue());
                 panel.add(botonPagina);
                 panel.add(Box.createVerticalStrut(10)); // Espacio entre botones
                 panel.revalidate();
@@ -140,7 +136,6 @@ public class LeftSideBar extends JPanel {
             botonSeguido.setMaximumSize(new Dimension(175, 40));
             botonSeguido.setAlignmentX(Component.CENTER_ALIGNMENT);
             botonSeguido.addActionListener(e -> {
-
                 SwingUtilities.invokeLater(() -> new ProfileWindowOther(user, seguido).setVisible(true));
                 SwingUtilities.getWindowAncestor(LeftSideBar.this).dispose();
             });
