@@ -403,6 +403,7 @@ public class Calendario extends JPanel {
                             eventoLabel.setOpaque(true);
                             eventoLabel.setFont(new Font("Arial", Font.BOLD, 10));
                             eventoLabel.setForeground(Color.WHITE);
+                            eventoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
                             if (evento.getCategoria().equals(Categorias.Estudios)) {
                                 eventoLabel.setBackground(Color.MAGENTA);
