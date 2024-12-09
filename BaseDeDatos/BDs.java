@@ -1390,77 +1390,80 @@ public class BDs {
 	
 	}
 	
-	public static int contarHabitos() {
+	public static int contarHabitos(String usuario, String fechaHoy) {
 	    int totalHabitos = 0;
-	    Connection connection = null;
-	    try {
+
+	    // Validar parámetros
+	    if (usuario == null || usuario.isEmpty() || fechaHoy == null || fechaHoy.isEmpty()) {
+	        System.err.println("ERROR: Los parámetros no deben ser nulos o vacíos.");
+	        return totalHabitos;
+	    }
+
+	    // Conexión a la base de datos
+	    String url = "jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas";
+	    String sql = "SELECT COUNT(*) AS total FROM habitos WHERE username = ? AND fecha_hoy = ?";
+
+	    try (
+	        Connection connection = DriverManager.getConnection(url);
+	        PreparedStatement preparedStatement = connection.prepareStatement(sql)
+	    ) {
 	        // Registrar el driver SQLite
 	        Class.forName("org.sqlite.JDBC");
-	        
-	        // Conectar a la base de datos
-	        connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
-	        
-	        // Consulta SQL para contar todos los elementos de la tabla
-	        String sql = "SELECT COUNT(*) AS total FROM habitos";
-	        Statement statement = connection.createStatement();
-	        ResultSet resultSet = statement.executeQuery(sql);
-	        
-	        // Recuperar el total de hábitos
-	        if (resultSet.next()) {
-	            totalHabitos = resultSet.getInt("total");
+
+	        // Asignar parámetros
+	        preparedStatement.setString(1, usuario);
+	        preparedStatement.setString(2, fechaHoy);
+
+	        // Ejecutar la consulta
+	        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	            if (resultSet.next()) {
+	                totalHabitos = resultSet.getInt("total");
+	            }
 	        }
 	    } catch (ClassNotFoundException e) {
 	        System.err.println("ERROR: Driver SQLite para JDBC no encontrado.");
 	    } catch (SQLException e) {
-	        System.err.println(e.getMessage());
-	    } finally {
-	        try {
-	            if (connection != null) {
-	                connection.close();
-	            }
-	        } catch (SQLException e) {
-	            System.err.println("Error al cerrar la conexión: " + e.getMessage());
-	        }
+	        System.err.println("ERROR al ejecutar la consulta: " + e.getMessage());
 	    }
+
 	    return totalHabitos;
 	}
+
 	
-	public static void eliminarTodosLosHabitos() {
-	    try {
-	        // Cargar el driver de SQLite
-	        Class.forName("org.sqlite.JDBC");
-	    } catch (ClassNotFoundException e) {
-	        System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+	public static void eliminarTodosLosHabitos(String usuario) {
+	    if (usuario == null || usuario.isEmpty()) {
+	        System.err.println("ERROR: El usuario no puede ser nulo o vacío.");
 	        return;
 	    }
 
-	    Connection connection = null;
+	    // Registrar el driver SQLite
 	    try {
-	        // Crear una conexión a la base de datos
-	        connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+	        Class.forName("org.sqlite.JDBC");
+	    } catch (ClassNotFoundException e) {
+	        System.err.println("ERROR: Driver SQLite para JDBC no encontrado.");
+	        return;
+	    }
 
-	        // Crear gestor de sentencias
-	        Statement statement = connection.createStatement();
-	        statement.setQueryTimeout(30);  // Poner un timeout de 30 segundos
+	    // Conexión y eliminación
+	    String url = "jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas";
+	    String sql = "DELETE FROM habitos WHERE username = ?";
 
-	        // Consulta SQL para eliminar todas las tuplas de la tabla "habitos"
-	        String sql = "DELETE FROM habitos";
+	    try (
+	        Connection connection = DriverManager.getConnection(url);
+	        PreparedStatement preparedStatement = connection.prepareStatement(sql)
+	    ) {
+	        // Asignar valor al parámetro
+	        preparedStatement.setString(1, usuario);
 
 	        // Ejecutar la consulta
-	        statement.executeUpdate(sql);
+	        int filasEliminadas = preparedStatement.executeUpdate();
+	        System.out.println("Se eliminaron " + filasEliminadas + " hábitos para el usuario: " + usuario);
 
 	    } catch (SQLException e) {
 	        System.err.println("Error al eliminar hábitos: " + e.getMessage());
-	    } finally {
-	        try {
-	            if (connection != null) {
-	                connection.close();  // Cerrar la conexión
-	            }
-	        } catch (SQLException e) {
-	            System.err.println("Error al cerrar la conexión: " + e.getMessage());
-	        }
 	    }
 	}
+
 	
 	//AQUI EMPIEZAN LOS METODOS DE LOS OBJETIVOS
 	public static void crearTablaObjetivos() {
