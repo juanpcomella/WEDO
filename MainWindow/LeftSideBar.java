@@ -102,7 +102,7 @@ public class LeftSideBar extends JPanel {
                 
             }
         });
-        
+        //
         
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); // Desactivar la barra de desplazamiento horizontal
