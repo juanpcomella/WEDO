@@ -9,8 +9,13 @@ import javax.swing.*;
 import javax.swing.text.*;
 
 public class Notas extends JFrame {
+	String titulo_editado;
+	String txt_editado;
 	int numero_vistas;
-    public Notas(String titulo) {
+	
+	JTextPane apuntePane;
+	JTextField tituloL;
+    public Notas(String titulo,String txt) {
         // Configuración de la ventana
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(new Dimension(500, 700));
@@ -19,14 +24,15 @@ public class Notas extends JFrame {
         
         
         // Título
-        JTextField tituloL = new JTextField(titulo);
+        tituloL = new JTextField(titulo);
         tituloL.setFont(new Font("Arial", Font.BOLD, 50));
         
         
         add(tituloL, BorderLayout.NORTH);
 
         // JTextPane para los apuntes
-        JTextPane apuntePane = new JTextPane();
+        apuntePane = new JTextPane();
+        apuntePane.setText(txt);
         apuntePane.setFont(new Font("Calibri", Font.PLAIN, 20));
         add(new JScrollPane(apuntePane), BorderLayout.CENTER); // Añadir con scroll
         apuntePane.setPreferredSize(new Dimension(400, 700));
@@ -152,11 +158,18 @@ public class Notas extends JFrame {
         panelInferior.add(fontComboBox);
         add(panelInferior, BorderLayout.SOUTH);
         
+        titulo_editado=tituloL.getText();
+        txt_editado=apuntePane.getText();
+        
+        titulo= titulo_editado;
+        txt=txt_editado;
+        
+        
     }
 
-    public static void main(String[] args) {
-        Notas notas = new Notas("Titulo");
-        notas.setVisible(true);
-    }
+    //public static void main(String[] args) {
+     //   Notas notas = new Notas("Titulo","");
+      //  notas.setVisible(true);
+   // }
 }
-
+//

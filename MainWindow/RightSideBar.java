@@ -153,7 +153,7 @@ public class RightSideBar extends JPanel {
             String descripcion = descripcionField.getText().trim();
             String fecha = fechaField.getText().trim();
 
-            if (!nombre.isEmpty() && !descripcion.isEmpty() && !fecha.isEmpty()) {
+            if (!nombre.isEmpty() && !fecha.isEmpty()) {
                 LocalDate fechaCumplimiento;
                 try {
                     fechaCumplimiento = LocalDate.parse(fecha);
@@ -248,8 +248,22 @@ public class RightSideBar extends JPanel {
                     objetivoLabel.setBackground(new Color(179, 229, 252));
                 }
             });
-
             
+            if (objetivo.getCuantoQueda() == 0) {
+                int opcion = JOptionPane.showConfirmDialog(
+                    null, 
+                    "¿Has completado el objetivo: " + objetivo.getNombre() + "?", 
+                    "Confirmación de objetivo", 
+                    JOptionPane.YES_NO_OPTION, 
+                    JOptionPane.QUESTION_MESSAGE
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    JOptionPane.showMessageDialog(null, "¡Felicidades por completar tu objetivo!");
+                } else if (opcion == JOptionPane.NO_OPTION) {
+                    JOptionPane.showMessageDialog(null, "¡Animo! ¡A la siguiente lo conseguiras!");
+                }
+            }
             objetivosPanel.add(objetivoLabel);
         }
 

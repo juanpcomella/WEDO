@@ -943,8 +943,6 @@ public class VentanaTienda extends JFrame {
     
     
 
-        
-
 
     private ImageIcon cargarImagen(String ruta, int ancho, int alto) {
         ImageIcon icono = new ImageIcon(ruta);

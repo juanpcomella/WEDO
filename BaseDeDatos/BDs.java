@@ -1080,6 +1080,76 @@ public class BDs {
 
 		return listaSeguimientos;
 	}
+	public static int obtenerCuentaSeguidores(String usuario) {
+		int cuentaSeguidores = 0;
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return cuentaSeguidores;
+		}
+
+		Connection connection = null;
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+
+			// Query to count followers
+			String sql = "SELECT COUNT(seguidor) AS cuenta_seguidores FROM seguimientos WHERE seguido = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, usuario);
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				cuentaSeguidores = resultSet.getInt("cuenta_seguidores");
+			}
+		} catch (SQLException e) {
+			System.err.println("Error SQL: " + e.getMessage());
+		} finally {
+			try {
+				if (connection != null) connection.close();
+			} catch (SQLException e) {
+				System.err.println("Error al cerrar la conexión: " + e.getMessage());
+			}
+		}
+
+		return cuentaSeguidores;
+	}
+
+	public static int obtenerCuentaSiguiendo(String usuario) {
+		int cuentaSiguiendo = 0;
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return cuentaSiguiendo;
+		}
+
+		Connection connection = null;
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+
+			// Query to count following
+			String sql = "SELECT COUNT(seguido) AS cuenta_siguiendo FROM seguimientos WHERE seguidor = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, usuario);
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				cuentaSiguiendo = resultSet.getInt("cuenta_siguiendo");
+			}
+		} catch (SQLException e) {
+			System.err.println("Error SQL: " + e.getMessage());
+		} finally {
+			try {
+				if (connection != null) connection.close();
+			} catch (SQLException e) {
+				System.err.println("Error al cerrar la conexión: " + e.getMessage());
+			}
+		}
+
+		return cuentaSiguiendo;
+	}
+
 
 	//AQUI EMPIEZAN LOS METODOS DE LOS HABITOS
 	public static void crearTablaHabitosTemporales() {

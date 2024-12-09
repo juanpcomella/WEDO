@@ -12,8 +12,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import javax.swing.border.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import java.io.*;
 
 
@@ -156,15 +158,35 @@ public class ProfileWindowSelf extends JFrame {
         rightGBC.gridx = 0;
         rightGBC.weightx = 1.0;
 
-        // Right Panel - Daily Streaks Panel
+        // Right Panel Follower Count
         rightGBC.gridy = 0;
+        rightGBC.weighty = 0.333;
+        JPanel countPanel = new JPanel(new GridLayout(1,2));
+        countPanel.setBackground(new Color(173, 216, 230));
+
+        int cuentaSeguidores = BDs.obtenerCuentaSeguidores(usuario.getNombreUsuario());
+        int cuentaSeguidos = BDs.obtenerCuentaSiguiendo(usuario.getNombreUsuario());
+
+        JLabel seguidoresLabel = new JLabel(cuentaSeguidores+" seguidores", SwingConstants.CENTER);
+        seguidoresLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        countPanel.add(seguidoresLabel, rightGBC);
+
+        JLabel seguidosLabel = new JLabel(cuentaSeguidos+" seguidos", SwingConstants.CENTER);
+        seguidosLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        countPanel.add(seguidosLabel, rightGBC);
+
+        rightPanel.add(countPanel, rightGBC);
+
+
+        // Right Panel - Daily Streaks Panel
+        rightGBC.gridy = 1;
         rightGBC.weighty = 0.333;
         JPanel dailyStreakPanel = new JPanel(new BorderLayout());
         dailyStreakPanel.setBackground(new Color(173, 216, 230));
 
         JLabel streakTitleLabel = new JLabel("Racha de Objetivos Diarios", SwingConstants.CENTER);
         streakTitleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        streakTitleLabel.setForeground(Color.WHITE);
+        streakTitleLabel.setForeground(new Color(50, 70, 90));
         streakTitleLabel.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
         streakTitleLabel.setBackground(new Color(173, 216, 230));
         dailyStreakPanel.add(streakTitleLabel, BorderLayout.NORTH);
@@ -258,45 +280,6 @@ public class ProfileWindowSelf extends JFrame {
 
         rightPanel.add(dailyStreakPanel, rightGBC);
 
-        // Right Panel - Progress Panel
-        rightGBC.gridy = 1;
-        rightGBC.weighty = 0.333;
-
-        JPanel progressPanel = new JPanel();
-        progressPanel.setBackground(new Color(173, 216, 230));
-        progressPanel.setLayout(new BoxLayout(progressPanel, BoxLayout.Y_AXIS));
-
-        progressPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        JLabel progressLabel = new JLabel("Titulo del objetivo", SwingConstants.CENTER);
-        progressLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        progressLabel.setForeground(Color.WHITE);
-        progressLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        progressPanel.add(progressLabel);
-
-        progressPanel.add(Box.createVerticalGlue());
-
-        JLabel percentageLabel = new JLabel("0%", SwingConstants.CENTER);
-        percentageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        percentageLabel.setForeground(Color.WHITE);
-        percentageLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        progressPanel.add(percentageLabel);
-
-        progressPanel.add(Box.createVerticalStrut(5));
-
-        JProgressBar progressBar = new JProgressBar(0, 100);
-        progressBar.setValue(15);
-        progressBar.setStringPainted(false);
-        progressBar.setPreferredSize(new Dimension(150, 10));
-        progressBar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        progressPanel.add(progressBar);
-
-        percentageLabel.setText(progressBar.getValue() + "%");
-
-        progressPanel.add(Box.createVerticalGlue());
-
-        rightPanel.add(progressPanel, rightGBC);
-
         // Right Panel - Calendar Panel
         rightGBC.gridy = 2;
         rightGBC.weighty = 0.333;
@@ -304,26 +287,50 @@ public class ProfileWindowSelf extends JFrame {
         activityPanel.setBackground(new Color(173, 216, 230));
         activityPanel.setLayout(new BorderLayout());
 
+        // Table Label
         JLabel activityLabel = new JLabel("Tus próximas actividades", SwingConstants.CENTER);
-        activityLabel.setForeground(Color.WHITE);
+        activityLabel.setForeground(new Color(50, 70, 90));
         activityLabel.setFont(new Font("Arial", Font.BOLD, 24));
         activityLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
         activityPanel.add(activityLabel, BorderLayout.NORTH);
 
-        // Configuración de la tabla
         String[] activityTableParams = {"Activity", "Date"};
-        DefaultTableModel tableModel = new DefaultTableModel(activityTableParams, 0);
+
+        DefaultTableModel tableModel = new DefaultTableModel(activityTableParams, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
         JTable activityJTable = new JTable(tableModel);
-        activityJTable.setOpaque(false);
+        activityJTable.setFont(new Font("Arial", Font.PLAIN, 16));
+        activityJTable.setRowHeight(30);
+        activityJTable.setShowGrid(true);
+        activityJTable.setGridColor(new Color(200, 200, 200));
         activityJTable.setBackground(Color.WHITE);
+        activityJTable.setForeground(Color.BLACK);
+
+        // CENTRADO DEL CHAT
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < activityJTable.getColumnCount(); i++) {
+            activityJTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        JTableHeader header = activityJTable.getTableHeader();
+        header.setFont(new Font("Arial", Font.BOLD, 18));
+        header.setBackground(new Color(58, 92, 181));
+        header.setForeground(Color.WHITE);
+        header.setReorderingAllowed(false);
 
         JScrollPane jtableScroll = new JScrollPane(activityJTable);
         jtableScroll.getViewport().setOpaque(false);
         jtableScroll.setOpaque(false);
-        
+        jtableScroll.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
         activityPanel.add(jtableScroll, BorderLayout.CENTER);
 
-// Cargar eventos del usuario
         cargarEventosEnTabla(usuario.getNombreUsuario(), activityJTable, tableModel);
 
         rightPanel.add(activityPanel, rightGBC);
