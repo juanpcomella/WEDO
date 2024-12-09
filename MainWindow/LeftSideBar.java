@@ -15,43 +15,44 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class LeftSideBar extends JPanel {
-	//String strVacio;
-	//String input;
-	Notas nota;
+    //String strVacio;
+    //String input;
+    Notas nota;
+
     public LeftSideBar(Usuario usuario) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(new Color(173, 216, 230));
 
         JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // Usar BoxLayout para apilar los botones verticalmente
         panel.setBackground(new Color(50, 70, 90));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel.setBorder(new LineBorder(new Color(173, 216, 230), 10));
         
+        // Botón "+" en la parte superior
         JButton button1 = new JButton("+");
         button1.setBackground(new Color(173, 216, 230));
         button1.setForeground(new Color(50, 70, 90));
-        button1.setPreferredSize(new Dimension (100,30));
-        button1.setMaximumSize(new Dimension (100,30));
-        button1.setMinimumSize(new Dimension (100,30));
-
+        button1.setPreferredSize(new Dimension(100, 30));
+        button1.setMaximumSize(new Dimension(100, 30));
+        button1.setMinimumSize(new Dimension(100, 30));
+        button1.setAlignmentX(Component.CENTER_ALIGNMENT); // Asegura que el botón "+" esté centrado
+        
+        // Agregar el botón "+" al panel
         JPanel buttonPanel1 = new JPanel();
         buttonPanel1.setLayout(new FlowLayout(FlowLayout.CENTER)); // Centra el botón dentro del panel
         buttonPanel1.setOpaque(false); // Hacer que el panel sea transparente
         buttonPanel1.add(button1);
         panel.add(buttonPanel1);
 
-        
         Color colorTurquesa = new Color(173, 216, 230);
         Color azulOscuro = new Color(50, 70, 90);
-        
 
+        // Crear un mapa de notas
         Map<JButton, Notas> notasMap = new HashMap<>();
 
-        
-        
+        // Acción para crear nuevas páginas
         button1.addActionListener(e -> {
             String input = JOptionPane.showInputDialog(null, "Escribe el título de la página:", "Crear Página", JOptionPane.QUESTION_MESSAGE);
             
@@ -60,58 +61,48 @@ public class LeftSideBar extends JPanel {
                 String strVacio = "";
                 botonPagina.addActionListener(a -> {
                     nota = notasMap.get(botonPagina);
-                    if (nota==null) {
-                    nota = new Notas(input,strVacio);
-                    notasMap.put(botonPagina, nota);
+                    if (nota == null) {
+                        nota = new Notas(input, strVacio);
+                        notasMap.put(botonPagina, nota);
                     }
-                	nota.setVisible(true);
-                	nota.addWindowListener(new WindowAdapter() {
-                		public void windowClosing(WindowEvent e) {
-                			
-                			nota.titulo_editado = nota.tituloL.getText();
-                	        nota.txt_editado = nota.apuntePane.getText();
+                    nota.setVisible(true);
+                    nota.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosing(WindowEvent e) {
+                            nota.titulo_editado = nota.tituloL.getText();
+                            nota.txt_editado = nota.apuntePane.getText();
 
-                	        // Asignar los valores actualizados a las variables externas
-                	        botonPagina.setText(nota.titulo_editado);
-                	        notasMap.put(botonPagina, nota);
-                	        
-                	        
-                	        
-                	        
-                		}
-					});
-                	
+                            // Asignar los valores actualizados a las variables externas
+                            botonPagina.setText(nota.titulo_editado);
+                            notasMap.put(botonPagina, nota);
+                        }
+                    });
                 });
                 
-                // Diseño del boton
-                botonPagina.setPreferredSize(new Dimension (80,30));
-                botonPagina.setMaximumSize(new Dimension (80,30));
-                botonPagina.setMinimumSize(new Dimension (80,30));
+                // Diseño del botón
+                botonPagina.setPreferredSize(new Dimension(80, 30));
+                botonPagina.setMaximumSize(new Dimension(80, 30));
+                botonPagina.setMinimumSize(new Dimension(80, 30));
                 botonPagina.setBackground(azulOscuro);
                 botonPagina.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
                 botonPagina.setBorder(new LineBorder(new Color(173, 216, 230), 5));
                 botonPagina.setForeground(colorTurquesa);
-                
-                JPanel buttonPanel2 = new JPanel();
-                buttonPanel2.setLayout(new FlowLayout(FlowLayout.CENTER)); // Centra el botón dentro del panel
-                buttonPanel2.setOpaque(false); // Hacer que el panel sea transparente
-                buttonPanel2.add(botonPagina);
-                panel.add(buttonPanel2);
+                botonPagina.setAlignmentX(Component.CENTER_ALIGNMENT); // Centra el botón
+
+                // Añadir el botón creado al panel
+                panel.add(Box.createVerticalGlue());
+                panel.add(botonPagina);
+                panel.add(Box.createVerticalStrut(10)); // Espacio entre botones
                 panel.revalidate();
                 panel.repaint();
-                
             }
         });
-        //
-        
+
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); // Desactivar la barra de desplazamiento horizontal
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); // Asegurar que la barra de desplazamiento vertical siempre esté visible
 
-        
         add(scrollPane); // Añadir el panel a la barra lateral
-        
-        //hasta aqui mi codigo
 
         JPanel panel2 = new JPanel();
         panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
@@ -160,15 +151,5 @@ public class LeftSideBar extends JPanel {
 
         panel2.revalidate();
         panel2.repaint();
-    }}
-    /*
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Left Sidebar Example");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 400);
-        frame.add(new LeftSideBar());
-        frame.setVisible(true);
     }
-     */
-
-
+}
