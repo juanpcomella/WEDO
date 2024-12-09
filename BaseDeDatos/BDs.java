@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 import StartingWindows.Usuario;
+import VentanaTienda.Item;
 import org.w3c.dom.Text;
 
 import MainWindow.Categorias;
@@ -533,7 +534,7 @@ public class BDs {
 	}
 	}
 	
-	public static void insertarEventos(String usuario, String nombre, String descripcion, String categoria, String fecha, String horaInicio, String horaFin, boolean todoElDia) { // agregarle uno más (privado)
+	public static void insertarEventos(String usuario, String nombre, String descripcion, String categoria, String fecha, String horaInicio, String horaFin, boolean todoElDia) {
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
@@ -562,7 +563,6 @@ public class BDs {
             preparedStatement.setString(6, horaInicio);
             preparedStatement.setString(7, horaFin);
             preparedStatement.setBoolean(8, todoElDia);
-			//preparedStatement.setBoolean(9, esPrivado);
           
             preparedStatement.executeUpdate();
 
@@ -594,13 +594,13 @@ public class BDs {
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
 			
-			String sql = "SELECT nombreEvento, descripcionEv, categoriaEv, fechaEv, horaInicioEv, horaFinEv, todoElDiaEv FROM eventos WHERE username = ?"; // agregarle uno más (privado)
+			String sql = "SELECT nombreEvento, descripcionEv, categoriaEv, fechaEv, horaInicioEv, horaFinEv, todoElDiaEv  FROM eventos WHERE username = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 	        preparedStatement.setString(1, usuario);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-        		Evento evento = new Evento(usuario, usuario, null, null, null, null, false); // agregarle uno más (privado)
+        		Evento evento = new Evento(usuario, usuario, null, null, null, null, false);
                 evento.setNombre(resultSet.getString("nombreEvento"));
                 evento.setDescripcion(resultSet.getString("descripcionEv"));
                 evento.setCategoria(Categorias.valueOf(resultSet.getString("categoriaEv")));
@@ -608,7 +608,6 @@ public class BDs {
                 evento.setHoraInicio(LocalTime.parse(resultSet.getString("horaInicioEv")));
                 evento.setHoraFin(LocalTime.parse(resultSet.getString("horaFinEv")));
                 evento.setTodoElDia(Boolean.parseBoolean(resultSet.getString("todoElDiaEv")));
-				//evento.setPrivado(Boolean.parseBoolean(resultSet.getString("esPrivado")));
                 eventos.add(evento);
 
             } 
@@ -625,7 +624,8 @@ public class BDs {
 	}
 		return eventos;
 	}
-
+	
+//aaaaaaaa
 	public static ArrayList<Evento> crearListaEventosPublicosPorUsuario(String usuario) {
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -670,6 +670,7 @@ public class BDs {
 		}
 		return eventos;
 	}
+
 
 	public static void eliminarEventos(String usuario, String nombre, String descripcion, String categoria, String fecha, String horaInicio, String horaFin, boolean todoElDia) {
 		try {
@@ -1620,6 +1621,111 @@ public class BDs {
 	        }
 	    }
 	}
+	//TABLAS PARA LOS ITEMS DE LA TIENDA
+	public void crearTablaItems() {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return;
+		}
+		Connection connection = null;
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30);
+
+			String sql = "CREATE TABLE IF NOT EXISTS items (" +
+					"username STRING, " +
+					"nombreItem STRING, " +
+					"precioItem INTEGER, " +
+					"tipoItem STRING, " +
+					"rutaItem STRING)";
+			statement.executeUpdate(sql);
+			System.out.println("Tabla 'items' creada o ya existente.");
+		} catch (SQLException e) {
+			System.err.println("Error SQL: " + e.getMessage());
+		} finally {
+			try {
+				if (connection != null)
+					connection.close();
+			} catch (SQLException e) {
+				System.err.println("Error al cerrar la conexión: " + e.getMessage());
+			}
+		}
+	}
+
+	public void insertarItem(String username, String nombreItem, int precioItem, String tipoItem, String rutaItem) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return;
+		}
+		Connection connection = null;
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+			String sql = "INSERT INTO items (username, nombreItem, precioItem, tipoItem, rutaItem) VALUES (?, ?, ?, ?, ?)";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+			preparedStatement.setString(1, username);
+			preparedStatement.setString(2, nombreItem);
+			preparedStatement.setInt(3, precioItem);
+			preparedStatement.setString(4, tipoItem);
+			preparedStatement.setString(5, rutaItem);
+
+			preparedStatement.executeUpdate();
+			System.out.println("Item insertado correctamente.");
+		} catch (SQLException e) {
+			System.err.println("Error SQL: " + e.getMessage());
+		} finally {
+			try {
+				if (connection != null)
+					connection.close();
+			} catch (SQLException e) {
+				System.err.println("Error al cerrar la conexión: " + e.getMessage());
+			}
+		}
+	}
+
+
+	public static ArrayList<Item> crearListaItems(String username) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+		}
+		Connection connection = null;
+		ArrayList<Item> items = new ArrayList<>();
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+			String sql = "SELECT nombreItem, precioItem, tipoItem, rutaItem FROM items WHERE username = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, username);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				Item item = new Item(
+						resultSet.getString("nombreItem"),
+						resultSet.getInt("precioItem"),
+						resultSet.getString("tipoItem"),
+						resultSet.getString("rutaItem")
+				);
+				items.add(item);
+			}
+		} catch (SQLException e) {
+			System.err.println("Error SQL: " + e.getMessage());
+		} finally {
+			try {
+				if (connection != null)
+					connection.close();
+			} catch (SQLException e) {
+				System.err.println("Error al cerrar la conexión: " + e.getMessage());
+			}
+		}
+		return items;
+	}
+
 
 //	public static void main(String[] args) {
 //		crearTablaCodigosDeVerificacionTemporales();

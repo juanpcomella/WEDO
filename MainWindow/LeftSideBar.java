@@ -9,10 +9,17 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class LeftSideBar extends JPanel {
+	//String strVacio;
+	//String input;
+	Notas nota;
     public LeftSideBar(Usuario usuario) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(new Color(173, 216, 230));
@@ -41,14 +48,36 @@ public class LeftSideBar extends JPanel {
         Color azulOscuro = new Color(50, 70, 90);
         
 
+        Map<JButton, Notas> notasMap = new HashMap<>();
+
         button1.addActionListener(e -> {
             String input = JOptionPane.showInputDialog(null, "Escribe el título de la página:", "Crear Página", JOptionPane.QUESTION_MESSAGE);
             
             if (input != null && !input.trim().isEmpty()) {
                 JButton botonPagina = new JButton(input);
+                String strVacio = "";
                 botonPagina.addActionListener(a -> {
-                	Notas nota = new Notas(input);
+                    nota = notasMap.get(botonPagina);
+                    if (nota==null) {
+                    nota = new Notas(input,strVacio);
+                    notasMap.put(botonPagina, nota);
+                    }
                 	nota.setVisible(true);
+                	nota.addWindowListener(new WindowAdapter() {
+                		public void windowClosing(WindowEvent e) {
+                			
+                			nota.titulo_editado = nota.tituloL.getText();
+                	        nota.txt_editado = nota.apuntePane.getText();
+
+                	        // Asignar los valores actualizados a las variables externas
+                	        botonPagina.setText(nota.titulo_editado);
+                	        notasMap.put(botonPagina, nota);
+                	        
+                	        
+                	        
+                	        
+                		}
+					});
                 	
                 });
                 
@@ -129,7 +158,7 @@ public class LeftSideBar extends JPanel {
 
         panel2.revalidate();
         panel2.repaint();
-    }
+    }}
     /*
     public static void main(String[] args) {
         JFrame frame = new JFrame("Left Sidebar Example");
@@ -139,5 +168,5 @@ public class LeftSideBar extends JPanel {
         frame.setVisible(true);
     }
      */
-}
+
 
