@@ -317,6 +317,7 @@ public class VentanaLoginDef extends JFrame {
                     usuario.setSaldo(BDs.getSaldo(usuario.getNombreUsuario()));
                   	MainWindow mw = new MainWindow(usuario);
                     mw.setVisible(true);
+                    BDs.crearTablaSeguimientos();
                     dispose();
                 }
 			}
