@@ -285,26 +285,23 @@ public class Calendario extends JPanel {
         diasPanel.removeAll();
 
         JPanel horasPanelIzquierda = new JPanel();
-        horasPanelIzquierda.setLayout(new GridLayout(24, 1));
-        horasPanelIzquierda.setPreferredSize(new Dimension(60, 600));
+        horasPanelIzquierda.setLayout(new GridLayout(25, 1));
+        horasPanelIzquierda.setPreferredSize(new Dimension(60, 750));
         horasPanelIzquierda.setBackground(new Color(173, 216, 230));
 
-        for (int hora = 0; hora < 24; hora++) {
-            JPanel horaContainer = new JPanel(new GridBagLayout());
-            JLabel horaLabel = new JLabel(String.format("%02d:00", hora));
+        for (int hora = 0; hora < 25; hora++) {
+            JLabel horaLabel = new JLabel(String.format("%02d:00", hora), SwingConstants.CENTER);
             horaLabel.setFont(new Font("Arial", Font.BOLD, 12));
-            horaLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            horaLabel.setOpaque(true);
             horaLabel.setBackground(new Color(173, 216, 230));
-            horaContainer.add(horaLabel);
-            horaContainer.setBackground(new Color(173, 216, 230));
-            horasPanelIzquierda.add(horaContainer);
+            horasPanelIzquierda.add(horaLabel);
         }
-
+        
         String[] diasSemana = {"Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"};
         LocalDate startOfWeek = seleccionado.with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
         LocalDate hoy = LocalDate.now();
 
-        diasPanel.setLayout(new GridLayout(1, 8));
+        diasPanel.setLayout(new GridLayout(1, 8)); 
         diasPanel.setBackground(new Color(173, 216, 230));
         diasPanel.add(horasPanelIzquierda);
 
@@ -314,7 +311,7 @@ public class Calendario extends JPanel {
             JPanel diaPanel = new JPanel();
             diaPanel.setLayout(new BorderLayout());
             diaPanel.setBackground(Color.WHITE);
-            diaPanel.setPreferredSize(new Dimension(150, 600));
+            diaPanel.setPreferredSize(new Dimension(150, 750));
 
             if (diaActual.equals(hoy)) {
                 diaPanel.setBackground(Color.LIGHT_GRAY);
@@ -325,21 +322,18 @@ public class Calendario extends JPanel {
             diaPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
             diaPanel.add(diaSemanaLabel, BorderLayout.NORTH);
 
-            JPanel horasPanel = new JPanel() {
+            JPanel horasPanel = new JPanel(null) {
                 @Override
                 protected void paintComponent(Graphics g) {
                     super.paintComponent(g);
                     g.setColor(Color.LIGHT_GRAY);
-                    for (int y = 25; y < getHeight(); y += 25) {
+
+                    for (int y = 30; y <= getHeight(); y += 30) {
                         g.drawLine(0, y, getWidth(), y);
                     }
                 }
             };
-            horasPanel.setLayout(null);
-
-            JPanel panelEventosTodoElDia = new JPanel();
-            panelEventosTodoElDia.setLayout(new BoxLayout(panelEventosTodoElDia, BoxLayout.Y_AXIS));
-            panelEventosTodoElDia.setOpaque(false);
+            horasPanel.setPreferredSize(new Dimension(150, 750)); 
 
             Map<Integer, ArrayList<Evento>> eventosPorHora = new HashMap<>();
             for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())) {
@@ -353,56 +347,54 @@ public class Calendario extends JPanel {
                 int horaInicio = entry.getKey();
                 ArrayList<Evento> eventos = entry.getValue();
 
-                int anchoTotal = 150; 
+                int anchoTotal = 150;
                 int anchoPorEvento = anchoTotal / eventos.size();
 
                 for (int index = 0; index < eventos.size(); index++) {
                     Evento evento = eventos.get(index);
                     int posicionX = index * anchoPorEvento;
 
-                    int duracionEvento = evento.getHoraFin().getHour() - evento.getHoraInicio().getHour();
-                    int altoEvento = duracionEvento * 25;
-                    if (evento.esEventoTodoElDia()) {
-                    	JPanel eventoLabelTodoElDia = new JPanel() {
-                    	    @Override
-                    	    protected void paintComponent(Graphics g) {
-                    	        super.paintComponent(g);
-                    	        Graphics2D g2d = (Graphics2D) g;
-                    	        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                    	        g2d.setColor(Color.RED);
-                    	        g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
-                    	        g2d.setColor(Color.BLACK);
-                    	        g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 10, 10);
-                    	    }
-                    	};
-                    	eventoLabelTodoElDia.setOpaque(false);
-                    	eventoLabelTodoElDia.setPreferredSize(new Dimension(10, 10));
+                    int duracionEnMinutos = evento.getHoraFin().getHour() * 60 + evento.getHoraFin().getMinute()
+                                          - (evento.getHoraInicio().getHour() * 60 + evento.getHoraInicio().getMinute());
+                    
+                    if (duracionEnMinutos >= 60) {
+                        int altoEvento = (duracionEnMinutos * 30) / 60; 
+                        int posicionY = (evento.getHoraInicio().getHour() * 60 + evento.getHoraInicio().getMinute()) * 30 / 60;
 
-                    	if (index > 0) {
-                    	    panelEventosTodoElDia.add(Box.createVerticalStrut(5));
-                    	}
-                    	panelEventosTodoElDia.add(eventoLabelTodoElDia);
-
-                    	eventoLabelTodoElDia.addMouseListener(new MouseAdapter() {
-                    	    @Override
-                    	    public void mouseClicked(MouseEvent e) {
-                    	        mostrarEventoTodoElDia(evento, diaActual, usuario);
-                    	    }
-                    	});
-
-                    } else {
                         JLabel eventoLabel = new JLabel(
-                        		"<html>" + 
-                                evento.getNombre() + "<br>" + 
-                                evento.getHoraInicio() + " - " + 
-                                evento.getHoraFin() + 
-                                "</html>"
-                        );
+                                "<html>" + evento.getNombre() + "<br>" +
+                                evento.getHoraInicio() + " - " + evento.getHoraFin() + "</html>",
+                                SwingConstants.CENTER);
                         eventoLabel.setOpaque(true);
                         eventoLabel.setFont(new Font("Arial", Font.BOLD, 10));
                         eventoLabel.setForeground(Color.WHITE);
-                        eventoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-                        eventoLabel.setVerticalAlignment(SwingConstants.NORTH);
+
+                        if (evento.getCategoria().equals(Categorias.Estudios)) {
+                            eventoLabel.setBackground(Color.MAGENTA);
+                        } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
+                            eventoLabel.setBackground(Color.GREEN);
+                        } else if (evento.getCategoria().equals(Categorias.Deporte)) {
+                            eventoLabel.setBackground(Color.CYAN);
+                        } else if (evento.getCategoria().equals(Categorias.Ocio)) {
+                            eventoLabel.setBackground(Color.ORANGE);
+                        }
+                        
+                        eventoLabel.addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mouseClicked(MouseEvent e) {
+                                mostrarEvento(evento, diaActual, usuario);
+                            }
+                        });
+
+                        eventoLabel.setBounds(posicionX, posicionY, anchoPorEvento, altoEvento);
+                        horasPanel.add(eventoLabel);
+                    } else {
+                    	int altoEvento = (duracionEnMinutos * 30) / 60; 
+                        int posicionY = (evento.getHoraInicio().getHour() * 60 + evento.getHoraInicio().getMinute()) * 30 / 60;
+                    	JLabel eventoLabel = new JLabel();
+                        eventoLabel.setOpaque(true);
+                        eventoLabel.setFont(new Font("Arial", Font.BOLD, 10));
+                        eventoLabel.setForeground(Color.WHITE);
 
                         if (evento.getCategoria().equals(Categorias.Estudios)) {
                             eventoLabel.setBackground(Color.MAGENTA);
@@ -414,7 +406,6 @@ public class Calendario extends JPanel {
                             eventoLabel.setBackground(Color.ORANGE);
                         }
 
-                        int posicionY = horaInicio * 25;
                         eventoLabel.setBounds(posicionX, posicionY, anchoPorEvento, altoEvento);
                         horasPanel.add(eventoLabel);
                         
@@ -424,27 +415,17 @@ public class Calendario extends JPanel {
                                 mostrarEvento(evento, diaActual, usuario);
                             }
                         });
-                    }
+					}
                 }
             }
 
-            diaPanel.add(panelEventosTodoElDia, BorderLayout.WEST); 
             diaPanel.add(horasPanel, BorderLayout.CENTER);
-
-            diaPanel.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    mostrarDialogo(diaActual, usuario);
-                }
-            });
-
             diasPanel.add(diaPanel);
         }
 
         diasPanel.revalidate();
         diasPanel.repaint();
     }
-
 
     private void mostrarDialogo(LocalDate date, Usuario usuario) { 
         JDialog dialog = new JDialog();
@@ -574,6 +555,8 @@ public class Calendario extends JPanel {
 
                 if (nombreEv.isEmpty()) {
                     JOptionPane.showMessageDialog(dialog, "Por favor, ingresa un nombre para el evento.");
+                } else if (!todoElDiaEv && (horaFinEv.isBefore(horaInicioEv) || horaFinEv.equals(horaInicioEv))) {
+                    JOptionPane.showMessageDialog(dialog, "La hora de fin debe ser posterior a la hora de inicio.");
                 } else {
                     BDs.insertarEventos(
                         usuario.getNombreUsuario(),
@@ -589,6 +572,7 @@ public class Calendario extends JPanel {
                     actualizarVista(usuario);
                     dialog.dispose();
                 }
+
             }
         });
 
