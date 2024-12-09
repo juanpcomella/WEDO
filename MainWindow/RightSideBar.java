@@ -56,7 +56,7 @@ public class RightSideBar extends JPanel {
         
         BDs.crearTablaObjetivos();
         for(Objetivo objetivo: BDs.crearListaObjetivos(usuario.getNombreUsuario())) {
-            añadirObjetivo(objetivo.getNombre(), objetivo.getFechaFin().toString(), usuario);
+            añadirObjetivo(objetivo.getNombre(),objetivo.getDescripcion(), objetivo.getFechaFin().toString(), usuario);
         }
         añadirObjetivoButton.addActionListener(e -> {
             mostrarDialogoAñadirObjetivo(usuario);
@@ -170,7 +170,7 @@ public class RightSideBar extends JPanel {
                     return; 
                 }
                 BDs.insertarObjetivos(usuario.getNombreUsuario(), nombre, descripcion, fecha, false);
-                añadirObjetivo(nombre, fecha, usuario);
+                añadirObjetivo(nombre,descripcion, fecha, usuario);
             } else {
                 JOptionPane.showMessageDialog(this, "Todos los campos deben ser completados.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -178,8 +178,8 @@ public class RightSideBar extends JPanel {
     }
 
    
-    private void añadirObjetivo(String nombre, String fechaCumplimiento, Usuario usuario) {
-        Objetivo objetivo = new Objetivo(nombre, "Descripción del objetivo", LocalDate.parse(fechaCumplimiento), false);
+    private void añadirObjetivo(String nombre, String descripcion, String fechaCumplimiento, Usuario usuario) {
+        Objetivo objetivo = new Objetivo(nombre, descripcion, LocalDate.parse(fechaCumplimiento), false);
         objetivo.setCuantoQueda(obtenerCuantoQueda(fechaCumplimiento)); 
 
         listaObjetivos.add(objetivo);
@@ -213,9 +213,7 @@ public class RightSideBar extends JPanel {
         ordenarObjetivosPorFechaRecursivo(lista, index + 1);
     }
 
-    private void ordenarObjetivosPorFecha() {
-        listaObjetivos.sort(Comparator.comparingInt(Objetivo::getCuantoQueda));
-    }
+  
 
     private void actualizarPanelObjetivos(Usuario usuario) {
         objetivosPanel.removeAll();
@@ -233,17 +231,26 @@ public class RightSideBar extends JPanel {
             objetivoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); 
             
             if(cuantoFalta < 0) {
+            	
+            	try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             	int confirm = JOptionPane.showConfirmDialog(
                         objetivosPanel,
                         "Ha llegado el día, ¿has completado tu objetivo?",
                         "",
                         JOptionPane.YES_NO_OPTION
+                       
                     );
             	 if (confirm == JOptionPane.YES_OPTION) {
                  	BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
                      eliminarObjetivoDePantalla(objetivo, usuario);
                      JOptionPane.showMessageDialog(null, "¡Felicidades!");
                  }
+            	 
             }
 
             String mensajeConTiempoRestante = "Quedan " + objetivo.getCuantoQueda() + " días";

@@ -2,6 +2,7 @@ package MainWindow;
 
 import ProfileWindow.ProfileWindowSelf;
 import StartingWindows.Usuario;
+import StartingWindows.VentanaBienvenida;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,7 +21,7 @@ public class MiniPerfil extends JFrame {
         setUndecorated(true); // Remove window decorations
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-
+        
         // Add MouseListener to detect clicks outside the window
         addWindowFocusListener(new WindowFocusListener() {
             @Override
@@ -37,7 +38,8 @@ public class MiniPerfil extends JFrame {
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(1, 2));
-
+        panel.setBackground(new Color(173, 216, 230));
+        
         try {
             BufferedImage profileImage = ImageIO.read(new File("imagenes/PERFIL.png"));
             ImageIcon profileIcon = new ImageIcon(getCircularImage(profileImage, 80));
@@ -59,6 +61,7 @@ public class MiniPerfil extends JFrame {
         }
 
         JPanel rightPanel = new JPanel();
+        rightPanel.setBackground(new Color(173, 216, 230));
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
@@ -82,6 +85,44 @@ public class MiniPerfil extends JFrame {
         panel.add(rightPanel);
 
         add(panel, BorderLayout.CENTER);
+        
+        JButton botonCerrarSesion = new JButton("Cerrar Sesión");
+        botonCerrarSesion.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				VentanaBienvenida ventanaBienvenida = new VentanaBienvenida();
+				ventanaBienvenida.setVisible(true);
+				dispose();
+			}
+		});
+        
+        rightPanel.add(botonCerrarSesion);
+        
+        JButton botonEliminarCuenta = new JButton("Eliminar cuenta");
+        botonEliminarCuenta.setBackground(Color.RED);
+        botonEliminarCuenta.setForeground(Color.WHITE);
+        botonEliminarCuenta.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int confirmacion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.",
+                    "Confirmar Eliminación",
+                    JOptionPane.YES_NO_OPTION
+                );
+
+                if (confirmacion == JOptionPane.YES_OPTION) {
+                    JOptionPane.showMessageDialog(null, "Cuenta eliminada correctamente.");
+                    VentanaBienvenida ventanaBienvenida = new VentanaBienvenida();
+                    ventanaBienvenida.setVisible(true);
+                    dispose();
+                }
+            }
+        });
+
+        rightPanel.add(botonEliminarCuenta);
     }
 
     private BufferedImage getCircularImage(BufferedImage image, int diameter) {
