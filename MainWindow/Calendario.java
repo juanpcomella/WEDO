@@ -296,7 +296,7 @@ public class Calendario extends JPanel {
             horaLabel.setBackground(new Color(173, 216, 230));
             horasPanelIzquierda.add(horaLabel);
         }
-        
+
         String[] diasSemana = {"Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"};
         LocalDate startOfWeek = seleccionado.with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
         LocalDate hoy = LocalDate.now();
@@ -335,6 +335,13 @@ public class Calendario extends JPanel {
             };
             horasPanel.setPreferredSize(new Dimension(150, 750)); 
 
+            horasPanel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    mostrarDialogo(diaActual, usuario);
+                }
+            });
+
             Map<Integer, ArrayList<Evento>> eventosPorHora = new HashMap<>();
             for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())) {
                 if (evento.getFecha().equals(diaActual)) {
@@ -342,6 +349,9 @@ public class Calendario extends JPanel {
                     eventosPorHora.computeIfAbsent(inicioEvento, k -> new ArrayList<>()).add(evento);
                 }
             }
+
+            JPanel panelEventosTodoElDia = new JPanel();
+            panelEventosTodoElDia.setLayout(new BoxLayout(panelEventosTodoElDia, BoxLayout.Y_AXIS));
 
             for (Map.Entry<Integer, ArrayList<Evento>> entry : eventosPorHora.entrySet()) {
                 int horaInicio = entry.getKey();
@@ -355,69 +365,98 @@ public class Calendario extends JPanel {
                     int posicionX = index * anchoPorEvento;
 
                     int duracionEnMinutos = evento.getHoraFin().getHour() * 60 + evento.getHoraFin().getMinute()
-                                          - (evento.getHoraInicio().getHour() * 60 + evento.getHoraInicio().getMinute());
-                    
-                    if (duracionEnMinutos >= 60) {
-                        int altoEvento = (duracionEnMinutos * 30) / 60; 
-                        int posicionY = (evento.getHoraInicio().getHour() * 60 + evento.getHoraInicio().getMinute()) * 30 / 60;
+                                            - (evento.getHoraInicio().getHour() * 60 + evento.getHoraInicio().getMinute());
+                    if (evento.esEventoTodoElDia()) {
+                        JPanel eventoLabelTodoElDia = new JPanel() {
+                            @Override
+                            protected void paintComponent(Graphics g) {
+                                super.paintComponent(g);
+                                Graphics2D g2d = (Graphics2D) g;
+                                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                                g2d.setColor(Color.RED);
+                                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+                                g2d.setColor(Color.BLACK);
+                                g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 10, 10);
+                            }
+                        };
+                        eventoLabelTodoElDia.setOpaque(false);
+                        eventoLabelTodoElDia.setPreferredSize(new Dimension(10, 30)); 
 
-                        JLabel eventoLabel = new JLabel(
-                                "<html>" + evento.getNombre() + "<br>" +
-                                evento.getHoraInicio() + " - " + evento.getHoraFin() + "</html>",
-                                SwingConstants.CENTER);
-                        eventoLabel.setOpaque(true);
-                        eventoLabel.setFont(new Font("Arial", Font.BOLD, 10));
-                        eventoLabel.setForeground(Color.WHITE);
 
-                        if (evento.getCategoria().equals(Categorias.Estudios)) {
-                            eventoLabel.setBackground(Color.MAGENTA);
-                        } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
-                            eventoLabel.setBackground(Color.GREEN);
-                        } else if (evento.getCategoria().equals(Categorias.Deporte)) {
-                            eventoLabel.setBackground(Color.CYAN);
-                        } else if (evento.getCategoria().equals(Categorias.Ocio)) {
-                            eventoLabel.setBackground(Color.ORANGE);
-                        }
-                        
-                        eventoLabel.addMouseListener(new MouseAdapter() {
+                        panelEventosTodoElDia.add(eventoLabelTodoElDia);
+
+                        eventoLabelTodoElDia.addMouseListener(new MouseAdapter() {
                             @Override
                             public void mouseClicked(MouseEvent e) {
-                                mostrarEvento(evento, diaActual, usuario);
+                                mostrarEventoTodoElDia(evento, diaActual, usuario);
                             }
                         });
-
-                        eventoLabel.setBounds(posicionX, posicionY, anchoPorEvento, altoEvento);
-                        horasPanel.add(eventoLabel);
                     } else {
-                    	int altoEvento = (duracionEnMinutos * 30) / 60; 
-                        int posicionY = (evento.getHoraInicio().getHour() * 60 + evento.getHoraInicio().getMinute()) * 30 / 60;
-                    	JLabel eventoLabel = new JLabel();
-                        eventoLabel.setOpaque(true);
-                        eventoLabel.setFont(new Font("Arial", Font.BOLD, 10));
-                        eventoLabel.setForeground(Color.WHITE);
+                        if (duracionEnMinutos >= 60) {
+                            int altoEvento = (duracionEnMinutos * 30) / 60; 
+                            int posicionY = (evento.getHoraInicio().getHour() * 60 + evento.getHoraInicio().getMinute()) * 30 / 60;
 
-                        if (evento.getCategoria().equals(Categorias.Estudios)) {
-                            eventoLabel.setBackground(Color.MAGENTA);
-                        } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
-                            eventoLabel.setBackground(Color.GREEN);
-                        } else if (evento.getCategoria().equals(Categorias.Deporte)) {
-                            eventoLabel.setBackground(Color.CYAN);
-                        } else if (evento.getCategoria().equals(Categorias.Ocio)) {
-                            eventoLabel.setBackground(Color.ORANGE);
-                        }
+                            JLabel eventoLabel = new JLabel(
+                                    "<html>" + evento.getNombre() + "<br>" +
+                                    evento.getHoraInicio() + " - " + evento.getHoraFin() + "</html>",
+                                    SwingConstants.CENTER);
+                            eventoLabel.setOpaque(true);
+                            eventoLabel.setFont(new Font("Arial", Font.BOLD, 10));
+                            eventoLabel.setForeground(Color.WHITE);
 
-                        eventoLabel.setBounds(posicionX, posicionY, anchoPorEvento, altoEvento);
-                        horasPanel.add(eventoLabel);
-                        
-                        eventoLabel.addMouseListener(new MouseAdapter() {
-                            @Override
-                            public void mouseClicked(MouseEvent e) {
-                                mostrarEvento(evento, diaActual, usuario);
+                            if (evento.getCategoria().equals(Categorias.Estudios)) {
+                                eventoLabel.setBackground(Color.MAGENTA);
+                            } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
+                                eventoLabel.setBackground(Color.GREEN);
+                            } else if (evento.getCategoria().equals(Categorias.Deporte)) {
+                                eventoLabel.setBackground(Color.CYAN);
+                            } else if (evento.getCategoria().equals(Categorias.Ocio)) {
+                                eventoLabel.setBackground(Color.ORANGE);
                             }
-                        });
-					}
+
+                            eventoLabel.setBounds(posicionX, posicionY, anchoPorEvento, altoEvento);
+                            horasPanel.add(eventoLabel);
+                            
+                            eventoLabel.addMouseListener(new MouseAdapter() {
+                                @Override
+                                public void mouseClicked(MouseEvent e) {
+                                    mostrarEventoTodoElDia(evento, diaActual, usuario);
+                                }
+                            });
+                        }else {
+                        	int altoEvento = (duracionEnMinutos * 30) / 60; 
+                            int posicionY = (evento.getHoraInicio().getHour() * 60 + evento.getHoraInicio().getMinute()) * 30 / 60;
+
+                            JLabel eventoLabel = new JLabel();
+                            eventoLabel.setOpaque(true);
+                            eventoLabel.setFont(new Font("Arial", Font.BOLD, 10));
+                            eventoLabel.setForeground(Color.WHITE);
+
+                            if (evento.getCategoria().equals(Categorias.Estudios)) {
+                                eventoLabel.setBackground(Color.MAGENTA);
+                            } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
+                                eventoLabel.setBackground(Color.GREEN);
+                            } else if (evento.getCategoria().equals(Categorias.Deporte)) {
+                                eventoLabel.setBackground(Color.CYAN);
+                            } else if (evento.getCategoria().equals(Categorias.Ocio)) {
+                                eventoLabel.setBackground(Color.ORANGE);
+                            }
+
+                            eventoLabel.setBounds(posicionX, posicionY, anchoPorEvento, altoEvento);
+                            horasPanel.add(eventoLabel);
+                            
+                            eventoLabel.addMouseListener(new MouseAdapter() {
+                                @Override
+                                public void mouseClicked(MouseEvent e) {
+                                    mostrarEventoTodoElDia(evento, diaActual, usuario);
+                                }
+                            });
+						}
+                    }
                 }
             }
+
+            diaPanel.add(panelEventosTodoElDia, BorderLayout.WEST);
 
             diaPanel.add(horasPanel, BorderLayout.CENTER);
             diasPanel.add(diaPanel);
