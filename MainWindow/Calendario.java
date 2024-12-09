@@ -392,9 +392,11 @@ public class Calendario extends JPanel {
 
                     } else {
                         JLabel eventoLabel = new JLabel(
-                            evento.getNombre() + " " +
-                            evento.getHoraInicio() + " - " +
-                            evento.getHoraFin()
+                        		"<html>" + 
+                                evento.getNombre() + "<br>" + 
+                                evento.getHoraInicio() + " - " + 
+                                evento.getHoraFin() + 
+                                "</html>"
                         );
                         eventoLabel.setOpaque(true);
                         eventoLabel.setFont(new Font("Arial", Font.BOLD, 10));
