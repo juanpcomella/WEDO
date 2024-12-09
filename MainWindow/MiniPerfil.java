@@ -139,6 +139,8 @@ public class MiniPerfil extends JFrame {
         rightPanel.add(middlePanel, BorderLayout.CENTER);
 
         JButton irPerfil = new JButton("Ver tu perfil");
+        irPerfil.setBackground(new Color(50,70,90));
+        irPerfil.setForeground(Color.WHITE);
         irPerfil.setPreferredSize(new Dimension(200, 40));
         irPerfil.addActionListener(e -> {
             ProfileWindowSelf perfil = new ProfileWindowSelf(usuario);
