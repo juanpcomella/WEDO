@@ -133,6 +133,7 @@ public class ProfileWindowOther extends JFrame {
         followButton.addActionListener(e -> {
             if (usuarioActual != null && usuarioBusqueda != null) {
                 try {
+                    crearTablaSeguimientos();
                     insertarElementosSeguimientos(usuarioActual, usuarioBusqueda);
 
                     JOptionPane.showMessageDialog(null,
