@@ -97,7 +97,7 @@ public class MiniPerfil extends JFrame {
 
         middlePanel.add(countPanel);
 
-        middlePanel.add(Box.createVerticalStrut(10));  
+//        middlePanel.add(Box.createVerticalStrut(10));  
 
         JPanel botonesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         botonesPanel.setBackground(new Color(173, 216, 230));
@@ -113,28 +113,28 @@ public class MiniPerfil extends JFrame {
             mw.dispose();
         });
 
-        JButton botonEliminarCuenta = new JButton("Eliminar cuenta");
-        botonEliminarCuenta.setPreferredSize(new Dimension(200, 40));  
-        botonEliminarCuenta.setBackground(new Color(200,80,80));  
-        botonEliminarCuenta.setForeground(Color.WHITE); 
-        botonEliminarCuenta.addActionListener(e -> {
-            int confirmacion = JOptionPane.showConfirmDialog(
-                null,
-                "¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.",
-                "Confirmar Eliminación",
-                JOptionPane.YES_NO_OPTION
-            );
-
-            if (confirmacion == JOptionPane.YES_OPTION) {
-                JOptionPane.showMessageDialog(null, "Cuenta eliminada correctamente.");
-                VentanaBienvenida ventanaBienvenida = new VentanaBienvenida();
-                ventanaBienvenida.setVisible(true);
-                dispose();
-            }
-        });
+//        JButton botonEliminarCuenta = new JButton("Eliminar cuenta");
+//        botonEliminarCuenta.setPreferredSize(new Dimension(200, 40));  
+//        botonEliminarCuenta.setBackground(new Color(200,80,80));  
+//        botonEliminarCuenta.setForeground(Color.WHITE); 
+//        botonEliminarCuenta.addActionListener(e -> {
+//            int confirmacion = JOptionPane.showConfirmDialog(
+//                null,
+//                "¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.",
+//                "Confirmar Eliminación",
+//                JOptionPane.YES_NO_OPTION
+//            );
+//
+//            if (confirmacion == JOptionPane.YES_OPTION) {
+//                JOptionPane.showMessageDialog(null, "Cuenta eliminada correctamente.");
+//                VentanaBienvenida ventanaBienvenida = new VentanaBienvenida();
+//                ventanaBienvenida.setVisible(true);
+//                dispose();
+//            }
+//        });
 
         botonesPanel.add(botonCerrarSesion);
-        botonesPanel.add(botonEliminarCuenta);
+//        botonesPanel.add(botonEliminarCuenta);
         middlePanel.add(botonesPanel);
 
         rightPanel.add(middlePanel, BorderLayout.CENTER);
