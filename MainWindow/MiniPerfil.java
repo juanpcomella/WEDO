@@ -39,7 +39,7 @@ public class MiniPerfil extends JFrame {
         mainPanel.setLayout(new BorderLayout());
         mainPanel.setBackground(new Color(173, 216, 230));
         add(mainPanel, BorderLayout.CENTER);
-        mainPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        mainPanel.setBorder(BorderFactory.createLineBorder(new Color(50, 60, 80), 2));
         
         JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10)); 
         leftPanel.setBackground(new Color(173, 216, 230));
@@ -110,11 +110,12 @@ public class MiniPerfil extends JFrame {
             VentanaBienvenida ventanaBienvenida = new VentanaBienvenida();
             ventanaBienvenida.setVisible(true);
             dispose();
+            mw.dispose();
         });
 
         JButton botonEliminarCuenta = new JButton("Eliminar cuenta");
         botonEliminarCuenta.setPreferredSize(new Dimension(200, 40));  
-        botonEliminarCuenta.setBackground(Color.RED);  
+        botonEliminarCuenta.setBackground(new Color(200,80,80));  
         botonEliminarCuenta.setForeground(Color.WHITE); 
         botonEliminarCuenta.addActionListener(e -> {
             int confirmacion = JOptionPane.showConfirmDialog(

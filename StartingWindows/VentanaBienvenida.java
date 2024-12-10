@@ -17,7 +17,6 @@ public class VentanaBienvenida extends JFrame {
 	
 
 	public VentanaBienvenida() {
-		setSize(700,500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
@@ -82,12 +81,12 @@ public class VentanaBienvenida extends JFrame {
 		JLabel pregunta = new JLabel("¿Aún no tienes cuenta?");
 		pregunta.setAlignmentX(CENTER_ALIGNMENT);
 		pregunta.setForeground(new Color(50,70,90));
-		pregunta.setFont(new Font("Bauhaus 93", Font.BOLD, 18));
+		pregunta.setFont(new Font("Tahoma", Font.BOLD, 18));
 		
 			//Registro
 		JButton registro = new JButton("Registrarse");
 		registro.setAlignmentX(CENTER_ALIGNMENT);
-		registro.setFont(new Font("Tahoman", Font.BOLD, 30));
+		registro.setFont(new Font("Tahoma", Font.BOLD, 30));
 		registro.setBackground(new Color(50,70,90));
 		registro.setForeground(Color.WHITE);
 		registro.setOpaque(true);
@@ -124,6 +123,7 @@ public class VentanaBienvenida extends JFrame {
 			VentanaBienvenida ventanaBienvenida = new VentanaBienvenida();
 			ventanaBienvenida.setVisible(true);
 			ventanaBienvenida.setLocationRelativeTo(null);
+			ventanaBienvenida.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		});
 
