@@ -301,11 +301,12 @@ public class RightSideBar extends JPanel {
         nombreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);  
         nombreLabel.setForeground(Color.BLACK);
         
-        JLabel descripcionLabel = new JLabel("<html>Descripción: " + objetivo.getDescripcion() + "</html>");
+        JLabel descripcionLabel = new JLabel("<html><div style='text-align: center; width: 200px;'>Descripción: " + objetivo.getDescripcion() + "</div></html>");
         descripcionLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         descripcionLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        descripcionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        descripcionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);     
         descripcionLabel.setForeground(Color.BLACK);
+
 
         JLabel fechaFinLabel = new JLabel("Fecha Fin: " + objetivo.getFechaFin());
         fechaFinLabel.setFont(new Font("Arial", Font.PLAIN, 14));
