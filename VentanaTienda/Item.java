@@ -5,7 +5,7 @@ import javax.swing.*;
 public class Item {
     private String nombreItem;
     private int precioItem;
-    private String tipoItem; // "foto" o "label"
+    private String tipoItem; // "foto", "moneda" o "label"
     private String contenido; // Ruta de foto o texto del label
 
     public Item(String nombreItem, int precioItem, String tipoItem, String contenido) {
@@ -50,7 +50,9 @@ public class Item {
     public Object getRepresentacionVisual() {
         if (tipoItem.equals("foto")) {
             return new ImageIcon(contenido); // Representación como ImageIcon
-        } else if (tipoItem.equals("label")) {
+        } else if (tipoItem.equals("moneda")) {
+            return new ImageIcon(contenido); // Representación como ImageIcon
+    } else if (tipoItem.equals("label")) {
             return new JLabel(contenido); // Representación como JLabel
         }
         return null;
