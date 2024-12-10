@@ -134,7 +134,7 @@ public class ProfileWindowSelf extends JFrame {
 
         JPanel descriptionPanel = new JPanel();
         descriptionPanel.setBackground(Color.WHITE);
-        JLabel descriptionLabel = new JLabel("Alguna descripción o algún dato noc");
+        JLabel descriptionLabel = new JLabel("");
         descriptionLabel.setFont(new Font("Arial", Font.BOLD, 24));
         descriptionPanel.add(descriptionLabel);
         descriptionPanel.setBackground(new Color(173, 216, 230));
