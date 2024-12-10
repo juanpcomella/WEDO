@@ -294,19 +294,23 @@ public class RightSideBar extends JPanel {
         JPanel contenidoPanel = new JPanel();
         contenidoPanel.setLayout(new BoxLayout(contenidoPanel, BoxLayout.Y_AXIS));
         contenidoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        contenidoPanel.setBackground(new Color(179, 229, 252));
 
         JLabel nombreLabel = new JLabel("Nombre: " + objetivo.getNombre());
         nombreLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        nombreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);      
-
+        nombreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);  
+        nombreLabel.setForeground(Color.BLACK);
+        
         JLabel descripcionLabel = new JLabel("<html>Descripción: " + objetivo.getDescripcion() + "</html>");
         descripcionLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         descripcionLabel.setHorizontalAlignment(SwingConstants.CENTER);
         descripcionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        descripcionLabel.setForeground(Color.BLACK);
 
         JLabel fechaFinLabel = new JLabel("Fecha Fin: " + objetivo.getFechaFin());
         fechaFinLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         fechaFinLabel.setAlignmentX(Component.CENTER_ALIGNMENT); 
+        fechaFinLabel.setForeground(Color.BLACK);
 
         contenidoPanel.add(nombreLabel);
         contenidoPanel.add(Box.createVerticalStrut(10));
@@ -349,26 +353,7 @@ public class RightSideBar extends JPanel {
         return (int) java.time.temporal.ChronoUnit.DAYS.between(fechaHoy, fechaObjetivo);
     }
 
-    private String calcularTiempoRestante(String fechaCumplimiento) {
-        try {
-            SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-            Date fechaObjetivo = formatoFecha.parse(fechaCumplimiento);
-            Date fechaHoy = new Date();
-            long diferenciaMillis = fechaObjetivo.getTime() - fechaHoy.getTime();
-            long diasRestantes = diferenciaMillis / (1000 * 60 * 60 * 24);
 
-            if (diasRestantes < 0) {
-                return "¡El objetivo ya pasó!";
-            } else if (diasRestantes == 0) {
-                return "¡Hoy es el día!";
-            } else {
-                return diasRestantes + " días restantes";
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Fecha inválida";
-        }
-    }
     //------------------------------------------------------------------------------------------------
   //METODOS HABITOS---------------------------------------------------------------------------------
     
