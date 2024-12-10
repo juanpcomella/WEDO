@@ -34,7 +34,7 @@ public class BDs {
 //			statement.executeUpdate("drop table if exists person");
 			
 			// Ejecutar sentencias SQL (Update)
-			statement.executeUpdate("create table if not exists usuarios (username string, password string, email string, saldo int, multiplicador double, iconoPerfil string, iconoMoneda string)");
+			statement.executeUpdate("create table if not exists usuarios (username string, password string, email string, saldo int, iconoPerfil string, iconoMoneda string)");
 
 		} catch(SQLException e) {
 			System.err.println(e.getMessage());
@@ -466,42 +466,42 @@ public class BDs {
 		return correoE;
 	}
 	
-	public static Double getMulti(String usuario) {
-		try {
-			Class.forName("org.sqlite.JDBC");
-		} catch (ClassNotFoundException e) {
-			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
-		}
-		Connection connection = null;
-		double  multi = 0;
-		try {
-			// Crear una conexión de BD
-			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");//a partir de los ultimo : es donde quieres que se guarden
-			// Crear gestores de sentencias
-			Statement statement = connection.createStatement();//crear consultas
-			statement.setQueryTimeout(30);  // poner timeout 30 msg
-			
-			String sql = "SELECT multiplicador FROM usuarios WHERE username = ?";
-			PreparedStatement preparedStatement = connection.prepareStatement(sql);
-	        preparedStatement.setString(1, usuario);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                multi = resultSet.getDouble("multiplicador");
-            } 
-		} catch(SQLException e) {
-			System.err.println(e.getMessage());
-		} finally {
-			try {
-				if(connection != null)
-					connection.close();
-			} catch(SQLException e) {
-				// Cierre de conexión fallido
-				System.err.println(e);
-			}
-	}
-		return multi;
-	}
+//	public static Double getMulti(String usuario) {
+//		try {
+//			Class.forName("org.sqlite.JDBC");
+//		} catch (ClassNotFoundException e) {
+//			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+//		}
+//		Connection connection = null;
+//		double  multi = 0;
+//		try {
+//			// Crear una conexión de BD
+//			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");//a partir de los ultimo : es donde quieres que se guarden
+//			// Crear gestores de sentencias
+//			Statement statement = connection.createStatement();//crear consultas
+//			statement.setQueryTimeout(30);  // poner timeout 30 msg
+//			
+//			String sql = "SELECT multiplicador FROM usuarios WHERE username = ?";
+//			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//	        preparedStatement.setString(1, usuario);
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//
+//            if (resultSet.next()) {
+//                multi = resultSet.getDouble("multiplicador");
+//            } 
+//		} catch(SQLException e) {
+//			System.err.println(e.getMessage());
+//		} finally {
+//			try {
+//				if(connection != null)
+//					connection.close();
+//			} catch(SQLException e) {
+//				// Cierre de conexión fallido
+//				System.err.println(e);
+//			}
+//	}
+//		return multi;
+//	}
 	
 	
 	public static void updateUsuario(String usuario, String usuarioNuevo) {
@@ -601,74 +601,74 @@ public class BDs {
 			
 	}
 	
-	public static void updateMultiplicador(String usuario, double nuevoMulti) {
-		try {
-			Class.forName("org.sqlite.JDBC");
-		} catch (ClassNotFoundException e) {
-			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
-		}
-		Connection connection = null;
-		try {
-			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
-			
-	        String sql = "UPDATE usuarios SET multiplicador = ? WHERE username = ?";
-			PreparedStatement preparedStatement = connection.prepareStatement(sql);
-	        preparedStatement.setDouble(1, nuevoMulti);
-	        preparedStatement.setString(2, usuario);
-	        
-	        preparedStatement.executeUpdate();
-
-
-		} catch(SQLException e) {
-			System.err.println(e.getMessage());
-		} finally {
-			try {
-				if(connection != null)
-					connection.close();
-			} catch(SQLException e) {
-				// Cierre de conexión fallido
-				System.err.println(e);
-			}
-	}
-			
-	}
+//	public static void updateMultiplicador(String usuario, double nuevoMulti) {
+//		try {
+//			Class.forName("org.sqlite.JDBC");
+//		} catch (ClassNotFoundException e) {
+//			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+//		}
+//		Connection connection = null;
+//		try {
+//			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+//			
+//	        String sql = "UPDATE usuarios SET multiplicador = ? WHERE username = ?";
+//			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//	        preparedStatement.setDouble(1, nuevoMulti);
+//	        preparedStatement.setString(2, usuario);
+//	        
+//	        preparedStatement.executeUpdate();
+//
+//
+//		} catch(SQLException e) {
+//			System.err.println(e.getMessage());
+//		} finally {
+//			try {
+//				if(connection != null)
+//					connection.close();
+//			} catch(SQLException e) {
+//				// Cierre de conexión fallido
+//				System.err.println(e);
+//			}
+//	}
+//			
+//	}
 	
-	public static Double getMultiplicador(String usuario) {
-		try {
-			Class.forName("org.sqlite.JDBC");
-		} catch (ClassNotFoundException e) {
-			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
-		}
-		Connection connection = null;
-		double multi = 0;
-		try {
-			// Crear una conexión de BD
-			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");//a partir de los ultimo : es donde quieres que se guarden
-			// Crear gestores de sentencias
-			Statement statement = connection.createStatement();//crear consultas
-			statement.setQueryTimeout(30);  // poner timeout 30 msg
-
-			String sql = "SELECT multiplicador FROM usuarios WHERE username = ?";
-			PreparedStatement preparedStatement = connection.prepareStatement(sql);
-	        preparedStatement.setString(1, usuario);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                multi = resultSet.getDouble("multiplicador");
-            }
-		} catch(SQLException e) {
-			System.err.println(e.getMessage());
-		} finally {
-			try {
-				if(connection != null)
-					connection.close();
-			} catch(SQLException e) {
-				// Cierre de conexión fallido
-				System.err.println(e);
-			}
-	}
-		return multi;
-	}
+//	public static Double getMultiplicador(String usuario) {
+//		try {
+//			Class.forName("org.sqlite.JDBC");
+//		} catch (ClassNotFoundException e) {
+//			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+//		}
+//		Connection connection = null;
+//		double multi = 0;
+//		try {
+//			// Crear una conexión de BD
+//			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");//a partir de los ultimo : es donde quieres que se guarden
+//			// Crear gestores de sentencias
+//			Statement statement = connection.createStatement();//crear consultas
+//			statement.setQueryTimeout(30);  // poner timeout 30 msg
+//
+//			String sql = "SELECT multiplicador FROM usuarios WHERE username = ?";
+//			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//	        preparedStatement.setString(1, usuario);
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//
+//            if (resultSet.next()) {
+//                multi = resultSet.getDouble("multiplicador");
+//            }
+//		} catch(SQLException e) {
+//			System.err.println(e.getMessage());
+//		} finally {
+//			try {
+//				if(connection != null)
+//					connection.close();
+//			} catch(SQLException e) {
+//				// Cierre de conexión fallido
+//				System.err.println(e);
+//			}
+//	}
+//		return multi;
+//	}
 	
 	public static Integer getSaldo(String usuario) {
 		try {

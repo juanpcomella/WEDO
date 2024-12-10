@@ -592,7 +592,7 @@ if(puntos > -10 & puntos <-5) {
 }else {
 	multiplicador = 1.3;
 }
-BDs.updateMultiplicador(usuario.getNombreUsuario(), multiplicador);
+//BDs.updateMultiplicador(usuario.getNombreUsuario(), multiplicador);
 
 }
    
@@ -606,8 +606,8 @@ public void actionPerformed(ActionEvent e) {
 int respuesta = JOptionPane.showConfirmDialog(null, "¿Desea omitir el cuestionario?","Omitir",
 JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE );
 if (respuesta == JOptionPane.YES_OPTION) {
-BDs.updateMultiplicador(usuario.getNombreUsuario(), 1);
-System.out.println(BDs.getMulti(usuario.getNombreUsuario()));
+//BDs.updateMultiplicador(usuario.getNombreUsuario(), 1);
+//System.out.println(BDs.getMulti(usuario.getNombreUsuario())+"**");
 MainWindow ventanaPrincipal = new MainWindow(usuario);
 ventanaPrincipal.setVisible(true);
 dispose();
