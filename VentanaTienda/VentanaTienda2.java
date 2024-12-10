@@ -22,6 +22,7 @@ import java.awt.*;
 import java.security.KeyStore.TrustedCertificateEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 public class VentanaTienda2 extends JFrame {
@@ -40,15 +41,19 @@ public class VentanaTienda2 extends JFrame {
     private int money;
 
     public VentanaTienda2(Usuario usuario) {
+        BDs.crearTablaCompras();
         //Configuración de la ventana principal
         setTitle("Tienda2");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-
         setLayout(new BorderLayout());
 
-        Color colorPrincipal = new Color(173,216,230);
-
+        modeloIcono = new DefaultTableModel(new Object[]{"Icono", "Precio"}, 0) {
+            public boolean isCellEditable(int row, int column) {
+                return column != 0; // Solo la columna de precio es editable
+            }
+        };
+        llenarTablaIconos(modeloIcono, usuario);
         String dinero = Integer.toString(BDs.getSaldo(usuario.getNombreUsuario()));
         money = Integer.parseInt(dinero);
 
@@ -71,14 +76,6 @@ public class VentanaTienda2 extends JFrame {
 
         tabbedPane.addTab("Iconos", panelIconos);
 
-        // Modelo de la tabla de iconos
-        modeloIcono = new DefaultTableModel(new Object[]{"Icono", "Precio"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return column != 0; // Solo la columna de precio es editable
-            }
-        };
-
         // Crear la tabla donde estarán los iconos.
         JTable iconoT = new JTable(modeloIcono);
         iconoT.setBackground(Color.BLUE);
@@ -86,16 +83,15 @@ public class VentanaTienda2 extends JFrame {
         iconoT.getTableHeader().setPreferredSize(new Dimension(0, 0));
         iconoT.setRowHeight(100);
 
-        llenarTablaIconos(modeloIcono);
+// Llenar la tabla de iconos pasando el usuario
+        llenarTablaIconos(modeloIcono, usuario);
 
         JScrollPane scrollIconos = new JScrollPane(iconoT);
         JPanel panelIconoConMargen = agregarMargen(scrollIconos, 20, 250, 90, 250);
         panelIconos.setBackground(Color.CYAN);
         panelIconos.add(panelIconoConMargen, BorderLayout.CENTER);
 
-
-
-        // Listener para detectar la celda bajo el mouse
+// Listener para detectar la celda bajo el mouse
         iconoT.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseMoved(MouseEvent e) {
@@ -122,23 +118,20 @@ public class VentanaTienda2 extends JFrame {
             }
         });
 
-
-
         iconoT.getColumnModel().getColumn(0).setCellRenderer(new ImageCellRenderer());
-
         iconoT.getColumnModel().getColumn(1).setCellRenderer(new PrecioCellRenderer(estadoCeldasIcono));
-
         iconoT.getColumnModel().getColumn(1).setCellEditor(new ButtonCellEditor(iconoT, estadoCeldasIcono, usuario));
 
+// Insertar ítems en la base de datos (solo si no existen)
+        insertarIconosBaseDeDatos(usuario);
 
-        //add(panelIconos, BorderLayout.CENTER);
-        insertarIconosBaseDeDatos();
-
-
+// Inicializar estado de celdas como no compradas
         for (int i = 0; i < iconoT.getRowCount(); i++) {
             Point celda_comprada = new Point(i, 1); // Crear un Point para la celda en la fila i y columna 1
             estadoCeldasIcono.put(celda_comprada, false); // Inicializar como no comprada
         }
+
+
 
         // Panel para los apodos
         JPanel panelApodos = new JPanel(new BorderLayout());
@@ -286,7 +279,7 @@ public class VentanaTienda2 extends JFrame {
         setVisible(true);
 
     }
-    public void insertarIconosBaseDeDatos() {
+    public void insertarIconosBaseDeDatos(Usuario usuario) {
         // Ejemplo de ítems a insertar
         Item[] iconos = {
                 new Item("LogoHomer", 85, "foto", "imagenes/logoHomer.png"),
@@ -311,7 +304,7 @@ public class VentanaTienda2 extends JFrame {
 
         // Forzar la recarga de datos en el modelo de la tabla
         modeloIcono.setRowCount(0); // Limpiar el modelo
-        llenarTablaIconos(modeloIcono); // Volver a cargar los ítems desde la base de datos
+        llenarTablaIconos(modeloIcono, usuario); // Volver a cargar los ítems desde la base de datos
     }
 
     public void insertarMonedasBaseDeDatos() {
@@ -414,21 +407,42 @@ public class VentanaTienda2 extends JFrame {
         return panelNorteIcono2;
     }
 
-    private void llenarTablaIconos(DefaultTableModel modeloIcono) {
-        // Cargar ítems de tipo "foto" desde la base de datos
+    private void llenarTablaIconos(DefaultTableModel modeloIcono, Usuario usuario) {
+        // Obtener la lista de todos los ítems de tipo "foto" desde la base de datos
         ArrayList<Item> listaItems = BDs.obtenerItemsPorTipo("foto");
+        ArrayList<Item> comprasUsuario = BDs.obtenerCompras(usuario.getNombreUsuario()); // Obtener compras del usuario
+
+        // Crear una lista con los nombres de los ítems comprados para facilitar la comparación
+        HashSet<String> nombresComprados = new HashSet<>();
+        for (Item comprado : comprasUsuario) {
+            nombresComprados.add(comprado.getNombreItem());
+        }
+
         if (listaItems.isEmpty()) {
             System.out.println("No hay ítems disponibles para mostrar.");
             return;
         }
 
+        // Limpiar el modelo para evitar duplicados si se vuelve a llenar
+        modeloIcono.setRowCount(0);
+
         for (Item item : listaItems) {
+            boolean comprado = nombresComprados.contains(item.getNombreItem());
+
             // Aplicar el método cargarImagen al contenido del ítem
             ImageIcon icono = cargarImagen(item.getContenido(), 80, 80);
-            modeloIcono.addRow(new Object[]{
-                    icono, // Icono procesado como ImageIcon
-                    new Object[]{item.getPrecioItem(), cargarImagen("imagenes/coin_sin_fondo.png", 30, 30)} // Precio y moneda
-            });
+            if (comprado) {
+                // Si el ítem ya fue comprado, mostrar como "Comprado"
+                modeloIcono.addRow(new Object[]{
+                        icono, // Icono procesado como ImageIcon
+                        "Comprado" // Mostrar el estado como comprado
+                });
+            } else {
+                modeloIcono.addRow(new Object[]{
+                        icono, // Icono procesado como ImageIcon
+                        new Object[]{item.getPrecioItem(), cargarImagen("imagenes/coin_sin_fondo.png", 30, 30)} // Precio y moneda
+                });
+            }
         }
     }
 
