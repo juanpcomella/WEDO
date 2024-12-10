@@ -593,7 +593,6 @@ if(puntos > -10 & puntos <-5) {
 	multiplicador = 1.3;
 }
 BDs.updateMultiplicador(usuario.getNombreUsuario(), multiplicador);
-System.out.println(puntos);
 
 }
    
@@ -608,6 +607,7 @@ int respuesta = JOptionPane.showConfirmDialog(null, "¿Desea omitir el cuestiona
 JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE );
 if (respuesta == JOptionPane.YES_OPTION) {
 BDs.updateMultiplicador(usuario.getNombreUsuario(), 1);
+System.out.println(BDs.getMulti(usuario.getNombreUsuario()));
 MainWindow ventanaPrincipal = new MainWindow(usuario);
 ventanaPrincipal.setVisible(true);
 dispose();

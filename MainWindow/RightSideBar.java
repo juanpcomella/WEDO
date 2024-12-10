@@ -331,14 +331,23 @@ public class RightSideBar extends JPanel {
                 );
 
                 if (confirm == JOptionPane.YES_OPTION) {
-
-                	BDs.updateSaldo(usuario.getNombreUsuario(),(int) (BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
-                	usuario.setSaldo((int) (BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
-                	BDs.updateSaldo(usuario.getNombreUsuario(), usuario.getSaldo());
+                	
+                	System.out.println(BDs.getMulti(usuario.getNombreUsuario()));
+                	System.out.println(usuario.getSaldo());
+                	usuario.setSaldo((int) (usuario.getSaldo()+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
+                	System.out.println(usuario.getSaldo());
+                    BDs.updateSaldo(usuario.getNombreUsuario(), usuario.getSaldo());
                     Navbar.coinAmountLabel.setText(String.valueOf(usuario.getSaldo()));
+//                	System.out.println(BDs.getSaldo(usuario.getNombreUsuario()));
+//                	BDs.updateSaldo(usuario.getNombreUsuario(),(int) (BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
+//                	System.out.println(BDs.getSaldo(usuario.getNombreUsuario()));
+//                	usuario.setSaldo((int) (BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
+//                	System.out.println(usuario.getNombreUsuario());
+//                	BDs.updateSaldo(usuario.getNombreUsuario(), usuario.getSaldo());
+//                    Navbar.coinAmountLabel.setText(String.valueOf(usuario.getSaldo()));
 
-                    Navbar.coinAmountLabel.setText(String.valueOf(usuario.getSaldo()));                                
-                	System.out.println(BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario()));
+//                    Navbar.coinAmountLabel.setText(String.valueOf(usuario.getSaldo()));                                
+//                	System.out.println(BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario()));
 
                 	BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
                     eliminarObjetivoDePantalla(objetivo, usuario);
