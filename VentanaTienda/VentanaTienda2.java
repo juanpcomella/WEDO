@@ -29,16 +29,13 @@ public class VentanaTienda2 extends JFrame {
 
     private int hoveredColumn = -1;
     private int hoveredRow = -1;
-    private int selectedRow = -1;
-    private int selectedColumn = -1;
     private Map<Point, Boolean> estadoCeldasIcono = new HashMap<>();
     private Map<Point, Boolean> estadoCeldasMoneda = new HashMap<>();
-    private Map<Point, Boolean> estadoCeldasApodo = new HashMap<>(); //new
     private DefaultTableModel modeloIcono;
     private DefaultTableModel modeloDinero;
-    private DefaultTableModel modeloApodos;
-
     private int money;
+    private Map<Integer, Item> itemMapIconos = new HashMap<>();
+    private Map<Integer, Item> itemMapMonedas = new HashMap<>();
 
     public VentanaTienda2(Usuario usuario) {
         BDs.crearTablaCompras();
@@ -54,12 +51,7 @@ public class VentanaTienda2 extends JFrame {
             }
         };
         llenarTablaIconos(modeloIcono, usuario);
-        String dinero = Integer.toString(BDs.getSaldo(usuario.getNombreUsuario()));
-        money = Integer.parseInt(dinero);
-
-
-        // Marcar el estado de las celdas
-        Map<Point, Boolean> estadoCeldasIcono = new HashMap<>();
+        money = BDs.getSaldo(usuario.getNombreUsuario());
 
         // TabbedPane para las secciones
         JTabbedPane tabbedPane = new JTabbedPane();
@@ -69,12 +61,8 @@ public class VentanaTienda2 extends JFrame {
 
         // JPanel para los iconos
         JPanel panelIconos = new JPanel(new BorderLayout());
-
         JPanel headerPanelIconos = crearHeaderPanel(String.valueOf(money), usuario);
-
         panelIconos.add(headerPanelIconos, BorderLayout.NORTH);
-
-        tabbedPane.addTab("Iconos", panelIconos);
 
         // Crear la tabla donde estarán los iconos.
         JTable iconoT = new JTable(modeloIcono);
@@ -83,15 +71,17 @@ public class VentanaTienda2 extends JFrame {
         iconoT.getTableHeader().setPreferredSize(new Dimension(0, 0));
         iconoT.setRowHeight(100);
 
-// Llenar la tabla de iconos pasando el usuario
-        llenarTablaIconos(modeloIcono, usuario);
-
         JScrollPane scrollIconos = new JScrollPane(iconoT);
         JPanel panelIconoConMargen = agregarMargen(scrollIconos, 20, 250, 90, 250);
         panelIconos.setBackground(Color.CYAN);
         panelIconos.add(panelIconoConMargen, BorderLayout.CENTER);
 
-// Listener para detectar la celda bajo el mouse
+        tabbedPane.addTab("Iconos", panelIconos);
+
+        // Llenar la tabla de iconos pasando el usuario
+        llenarTablaIconos(modeloIcono, usuario);
+
+        // Listener para detectar la celda bajo el mouse
         iconoT.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseMoved(MouseEvent e) {
@@ -120,88 +110,15 @@ public class VentanaTienda2 extends JFrame {
 
         iconoT.getColumnModel().getColumn(0).setCellRenderer(new ImageCellRenderer());
         iconoT.getColumnModel().getColumn(1).setCellRenderer(new PrecioCellRenderer(estadoCeldasIcono));
-        iconoT.getColumnModel().getColumn(1).setCellEditor(new ButtonCellEditor(iconoT, estadoCeldasIcono, usuario));
+        iconoT.getColumnModel().getColumn(1).setCellEditor(new ButtonCellEditor(iconoT, estadoCeldasIcono, itemMapIconos, usuario));
 
-// Insertar ítems en la base de datos (solo si no existen)
+        // Insertar ítems en la base de datos (solo si no existen)
         insertarIconosBaseDeDatos(usuario);
 
-// Inicializar estado de celdas como no compradas
+        // Inicializar estado de celdas como no compradas
         for (int i = 0; i < iconoT.getRowCount(); i++) {
             Point celda_comprada = new Point(i, 1); // Crear un Point para la celda en la fila i y columna 1
             estadoCeldasIcono.put(celda_comprada, false); // Inicializar como no comprada
-        }
-
-
-
-        // Panel para los apodos
-        JPanel panelApodos = new JPanel(new BorderLayout());
-        tabbedPane.addTab("Apodos", panelApodos);
-
-        // Crear el header panel para los apodos
-        JPanel headerPanelApodos = crearHeaderPanel(String.valueOf(money), usuario);
-        panelApodos.add(headerPanelApodos, BorderLayout.NORTH);
-
-        // Modelo de la tabla de apodos
-        modeloApodos = new DefaultTableModel(new Object[]{"Apodo", "Acción"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return column == 1; // Solo la columna de acción es editable
-            }
-        };
-
-        // Crear la tabla de apodos
-        JTable apodosT = new JTable(modeloApodos);
-        apodosT.setRowHeight(50);
-        apodosT.getTableHeader().setVisible(false);
-        apodosT.getTableHeader().setPreferredSize(new Dimension(0, 0));
-
-        // Llenar la tabla de apodos
-        llenarTablaApodos(modeloApodos);
-
-        // Agregar la tabla a un JScrollPane
-        JScrollPane scrollApodos = new JScrollPane(apodosT);
-        JPanel panelApodoConMargen = agregarMargen(scrollApodos, 20, 250, 90, 250);
-        panelApodos.setBackground(Color.CYAN);
-        panelApodos.add(panelApodoConMargen, BorderLayout.CENTER);
-
-
-        // Listener para detectar celdas resaltadas
-        apodosT.addMouseMotionListener(new MouseMotionListener() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                int row = apodosT.rowAtPoint(e.getPoint());
-                int column = apodosT.columnAtPoint(e.getPoint());
-
-                if (column == 1) { // Asegurar que estamos en la columna de acciones
-                    hoveredRow = row;
-                    hoveredColumn = column;
-                } else {
-                    hoveredRow = -1;
-                    hoveredColumn = -1; // Restablecer si el mouse no está sobre la columna
-                }
-                apodosT.repaint();
-            }
-
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                // Método generado automáticamente
-            }
-        });
-
-        apodosT.getColumnModel().getColumn(0).setCellRenderer(new ApodoCellRenderer());
-
-        // Renderizador para la columna de precios y acciones
-        apodosT.getColumnModel().getColumn(1).setCellRenderer(new PrecioCellRenderer(estadoCeldasApodo));
-
-        // Editor para los botones de compra
-        apodosT.getColumnModel().getColumn(1).setCellEditor(new ButtonCellEditor(apodosT, estadoCeldasApodo, usuario));
-
-        insertarApodosBaseDeDatos();
-
-        // Llenar el estado de las celdas como no compradas inicialmente
-        for (int i = 0; i < apodosT.getRowCount(); i++) {
-            Point celda_comprada = new Point(i, 1); // Fila i, columna de acciones (1)
-            estadoCeldasApodo.put(celda_comprada, false); // Inicializar como no comprada
         }
 
         // Panel para las monedas
@@ -226,12 +143,14 @@ public class VentanaTienda2 extends JFrame {
         monedasT.setBackground(new Color(0, 100, 0));
         monedasT.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
-        llenarTablaMonedas(modeloDinero);
+
 
         JScrollPane scrollMonedas = new JScrollPane(monedasT);
         JPanel panelMonedaConMargen = agregarMargen(scrollMonedas, 20, 250, 90, 250);
         panelMonedas.setBackground(Color.CYAN);
         panelMonedas.add(panelMonedaConMargen, BorderLayout.CENTER);
+
+        llenarTablaMonedas(modeloDinero);
 
         monedasT.addMouseMotionListener(new MouseMotionListener() {
             @Override
@@ -264,7 +183,7 @@ public class VentanaTienda2 extends JFrame {
 
         monedasT.getColumnModel().getColumn(1).setCellRenderer(new PrecioCellRenderer(estadoCeldasMoneda));
 
-        monedasT.getColumnModel().getColumn(1).setCellEditor(new ButtonCellEditor(monedasT, estadoCeldasMoneda, usuario));
+        monedasT.getColumnModel().getColumn(1).setCellEditor(new ButtonCellEditor(monedasT, estadoCeldasMoneda, itemMapMonedas, usuario));
 
 
         //add(panelMonedas, BorderLayout.CENTER);
@@ -336,31 +255,6 @@ public class VentanaTienda2 extends JFrame {
         llenarTablaMonedas(modeloDinero); // Volver a cargar las monedas desde la base de datos
     }
 
-    public void insertarApodosBaseDeDatos() {
-        Item[] apodos = {
-                new Item("Batman", 200, "label", "textos/Batman.ttf"),
-                new Item("Super Saiyan", 100, "label", "textos/Saiyan-Sans.ttf"),
-                new Item("Vengador", 100, "label", "textos/AVENGEANCE HEROIC AVENGER.ttf"),
-                new Item("Terminator", 100, "label", "textos/terminator real nfi.ttf"),
-                new Item("Gladiador", 100, "label", "textos/Marav2.ttf"),
-                new Item("Maestro", 100, "label", "textos/Karate.ttf")
-        };
-
-        for (Item apodo : apodos) {
-            if (!BDs.itemExiste(apodo.getNombreItem())) {
-                BDs.insertarItem("defaultUser", apodo.getNombreItem(), apodo.getPrecioItem(), apodo.getTipoItem(), apodo.getContenido());
-                System.out.println("Apodo " + apodo.getNombreItem() + " insertado en la base de datos.");
-            } else {
-                System.out.println("Apodo " + apodo.getNombreItem() + " ya existe en la base de datos. No se insertará.");
-            }
-        }
-        System.out.println("Apodos insertados en la base de datos.");
-
-        // Forzar la recarga de datos en el modelo de la tabla
-        modeloApodos.setRowCount(0); // Limpiar el modelo
-        llenarTablaApodos(modeloApodos); // Volver a cargar los apodos desde la base de datos
-    }
-
     private JPanel crearHeaderPanel(String dinero, Usuario usuario) {
         // Color principal para el header
         Color colorPrincipal = new Color(173, 216, 230);
@@ -410,112 +304,52 @@ public class VentanaTienda2 extends JFrame {
     private void llenarTablaIconos(DefaultTableModel modeloIcono, Usuario usuario) {
         // Obtener la lista de todos los ítems de tipo "foto" desde la base de datos
         ArrayList<Item> listaItems = BDs.obtenerItemsPorTipo("foto");
-        ArrayList<Item> comprasUsuario = BDs.obtenerCompras(usuario.getNombreUsuario()); // Obtener compras del usuario
-
-        // Crear una lista con los nombres de los ítems comprados para facilitar la comparación
-        HashSet<String> nombresComprados = new HashSet<>();
-        for (Item comprado : comprasUsuario) {
-            nombresComprados.add(comprado.getNombreItem());
-        }
 
         if (listaItems.isEmpty()) {
             System.out.println("No hay ítems disponibles para mostrar.");
             return;
         }
 
-        // Limpiar el modelo para evitar duplicados si se vuelve a llenar
+        // Limpiar el modelo y el itemMap para evitar duplicados si se vuelve a llenar
         modeloIcono.setRowCount(0);
+        itemMapIconos.clear();
 
-        for (Item item : listaItems) {
-            boolean comprado = nombresComprados.contains(item.getNombreItem());
+        for (int i = 0; i < listaItems.size(); i++) {
+            Item item = listaItems.get(i);
 
-            // Aplicar el método cargarImagen al contenido del ítem
+            // Agregar el ítem al mapa con la fila como clave
+            itemMapIconos.put(i, item);
+
+            // Procesar el ítem para la tabla
             ImageIcon icono = cargarImagen(item.getContenido(), 80, 80);
-            if (comprado) {
-                // Si el ítem ya fue comprado, mostrar como "Comprado"
-                modeloIcono.addRow(new Object[]{
-                        icono, // Icono procesado como ImageIcon
-                        "Comprado" // Mostrar el estado como comprado
-                });
-            } else {
-                modeloIcono.addRow(new Object[]{
-                        icono, // Icono procesado como ImageIcon
-                        new Object[]{item.getPrecioItem(), cargarImagen("imagenes/coin_sin_fondo.png", 30, 30)} // Precio y moneda
-                });
-            }
-        }
-    }
-
-    private void llenarTablaMonedas(DefaultTableModel modeloDinero) {
-        // Obtener la lista de monedas desde la base de datos
-        ArrayList<Item> listaMonedas = BDs.obtenerItemsPorTipo("moneda"); // Cambia "moneda" si tienes otro tipo en la BD
-
-        for (Item item : listaMonedas) {
-            // Aplicar el método cargarImagen al contenido del ítem
-            ImageIcon icono = cargarImagen(item.getContenido(), 80, 80); // Ajusta el tamaño según necesidad
-            modeloDinero.addRow(new Object[]{
-                    icono, // Imagen del ítem procesada como ImageIcon
+            modeloIcono.addRow(new Object[]{
+                    icono, // Icono procesado como ImageIcon
                     new Object[]{item.getPrecioItem(), cargarImagen("imagenes/coin_sin_fondo.png", 30, 30)} // Precio y moneda
             });
         }
     }
 
-    private void llenarTablaApodos(DefaultTableModel modeloApodos) {
-        try {
-            // Verificar si hay datos en la base de datos
-            ArrayList<Item> listaApodos = BDs.obtenerItemsPorTipo("label");
-            if (listaApodos.isEmpty()) {
-                System.out.println("No hay apodos disponibles para mostrar.");
-                return;
-            }
+    private void llenarTablaMonedas(DefaultTableModel modeloDinero) {
+        // Obtener la lista de monedas desde la base de datos
+        ArrayList<Item> listaMonedas = BDs.obtenerItemsPorTipo("moneda");
 
-            // Cargar fuentes personalizadas
-            Font customFontBatman = Font.createFont(Font.TRUETYPE_FONT, new File("textos/Batman.ttf")).deriveFont(48f);
-            Font customFontSs = Font.createFont(Font.TRUETYPE_FONT, new File("textos/Saiyan-Sans.ttf")).deriveFont(48f);
-            Font customFontAve = Font.createFont(Font.TRUETYPE_FONT, new File("textos/AVENGEANCE HEROIC AVENGER.ttf")).deriveFont(48f);
-            Font customFontTer = Font.createFont(Font.TRUETYPE_FONT, new File("textos/terminator real nfi.ttf")).deriveFont(30f);
-            Font customFontGlad = Font.createFont(Font.TRUETYPE_FONT, new File("textos/Marav2.ttf")).deriveFont(40f);
-            Font maestroFont = Font.createFont(Font.TRUETYPE_FONT, new File("textos/Karate.ttf")).deriveFont(40f);
+        // Limpiar el modelo y el itemMapMonedas para evitar duplicados
+        modeloDinero.setRowCount(0);
+        itemMapMonedas.clear();
 
-            // Registrar fuentes en el sistema gráfico
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(customFontBatman);
-            ge.registerFont(customFontSs);
-            ge.registerFont(customFontAve);
-            ge.registerFont(customFontTer);
-            ge.registerFont(customFontGlad);
-            ge.registerFont(maestroFont);
+        for (int i = 0; i < listaMonedas.size(); i++) {
+            Item item = listaMonedas.get(i);
 
-            // Mapear apodos con fuentes personalizadas
-            Map<String, Font> fuentesApodos = new HashMap<>();
-            fuentesApodos.put("Batman", customFontBatman);
-            fuentesApodos.put("Super Saiyan", customFontSs);
-            fuentesApodos.put("Vengador", customFontAve);
-            fuentesApodos.put("Terminator", customFontTer);
-            fuentesApodos.put("Gladiador", customFontGlad);
-            fuentesApodos.put("Maestro", maestroFont);
+            // Agregar el ítem al mapa con la fila como clave
+            itemMapMonedas.put(i, item);
 
-            // Iterar sobre los apodos y agregarlos al modelo
-            for (Item apodo : listaApodos) {
-                Font fuente = fuentesApodos.getOrDefault(apodo.getNombreItem(), new Font("Arial", Font.PLAIN, 24));
-                agregarApodo(modeloApodos, apodo.getNombreItem(), fuente, apodo.getPrecioItem(), "imagenes/coin_sin_fondo.png");
-            }
-
-        } catch (FontFormatException | IOException e) {
-            System.err.println("Error al cargar fuentes personalizadas: " + e.getMessage());
+            // Procesar el ítem para la tabla
+            ImageIcon icono = cargarImagen(item.getContenido(), 80, 80);
+            modeloDinero.addRow(new Object[]{
+                    icono, // Imagen del ítem procesada como ImageIcon
+                    new Object[]{item.getPrecioItem(), cargarImagen("imagenes/coin_sin_fondo.png", 30, 30)} // Precio y moneda
+            });
         }
-    }
-
-    private void agregarApodo(DefaultTableModel modeloApodos, String texto, Font fuente, int precio, String rutaIcono) {
-        JLabel apodoLabel = new JLabel(texto);
-        apodoLabel.setFont(fuente);
-        JPanel apodoPanel = new JPanel();
-        apodoPanel.setBackground(Color.WHITE);
-        apodoPanel.add(apodoLabel);
-        modeloApodos.addRow(new Object[]{
-                apodoPanel, // Apodo renderizado en un JPanel
-                new Object[]{precio, cargarImagen(rutaIcono, 30, 30)} // Precio y moneda
-        });
     }
 
     private ImageIcon cargarImagen(String ruta, int ancho, int alto) {
@@ -540,19 +374,6 @@ public class VentanaTienda2 extends JFrame {
             }
             // Si no es un ImageIcon, usamos el renderizado predeterminado
             return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        }
-    }
-
-    private class ApodoCellRenderer extends DefaultTableCellRenderer {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            if (value instanceof JPanel) {
-                // Si el valor es un JPanel, se devuelve directamente
-                return (JPanel) value;
-            } else {
-                // Renderizado predeterminado
-                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            }
         }
     }
 
@@ -622,13 +443,15 @@ public class VentanaTienda2 extends JFrame {
         private Object valorOriginal;
         private JLabel comprado;
         private Point celda;
-        private JTable table; // Parámetro para la tabla
+        private JTable table; // Tabla actual
+        private Map<Integer, Item> itemMap; // Mapa específico de la tabla actual
         private Map<Point, Boolean> estadoCeldas; // Parámetro para el estado de las celdas
         private Usuario usuario; // Usuario actual
 
-        public ButtonCellEditor(JTable table, Map<Point, Boolean> estadoCeldas, Usuario usuario) {
+        public ButtonCellEditor(JTable table, Map<Point, Boolean> estadoCeldas, Map<Integer, Item> itemMap, Usuario usuario) {
             this.table = table;
             this.estadoCeldas = estadoCeldas;
+            this.itemMap = itemMap; // Asigna el mapa específico de la tabla actual
             this.usuario = usuario;
 
             button = new JButton("Comprar");
@@ -673,6 +496,22 @@ public class VentanaTienda2 extends JFrame {
                         usuario.setSaldo(money);
                         BDs.updateSaldo(usuario.getNombreUsuario(), usuario.getSaldo());
                         estadoCeldas.put(celda, true);
+
+                        // Agregar item comprado a la base de datos de items comprados.
+                        Item itemComprado = itemMap.get(selectedRow); // Obtener el ítem correspondiente
+                        if (itemComprado != null) {
+                            BDs.insertarCompra(
+                                    usuario.getNombreUsuario(),
+                                    itemComprado.getNombreItem(),
+                                    itemComprado.getPrecioItem(),
+                                    itemComprado.getTipoItem(),
+                                    itemComprado.getContenido()
+                            );
+                            System.out.println("Item registrado: " + itemComprado.getNombreItem());
+                        } else {
+                            System.err.println("Error: No se encontró el ítem correspondiente para la fila " + selectedRow);
+                        }
+
 
                         // Actualizar la celda con "Comprado"
                         table.setValueAt(comprado, selectedRow, selectedColumn);
