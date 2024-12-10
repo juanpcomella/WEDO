@@ -288,7 +288,8 @@ public class RightSideBar extends JPanel {
         JDialog dialog = new JDialog((Frame) null, "Detalles del Objetivo", true);
         dialog.setSize(400, 200);
         dialog.setLayout(new BorderLayout());
-
+        
+        JPanel panelAbajo = new JPanel(new GridLayout(1,2));
         JPanel contenidoPanel = new JPanel();
         contenidoPanel.setLayout(new BoxLayout(contenidoPanel, BoxLayout.Y_AXIS));
         contenidoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -318,7 +319,7 @@ public class RightSideBar extends JPanel {
         contenidoPanel.add(fechaFinLabel);
         
         JButton botonCompletado = new JButton("Completado");
-        botonCompletado.setBackground(new Color(200,80,80)); 
+        botonCompletado.setBackground(new Color(76, 175, 80)); 
         botonCompletado.setForeground(Color.WHITE);
         if (objetivo.getCuantoQueda() >=0 ) {
         	botonCompletado.addActionListener(e -> {
@@ -333,7 +334,8 @@ public class RightSideBar extends JPanel {
 
                 	BDs.updateSaldo(usuario.getNombreUsuario(),(int) (BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
                 	usuario.setSaldo((int) (BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
-                	System.out.println(BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario()));
+                	BDs.updateSaldo(usuario.getNombreUsuario(), usuario.getSaldo());
+                    Navbar.coinAmountLabel.setText(String.valueOf(usuario.getSaldo()));
                 	BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
                     eliminarObjetivoDePantalla(objetivo, usuario);
                     dialog.dispose();
@@ -361,8 +363,9 @@ public class RightSideBar extends JPanel {
         });
 
         dialog.add(contenidoPanel, BorderLayout.CENTER);
-        dialog.add(botonCompletado, BorderLayout.EAST);
-        dialog.add(eliminarButton, BorderLayout.SOUTH);
+        panelAbajo.add(botonCompletado);
+        panelAbajo.add(eliminarButton);
+        dialog.add(panelAbajo, BorderLayout.SOUTH);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }
