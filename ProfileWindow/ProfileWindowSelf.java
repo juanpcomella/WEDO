@@ -341,6 +341,7 @@ public class ProfileWindowSelf extends JFrame {
         add(mainPanel);
     }
 
+
     private BufferedImage getCircularImage(BufferedImage image, int diameter) {
         BufferedImage output = new BufferedImage(diameter, diameter, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = output.createGraphics();

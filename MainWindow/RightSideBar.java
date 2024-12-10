@@ -501,7 +501,7 @@ public class RightSideBar extends JPanel {
                                 }
 
                                 //Suma 10 monedas por habito completado
-                                usuario.setSaldo(usuario.getSaldo()+10);
+                                usuario.setSaldo(usuario.getSaldo()+10000);
                                 BDs.updateSaldo(usuario.getNombreUsuario(), usuario.getSaldo());
                                 Navbar.coinAmountLabel.setText(String.valueOf(usuario.getSaldo()));                                
                             } 
