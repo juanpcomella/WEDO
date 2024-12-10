@@ -71,8 +71,9 @@ public class VentanaLoginDef extends JFrame {
         introducirDatos.setFont(new Font("Tahoma", Font.BOLD, 30));
         gbc.gridy = 1;
         gbc.insets = new Insets(5, 10, 20, 10);
+        introducirDatos.setForeground(new Color(50, 70, 90));
         datos.add(introducirDatos, gbc);
-
+        
         gbc.gridwidth = 1;
 
         JLabel username = new JLabel("Usuario / Email");
@@ -107,7 +108,7 @@ public class VentanaLoginDef extends JFrame {
         gbc.insets = new Insets(0, 10, 5, 10);
         datos.add(passwordTF, gbc);
 
-        JCheckBox recuerdame = new JCheckBox("Recuérdame");
+        JLabel recuerdame = new JLabel("");
 		recuerdame.setForeground(new Color(50, 70, 90));
 		recuerdame.setOpaque(false);
         recuerdame.setFont(new Font("Arial", Font.ITALIC, 16));
@@ -297,6 +298,7 @@ public class VentanaLoginDef extends JFrame {
                 String passwordUser = new String(passwordTF.getPassword());
                 if(!BDs.usuarioExistente(usernameUser) & !BDs.emailExistente(usernameUser)) {
                     	JOptionPane.showMessageDialog(null,"Nombre de usuario o contraseña incorrectos.");
+                    	//metodos bbdd
                 }else if(!BDs.contraseñaExistente(passwordUser)) {
                 	JOptionPane.showMessageDialog(null,"Nombre de usuario o contraseña incorrectos.");
                 }else {

@@ -215,10 +215,10 @@ public class Calendario extends JPanel {
                     if (evento.esEventoTodoElDia()) {
                         JLabel eventoLabelTodoElDia = new JLabel();
                         eventoLabelTodoElDia.setOpaque(true);
-                        eventoLabelTodoElDia.setPreferredSize(new Dimension(10, 10));
-                        eventoLabelTodoElDia.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                        eventoLabelTodoElDia.setPreferredSize(new Dimension(12, 12));
+                        eventoLabelTodoElDia.setBorder(BorderFactory.createLineBorder(Color.WHITE));
                         eventoLabelTodoElDia.setFont(new Font("Arial", Font.BOLD, 8));
-                        eventoLabelTodoElDia.setBackground(Color.RED);
+                        eventoLabelTodoElDia.setBackground(new Color(233,145,183));
 
                         todoElDiaPanel.add(eventoLabelTodoElDia);
 
@@ -232,17 +232,18 @@ public class Calendario extends JPanel {
                         JLabel eventoLabel = new JLabel(evento.getNombre());
                         eventoLabel.setOpaque(true);
                         eventoLabel.setPreferredSize(new Dimension(8, 8));
-                        eventoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                        eventoLabel.setBorder(BorderFactory.createLineBorder(Color.white));
                         eventoLabel.setFont(new Font("Arial", Font.BOLD, 8));
+                        eventoLabel.setForeground(Color.BLACK);
 
                         if (evento.getCategoria().equals(Categorias.Estudios)) {
-                            eventoLabel.setBackground(Color.MAGENTA);
+                            eventoLabel.setBackground(new Color(255,245,150));
                         } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
-                            eventoLabel.setBackground(Color.GREEN);
+                            eventoLabel.setBackground(new Color(255,194,145));
                         } else if (evento.getCategoria().equals(Categorias.Deporte)) {
-                            eventoLabel.setBackground(Color.CYAN);
+                            eventoLabel.setBackground(new Color(200,160,210));
                         } else if (evento.getCategoria().equals(Categorias.Ocio)) {
-                            eventoLabel.setBackground(Color.ORANGE);
+                            eventoLabel.setBackground(new Color(190, 230,180));
                         }
 
                         eventoLabel.addMouseListener(new MouseAdapter() {
@@ -373,9 +374,9 @@ public class Calendario extends JPanel {
                                 super.paintComponent(g);
                                 Graphics2D g2d = (Graphics2D) g;
                                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                                g2d.setColor(Color.RED);
+                                g2d.setColor(new Color(233,145,183));
                                 g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
-                                g2d.setColor(Color.BLACK);
+                                g2d.setColor(Color.WHITE);
                                 g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 10, 10);
                             }
                         };
@@ -402,17 +403,17 @@ public class Calendario extends JPanel {
                                     SwingConstants.CENTER);
                             eventoLabel.setOpaque(true);
                             eventoLabel.setFont(new Font("Arial", Font.BOLD, 10));
-                            eventoLabel.setForeground(Color.WHITE);
-                            eventoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                            eventoLabel.setForeground(Color.BLACK);
+                            eventoLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 
                             if (evento.getCategoria().equals(Categorias.Estudios)) {
-                                eventoLabel.setBackground(Color.MAGENTA);
+                                eventoLabel.setBackground(new Color(255,245,150));
                             } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
-                                eventoLabel.setBackground(Color.GREEN);
+                                eventoLabel.setBackground(new Color(255,194,145));
                             } else if (evento.getCategoria().equals(Categorias.Deporte)) {
-                                eventoLabel.setBackground(Color.CYAN);
+                                eventoLabel.setBackground(new Color(200,160,210));
                             } else if (evento.getCategoria().equals(Categorias.Ocio)) {
-                                eventoLabel.setBackground(Color.ORANGE);
+                                eventoLabel.setBackground(new Color(190, 230,180));
                             }
 
                             eventoLabel.setBounds(posicionX, posicionY, anchoPorEvento, altoEvento);
@@ -432,15 +433,16 @@ public class Calendario extends JPanel {
                             eventoLabel.setOpaque(true);
                             eventoLabel.setFont(new Font("Arial", Font.BOLD, 10));
                             eventoLabel.setForeground(Color.WHITE);
-
+                            eventoLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+                            
                             if (evento.getCategoria().equals(Categorias.Estudios)) {
-                                eventoLabel.setBackground(Color.MAGENTA);
+                                eventoLabel.setBackground(new Color(255,245,150));
                             } else if (evento.getCategoria().equals(Categorias.Trabajo)) {
-                                eventoLabel.setBackground(Color.GREEN);
+                                eventoLabel.setBackground(new Color(255,194,145));
                             } else if (evento.getCategoria().equals(Categorias.Deporte)) {
-                                eventoLabel.setBackground(Color.CYAN);
+                                eventoLabel.setBackground(new Color(200,160,210));
                             } else if (evento.getCategoria().equals(Categorias.Ocio)) {
-                                eventoLabel.setBackground(Color.ORANGE);
+                                eventoLabel.setBackground(new Color(190, 230,180));
                             }
 
                             eventoLabel.setBounds(posicionX, posicionY, anchoPorEvento, altoEvento);
@@ -591,6 +593,12 @@ public class Calendario extends JPanel {
                     horaFinEv = LocalTime.of(horaFin, minutoFin);
                     todoElDiaEv = false;
                 }
+                boolean esPublico = false;
+                if(publicoButton.isSelected()) {
+                	esPublico = true;
+                }else {
+                	esPublico = false;
+                }
 
                 if (nombreEv.isEmpty()) {
                     JOptionPane.showMessageDialog(dialog, "Por favor, ingresa un nombre para el evento.");
@@ -605,7 +613,8 @@ public class Calendario extends JPanel {
                         date.toString(),
                         horaInicioEv.toString(),
                         horaFinEv.toString(),
-                        todoElDiaEv
+                        todoElDiaEv,
+                        esPublico
                     );
                     JOptionPane.showMessageDialog(dialog, "Evento guardado.");
                     actualizarVista(usuario);
@@ -710,7 +719,7 @@ public class Calendario extends JPanel {
     private void mostrarEventoTodoElDia(Evento evento, LocalDate date, Usuario usuario) {
         JDialog dialog = new JDialog();
         dialog.setTitle("Evento para el " + date.toString());
-        dialog.setSize(300, 200); 
+        dialog.setSize(350, 250); 
         dialog.setLocationRelativeTo(this);
         JPanel panel = new JPanel();
         panel.setBackground(new Color(173, 216, 230));

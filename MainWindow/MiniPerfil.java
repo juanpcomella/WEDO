@@ -6,6 +6,9 @@ import StartingWindows.VentanaBienvenida;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import BaseDeDatos.BDs;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
@@ -16,33 +19,34 @@ import java.io.IOException;
 public class MiniPerfil extends JFrame {
 
     public MiniPerfil(Usuario usuario, JFrame mw) {
-        setTitle("Mini Perfil");
-        setSize(400, 180);
-        setUndecorated(true); // Remove window decorations
+    	setTitle("Mini Perfil");
+        setSize(350, 250); 
+        setUndecorated(true);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         
-        // Add MouseListener to detect clicks outside the window
         addWindowFocusListener(new WindowFocusListener() {
             @Override
-            public void windowGainedFocus(WindowEvent e) {
-                // Do nothing when gaining focus
-            }
+            public void windowGainedFocus(WindowEvent e) {}
 
             @Override
             public void windowLostFocus(WindowEvent e) {
-                // Close the MiniPerfil when losing focus
                 dispose();
             }
         });
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(1, 2));
-        panel.setBackground(new Color(173, 216, 230));
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.setBackground(new Color(173, 216, 230));
+        add(mainPanel, BorderLayout.CENTER);
+        mainPanel.setBorder(BorderFactory.createLineBorder(new Color(50, 60, 80), 2));
         
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10)); 
+        leftPanel.setBackground(new Color(173, 216, 230));
+
         try {
             BufferedImage profileImage = ImageIO.read(new File("imagenes/PERFIL.png"));
-            ImageIcon profileIcon = new ImageIcon(getCircularImage(profileImage, 80));
+            ImageIcon profileIcon = new ImageIcon(getCircularImage(profileImage, 70)); 
             JLabel profileLabel = new JLabel(profileIcon);
             profileLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
             profileLabel.addMouseListener(new MouseAdapter() {
@@ -52,77 +56,105 @@ public class MiniPerfil extends JFrame {
                     dispose();
                 }
             });
-
-            panel.add(profileLabel);
+            leftPanel.add(profileLabel);
         } catch (IOException e) {
             System.out.println("Error al cargar la imagen de perfil: " + e.getMessage());
             JLabel errorLabel = new JLabel("Sin imagen", SwingConstants.CENTER);
-            panel.add(errorLabel);
+            leftPanel.add(errorLabel);
         }
 
+        mainPanel.add(leftPanel, BorderLayout.WEST);
+
         JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BorderLayout());
         rightPanel.setBackground(new Color(173, 216, 230));
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        mainPanel.add(rightPanel, BorderLayout.CENTER);
 
-        JLabel usuarioLabel = new JLabel(usuario.getNombreUsuario());
-        usuarioLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        usuarioLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JLabel usuarioLabel = new JLabel(usuario.getNombreUsuario(), SwingConstants.CENTER);
+        usuarioLabel.setFont(new Font("Arial", Font.BOLD, 18)); 
+        usuarioLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        rightPanel.add(usuarioLabel, BorderLayout.NORTH);
 
-        JButton irPerfil = new JButton("Ver tu perfil");
-        irPerfil.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                ProfileWindowSelf perfil = new ProfileWindowSelf(usuario);
-                perfil.setVisible(true);
-                mw.dispose();
+        JPanel middlePanel = new JPanel();
+        middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
+        middlePanel.setBackground(new Color(173, 216, 230));
+
+        JPanel countPanel = new JPanel(new GridLayout(1, 2));
+        countPanel.setBackground(new Color(173, 216, 230));
+
+        /*
+        int cuentaSeguidores = BDs.obtenerCuentaSeguidores(usuario.getNombreUsuario());
+        int cuentaSeguidos = BDs.obtenerCuentaSiguiendo(usuario.getNombreUsuario());
+
+        JLabel seguidoresLabel = new JLabel(cuentaSeguidores + " seguidores", SwingConstants.CENTER);
+        seguidoresLabel.setFont(new Font("Arial", Font.BOLD, 16));  // Texto más pequeño
+        countPanel.add(seguidoresLabel);
+
+        JLabel seguidosLabel = new JLabel(cuentaSeguidos + " seguidos", SwingConstants.CENTER);
+        seguidosLabel.setFont(new Font("Arial", Font.BOLD, 16));  // Texto más pequeño
+        countPanel.add(seguidosLabel);
+        */
+
+        middlePanel.add(countPanel);
+
+        middlePanel.add(Box.createVerticalStrut(10));  
+
+        JPanel botonesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        botonesPanel.setBackground(new Color(173, 216, 230));
+
+        JButton botonCerrarSesion = new JButton("Cerrar sesión");
+        botonCerrarSesion.setPreferredSize(new Dimension(200, 40)); 
+        botonCerrarSesion.setBackground(Color.GRAY);  
+        botonCerrarSesion.setForeground(Color.WHITE);  
+        botonCerrarSesion.addActionListener(e -> {
+            VentanaBienvenida ventanaBienvenida = new VentanaBienvenida();
+            ventanaBienvenida.setVisible(true);
+            dispose();
+            mw.dispose();
+        });
+
+        JButton botonEliminarCuenta = new JButton("Eliminar cuenta");
+        botonEliminarCuenta.setPreferredSize(new Dimension(200, 40));  
+        botonEliminarCuenta.setBackground(new Color(200,80,80));  
+        botonEliminarCuenta.setForeground(Color.WHITE); 
+        botonEliminarCuenta.addActionListener(e -> {
+            int confirmacion = JOptionPane.showConfirmDialog(
+                null,
+                "¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.",
+                "Confirmar Eliminación",
+                JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                JOptionPane.showMessageDialog(null, "Cuenta eliminada correctamente.");
+                VentanaBienvenida ventanaBienvenida = new VentanaBienvenida();
+                ventanaBienvenida.setVisible(true);
                 dispose();
             }
         });
 
-        rightPanel.add(usuarioLabel);
-        rightPanel.add(irPerfil);
+        botonesPanel.add(botonCerrarSesion);
+        botonesPanel.add(botonEliminarCuenta);
+        middlePanel.add(botonesPanel);
 
-        panel.add(rightPanel);
+        rightPanel.add(middlePanel, BorderLayout.CENTER);
 
-        add(panel, BorderLayout.CENTER);
-        
-        JButton botonCerrarSesion = new JButton("Cerrar Sesión");
-        botonCerrarSesion.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				VentanaBienvenida ventanaBienvenida = new VentanaBienvenida();
-				ventanaBienvenida.setVisible(true);
-				dispose();
-			}
-		});
-        
-        rightPanel.add(botonCerrarSesion);
-        
-        JButton botonEliminarCuenta = new JButton("Eliminar cuenta");
-        botonEliminarCuenta.setBackground(Color.RED);
-        botonEliminarCuenta.setForeground(Color.WHITE);
-        botonEliminarCuenta.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int confirmacion = JOptionPane.showConfirmDialog(
-                    null,
-                    "¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.",
-                    "Confirmar Eliminación",
-                    JOptionPane.YES_NO_OPTION
-                );
-
-                if (confirmacion == JOptionPane.YES_OPTION) {
-                    JOptionPane.showMessageDialog(null, "Cuenta eliminada correctamente.");
-                    VentanaBienvenida ventanaBienvenida = new VentanaBienvenida();
-                    ventanaBienvenida.setVisible(true);
-                    dispose();
-                }
-            }
+        JButton irPerfil = new JButton("Ver tu perfil");
+        irPerfil.setBackground(new Color(50,70,90));
+        irPerfil.setForeground(Color.WHITE);
+        irPerfil.setPreferredSize(new Dimension(200, 40));
+        irPerfil.addActionListener(e -> {
+            ProfileWindowSelf perfil = new ProfileWindowSelf(usuario);
+            perfil.setVisible(true);
+            mw.dispose();
+            dispose();
         });
 
-        rightPanel.add(botonEliminarCuenta);
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 10));
+        bottomPanel.setBackground(new Color(173, 216, 230));
+        bottomPanel.add(irPerfil);
+
+        rightPanel.add(bottomPanel, BorderLayout.SOUTH);
     }
 
     private BufferedImage getCircularImage(BufferedImage image, int diameter) {

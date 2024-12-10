@@ -519,7 +519,7 @@ public class BDs {
 			
 			// Ejecutar sentencias SQL (Update)
 			statement.executeUpdate("create table if not exists eventos (username string, nombreEvento string, descripcionEv string, categoriaEv string, fechaEv string, "
-					+ "horaInicioEv string, horaFinEv string, todoElDiaEv boolean)");
+					+ "horaInicioEv string, horaFinEv string, todoElDiaEv boolean, esPublico boolean)");
 
 		} catch(SQLException e) {
 			System.err.println(e.getMessage());
@@ -534,7 +534,7 @@ public class BDs {
 	}
 	}
 	
-	public static void insertarEventos(String usuario, String nombre, String descripcion, String categoria, String fecha, String horaInicio, String horaFin, boolean todoElDia) {
+	public static void insertarEventos(String usuario, String nombre, String descripcion, String categoria, String fecha, String horaInicio, String horaFin, boolean todoElDia, boolean esPublico) {
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
@@ -549,7 +549,7 @@ public class BDs {
 			Statement statement = connection.createStatement();//crear consultas
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
 			
-			String sql = "insert into eventos (username, nombreEvento, descripcionEv, categoriaEv, fechaEv, horaInicioEv, horaFinEv, todoElDiaEv) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+			String sql = "insert into eventos (username, nombreEvento, descripcionEv, categoriaEv, fechaEv, horaInicioEv, horaFinEv, todoElDiaEv, esPublico) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             // Preparar la consulta
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -563,6 +563,7 @@ public class BDs {
             preparedStatement.setString(6, horaInicio);
             preparedStatement.setString(7, horaFin);
             preparedStatement.setBoolean(8, todoElDia);
+            preparedStatement.setBoolean(9, esPublico);
           
             preparedStatement.executeUpdate();
 
@@ -642,7 +643,7 @@ public class BDs {
 			statement.setQueryTimeout(30);  // Timeout de 30 ms
 
 			// Consulta SQL actualizada para filtrar eventos públicos
-			String sql = "SELECT nombreEvento, descripcionEv, categoriaEv, fechaEv, horaInicioEv, horaFinEv, todoElDiaEv, esPrivado FROM eventos WHERE username = ? AND publico = 1"; // Filtrar eventos públicos
+			String sql = "SELECT nombreEvento, descripcionEv, categoriaEv, fechaEv, horaInicioEv, horaFinEv, todoElDiaEv, esPublico FROM eventos WHERE username = ? AND esPublico = true"; // Filtrar eventos públicos
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setString(1, usuario);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -656,7 +657,7 @@ public class BDs {
 				evento.setHoraInicio(LocalTime.parse(resultSet.getString("horaInicioEv")));
 				evento.setHoraFin(LocalTime.parse(resultSet.getString("horaFinEv")));
 				evento.setTodoElDia(Boolean.parseBoolean(resultSet.getString("todoElDiaEv")));
-				evento.setPrivado(Boolean.parseBoolean(resultSet.getString("esPrivado")));
+				evento.setPrivado(Boolean.parseBoolean(resultSet.getString("esPublico")));
 				eventos.add(evento);
 			}
 		} catch (SQLException e) {
@@ -1732,6 +1733,78 @@ public class BDs {
 		}
 		return items;
 	}
+	public boolean itemExiste(String nombreItem) {
+		try {
+			// Cargar el driver JDBC
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+			return false; // En caso de error, asumimos que no existe
+		}
+		Connection connection = null;
+		boolean existe = false;
+		try {
+			// Conectar a la base de datos
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+
+			// Consulta SQL para verificar existencia
+			String sql = "SELECT COUNT(*) AS total FROM items WHERE nombreItem = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, nombreItem);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			// Verificar si el ítem existe
+			if (resultSet.next()) {
+				existe = resultSet.getInt("total") > 0;
+			}
+		} catch (SQLException e) {
+			System.err.println("Error SQL: " + e.getMessage());
+		} finally {
+			try {
+				if (connection != null)
+					connection.close();
+			} catch (SQLException e) {
+				System.err.println("Error al cerrar la conexión: " + e.getMessage());
+			}
+		}
+		return existe;
+	}
+	public ArrayList<Item> obtenerItemsPorTipo(String tipoItem) {
+		ArrayList<Item> items = new ArrayList<>();
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+		}
+		Connection connection = null;
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+			String sql = "SELECT nombreItem, precioItem, tipoItem, contenido FROM items WHERE tipoItem = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, tipoItem);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				items.add(new Item(
+						resultSet.getString("nombreItem"),
+						resultSet.getInt("precioItem"),
+						resultSet.getString("tipoItem"),
+						resultSet.getString("contenido")
+				));
+			}
+		} catch (SQLException e) {
+			System.err.println("Error SQL: " + e.getMessage());
+		} finally {
+			try {
+				if (connection != null)
+					connection.close();
+			} catch (SQLException e) {
+				System.err.println("Error al cerrar la conexión: " + e.getMessage());
+			}
+		}
+		return items;
+	}
+
 
 	// MÉTODOS PARA LOS ITEMS QUE HAZ COMPRADO.
 	public void crearTablaCompras() {
