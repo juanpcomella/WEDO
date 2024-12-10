@@ -20,7 +20,7 @@ public class Notas extends JFrame {
 	String txt_editado;
 	int numero_vistas;
 	Notas nota;
-	
+	JButton botonPagina;
 	JTextPane apuntePane;
 	JTextField tituloL;
     public Notas(String titulo,String txt) {
@@ -186,12 +186,7 @@ public class Notas extends JFrame {
         JPanel panelDcha = new JPanel (new BorderLayout());
         JButton volver = new JButton("Volver");
         
-        volver.addActionListener(b -> {
-        	this.setVisible(false);
-        	this.titulo_editado = this.tituloL.getText();
-            this.txt_editado = this.apuntePane.getText();
-            
-        });
+       
         
         
         
@@ -206,6 +201,16 @@ public class Notas extends JFrame {
         add(panelCrear, BorderLayout.EAST);
         
         Map<JButton, Notas> notasMap = new HashMap<>();
+        
+        volver.addActionListener(b -> {
+        	this.setVisible(false);
+        	this.titulo_editado = this.tituloL.getText();
+            this.txt_editado = this.apuntePane.getText();
+            this.botonPagina.setText(this.titulo_editado);
+            notasMap.put(this.botonPagina, this);
+            
+            
+        });
 
         // Acción para crear nuevas páginas
         createN.addActionListener(e -> {
@@ -215,7 +220,7 @@ String input = JOptionPane.showInputDialog(null, "Escribe el título de la pági
             	
             	
             	
-                JButton botonPagina = new JButton(input);
+                botonPagina = new JButton(input);
                 //botonPagina.setBackground(azulOscuro);
                 //botonPagina.setForeground(colorTurquesa);
                 String strVacio = "";
