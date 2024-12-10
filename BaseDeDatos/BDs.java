@@ -601,7 +601,6 @@ public class BDs {
 			
 	}
 	
-<<<<<<< HEAD
 //	public static void updateMultiplicador(String usuario, double nuevoMulti) {
 //		try {
 //			Class.forName("org.sqlite.JDBC");
@@ -670,7 +669,6 @@ public class BDs {
 //	}
 //		return multi;
 //	}
-=======
 	public static void updateMultiplicador(String usuario, double nuevoMulti) {
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -787,7 +785,6 @@ public class BDs {
 	}
 		return multi;
 	}
->>>>>>> branch 'preUpload' of git@github.com:juanpcomella/tempus.git
 	
 	public static Integer getSaldo(String usuario) {
 		try {
