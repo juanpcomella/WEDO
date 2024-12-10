@@ -218,68 +218,59 @@ public class RightSideBar extends JPanel {
         objetivosPanel.removeAll();
 
         for (Objetivo objetivo : listaObjetivos) {
-            JLabel objetivoLabel = new JLabel(objetivo.getNombre());
+
             int cuantoFalta = objetivo.getCuantoQueda();
-            objetivoLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-            objetivoLabel.setBackground(new Color(179, 229, 252));
-            objetivoLabel.setForeground(new Color(30, 136, 229)); 
-            objetivoLabel.setOpaque(true); 
-            objetivoLabel.setHorizontalAlignment(SwingConstants.CENTER); 
-            objetivoLabel.setPreferredSize(new Dimension(getWidth(), 40));
-            objetivoLabel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40)); 
-            objetivoLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2)); 
-//            if(cuantoFalta < 0) {
-//
-//            	try {           	
-//					Thread.sleep(1000);
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//            	int confirm = JOptionPane.showConfirmDialog(
-//                        objetivosPanel,
-//                        "Ha llegado el día, ¿has completado el objetivo:  "+ objetivo.getNombre()+ "?",
-//                        "",
-//                        JOptionPane.YES_NO_OPTION
-//                       
-//                    );
-//            	 if (confirm == JOptionPane.YES_OPTION) {
-//            		 BDs.updateSaldo(usuario.getNombreUsuario(), BDs.getSaldo(usuario.getNombreUsuario()+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
-//                 	 BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
-////                     eliminarObjetivoDePantalla(objetivo, usuario);
-//                     JOptionPane.showMessageDialog(null, "¡Felicidades! ¡Sigue asi con tus objetivos!");
-//                     MainWindow mv = new MainWindow(usuario);
-//                     mv.setVisible(true);
-//                 }else {
-//                	 BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
-////                     eliminarObjetivoDePantalla(objetivo, usuario);
-//                     JOptionPane.showMessageDialog(null, "¡Animo! ¡No te desmotives y sigue adelante con tus objetivos!");
-//                     MainWindow mv = new MainWindow(usuario);
-//                     mv.setVisible(true);
-//				}
-//            }
+            if (cuantoFalta < 0) {
+                JLabel objetivoLabel = new JLabel("Objetivo Expirado");
+				
+	            objetivoLabel.addMouseListener(new MouseAdapter() {
+	                @Override
+	                public void mouseClicked(MouseEvent e) {
+	                    mostrarDetallesObjetivo(objetivo, usuario);
+	                }
 
-            String mensajeConTiempoRestante = "Quedan " + objetivo.getCuantoQueda() + " días";
-            objetivoLabel.setText(objetivo.getNombre() + " - " + mensajeConTiempoRestante);
+
+	                @Override
+	                public void mouseExited(MouseEvent e) {
+	                    objetivoLabel.setBackground(new Color(200,80,80));
+	                }
+	            });
+	            
+	            objetivosPanel.add(objetivoLabel);
+			}else {
+	            JLabel objetivoLabel = new JLabel(objetivo.getNombre());
+				objetivoLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+	            objetivoLabel.setBackground(new Color(179, 229, 252));
+	            objetivoLabel.setForeground(new Color(30, 136, 229)); 
+	            objetivoLabel.setOpaque(true); 
+	            objetivoLabel.setHorizontalAlignment(SwingConstants.CENTER); 
+	            objetivoLabel.setPreferredSize(new Dimension(getWidth(), 40));
+	            objetivoLabel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40)); 
+	            objetivoLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2)); 
+	            String mensajeConTiempoRestante = "Quedan " + objetivo.getCuantoQueda() + " días";
+	            objetivoLabel.setText(objetivo.getNombre() + " - " + mensajeConTiempoRestante);
+	            objetivoLabel.addMouseListener(new MouseAdapter() {
+	                @Override
+	                public void mouseClicked(MouseEvent e) {
+	                    mostrarDetallesObjetivo(objetivo, usuario);
+	                }
+
+	                @Override
+	                public void mouseEntered(MouseEvent e) {
+	                    objetivoLabel.setBackground(new Color(144, 202, 249));
+	                }
+
+	                @Override
+	                public void mouseExited(MouseEvent e) {
+	                    objetivoLabel.setBackground(new Color(179, 229, 252));
+	                }
+	            });
+	            
+	            objetivosPanel.add(objetivoLabel);
+			}
             
-            objetivoLabel.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    mostrarDetallesObjetivo(objetivo, usuario);
-                }
-
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    objetivoLabel.setBackground(new Color(144, 202, 249));
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    objetivoLabel.setBackground(new Color(179, 229, 252));
-                }
-            });
             
-            objetivosPanel.add(objetivoLabel);
+
         }
 
         revalidate();
@@ -322,24 +313,27 @@ public class RightSideBar extends JPanel {
         JButton botonCompletado = new JButton("Completado");
         botonCompletado.setBackground(new Color(200,80,80)); 
         botonCompletado.setForeground(Color.WHITE);
-        botonCompletado.addActionListener(e -> {
-            int confirm = JOptionPane.showConfirmDialog(
-                dialog,
-                "¿Has completado el objetivo:" + objetivo.getNombre()+ "?",
-                "",
-                JOptionPane.YES_NO_OPTION
-            );
+        if (objetivo.getCuantoQueda() >=0 ) {
+        	botonCompletado.addActionListener(e -> {
+                int confirm = JOptionPane.showConfirmDialog(
+                    dialog,
+                    "¿Has completado el objetivo:" + objetivo.getNombre()+ "?",
+                    "",
+                    JOptionPane.YES_NO_OPTION
+                );
 
-            if (confirm == JOptionPane.YES_OPTION) {
+                if (confirm == JOptionPane.YES_OPTION) {
 
-            	BDs.updateSaldo(usuario.getNombreUsuario(),(int) (BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
-            	usuario.setSaldo((int) (BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
-            	System.out.println(BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario()));
-            	BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
-                eliminarObjetivoDePantalla(objetivo, usuario);
-                dialog.dispose();
-            }
-        });
+                	BDs.updateSaldo(usuario.getNombreUsuario(),(int) (BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
+                	usuario.setSaldo((int) (BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
+                	System.out.println(BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario()));
+                	BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
+                    eliminarObjetivoDePantalla(objetivo, usuario);
+                    dialog.dispose();
+                }
+            });
+		}
+        
         
         JButton eliminarButton = new JButton("Eliminar objetivo");
         eliminarButton.setBackground(new Color(200,80,80)); 
