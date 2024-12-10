@@ -176,8 +176,7 @@ public class RightSideBar extends JPanel {
             }
         }
     }
-
-   
+ 
     private void añadirObjetivo(String nombre, String descripcion, String fechaCumplimiento, Usuario usuario) {
         Objetivo objetivo = new Objetivo(nombre, descripcion, LocalDate.parse(fechaCumplimiento), false);
         objetivo.setCuantoQueda(obtenerCuantoQueda(fechaCumplimiento)); 
@@ -231,16 +230,16 @@ public class RightSideBar extends JPanel {
             objetivoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); 
             
             if(cuantoFalta < 0) {
-            	
-            	try {
-					Thread.sleep(2000);
+
+            	try {           	
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
             	int confirm = JOptionPane.showConfirmDialog(
                         objetivosPanel,
-                        "Ha llegado el día, ¿has completado tu objetivo?",
+                        "Ha llegado el día, ¿has completado el objetivo:  "+ objetivo.getNombre()+ "?",
                         "",
                         JOptionPane.YES_NO_OPTION
                        
@@ -248,9 +247,16 @@ public class RightSideBar extends JPanel {
             	 if (confirm == JOptionPane.YES_OPTION) {
                  	BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
                      eliminarObjetivoDePantalla(objetivo, usuario);
-                     JOptionPane.showMessageDialog(null, "¡Felicidades!");
-                 }
-            	 
+                     JOptionPane.showMessageDialog(null, "¡Felicidades! ¡Sigue asi con tus objetivos!");
+                     MainWindow mv = new MainWindow(usuario);
+                     mv.setVisible(true);
+                 }else {
+                	 BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
+                     eliminarObjetivoDePantalla(objetivo, usuario);
+                     JOptionPane.showMessageDialog(null, "¡Animo! ¡No te desmotives y sigue adelante con tus objetivos!");
+                     MainWindow mv = new MainWindow(usuario);
+                     mv.setVisible(true);
+				}
             }
 
             String mensajeConTiempoRestante = "Quedan " + objetivo.getCuantoQueda() + " días";
