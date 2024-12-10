@@ -334,13 +334,12 @@ public class RightSideBar extends JPanel {
 
                 	BDs.updateSaldo(usuario.getNombreUsuario(),(int) (BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
                 	usuario.setSaldo((int) (BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
-<<<<<<< HEAD
                 	BDs.updateSaldo(usuario.getNombreUsuario(), usuario.getSaldo());
                     Navbar.coinAmountLabel.setText(String.valueOf(usuario.getSaldo()));
-=======
+
                     Navbar.coinAmountLabel.setText(String.valueOf(usuario.getSaldo()));                                
                 	System.out.println(BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario()));
->>>>>>> branch 'preUpload' of git@github.com:juanpcomella/tempus.git
+
                 	BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
                     eliminarObjetivoDePantalla(objetivo, usuario);
                     dialog.dispose();
