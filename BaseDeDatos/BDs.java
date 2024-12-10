@@ -465,6 +465,72 @@ public class BDs {
 	}
 		return correoE;
 	}
+	
+	public static void updateUsuario(String usuario, String usuarioNuevo) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+		}
+		Connection connection = null;
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+			
+	        String sql = "UPDATE usuarios SET username = ? WHERE username = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setString(1, usuarioNuevo);
+	        preparedStatement.setString(2, usuario);
+	        
+	        preparedStatement.executeUpdate();
+
+
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+			
+	}
+	
+	
+	
+	public static void updateEmail(String usuario, String nuevoEmail) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+		}
+		Connection connection = null;
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+			
+	        String sql = "UPDATE usuarios SET email = ? WHERE username = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setString(1, nuevoEmail);
+	        preparedStatement.setString(2, usuario);
+	        
+	        preparedStatement.executeUpdate();
+
+
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+			
+	}
 	public static void updateSaldo(String usuario, int nuevoSaldo) {
 		try {
 			Class.forName("org.sqlite.JDBC");
