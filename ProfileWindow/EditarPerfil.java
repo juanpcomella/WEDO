@@ -65,6 +65,14 @@ public class EditarPerfil extends JFrame {
         JButton cambiarMoneda = new JButton("Cambiar moneda");
         cambiarMoneda.setAlignmentX(Component.CENTER_ALIGNMENT);
         cambiarMoneda.setFont(new Font("Arial", Font.PLAIN, 16));
+        cambiarMoneda.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Abrir la ventana de selección de íconos
+                SeleccionarMoneda ventanaSeleccion = new SeleccionarMoneda(usuario);
+                ventanaSeleccion.setVisible(true);
+            }
+        });
         cambiarDatos.add(cambiarMoneda);
 
         JTextField username = new JTextField(usuario.getNombreUsuario(), SwingConstants.CENTER); // Align right
