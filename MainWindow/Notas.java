@@ -20,7 +20,7 @@ public class Notas extends JFrame {
 	String txt_editado;
 	int numero_vistas;
 	Notas nota;
-	
+	JButton botonPagina;
 	JTextPane apuntePane;
 	JTextField tituloL;
     public Notas(String titulo,String txt) {
@@ -183,29 +183,60 @@ public class Notas extends JFrame {
         //createN.setBackground(azulOscuro);
         //createN.setForeground(colorTurquesa);
         
+        JPanel panelDcha = new JPanel (new BorderLayout());
+        JButton volver = new JButton("Volver");
+        
+       
+        
+        
+        
+        panelDcha.add(volver, BorderLayout.NORTH);
+        add(panelDcha, BorderLayout.WEST);
+        
+        
+        
         panelCrear.add(Box.createVerticalStrut(10));
 
         
         add(panelCrear, BorderLayout.EAST);
         
         Map<JButton, Notas> notasMap = new HashMap<>();
+        
+        volver.addActionListener(b -> {
+        	this.setVisible(false);
+        	this.titulo_editado = this.tituloL.getText();
+            this.txt_editado = this.apuntePane.getText();
+            this.botonPagina.setText(this.titulo_editado);
+            notasMap.put(this.botonPagina, this);
+            
+            
+        });
 
         // Acción para crear nuevas páginas
         createN.addActionListener(e -> {
 String input = JOptionPane.showInputDialog(null, "Escribe el título de la página:", "Crear Página", JOptionPane.QUESTION_MESSAGE);
             
             if (input != null && !input.trim().isEmpty()) {
-                JButton botonPagina = new JButton(input);
+            	
+            	
+            	
+                botonPagina = new JButton(input);
                 //botonPagina.setBackground(azulOscuro);
                 //botonPagina.setForeground(colorTurquesa);
                 String strVacio = "";
+                
                 botonPagina.addActionListener(a -> {
                     nota = notasMap.get(botonPagina);
                     if (nota == null) {
                         nota = new Notas(input, strVacio);
+                        
                         notasMap.put(botonPagina, nota);
+                        
+                        
                     }
                     nota.setVisible(true);
+                    
+                    
                     nota.addWindowListener(new WindowAdapter() {
                         @Override
                         public void windowClosing(WindowEvent e) {
@@ -216,7 +247,10 @@ String input = JOptionPane.showInputDialog(null, "Escribe el título de la pági
                             botonPagina.setText(nota.titulo_editado);
                             notasMap.put(botonPagina, nota);
                         }
+                    
                     });
+                    
+                    
                 });
                 botonPagina.addMouseListener(new MouseAdapter() {
                     @Override
@@ -248,14 +282,21 @@ String input = JOptionPane.showInputDialog(null, "Escribe el título de la pági
                 panelCrear.add(Box.createVerticalStrut(10)); // Espacio entre botones
                 panelCrear.revalidate();
                 panelCrear.repaint();
+                
             }
+            
+          //panel de la derecha del todo:
+            
         });
       
             
+        
+        
+        }
             
          
     
-    }
+    
             
             
            
