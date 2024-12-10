@@ -161,6 +161,8 @@ public class LeftSideBar extends JPanel {
         for (Usuario seguido : listaSeguimientos) {
             JButton botonSeguido = new JButton(seguido.getNombreUsuario());
             botonSeguido.setFont(new Font("Arial", Font.PLAIN, 18));
+            botonSeguido.setBackground(new Color(173, 216, 230));
+            botonSeguido.setForeground(Color.BLACK);
             botonSeguido.setPreferredSize(new Dimension(175, 40));
             botonSeguido.setMaximumSize(new Dimension(175, 40));
             botonSeguido.setAlignmentX(Component.CENTER_ALIGNMENT);

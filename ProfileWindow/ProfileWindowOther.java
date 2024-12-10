@@ -108,7 +108,7 @@ public class ProfileWindowOther extends JFrame {
 
         JPanel descriptionPanel = new JPanel();
         descriptionPanel.setBackground(new Color(173, 216, 230)); // Updated color
-        JLabel descriptionLabel = new JLabel("Una descripción del usuario");
+        JLabel descriptionLabel = new JLabel("");
         descriptionLabel.setFont(new Font("Arial", Font.BOLD, 24));
         descriptionPanel.add(descriptionLabel);
         leftPanel.add(descriptionPanel, leftGBC);
