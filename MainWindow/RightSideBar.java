@@ -332,9 +332,9 @@ public class RightSideBar extends JPanel {
 
                 if (confirm == JOptionPane.YES_OPTION) {
                 	
-                	System.out.println(BDs.getMulti(usuario.getNombreUsuario()));
+//                	System.out.println(BDs.getMulti(usuario.getNombreUsuario()));
                 	System.out.println(usuario.getSaldo());
-                	usuario.setSaldo((int) (usuario.getSaldo()+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
+                	usuario.setSaldo(usuario.getSaldo()+70);
                 	System.out.println(usuario.getSaldo());
                     BDs.updateSaldo(usuario.getNombreUsuario(), usuario.getSaldo());
                     Navbar.coinAmountLabel.setText(String.valueOf(usuario.getSaldo()));
@@ -501,7 +501,7 @@ public class RightSideBar extends JPanel {
                                 }
 
                                 //Suma 10 monedas por habito completado
-                                usuario.setSaldo(usuario.getSaldo()+10);
+                                usuario.setSaldo(usuario.getSaldo()+10000);
                                 BDs.updateSaldo(usuario.getNombreUsuario(), usuario.getSaldo());
                                 Navbar.coinAmountLabel.setText(String.valueOf(usuario.getSaldo()));                                
                             } 

@@ -262,8 +262,12 @@ public class VentanaLoginDef extends JFrame {
                             if (option3 == 0) {
                                 String nuevaContraseña = textField3.getText().trim();
                                 if (!nuevaContraseña.isEmpty()) {
+                                	
+                                	System.out.println(BDs.getPassword(usuarioParaContraseña)+"**");
                                 	BDs.deletePassword(usuarioParaContraseña);
+                                	System.out.println(BDs.getPassword(usuarioParaContraseña)+"**");
                                     BDs.updatePassword(usuarioParaContraseña, nuevaContraseña);
+                                	System.out.println(BDs.getPassword(usuarioParaContraseña)+"**");
                                     JOptionPane.showMessageDialog(null, "¡Contraseña actualizada exitosamente!");
                                     contraseñaValida = true;
                                 } else {
