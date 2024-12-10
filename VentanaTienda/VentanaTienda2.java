@@ -20,7 +20,10 @@ import StartingWindows.Usuario;
 
 import java.awt.*;
 import java.security.KeyStore.TrustedCertificateEntry;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 public class VentanaTienda2 extends JFrame {
 
@@ -35,7 +38,6 @@ public class VentanaTienda2 extends JFrame {
     private Map<Integer, Item> itemMapMonedas = new HashMap<>();
 
     public VentanaTienda2(Usuario usuario) {
-        BDs.crearTablaItems();
         BDs.crearTablaCompras();
         //Configuración de la ventana principal
         setTitle("Tienda2");
@@ -86,15 +88,14 @@ public class VentanaTienda2 extends JFrame {
                 // Detectar fila y columna donde está el mouse
                 int row = iconoT.rowAtPoint(e.getPoint());
                 int column = iconoT.columnAtPoint(e.getPoint());
-                Point celda = new Point(row, column);
 
-                // Verificar si la celda no está comprada antes de activar hovered
-                if (column == 1 && !estadoCeldasIcono.getOrDefault(celda, false)) {
+                // Actualizar las variables hoveredRow y hoveredColumn si estamos en la columna de precios
+                if (column == 1) { // Asegurarse de que es la columna de precios
                     hoveredRow = row;
                     hoveredColumn = column;
                 } else {
                     hoveredRow = -1;
-                    hoveredColumn = -1; // Resetear si la celda está comprada
+                    hoveredColumn = -1; // Resetear si el mouse no está sobre la columna
                 }
 
                 // Forzar la actualización de la tabla
@@ -106,7 +107,6 @@ public class VentanaTienda2 extends JFrame {
                 // No se utiliza
             }
         });
-
 
         iconoT.getColumnModel().getColumn(0).setCellRenderer(new ImageCellRenderer());
         iconoT.getColumnModel().getColumn(1).setCellRenderer(new PrecioCellRenderer(estadoCeldasIcono));
@@ -150,7 +150,7 @@ public class VentanaTienda2 extends JFrame {
         panelMonedas.setBackground(Color.CYAN);
         panelMonedas.add(panelMonedaConMargen, BorderLayout.CENTER);
 
-        llenarTablaMonedas(modeloDinero, usuario);
+        llenarTablaMonedas(modeloDinero);
 
         monedasT.addMouseMotionListener(new MouseMotionListener() {
             @Override
@@ -187,7 +187,7 @@ public class VentanaTienda2 extends JFrame {
 
 
         //add(panelMonedas, BorderLayout.CENTER);
-        insertarMonedasBaseDeDatos(usuario);
+        insertarMonedasBaseDeDatos();
 
         for (int i = 0; i < monedasT.getRowCount(); i++) {
             Point celda_comprada = new Point(i, 1);
@@ -226,7 +226,7 @@ public class VentanaTienda2 extends JFrame {
         llenarTablaIconos(modeloIcono, usuario); // Volver a cargar los ítems desde la base de datos
     }
 
-    public void insertarMonedasBaseDeDatos(Usuario usuario) {
+    public void insertarMonedasBaseDeDatos() {
         Item[] monedas = {
                 new Item("ZorroEnLuna", 50, "moneda", "imagenes/zorroenluna.png"),
                 new Item("PizzaAzul", 100, "moneda", "imagenes/pizzaazul.png"),
@@ -252,7 +252,7 @@ public class VentanaTienda2 extends JFrame {
 
         // Forzar la recarga de datos en el modelo de la tabla
         modeloDinero.setRowCount(0); // Limpiar el modelo
-        llenarTablaMonedas(modeloDinero, usuario); // Volver a cargar las monedas desde la base de datos
+        llenarTablaMonedas(modeloDinero); // Volver a cargar las monedas desde la base de datos
     }
 
     private JPanel crearHeaderPanel(String dinero, Usuario usuario) {
@@ -302,63 +302,38 @@ public class VentanaTienda2 extends JFrame {
     }
 
     private void llenarTablaIconos(DefaultTableModel modeloIcono, Usuario usuario) {
+        // Obtener la lista de todos los ítems de tipo "foto" desde la base de datos
         ArrayList<Item> listaItems = BDs.obtenerItemsPorTipo("foto");
-        ArrayList<Item> comprasUsuario = BDs.obtenerCompras(usuario.getNombreUsuario());
 
-        // Crear un HashSet con los nombres de los ítems comprados
-        HashSet<String> nombresComprados = new HashSet<>();
-        for (Item comprado : comprasUsuario) {
-            nombresComprados.add(comprado.getNombreItem());
-        }
-
-        // Limpiar el modelo y el mapa
-        modeloIcono.setRowCount(0);
-        itemMapIconos.clear();
-        estadoCeldasIcono.clear();
-
-        for (int i = 0; i < listaItems.size(); i++) {
-            Item item = listaItems.get(i);
-            itemMapIconos.put(i, item);
-
-            // Verificar si el ítem ya fue comprado
-            boolean comprado = nombresComprados.contains(item.getNombreItem());
-            ImageIcon icono = cargarImagen(item.getContenido(), 80, 80);
-
-            if (comprado) {
-                // Mostrar "Comprado" en la tabla y actualizar el estado
-                modeloIcono.addRow(new Object[]{
-                        icono,
-                        "Comprado"
-                });
-                estadoCeldasIcono.put(new Point(i, 1), true); // Celda marcada como comprada
-            } else {
-                // Mostrar el precio y actualizar el estado
-                modeloIcono.addRow(new Object[]{
-                        icono,
-                        new Object[]{item.getPrecioItem(), cargarImagen("imagenes/coin_sin_fondo.png", 30, 30)}
-                });
-                estadoCeldasIcono.put(new Point(i, 1), false); // Celda no comprada
-            }
-        }
-    }
-
-    private void llenarTablaMonedas(DefaultTableModel modeloDinero, Usuario usuario) {
-        // Obtener la lista de monedas desde la base de datos
-        ArrayList<Item> listaMonedas = BDs.obtenerItemsPorTipo("moneda");
-        ArrayList<Item> comprasUsuario = BDs.obtenerCompras(usuario.getNombreUsuario()); // Obtener compras del usuario
-
-        // Crear una lista con los nombres de los ítems comprados para facilitar la comparación
-        HashSet<String> nombresComprados = new HashSet<>();
-        for (Item comprado : comprasUsuario) {
-            nombresComprados.add(comprado.getNombreItem());
-        }
-
-        if (listaMonedas.isEmpty()) {
-            System.out.println("No hay monedas disponibles para mostrar.");
+        if (listaItems.isEmpty()) {
+            System.out.println("No hay ítems disponibles para mostrar.");
             return;
         }
 
-        // Limpiar el modelo para evitar duplicados si se vuelve a llenar
+        // Limpiar el modelo y el itemMap para evitar duplicados si se vuelve a llenar
+        modeloIcono.setRowCount(0);
+        itemMapIconos.clear();
+
+        for (int i = 0; i < listaItems.size(); i++) {
+            Item item = listaItems.get(i);
+
+            // Agregar el ítem al mapa con la fila como clave
+            itemMapIconos.put(i, item);
+
+            // Procesar el ítem para la tabla
+            ImageIcon icono = cargarImagen(item.getContenido(), 80, 80);
+            modeloIcono.addRow(new Object[]{
+                    icono, // Icono procesado como ImageIcon
+                    new Object[]{item.getPrecioItem(), cargarImagen("imagenes/coin_sin_fondo.png", 30, 30)} // Precio y moneda
+            });
+        }
+    }
+
+    private void llenarTablaMonedas(DefaultTableModel modeloDinero) {
+        // Obtener la lista de monedas desde la base de datos
+        ArrayList<Item> listaMonedas = BDs.obtenerItemsPorTipo("moneda");
+
+        // Limpiar el modelo y el itemMapMonedas para evitar duplicados
         modeloDinero.setRowCount(0);
         itemMapMonedas.clear();
 
@@ -368,25 +343,12 @@ public class VentanaTienda2 extends JFrame {
             // Agregar el ítem al mapa con la fila como clave
             itemMapMonedas.put(i, item);
 
-            // Verificar si el ítem ya fue comprado
-            boolean comprado = nombresComprados.contains(item.getNombreItem());
-
             // Procesar el ítem para la tabla
             ImageIcon icono = cargarImagen(item.getContenido(), 80, 80);
-            if (comprado) {
-                // Si el ítem ya fue comprado, mostrar como "Comprado"
-                modeloDinero.addRow(new Object[]{
-                        icono, // Icono procesado como ImageIcon
-                        "Comprado" // Mostrar el estado como comprado
-                });
-                estadoCeldasMoneda.put(new Point(i, 1), true); // Marcar la celda como comprada
-            } else {
-                modeloDinero.addRow(new Object[]{
-                        icono, // Icono procesado como ImageIcon
-                        new Object[]{item.getPrecioItem(), cargarImagen("imagenes/coin_sin_fondo.png", 30, 30)} // Precio y moneda
-                });
-                estadoCeldasMoneda.put(new Point(i, 1), false); // Marcar la celda como no comprada
-            }
+            modeloDinero.addRow(new Object[]{
+                    icono, // Imagen del ítem procesada como ImageIcon
+                    new Object[]{item.getPrecioItem(), cargarImagen("imagenes/coin_sin_fondo.png", 30, 30)} // Precio y moneda
+            });
         }
     }
 
@@ -424,6 +386,7 @@ public class VentanaTienda2 extends JFrame {
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            JPanel panel = new JPanel();
             Point celda_Render = new Point(row, column);
 
             // Verificar si la celda ya está comprada
@@ -433,36 +396,46 @@ public class VentanaTienda2 extends JFrame {
                 compradoL.setForeground(Color.green);
                 compradoL.setHorizontalAlignment(SwingConstants.CENTER);
                 compradoL.setVerticalAlignment(SwingConstants.CENTER);
-                return compradoL; // Mostrar "Comprado" si ya está comprado
+                return compradoL;
             } else {
-                if (value instanceof Object[]) {
-                    // Mostrar precio y moneda
-                    JPanel panelElements = new JPanel(new GridBagLayout());
-                    GridBagConstraints gbc = new GridBagConstraints();
-                    gbc.insets = new Insets(0, 1, 0, 1);
-                    gbc.gridy = 0;
-                    gbc.weightx = 0.0;
-                    gbc.anchor = GridBagConstraints.CENTER;
+                // Mostrar botón "Comprar" cuando la celda está resaltada
+                if (column == hoveredColumn && row == hoveredRow) {
+                    JButton boton = new JButton("Comprar");
+                    boton.setBackground(new Color(255, 215, 0));
+                    boton.setFont(new Font("Arial", Font.BOLD, 24));
+                    return boton;
+                } else {
+                    if (value instanceof Object[]) {
+                        // Crear un panel con GridBagLayout
+                        JPanel panelElements = new JPanel(new GridBagLayout());
+                        GridBagConstraints gbc = new GridBagConstraints();
+                        gbc.insets = new Insets(0, 1, 0, 1); // Espaciado entre componentes
+                        gbc.gridy = 0; // Misma fila para ambos elementos
+                        gbc.weightx = 0.0; // Evitar expansión horizontal
+                        gbc.anchor = GridBagConstraints.CENTER; // Centrado vertical y horizontal
 
-                    Object[] cellData = (Object[]) value;
+                        Object[] cellData = (Object[]) value;
 
-                    JLabel numberLabel = new JLabel(String.valueOf(cellData[0]));
-                    numberLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
-                    gbc.gridx = 0;
-                    panelElements.add(numberLabel, gbc);
+                        // Crear el JLabel para el número
+                        JLabel numberLabel = new JLabel(String.valueOf(cellData[0]));
+                        numberLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
+                        gbc.gridx = 0; // Columna izquierda
+                        panelElements.add(numberLabel, gbc);
 
-                    if (cellData[1] instanceof Icon) {
-                        JLabel iconLabel = new JLabel((Icon) cellData[1]);
-                        gbc.gridx = 1;
-                        panelElements.add(iconLabel, gbc);
+                        // Crear el JLabel para el ícono
+                        if (cellData[1] instanceof Icon) {
+                            JLabel iconLabel = new JLabel((Icon) cellData[1]);
+                            gbc.gridx = 1; // Columna derecha
+                            panelElements.add(iconLabel, gbc);
+                        }
+
+                        return panelElements;
                     }
-                    return panelElements;
                 }
             }
-            return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            return panel;
         }
     }
-
 
     private class ButtonCellEditor extends AbstractCellEditor implements TableCellEditor {
         private JPanel panel;
@@ -486,51 +459,79 @@ public class VentanaTienda2 extends JFrame {
             button.setFont(new Font("Arial", Font.BOLD, 24));
 
             button.addActionListener(e -> {
+                // Obtener la celda seleccionada
                 int selectedRow = table.getSelectedRow();
                 int selectedColumn = table.getSelectedColumn();
                 celda = new Point(selectedRow, selectedColumn);
 
-                if (!estadoCeldas.getOrDefault(celda, false)) {
-                    // Proceso de compra
-                    Object cellValue = table.getValueAt(selectedRow, 1);
-                    int precio = 0;
-                    if (cellValue instanceof Object[]) {
-                        Object[] cellData = (Object[]) cellValue;
-                        if (cellData[0] instanceof Integer) {
-                            precio = (Integer) cellData[0];
-                        }
+                // Obtener el precio de la celda seleccionada
+                Object cellValue = table.getValueAt(selectedRow, 1);
+                int precio = 0;
+                if (cellValue instanceof Object[]) {
+                    Object[] cellData = (Object[]) cellValue;
+                    if (cellData[0] instanceof Integer) {
+                        precio = (Integer) cellData[0];
                     }
+                }
 
-                    if (money >= precio) {
-                        int respuesta = JOptionPane.showConfirmDialog(
-                                null,
-                                "¿Desea comprar por " + precio + " monedas?",
-                                "Comprar",
-                                JOptionPane.YES_NO_OPTION,
-                                JOptionPane.INFORMATION_MESSAGE
-                        );
+                // Verificar si hay suficiente dinero
+                if (money >= precio) {
+                    int respuesta = JOptionPane.showConfirmDialog(
+                            null,
+                            "¿Desea comprar por " + precio + " monedas?",
+                            "Comprar",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+                    if (respuesta == JOptionPane.YES_OPTION) {
+                        comprado = new JLabel("Comprado");
+                        comprado.setFont(new Font("Arial", Font.BOLD, 24));
+                        comprado.setForeground(Color.green);
+                        comprado.setHorizontalAlignment(SwingConstants.CENTER);
+                        comprado.setVerticalAlignment(SwingConstants.CENTER);
+                        System.out.println("Compra realizada.");
 
-                        if (respuesta == JOptionPane.YES_OPTION) {
-                            money -= precio;
-                            usuario.setSaldo(money);
-                            BDs.updateSaldo(usuario.getNombreUsuario(), usuario.getSaldo());
-                            estadoCeldas.put(celda, true); // Marcar como comprado
-                            table.setValueAt("Comprado", selectedRow, selectedColumn); // Actualizar celda visual
-                            table.repaint();
-                            JOptionPane.showMessageDialog(null, "¡Compra realizada!");
+                        // Restar dinero y actualizar el saldo del usuario
+                        money -= precio;
+                        usuario.setSaldo(money);
+                        BDs.updateSaldo(usuario.getNombreUsuario(), usuario.getSaldo());
+                        estadoCeldas.put(celda, true);
+
+                        // Agregar item comprado a la base de datos de items comprados.
+                        Item itemComprado = itemMap.get(selectedRow); // Obtener el ítem correspondiente
+                        if (itemComprado != null) {
+                            BDs.insertarCompra(
+                                    usuario.getNombreUsuario(),
+                                    itemComprado.getNombreItem(),
+                                    itemComprado.getPrecioItem(),
+                                    itemComprado.getTipoItem(),
+                                    itemComprado.getContenido()
+                            );
+                            System.out.println("Item registrado: " + itemComprado.getNombreItem());
+                        } else {
+                            System.err.println("Error: No se encontró el ítem correspondiente para la fila " + selectedRow);
                         }
+
+
+                        // Actualizar la celda con "Comprado"
+                        table.setValueAt(comprado, selectedRow, selectedColumn);
+                        table.repaint();
+
+                        JOptionPane.showMessageDialog(null, "¡Compra realizada!");
                     } else {
-                        JOptionPane.showMessageDialog(
-                                null,
-                                "Dinero insuficiente",
-                                "Error",
-                                JOptionPane.ERROR_MESSAGE
-                        );
+                        System.out.println("Compra cancelada.");
                     }
+                } else {
+                    int dinero_faltante = (money - precio) * (-1);
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Dinero insuficiente, te faltan " + dinero_faltante + " monedas",
+                            "Error, compra no realizada",
+                            JOptionPane.ERROR_MESSAGE
+                    );
                 }
                 fireEditingStopped();
             });
-
 
             panel = new JPanel(new BorderLayout());
             panel.add(button, BorderLayout.CENTER);
@@ -539,34 +540,19 @@ public class VentanaTienda2 extends JFrame {
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
             celda = new Point(row, column);
+            valorOriginal = value;
 
-            // Verificar si el ítem está marcado como comprado
-            if (estadoCeldas.getOrDefault(celda, false)) {
+            if (estadoCeldas.getOrDefault(celda, true)) {
                 JLabel compradoL = new JLabel("Comprado");
                 compradoL.setFont(new Font("Arial", Font.BOLD, 24));
                 compradoL.setForeground(Color.green);
                 compradoL.setHorizontalAlignment(SwingConstants.CENTER);
                 compradoL.setVerticalAlignment(SwingConstants.CENTER);
-                return compradoL; // Retorna un JLabel para celdas compradas
+                return compradoL;
             } else {
-                return panel; // Retorna el botón solo si no está comprado
+                return panel;
             }
         }
-
-        @Override
-        public boolean isCellEditable(EventObject e) {
-            if (e instanceof MouseEvent) {
-                MouseEvent me = (MouseEvent) e;
-                int row = table.rowAtPoint(me.getPoint());
-                int column = table.columnAtPoint(me.getPoint());
-                Point celda = new Point(row, column);
-
-                // Si la celda está comprada, no permitir la edición
-                return !estadoCeldas.getOrDefault(celda, false);
-            }
-            return false;
-        }
-
 
         @Override
         public Object getCellEditorValue() {
@@ -584,7 +570,8 @@ public class VentanaTienda2 extends JFrame {
 
     public static void main(String[] args) {
         BDs.crearTablaItems();
-        Usuario usuario = new Usuario(null, null, null);
+        String user = "juanpcomella";
+        Usuario usuario = BDs.obtenerUsuario(user);
         VentanaTienda2 ventana = new VentanaTienda2(usuario);
         ventana.setVisible(true);
     }
