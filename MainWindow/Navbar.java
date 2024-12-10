@@ -5,7 +5,7 @@ import ProfileWindow.ProfileWindowOther;
 import ProfileWindow.ProfileWindowSelf;
 import StartingWindows.Usuario;
 import VentanaTienda.VentanaTienda;
-
+import VentanaTienda.VentanaTienda2;
 
 import javax.swing.*;
 import java.awt.*;
@@ -150,7 +150,7 @@ public class Navbar extends JPanel {
         shopIcon.setContentAreaFilled(false);
         shopIcon.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                VentanaTienda ventanaTienda = new VentanaTienda(usuario);
+                VentanaTienda2 ventanaTienda = new VentanaTienda2(usuario);
                 ventanaTienda.setLocationRelativeTo(null);
                 ventanaTienda.setVisible(true);
                 ((JFrame) SwingUtilities.getWindowAncestor(shopIcon)).dispose();
