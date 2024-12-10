@@ -108,7 +108,7 @@ public class ProfileWindowOther extends JFrame {
 
         JPanel descriptionPanel = new JPanel();
         descriptionPanel.setBackground(new Color(173, 216, 230)); // Updated color
-        JLabel descriptionLabel = new JLabel("Una descripción del usuario");
+        JLabel descriptionLabel = new JLabel("");
         descriptionLabel.setFont(new Font("Arial", Font.BOLD, 24));
         descriptionPanel.add(descriptionLabel);
         leftPanel.add(descriptionPanel, leftGBC);
@@ -303,7 +303,7 @@ public class ProfileWindowOther extends JFrame {
         activityPanel.setLayout(new BorderLayout());
 
         // Table Label
-        JLabel activityLabel = new JLabel("Tus próximas actividades", SwingConstants.CENTER);
+        JLabel activityLabel = new JLabel("Próximas actividades de "+ usuarioBusqueda.getNombreUsuario(), SwingConstants.CENTER);
         activityLabel.setForeground(new Color(50, 70, 90));
         activityLabel.setFont(new Font("Arial", Font.BOLD, 24));
         activityLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));

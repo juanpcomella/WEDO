@@ -133,7 +133,9 @@ public class Navbar extends JPanel {
         gbc.weightx = 0;
         add(coinIcon, gbc);
 
-        coinAmountLabel = new JLabel(Integer.toString(usuario.getSaldo()));
+        int saldo = BDs.getSaldo(usuario.getNombreUsuario()); 
+        coinAmountLabel = new JLabel(Integer.toString(saldo));
+
         coinAmountLabel.setFont(new Font("Arial", Font.BOLD, 20));
         coinAmountLabel.setForeground(new Color(50, 70, 90));
         gbc.gridx++;
