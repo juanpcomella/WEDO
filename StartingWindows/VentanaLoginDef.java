@@ -1,5 +1,6 @@
 package StartingWindows;
 
+import MainWindow.Habito;
 import MainWindow.MainWindow;
 
 import javax.swing.*;
@@ -12,12 +13,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 public class VentanaLoginDef extends JFrame {
 
     private static final long serialVersionUID = 1L;
-
 
 	public VentanaLoginDef() {
         setTitle("WEDO - Inicio de sesión");
@@ -69,8 +71,9 @@ public class VentanaLoginDef extends JFrame {
         introducirDatos.setFont(new Font("Tahoma", Font.BOLD, 30));
         gbc.gridy = 1;
         gbc.insets = new Insets(5, 10, 20, 10);
+        introducirDatos.setForeground(new Color(50, 70, 90));
         datos.add(introducirDatos, gbc);
-
+        
         gbc.gridwidth = 1;
 
         JLabel username = new JLabel("Usuario / Email");
@@ -105,7 +108,7 @@ public class VentanaLoginDef extends JFrame {
         gbc.insets = new Insets(0, 10, 5, 10);
         datos.add(passwordTF, gbc);
 
-        JCheckBox recuerdame = new JCheckBox("Recuérdame");
+        JLabel recuerdame = new JLabel("");
 		recuerdame.setForeground(new Color(50, 70, 90));
 		recuerdame.setOpaque(false);
         recuerdame.setFont(new Font("Arial", Font.ITALIC, 16));
@@ -138,7 +141,11 @@ public class VentanaLoginDef extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				 // Crear un JTextField
+				String usuarioParaContraseña = null;
                 JTextField textField = new JTextField(15); // Ancho de 15 columnas
+                JTextField textField2 = new JTextField(15); // Ancho de 15 columnas
+                JTextField textField3 = new JTextField(15); // Ancho de 15 columnas
+
 
                 // Mostrar el JOptionPane con el JTextField
                 int option = JOptionPane.showOptionDialog(
@@ -155,19 +162,130 @@ public class VentanaLoginDef extends JFrame {
                 	String correoRep = null;
                 	String correoOuserDeRecuperacion = textField.getText();
                 	if(BDs.usuarioExistente(correoOuserDeRecuperacion)) {
-                		correoRep = BDs.getEmail(correoOuserDeRecuperacion);
-                        JOptionPane.showMessageDialog(null,"Correo enviado.");
+                		usuarioParaContraseña = correoOuserDeRecuperacion;
+                		correoRep = BDs.getEmail(correoOuserDeRecuperacion); 
+                		BDs.crearTablaCodigosDeVerificacionTemporales();
                 		EnviarCorreoRecuperacion.enviarCorreo(correoRep);
+                		boolean codigoCorrecto = false;
+                        while (!codigoCorrecto) {
+                            int option2 = JOptionPane.showOptionDialog(
+                                    panel,
+                                    new Object[]{"Introduce el código de verificación:", textField2},
+                                    "",
+                                    JOptionPane.OK_CANCEL_OPTION,
+                                    JOptionPane.PLAIN_MESSAGE,
+                                    null,
+                                    new Object[]{"Aceptar"}, // Botón personalizado
+                                    "Aceptar"
+                            );
+
+                            if (option2 == 0) {
+                                String codigoIngresado = textField2.getText();
+                                if (codigoIngresado.equals(BDs.obtenerCodigoDeVerificacion(correoRep))) {
+                                    codigoCorrecto = true;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Código de verificación incorrecto. Inténtalo de nuevo.");
+                                }
+                            } else {
+                                return; // Cancelar
+                            }
+                        }
+                        boolean contraseñaValida = false;
+                        while (!contraseñaValida) {
+                            int option3 = JOptionPane.showOptionDialog(
+                                    panel,
+                                    new Object[]{"Introduce tu nueva contraseña:", textField3},
+                                    "",
+                                    JOptionPane.OK_CANCEL_OPTION,
+                                    JOptionPane.PLAIN_MESSAGE,
+                                    null,
+                                    new Object[]{"Aceptar"}, // Botón personalizado
+                                    "Aceptar"
+                            );
+
+                            if (option3 == 0) {
+                                String nuevaContraseña = textField3.getText().trim();
+                                if (!nuevaContraseña.isEmpty()) {
+                                    BDs.updatePassword(usuarioParaContraseña, nuevaContraseña);
+                                    JOptionPane.showMessageDialog(null, "¡Contraseña actualizada exitosamente!");
+                                    contraseñaValida = true;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Introduce una contraseña válida.");
+                                }
+                            } else {
+                                return; // Cancelar
+                            }
+                        }
                 	}else if(BDs.emailExistente(correoOuserDeRecuperacion)) {
+                		usuarioParaContraseña = BDs.getUsuarioMedianteCorreo(correoOuserDeRecuperacion);
                 		correoRep = correoOuserDeRecuperacion;
-                        JOptionPane.showMessageDialog(null,"Correo enviado.");
+                		BDs.crearTablaCodigosDeVerificacionTemporales();
                 		EnviarCorreoRecuperacion.enviarCorreo(correoRep);
+                		boolean codigoCorrecto = false;
+                        while (!codigoCorrecto) {
+                            int option2 = JOptionPane.showOptionDialog(
+                                    panel,
+                                    new Object[]{"Introduce el código de verificación:", textField2},
+                                    "",
+                                    JOptionPane.OK_CANCEL_OPTION,
+                                    JOptionPane.PLAIN_MESSAGE,
+                                    null,
+                                    new Object[]{"Aceptar"}, // Botón personalizado
+                                    "Aceptar"
+                            );
+
+                            if (option2 == 0) {
+                                String codigoIngresado = textField2.getText();
+                                if (codigoIngresado.equals(BDs.obtenerCodigoDeVerificacion(correoRep))) {
+                                    codigoCorrecto = true;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Código de verificación incorrecto. Inténtalo de nuevo.");
+                                }
+                            } else {
+                                return; // Cancelar
+                            }
+                        }
+                    	//HAY QUE HACER CAMBIOS
+                        boolean contraseñaValida = false;
+                        while (!contraseñaValida) {
+                            int option3 = JOptionPane.showOptionDialog(
+                                    panel,
+                                    new Object[]{"Introduce tu nueva contraseña:", textField3},
+                                    "",
+                                    JOptionPane.OK_CANCEL_OPTION,
+                                    JOptionPane.PLAIN_MESSAGE,
+                                    null,
+                                    new Object[]{"Aceptar"}, // Botón personalizado
+                                    "Aceptar"
+                            );
+
+                            if (option3 == 0) {
+                                String nuevaContraseña = textField3.getText().trim();
+                                if (!nuevaContraseña.isEmpty()) {
+                                	
+                                	System.out.println(BDs.getPassword(usuarioParaContraseña)+"**");
+                                	BDs.deletePassword(usuarioParaContraseña);
+                                	System.out.println(BDs.getPassword(usuarioParaContraseña)+"**");
+                                    BDs.updatePassword(usuarioParaContraseña, nuevaContraseña);
+                                	System.out.println(BDs.getPassword(usuarioParaContraseña)+"**");
+                                    JOptionPane.showMessageDialog(null, "¡Contraseña actualizada exitosamente!");
+                                    contraseñaValida = true;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Introduce una contraseña válida.");
+                                }
+                            } else {
+                                return; // Cancelar
+                            }
+                        }
                 	}else {
-                        JOptionPane.showMessageDialog(null,"Usuario no encontrado.");
+                        JOptionPane.showMessageDialog(null,"Usuario o correo no encontrados.");
                 	}
+                	
                 }
+                
 			}
         });
+        
 
         gbc.gridy = 7;
         datos.add(olvidado, gbc);
@@ -185,6 +303,7 @@ public class VentanaLoginDef extends JFrame {
                 String passwordUser = new String(passwordTF.getPassword());
                 if(!BDs.usuarioExistente(usernameUser) & !BDs.emailExistente(usernameUser)) {
                     	JOptionPane.showMessageDialog(null,"Nombre de usuario o contraseña incorrectos.");
+                    	//metodos bbdd
                 }else if(!BDs.contraseñaExistente(passwordUser)) {
                 	JOptionPane.showMessageDialog(null,"Nombre de usuario o contraseña incorrectos.");
                 }else {
@@ -202,6 +321,7 @@ public class VentanaLoginDef extends JFrame {
                 	}else {
                 		usuario.setCorreo(BDs.getEmail(usernameUser));
                 	}
+                    usuario.setSaldo(BDs.getSaldo(usuario.getNombreUsuario()));
                   	MainWindow mw = new MainWindow(usuario);
                     mw.setVisible(true);
                     dispose();

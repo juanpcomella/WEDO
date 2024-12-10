@@ -16,6 +16,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import BaseDeDatos.BDs;
 import MainWindow.MainWindow;
 
 public class ventanaCuestionario extends JFrame {
@@ -250,92 +251,6 @@ logo.setAlignmentX(CENTER_ALIGNMENT);
         Font fuente = new Font("Tahoma", Font.BOLD, 20);  // Fuente grande
         Font fuente2 = new Font("Tahoma", Font.BOLD, 15);
        
-        //JLabel que va a indicar la opcion de alcohol
-        JLabel alcoL = new JLabel ("Consumo de alcohol:   ");
-        JSlider sliderAlc = new JSlider(JSlider.HORIZONTAL, 0, 4, 2);
-        sliderAlc.setMajorTickSpacing(20); // Espaciado principal (marcas grandes)
-        sliderAlc.setMinorTickSpacing(5);  // Espaciado menor (marcas pequeñas)
-        sliderAlc.setPaintTicks(true);     // Mostrar las marcas
-        sliderAlc.setPaintLabels(true);    // Mostrar las etiquetas de los valores
-        sliderAlc.setOpaque(false);
-        sliderAlc.setPreferredSize(new Dimension(550, 50));
-        JLabel espacioAlc = new JLabel("  ");
-        espacioAlc.setOpaque(false);
-       
-        Hashtable<Integer, JLabel> labelTableAlc = new Hashtable<>();
-        JLabel abstemio = new JLabel("Abstemio");
-        abstemio.setFont(fuente2);
-        abstemio.setForeground(new Color(50,70,90));
-        JLabel bajo = new JLabel("Bajo");
-        bajo.setFont(fuente2);
-        bajo.setForeground(new Color(50,70,90));
-        JLabel medio = new JLabel("Medio");
-        medio.setFont(fuente2);
-        medio.setForeground(new Color(50,70,90));
-        JLabel alto = new JLabel("Alto");
-        alto.setFont(fuente2);
-        alto.setForeground(new Color(50,70,90));
-        JLabel muyAlto = new JLabel("Muy alto");
-        muyAlto.setFont(fuente2);
-        muyAlto.setForeground(new Color(50,70,90));
-
-        labelTableAlc.put(0, abstemio);
-        labelTableAlc.put(1, bajo);
-        labelTableAlc.put(2, medio);
-        labelTableAlc.put(3, alto);
-        labelTableAlc.put(4, muyAlto);
-
-        sliderAlc.setLabelTable(labelTableAlc);
-        sliderAlc.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                puntosAlc = (labelTableAlc.get(sliderAlc.getValue())).getText();
-            }
-        });
-       
-        //JLabel que va a indicar la opcion de fumar
-        JLabel fumarL = new JLabel ("Consumo de tabaco:      ");
-        JSlider sliderTab = new JSlider(JSlider.HORIZONTAL, 0, 4, 2);
-        sliderTab.setMajorTickSpacing(20); // Espaciado principal (marcas grandes)
-        sliderTab.setMinorTickSpacing(5);  // Espaciado menor (marcas pequeñas)
-        sliderTab.setPaintTicks(true);     // Mostrar las marcas
-        sliderTab.setPaintLabels(true);    // Mostrar las etiquetas de los valores
-        sliderTab.setOpaque(false);
-        sliderTab.setPreferredSize(new Dimension(550, 50));
-        JLabel espacioTab = new JLabel("  ");
-        espacioTab.setOpaque(false);
-       
-        Hashtable<Integer, JLabel> labelTableTab = new Hashtable<>();
-        JLabel abstemio2 = new JLabel("Abstemio");
-        abstemio2.setFont(fuente2);
-        abstemio2.setForeground(new Color(50,70,90));
-        JLabel bajo2 = new JLabel("Bajo");
-        bajo2.setFont(fuente2);
-        bajo2.setForeground(new Color(50,70,90));
-        JLabel medio2 = new JLabel("Medio");
-        medio2.setFont(fuente2);
-        medio2.setForeground(new Color(50,70,90));
-        JLabel alto2 = new JLabel("Alto");
-        alto2.setFont(fuente2);
-        alto2.setForeground(new Color(50,70,90));
-        JLabel muyAlto2 = new JLabel("Muy alto");
-        muyAlto2.setFont(fuente2);
-        muyAlto2.setForeground(new Color(50,70,90));
-
-        labelTableTab.put(0, abstemio2);
-        labelTableTab.put(1, bajo2);
-        labelTableTab.put(2, medio2);
-        labelTableTab.put(3, alto2);
-        labelTableTab.put(4, muyAlto2);
-
-        sliderTab.setLabelTable(labelTableTab);
-        sliderAlc.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                puntosTab = (labelTableTab.get(sliderTab.getValue())).getText();
-            }
-        });
-       
         //JLabel que va a indicar la opcion de sueño
         JLabel sueñoL = new JLabel ("Horas de sueño: ");
        
@@ -394,14 +309,14 @@ hombreC.setSelected(false);
         panelNutricion.add(selectNutricion);
        
         //añadimos los elementos al panelAlc
-        panelAlc.add(alcoL);
-        panelAlc.add(espacioAlc);
-        panelAlc.add(sliderAlc);
-       
-        //añadimos los elementos al panelFumar
-        panelFumar.add(fumarL);
-        panelAlc.add(espacioTab);
-        panelFumar.add(sliderTab);
+//        panelAlc.add(alcoL);
+//        panelAlc.add(espacioAlc);
+//        panelAlc.add(sliderAlc);
+//       
+//        //añadimos los elementos al panelFumar
+//        panelFumar.add(fumarL);
+//        panelAlc.add(espacioTab);
+//        panelFumar.add(sliderTab);
        
         //añadimos los elementos al panelSueño
         panelSueño.add(sueñoL);
@@ -428,10 +343,6 @@ hombreC.setSelected(false);
         panelFinal.add(Box.createVerticalStrut(40));
         panelFinal.add(panelNutricion);
         panelFinal.add(Box.createVerticalStrut(60));
-        panelFinal.add(panelAlc);
-        panelFinal.add(Box.createVerticalStrut(60));
-        panelFinal.add(panelFumar);
-        panelFinal.add(Box.createVerticalStrut(60));
         panelFinal.add(panelSueño);
         panelFinal.add(Box.createVerticalStrut(60));
         panelFinal.add(panelOE);
@@ -454,8 +365,8 @@ hombreC.setSelected(false);
      deporteL.setFont(fuente);
      trabajoL.setFont(fuente);
      nutricionL.setFont(fuente);
-     alcoL.setFont(fuente);
-     fumarL.setFont(fuente);
+//     alcoL.setFont(fuente);
+//     fumarL.setFont(fuente);
      sueñoL.setFont(fuente);
 fechaNacL.setForeground(new Color(50,70,90));
 sexoL.setForeground(new Color(50,70,90));
@@ -466,8 +377,8 @@ alturaL.setForeground(new Color(50,70,90));
 deporteL.setForeground(new Color(50,70,90));
 trabajoL.setForeground(new Color(50,70,90));
 nutricionL.setForeground(new Color(50,70,90));
-alcoL.setForeground(new Color(50,70,90));
-fumarL.setForeground(new Color(50,70,90));
+//alcoL.setForeground(new Color(50,70,90));
+//fumarL.setForeground(new Color(50,70,90));
 sueñoL.setForeground(new Color(50,70,90));
 
 
@@ -642,33 +553,7 @@ puntos+=0;
 puntos-=2;
 }
 
-//caso alcohol
-//cierto que los casos "excesivo","moderado" pueden ser muy relativos, pero es a considerar
-//por el usuario
-if (puntosAlc.equals("Muy alto")) {
-puntos-=2;
-} else if (puntosAlc.equals("Alto")) {
-puntos-=1;
-} else if (puntosAlc.equals("Medio")) {
-puntos+=0;
-} else if(puntosAlc.equals("Bajo")){
-puntos+=1;
-}else {
-puntos += 2;
-}
 
-//caso fumar
-if (puntosTab.equals("Muy alto")) {
-puntos-=2;
-} else if (puntosTab.equals("Alto")) {
-puntos-=1;
-} else if (puntosTab.equals("Medio")) {
-puntos+=0;
-} else if(puntosTab.equals("Bajo")){
-puntos+=1;
-}else {
-puntos += 2;
-}
 
 //caso dormir:
 if (opcionSue==0) {
@@ -696,21 +581,19 @@ puntos-=1;
 } else {
 puntos-=2;
 }
-//ahora dependiendo de los puntos que tenga el usuario, estara en un rango o en otro
-if (puntos < -5) {
-   rango = "Principiante";
-} else if (puntos >= -5 && puntos <= 0) {
-   rango = "Seminovato";
-} else if (puntos >= 1 && puntos <= 5) {
-   rango = "Normal";
-} else if (puntos >= 6 && puntos <= 8) {
-   rango = "Avanzado";
-} else {
-   rango = "Ultraavanzado";
-}
 
-//System.out.println("Tu rango es: " + rango);
-//System.out.println("Has obtenido " + puntos+ " puntos");
+double multiplicador;
+if(puntos > -10 & puntos <-5) {
+	multiplicador = 0.7;
+}else if(puntos > -5 & puntos < 0) {
+	multiplicador = 0.8;
+}else if(puntos > 0 & puntos < 5){
+	multiplicador = 1.2;
+}else {
+	multiplicador = 1.3;
+}
+//BDs.updateMultiplicador(usuario.getNombreUsuario(), multiplicador);
+
 }
    
     });
@@ -723,27 +606,14 @@ public void actionPerformed(ActionEvent e) {
 int respuesta = JOptionPane.showConfirmDialog(null, "¿Desea omitir el cuestionario?","Omitir",
 JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE );
 if (respuesta == JOptionPane.YES_OPTION) {
+//BDs.updateMultiplicador(usuario.getNombreUsuario(), 1);
+//System.out.println(BDs.getMulti(usuario.getNombreUsuario())+"**");
 MainWindow ventanaPrincipal = new MainWindow(usuario);
 ventanaPrincipal.setVisible(true);
 dispose();
 }
 }
 });
-    }//udue+
-   /*
-    public static void main(String[] args) {
-            try {
-                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            } catch (Exception e) {
-                    e.printStackTrace();
-            }
-
-            SwingUtilities.invokeLater(() -> {
-                    ventanaCuestionario ventana = new ventanaCuestionario(usuario);
-                    ventana.setVisible(true);
-            });
-
     }
 
-    */
 }

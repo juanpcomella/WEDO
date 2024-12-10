@@ -18,9 +18,9 @@ public class MainWindow extends JFrame {
 
     public MainWindow(Usuario usuario) {
     	
-    	for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())){
-        	System.out.println(evento.getNombre());
-        }
+//    	for (Evento evento : BDs.crearListaEventosPorUsuario(usuario.getNombreUsuario())){
+//        	System.out.println(evento.getNombre());
+//        }
         setTitle("WEDO");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,11 +45,11 @@ public class MainWindow extends JFrame {
         JPanel panelSur = new JPanel();
         panelSur.setLayout(new BorderLayout());
 
-        LeftSideBar leftSideBar = new LeftSideBar();
+        LeftSideBar leftSideBar = new LeftSideBar(usuario);
         leftSideBar.setPreferredSize(new Dimension(0, getHeight()));
         panelOeste.add(leftSideBar, BorderLayout.CENTER);
 
-        Navbar navbar = new Navbar(leftSideBar, usuario);
+        Navbar navbar = new Navbar(leftSideBar, usuario, this);
         int navbarHeight = (int) (getHeight() * 0.1);
         navbar.setPreferredSize(new Dimension(getWidth(), navbarHeight));
         panelNorte.add(navbar, BorderLayout.CENTER);
@@ -58,8 +58,8 @@ public class MainWindow extends JFrame {
         panelCentro.add(calendario, BorderLayout.CENTER);
 
 
-        RightSideBar rightSideBar = new RightSideBar();
-        int rsbWidth = (int) (getWidth() * 0.1);
+        RightSideBar rightSideBar = new RightSideBar(usuario);
+        int rsbWidth = (int) (getWidth() * 0.3);
         rightSideBar.setPreferredSize(new Dimension(rsbWidth, getHeight()));
         panelEste.add(rightSideBar, BorderLayout.EAST);
 
@@ -75,7 +75,7 @@ public class MainWindow extends JFrame {
                 navbar.setPreferredSize(new Dimension(getWidth(), dynamicHeight));
                 navbar.revalidate();
 
-                int dynamicWidth = (int) (getWidth() * 0.1);
+                int dynamicWidth = (int) (getWidth() * 0.2);
                 rightSideBar.setPreferredSize(new Dimension(dynamicWidth, (getHeight())));
                 rightSideBar.revalidate();
             }

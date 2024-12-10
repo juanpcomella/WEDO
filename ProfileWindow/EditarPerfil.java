@@ -4,6 +4,9 @@ import StartingWindows.Usuario;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import BaseDeDatos.BDs;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,26 +42,37 @@ public class EditarPerfil extends JFrame {
             panel.add(new JLabel("Image not found"), BorderLayout.CENTER);
         }
 
-        JButton cambiarFoto = new JButton("Cambiar foto");
-        cambiarFoto.setAlignmentX(Component.CENTER_ALIGNMENT);
-        cambiarFoto.setFont(new Font("Arial", Font.PLAIN, 16));
-        cambiarFoto.setMargin(new Insets(5, 10, 5, 10));
-        panel.add(cambiarFoto);
 
 
         JPanel cambiarDatos = new JPanel(new GridLayout(5, 2, 10, 10)); // 2 rows, 2 columns, with padding
         cambiarDatos.setAlignmentX(Component.CENTER_ALIGNMENT);
         cambiarDatos.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10)); // Add margins
 
-        JButton cambiarApodo = new JButton("Cambiar apodo");
-        cambiarApodo.setAlignmentX(Component.CENTER_ALIGNMENT);
-        cambiarApodo.setFont(new Font("Arial", Font.PLAIN, 16));
+        JButton cambiarFoto = new JButton("Cambiar foto");
+        cambiarFoto.setAlignmentX(Component.CENTER_ALIGNMENT);
+        cambiarFoto.setFont(new Font("Arial", Font.PLAIN, 16));
+        cambiarFoto.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Abrir la ventana de selección de íconos
+                SeleccionarIconoPerfil ventanaSeleccion = new SeleccionarIconoPerfil(usuario);
+                ventanaSeleccion.setVisible(true);
+            }
+        });
 
-        cambiarDatos.add(cambiarApodo);
+        cambiarDatos.add(cambiarFoto);
 
         JButton cambiarMoneda = new JButton("Cambiar moneda");
         cambiarMoneda.setAlignmentX(Component.CENTER_ALIGNMENT);
         cambiarMoneda.setFont(new Font("Arial", Font.PLAIN, 16));
+        cambiarMoneda.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Abrir la ventana de selección de íconos
+                SeleccionarMoneda ventanaSeleccion = new SeleccionarMoneda(usuario);
+                ventanaSeleccion.setVisible(true);
+            }
+        });
         cambiarDatos.add(cambiarMoneda);
 
         JTextField username = new JTextField(usuario.getNombreUsuario(), SwingConstants.CENTER); // Align right
@@ -79,8 +93,12 @@ public class EditarPerfil extends JFrame {
                     changeUsername.setText("Guardar");
                 }
                 else{
-                    username.setEditable(false);
+                	String nuevoUsuario = username.getText();
+                	BDs.updateUsuario(usuario.getNombreUsuario(), nuevoUsuario);
+                	usuario.setNombreUsuario(nuevoUsuario);
+                	username.setEditable(false);
                     changeUsername.setText("Cambiar username");
+                    
                 }
                 usrEditable[0] = !usrEditable[0];
             }
@@ -105,6 +123,9 @@ public class EditarPerfil extends JFrame {
                     changeEmail.setText("Guardar");
                 }
                 else{
+                	String nuevoEmail = email.getText();
+                	BDs.updateEmail(usuario.getNombreUsuario(), nuevoEmail);
+                	usuario.setCorreo(nuevoEmail);
                     email.setEditable(false);
                     changeEmail.setText("Cambiar email");
                 }
@@ -130,6 +151,9 @@ public class EditarPerfil extends JFrame {
                     changePassword.setText("Guardar");
                 }
                 else{
+                	String nuevaContraseña = String.valueOf(password.getPassword());
+                	BDs.updatePassword(usuario.getNombreUsuario(), nuevaContraseña);
+                	usuario.setContraseña(nuevaContraseña);
                     password.setEditable(false);
                     changePassword.setText("Cambiar contraseña");
                 }
@@ -137,34 +161,36 @@ public class EditarPerfil extends JFrame {
             }
         });
 
-        JTextArea descripcion = new JTextArea();
-        JScrollPane descripcionScrollPane = new JScrollPane(descripcion);
-        descripcion.setFont(new Font("Arial", Font.PLAIN, 16));
-        descripcion.setLineWrap(true);
-        descripcion.setWrapStyleWord(true);
-        descripcion.setEditable(false);
-        cambiarDatos.add(descripcionScrollPane);
+//        JTextArea descripcion = new JTextArea();
+//        JScrollPane descripcionScrollPane = new JScrollPane(descripcion);
+//        descripcion.setFont(new Font("Arial", Font.PLAIN, 16));
+//        descripcion.setLineWrap(true);
+//        descripcion.setWrapStyleWord(true);
+//        descripcion.setEditable(false);
+//        cambiarDatos.add(descripcionScrollPane);
 
-        JButton changeDescripcion = new JButton("Cambiar descripcion");
-        changeDescripcion.setFont(new Font("Arial", Font.PLAIN, 16));
-        changeDescripcion.setMargin(new Insets(5, 10, 5, 10));
-        boolean descEditable[] = {false};
-        changeDescripcion.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(descEditable[0]) {
-                    descripcion.setEditable(true);
-                    changeDescripcion.setText("Guardar");
-                }
-                else{
-                    descripcion.setEditable(false);
-                    changeDescripcion.setText("Cambiar username");
-                }
-                descEditable[0] = !descEditable[0];
-            }
-        });
+//        JButton changeDescripcion = new JButton("Cambiar descripcion");
+//        changeDescripcion.setFont(new Font("Arial", Font.PLAIN, 16));
+//        changeDescripcion.setMargin(new Insets(5, 10, 5, 10));
+//        boolean descEditable[] = {false};
+//        changeDescripcion.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if(descEditable[0]) {
+//                    descripcion.setEditable(true);
+//                    changeDescripcion.setText("Guardar");
+//                }
+//                else{
+//                	String nuevaDescripcion = descripcion.getText();
+//                	
+//                	descripcion.setEditable(false);
+//                    changeDescripcion.setText("Cambiar username");
+//                }
+//                descEditable[0] = !descEditable[0];
+//            }
+//        });
 
-        cambiarDatos.add(changeDescripcion);
+//        cambiarDatos.add(changeDescripcion);
 
         panel.add(cambiarDatos);
 

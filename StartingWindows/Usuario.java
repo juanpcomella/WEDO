@@ -5,6 +5,9 @@ public class Usuario {
 	String nombreUsuario;
 	String correo;
 	String contraseña;
+	int saldo;
+	String fotoPerfil;
+	String rutaMoneda;
 
 	public Usuario(String nombreUsuario, String correo, String contraseña) {
 		super();
@@ -12,6 +15,17 @@ public class Usuario {
 		this.correo = correo;
 		this.contraseña = contraseña;
 	}
+	
+
+	public int getSaldo() {
+		return saldo;
+	}
+
+
+	public void setSaldo(int saldo) {
+		this.saldo = saldo;
+	}
+
 
 	public String getNombreUsuario() {
 		return nombreUsuario;
@@ -35,6 +49,22 @@ public class Usuario {
 
 	public void setContraseña(String contraseña) {
 		this.contraseña = contraseña;
+	}
+
+	public String getFotoPerfil() {
+		return fotoPerfil;
+	}
+
+	public void setFotoPerfil(String fotoPerfil) {
+		this.fotoPerfil = fotoPerfil;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true; // Mismo objeto en memoria
+		if (obj == null || getClass() != obj.getClass()) return false; // Tipos diferentes
+		Usuario usuario = (Usuario) obj;
+		return this.nombreUsuario.equals(usuario.nombreUsuario); // Compara por un identificador único
 	}
 
 	public static void main(String[] args) {

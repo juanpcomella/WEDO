@@ -1,11 +1,20 @@
 package VentanaTienda;
 
 import javax.swing.*;
+
+import java.io.File;
+import java.io.IOException;
+
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
+
+import BaseDeDatos.BDs;
+import MainWindow.MainWindow;
+import MainWindow.Navbar;
+import StartingWindows.Usuario;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -28,7 +37,7 @@ public class VentanaTienda extends JFrame {
     private Map<Point, Boolean> estadoCeldasApodo = new HashMap<>(); //new
 
     private int money;
-    public VentanaTienda() {
+    public VentanaTienda(Usuario usuario) {
         // Configuración de la ventana principal
         setTitle("Tienda");
         setSize(800, 600);
@@ -36,6 +45,8 @@ public class VentanaTienda extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         
         setLayout(new BorderLayout());
+        
+        Color colorPrincipal = new Color(173, 216, 230);
 
         // Marcar el estado de las celdas
         Map<Point, Boolean> estadoCeldasIcono = new HashMap<>();
@@ -103,12 +114,10 @@ public class VentanaTienda extends JFrame {
         //iconoT.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         iconoT.setRowHeight(100);
 
-        //panelIcono.add(new JScrollPane(iconoT), BorderLayout.CENTER);
 
         // Dinero almacenado aquí, luego se hará un parseInt para convertir
-        String dinero = "200";
+        String dinero = Integer.toString(BDs.getSaldo(usuario.getNombreUsuario()));
         
-
         // Parseo de dinero
         money = Integer.parseInt(dinero);
 
@@ -205,14 +214,42 @@ public class VentanaTienda extends JFrame {
 
         JLabel dineroL = new JLabel(icon2);
         JPanel panelNorteIcono = new JPanel();
-        panelNorteIcono.setBackground(new Color(255, 215, 0));
+        panelNorteIcono.setBackground(colorPrincipal);
         JLabel stringDinero = new JLabel(dinero);
         panelNorteIcono.add(dineroL);
         panelNorteIcono.add(stringDinero);
+        
+        JPanel panelNorteIcono2 = new JPanel(new BorderLayout());
+        
+        panelNorteIcono2.setBackground(colorPrincipal);
+        
+        panelNorteIcono2.add(panelNorteIcono,BorderLayout.CENTER);
+        
+        
+        
         JLabel StringmonyL = new JLabel(dinero);
         JLabel StrApodomoney = new JLabel(dinero);
 
-        panelIcono.add(panelNorteIcono, BorderLayout.NORTH);
+        panelIcono.add(panelNorteIcono2, BorderLayout.NORTH);
+        
+        JButton volverB = new JButton("<< Volver");
+        panelNorteIcono2.add(volverB, BorderLayout.WEST);
+        
+        JLabel labelVacio = new JLabel ("esto es jlabel para centrar");//solucion para centrar 
+        labelVacio.setForeground(colorPrincipal);
+        
+        panelNorteIcono2.add(labelVacio, BorderLayout.EAST);
+ 
+        
+        
+        
+        volverB.setForeground(new Color(50, 70, 90));
+        volverB.setFont(new Font("Tahoma", Font.BOLD, 15));
+        volverB.setContentAreaFilled(false);
+        volverB.setBorderPainted(false);
+        volverB.setFocusable(false);
+        
+        // Asi se puede poner el boton de volver a la izquierda del todo
 
         // Renderizador para la columna de "Icono" (solo imagen)
         iconoT.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
@@ -257,6 +294,10 @@ public class VentanaTienda extends JFrame {
                             precio = (Integer) cellData[0];
                         }
                     }
+                    
+//                    String dinero = Integer.toString(BDs.getSaldo(usuario.getNombreUsuario()));                  
+//                    // Parseo de dinero
+//                    money = Integer.parseInt(dinero);
 
                     // Verificar si hay suficiente dinero
                     if (money >= precio) {
@@ -275,8 +316,13 @@ public class VentanaTienda extends JFrame {
                             comprado.setVerticalAlignment(SwingConstants.CENTER);
                             System.out.println("Compra realizada.");
                             money -= precio; // Restar el precio al dinero del usuario
+                            usuario.setSaldo(money);
+                            BDs.updateSaldo(usuario.getNombreUsuario(),usuario.getSaldo());
+                            Navbar.coinAmountLabel.setText(String.valueOf(usuario.getSaldo()));
                             stringDinero.setText(String.valueOf(money));
                             StringmonyL.setText(String.valueOf(money));
+                            StrApodomoney.setText(String.valueOf(money));
+                            
                             
                             estadoCeldas.put(celda, true);
                             table.setValueAt(comprado, selectedRow, selectedColumn);
@@ -456,7 +502,7 @@ public class VentanaTienda extends JFrame {
                         }
                     }
                 }
-                return panel; // Retornar un panel vacío si no hay datos
+                return panel; 
             }
         });
         
@@ -500,8 +546,34 @@ public class VentanaTienda extends JFrame {
         JLabel icoinmony = new JLabel(icon2);
         panelNorteMonedas.add(icoinmony);
         panelNorteMonedas.add(StringmonyL);
-        panelTematica.add(panelNorteMonedas, BorderLayout.NORTH);
-        panelNorteMonedas.setBackground(new Color(255, 215, 0));
+        
+        panelNorteMonedas.setBackground(colorPrincipal);
+    
+        JPanel panelNorteMonedas2 = new JPanel(new BorderLayout());
+        
+        panelNorteMonedas2.setBackground(colorPrincipal);
+        
+        panelNorteMonedas2.add(panelNorteMonedas, BorderLayout.CENTER);
+        
+        JLabel labelVacio3 = new JLabel("esto es jlabel para centrar");
+        
+        labelVacio3.setForeground(colorPrincipal);
+        
+        panelNorteMonedas2.add(labelVacio3,BorderLayout.EAST);
+        
+        JButton volverB3 = new JButton("<< Volver");
+        
+        panelNorteMonedas2.add(volverB3,BorderLayout.WEST);
+        volverB3.setForeground(new Color(50, 70, 90));
+        volverB3.setFont(new Font("Tahoma", Font.BOLD, 15));
+        volverB3.setContentAreaFilled(false);
+        volverB3.setBorderPainted(false);
+        volverB3.setFocusable(false);
+        
+        
+        
+        
+        panelTematica.add(panelNorteMonedas2, BorderLayout.NORTH);
         
  
         
@@ -596,7 +668,7 @@ public class VentanaTienda extends JFrame {
         
 
         // Editor de celdas
-        apodosT.getColumnModel().getColumn(1).setCellEditor(new ButtonCellEditor(monedasT, estadoCeldasMoneda));
+        apodosT.getColumnModel().getColumn(1).setCellEditor(new ButtonCellEditor(apodosT, estadoCeldasApodo));
 
         // Listener para resaltar celdas
         apodosT.addMouseMotionListener(new MouseMotionListener() {
@@ -625,14 +697,39 @@ public class VentanaTienda extends JFrame {
 
         // Configuración del panel superior
         JPanel panelNorteApodo = new JPanel();
-        panelNorteApodo.setBackground(new Color(255, 215, 0));
-        panelNorteApodo.add(new JLabel(icon2)); // Ícono
+        panelNorteApodo.setBackground(colorPrincipal);
+        panelNorteApodo.add(new JLabel(icon2)); //Icono
         panelNorteApodo.add(StrApodomoney); // Etiqueta del dinero
         StrApodomoney.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
         
         stringDinero.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
         
         StringmonyL.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
+        
+        JPanel panelNorteApodo2 = new JPanel(new BorderLayout());        
+        
+        panelNorteApodo2.add(panelNorteApodo, BorderLayout.CENTER);
+        
+        JButton volverB2 = new JButton("<< Volver");
+        
+        
+        volverB2.setForeground(new Color(50, 70, 90));
+        volverB2.setFont(new Font("Tahoma", Font.BOLD, 15));
+        volverB2.setContentAreaFilled(false);
+        volverB2.setBorderPainted(false);
+        volverB2.setFocusable(false);
+        
+        
+        panelNorteApodo2.add(volverB2,BorderLayout.WEST);
+        
+        
+        JLabel labelVacio2 = new JLabel("esto es jlabel para centrar");
+        labelVacio2.setForeground(colorPrincipal);
+        
+        panelNorteApodo2.add(labelVacio2,BorderLayout.EAST);
+
+        
+        panelNorteApodo2.setBackground(colorPrincipal);
 
 
 
@@ -644,20 +741,207 @@ public class VentanaTienda extends JFrame {
 
         // Agregar componentes al panel principal de apodos
         panelApodos.setLayout(new BorderLayout());
-        panelApodos.add(panelNorteApodo, BorderLayout.NORTH);
+        panelApodos.add(panelNorteApodo2, BorderLayout.NORTH);
         panelApodos.add(panelApodosConMargen, BorderLayout.CENTER);
 
-        // Agregar filas de ejemplo a la tabla de apodos
-        modeloApodos.addRow(new Object[]{"Superman", new Object[]{100, icon2}});
-        modeloApodos.addRow(new Object[]{"Batman", new Object[]{200, icon2}});
-        modeloApodos.addRow(new Object[]{"Spiderman", new Object[]{150, icon2}});
+        
 
+        
+        apodosT.setRowHeight(50);//new
+
+        
+        Font customFontBatman = null;
+		try {
+			customFontBatman = Font.createFont(Font.TRUETYPE_FONT, new File("textos/Gotham.ttf")).deriveFont(48f);
+		} catch (FontFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        ge.registerFont(customFontBatman);
+        
+      ;
+        
+
+        
+        
+        JLabel batmanL = new JLabel("Batman");
+        batmanL.setFont(customFontBatman);
+        JPanel panelBatman = new JPanel();
+        panelBatman.add(batmanL);
+        
+        
+        modeloApodos.addRow(new Object[]{panelBatman, new Object[]{200, icon2}});
+
+
+        apodosT.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                if (value instanceof JPanel) {
+                    return (Component) value;
+                }
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            }
+        });
+        
+        apodosT.getTableHeader().setVisible(false);
+        apodosT.getTableHeader().setPreferredSize(new Dimension(0, 0));
+        //iconoT.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        
+        
+        
+        Font customFontSs = null;
+		try {
+			customFontSs = Font.createFont(Font.TRUETYPE_FONT, new File("textos/Saiyan-Sans.ttf")).deriveFont(48f);
+		} catch (FontFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        GraphicsEnvironment ge2 = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        ge2.registerFont(customFontBatman);
+        
+        JLabel ssLabel = new JLabel("Super Saiyan");
+        ssLabel.setFont(customFontSs);
+        
+        JPanel ssPanel = new JPanel();
+        ssPanel.add(ssLabel);
+        
+        modeloApodos.addRow(new Object[]{ssPanel, new Object[]{100, icon2}});
+        
+        Font customFontAve = null;
+		try {
+			customFontAve = Font.createFont(Font.TRUETYPE_FONT, new File("textos/AVENGEANCE HEROIC AVENGER.ttf")).deriveFont(48f);
+		} catch (FontFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        GraphicsEnvironment ge3 = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        ge3.registerFont(customFontBatman);
+        
+        JLabel aveLabel = new JLabel("Vengador ");
+        aveLabel.setFont(customFontAve);
+        
+        JPanel avePanel = new JPanel();
+        avePanel.add(aveLabel);
+        
+        modeloApodos.addRow(new Object[]{avePanel, new Object[]{100, icon2}});
+        
+        
+        
+        Font customFontTer = null;
+        
+        try {
+			customFontTer = Font.createFont(Font.TRUETYPE_FONT, new File("textos/terminator real nfi.ttf")).deriveFont(30f);
+	        
+
+		} catch (FontFormatException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.out.println("no se encontro");
+		}
+        GraphicsEnvironment ge4 = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        ge4.registerFont(customFontTer);
+        
+        JLabel terLabel = new JLabel("Terminator");
+        terLabel.setFont(customFontTer);
+        
+        JPanel terPanel = new JPanel();
+        terPanel.add(terLabel);
+        
+        modeloApodos.addRow(new Object[]{terPanel, new Object[]{100, icon2}});
+     
+        
+        Font customFontGlad = null;
+        
+        try {
+			customFontGlad = Font.createFont(Font.TRUETYPE_FONT, new File("textos/Marav2.ttf")).deriveFont(40f);
+	        
+
+		} catch (FontFormatException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.out.println("no se encontro");
+		}
+        GraphicsEnvironment ge5 = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        ge5.registerFont(customFontGlad);
+        
+        JLabel gladLabel = new JLabel("{Gladiador#");
+        gladLabel.setFont(customFontGlad);
+        
+        JPanel gladPanel = new JPanel();
+        gladPanel.add(gladLabel);
+        
+        modeloApodos.addRow(new Object[]{gladPanel, new Object[]{100, icon2}});
+        
+        
+        Font maestroFont = null;
+        
+        try {
+			maestroFont = Font.createFont(Font.TRUETYPE_FONT, new File("textos/Karate.ttf")).deriveFont(40f);
+	        
+
+		} catch (FontFormatException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.out.println("no se encontro");
+		}
+        GraphicsEnvironment ge6 = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        ge6.registerFont(maestroFont);
+        
+        JLabel maestroL = new JLabel("maestro");
+        maestroL.setFont(maestroFont);
+        
+        JPanel maestroPanel = new JPanel();
+        maestroPanel.add(maestroL);
+        
+        //maestroPanel.setBackground(Color.red); // Asi se colorean aunque sea por separado
+        
+        modeloApodos.addRow(new Object[]{maestroPanel, new Object[]{100, icon2}});
+        
+        
+        
+        
+        
+        for (int i = 0; i < apodosT.getRowCount(); i++) {
+            Point celda_comprada = new Point(i, 1); 
+            estadoCeldasApodo.put(celda_comprada, false); 
+        }
+        
+        volverB.addActionListener(e ->{
+        	MainWindow mainWindow = new MainWindow(usuario);
+            mainWindow.setVisible(true);
+            dispose();
+        	
+        });
+        
+        volverB2.addActionListener(e ->{
+        	MainWindow mainWindow = new MainWindow(usuario);
+            mainWindow.setVisible(true);
+            dispose();
+        	
+        });
+        
+        volverB3.addActionListener(e ->{
+        	MainWindow mainWindow = new MainWindow(usuario);
+            mainWindow.setVisible(true);
+            dispose();
+        	
+        });
+        	
         
 
     }
     
-
-        
+    
 
 
     private ImageIcon cargarImagen(String ruta, int ancho, int alto) {
@@ -667,7 +951,8 @@ public class VentanaTienda extends JFrame {
     }
 
     public static void main(String[] args) {
-        VentanaTienda ventana = new VentanaTienda();
+    	Usuario usuario = new Usuario(null, null, null);
+        VentanaTienda ventana = new VentanaTienda(usuario);
         ventana.setVisible(true);
     }
 }
