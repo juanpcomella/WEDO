@@ -228,7 +228,6 @@ public class RightSideBar extends JPanel {
             objetivoLabel.setPreferredSize(new Dimension(getWidth(), 40));
             objetivoLabel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40)); 
             objetivoLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2)); 
-            
             if(cuantoFalta < 0) {
 
             	try {           	
@@ -459,21 +458,7 @@ public class RightSideBar extends JPanel {
                                 for (ActionListener listener : habitoButton.getActionListeners()) {
                                 	habitoButton.removeActionListener(listener);
                                 }
-//                                for(Habito habitoLista : BDs.crearListaHabitos(usuario.getNombreUsuario(), fechaHoy)) {
-//                                	System.out.println(habitoLista.getNombre());
-////                            		System.out.println(habito);
-//                                	if(habitoLista.getNombre().equals(habito)) {
-//                                		System.out.println("igual");
-//                                		System.out.println(BDs.seleccionarHabitoCompletado(usuario.getNombreUsuario(), habito));
-////                                		for(Habito h : BDs.crearListaHabitos(usuario.getNombreUsuario(), fechaHoy)) {
-////                                			System.out.println(h.isCompletado());
-////                                		}
-//                                		System.out.println(habito);
-//                                		habitoLista.setCompletado(true);
-//                                		BDs.updateCompletadoHabito(usuario.getNombreUsuario(), habito, true);
-//                                		System.out.println(BDs.seleccionarHabitoCompletado(usuario.getNombreUsuario(), "Jugar un juego de mesa con alguien"));
-//                                	}
-//                                }
+
                                 //Suma 10 monedas por habito completado
                                 usuario.setSaldo(usuario.getSaldo()+10);
                                 BDs.updateSaldo(usuario.getNombreUsuario(), usuario.getSaldo());
@@ -489,20 +474,7 @@ public class RightSideBar extends JPanel {
         repaint();
     }
  
-    //PASO 4 --> COGEMOS DE LA BASE DE DATOS LOS HABITOS CON LA FECHA DE HOY Y DEL USUARIO INDICADO Y METEMOS LOS NOMBRES EN LA LISTA habitos
-//    private ArrayList<String> cargarHabitosDiarios(Usuario usuario) {
-//    	ArrayList<Habito> habitosConFecha = new ArrayList<>();
-//        ArrayList<String> habitos = new ArrayList<>();
-////            String fechaHoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-//            habitosConFecha = BDs.crearListaHabitos(usuario.getNombreUsuario());
-//            BDs.eliminarTodosLosHabitos();
-//            
-//            for(Habito habito: habitosConFecha) {
-//            	habitos.add(habito.getNombre());
-//            }
-//
-//        return habitos;
-//    }
+
 
    
     
