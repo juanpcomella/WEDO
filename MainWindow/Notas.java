@@ -405,7 +405,7 @@ public class Notas extends JFrame {
         titulo= titulo_editado;
         txt=txt_editado;
         
-        //Intento de crear notas dentro de notas:
+        // Intento de crear notas dentro de notas:
         panelCrear = new JPanel();
         panelCrear.setLayout(new BoxLayout(panelCrear, BoxLayout.Y_AXIS));
         createN = new JButton("+");
@@ -443,7 +443,7 @@ public class Notas extends JFrame {
             this.titulo_editado = this.tituloL.getText();
             this.txt_editado = this.apuntePane.getText();
 
-            // Actualizar el texto del botón asociado
+            // Actualizar el texto del botón asociado a la nota
             if (this.botonPagina != null) {
                 this.botonPagina.setText(this.titulo_editado);
             }
@@ -502,7 +502,6 @@ public class Notas extends JFrame {
                 panelCrear.revalidate();
                 panelCrear.repaint();
 
-                // Asocia el nuevo botón con la nueva nota en el mapa
                 Notas nuevaNota = new Notas(input, contenidoVacio);
                 nuevaNota.botonPagina = nuevoBoton;
                 notasMap.put(nuevoBoton, nuevaNota);
