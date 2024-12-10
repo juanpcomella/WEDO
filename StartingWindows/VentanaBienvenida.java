@@ -87,7 +87,7 @@ public class VentanaBienvenida extends JFrame {
 			//Registro
 		JButton registro = new JButton("Registrarse");
 		registro.setAlignmentX(CENTER_ALIGNMENT);
-		registro.setFont(new Font("Tahoman", Font.BOLD, 30));
+		registro.setFont(new Font("Tahoma", Font.BOLD, 30));
 		registro.setBackground(new Color(50,70,90));
 		registro.setForeground(Color.WHITE);
 		registro.setOpaque(true);
