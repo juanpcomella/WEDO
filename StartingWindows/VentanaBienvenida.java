@@ -18,6 +18,7 @@ public class VentanaBienvenida extends JFrame {
 
 	public VentanaBienvenida() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		//Panel
 		JPanel panel = new JPanel();
@@ -80,7 +81,7 @@ public class VentanaBienvenida extends JFrame {
 		JLabel pregunta = new JLabel("¿Aún no tienes cuenta?");
 		pregunta.setAlignmentX(CENTER_ALIGNMENT);
 		pregunta.setForeground(new Color(50,70,90));
-		pregunta.setFont(new Font("Bauhaus 93", Font.BOLD, 18));
+		pregunta.setFont(new Font("Tahoma", Font.BOLD, 18));
 		
 			//Registro
 		JButton registro = new JButton("Registrarse");
