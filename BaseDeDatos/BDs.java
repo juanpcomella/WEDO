@@ -1807,7 +1807,7 @@ public class BDs {
 
 
 	// MÉTODOS PARA LOS ITEMS QUE HAZ COMPRADO.
-	public void crearTablaCompras() {
+	public static void crearTablaCompras() {
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
