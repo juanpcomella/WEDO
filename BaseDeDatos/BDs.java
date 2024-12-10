@@ -466,6 +466,44 @@ public class BDs {
 		return correoE;
 	}
 	
+	public static Double getMulti(String usuario) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			System.err.println("ERROR: Driver sqlite para JDBC no encontrado");
+		}
+		Connection connection = null;
+		double  multi = 0;
+		try {
+			// Crear una conexión de BD
+			connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");//a partir de los ultimo : es donde quieres que se guarden
+			// Crear gestores de sentencias
+			Statement statement = connection.createStatement();//crear consultas
+			statement.setQueryTimeout(30);  // poner timeout 30 msg
+			
+			String sql = "SELECT multiplicador FROM usuarios WHERE username = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setString(1, usuario);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                multi = resultSet.getDouble("multiplicador");
+            } 
+		} catch(SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if(connection != null)
+					connection.close();
+			} catch(SQLException e) {
+				// Cierre de conexión fallido
+				System.err.println(e);
+			}
+	}
+		return multi;
+	}
+	
+	
 	public static void updateUsuario(String usuario, String usuarioNuevo) {
 		try {
 			Class.forName("org.sqlite.JDBC");

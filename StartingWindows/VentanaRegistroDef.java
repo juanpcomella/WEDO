@@ -158,11 +158,11 @@ public class VentanaRegistroDef extends JFrame {
                     JOptionPane.showMessageDialog(null,"Las contraseñas no son iguales.");
                 }
 				//comprobar que el nombre de usuario no existe
-                else if(BDs.usuarioExistente(usernameUser)){
-                	JOptionPane.showMessageDialog(null,"Nombre de usuario existente.");
-                }else if(BDs.emailExistente(emailUser)){
-                	JOptionPane.showMessageDialog(null,"Correo electrónico en uso.");
-                }
+//                else if(BDs.usuarioExistente(usernameUser)){
+//                	JOptionPane.showMessageDialog(null,"Nombre de usuario existente.");
+//                }else if(BDs.emailExistente(emailUser)){
+//                	JOptionPane.showMessageDialog(null,"Correo electrónico en uso.");
+//                }
                 else {                	
                 	BDs.crearTablaUsuarios();
                 	BDs.insertarElementos(usernameUser, passwordUser, emailUser);
