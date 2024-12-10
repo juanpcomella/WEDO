@@ -17,9 +17,7 @@ public class VentanaBienvenida extends JFrame {
 	
 
 	public VentanaBienvenida() {
-		setSize(700,500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		//Panel
 		JPanel panel = new JPanel();
@@ -124,6 +122,7 @@ public class VentanaBienvenida extends JFrame {
 			VentanaBienvenida ventanaBienvenida = new VentanaBienvenida();
 			ventanaBienvenida.setVisible(true);
 			ventanaBienvenida.setLocationRelativeTo(null);
+			ventanaBienvenida.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		});
 
