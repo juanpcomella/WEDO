@@ -234,6 +234,7 @@ public class Calendario extends JPanel {
                         eventoLabel.setPreferredSize(new Dimension(8, 8));
                         eventoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                         eventoLabel.setFont(new Font("Arial", Font.BOLD, 8));
+                        eventoLabel.setForeground(Color.BLACK);
 
                         if (evento.getCategoria().equals(Categorias.Estudios)) {
                             eventoLabel.setBackground(Color.MAGENTA);
@@ -402,7 +403,7 @@ public class Calendario extends JPanel {
                                     SwingConstants.CENTER);
                             eventoLabel.setOpaque(true);
                             eventoLabel.setFont(new Font("Arial", Font.BOLD, 10));
-                            eventoLabel.setForeground(Color.WHITE);
+                            eventoLabel.setForeground(Color.BLACK);
                             eventoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
                             if (evento.getCategoria().equals(Categorias.Estudios)) {
@@ -717,7 +718,7 @@ public class Calendario extends JPanel {
     private void mostrarEventoTodoElDia(Evento evento, LocalDate date, Usuario usuario) {
         JDialog dialog = new JDialog();
         dialog.setTitle("Evento para el " + date.toString());
-        dialog.setSize(300, 200); 
+        dialog.setSize(350, 250); 
         dialog.setLocationRelativeTo(this);
         JPanel panel = new JPanel();
         panel.setBackground(new Color(173, 216, 230));
