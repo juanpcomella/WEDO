@@ -34,6 +34,7 @@ public class VentanaTienda2 extends JFrame {
     private DefaultTableModel modeloIcono;
     private DefaultTableModel modeloDinero;
     private int money;
+    private JLabel saldoLabel;
     private Map<Integer, Item> itemMapIconos = new HashMap<>();
     private Map<Integer, Item> itemMapMonedas = new HashMap<>();
 
@@ -61,7 +62,7 @@ public class VentanaTienda2 extends JFrame {
         tabbedPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JPanel panelIconos = new JPanel(new BorderLayout());
-        JPanel headerPanelIconos = crearHeaderPanel(String.valueOf(money), usuario);
+        JPanel headerPanelIconos = crearHeaderPanel(usuario);
         panelIconos.add(headerPanelIconos, BorderLayout.NORTH);
 
         JTable iconoT = new JTable(modeloIcono);
@@ -118,7 +119,7 @@ public class VentanaTienda2 extends JFrame {
         JPanel panelMonedas = new JPanel(new BorderLayout());
         tabbedPane.addTab("Monedas", panelMonedas);
 
-        JPanel headerPanelMonedas = crearHeaderPanel(String.valueOf(money), usuario);
+        JPanel headerPanelMonedas = crearHeaderPanel(usuario);
         panelMonedas.add(headerPanelMonedas, BorderLayout.NORTH);
 
         modeloDinero = new DefaultTableModel(new Object[]{"Moneda", "Precio"}, 0) {
@@ -241,13 +242,12 @@ public class VentanaTienda2 extends JFrame {
         llenarTablaMonedas(modeloDinero);
     }
 
-    private JPanel crearHeaderPanel(String dinero, Usuario usuario) {
+    private JPanel crearHeaderPanel(Usuario usuario) {
         Color colorPrincipal = new Color(173, 216, 230);
 
         JLabel dineroL = new JLabel(cargarImagen("imagenes/coin_sin_fondo.png", 30, 30));
-        JLabel stringDinero = new JLabel(dinero);
+        JLabel stringDinero = new JLabel(String.valueOf(money)); // Guardar referencia al saldo
         stringDinero.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
-
 
         JPanel panelNorteIcono = new JPanel();
         panelNorteIcono.setBackground(colorPrincipal);
@@ -277,8 +277,12 @@ public class VentanaTienda2 extends JFrame {
         labelVacio.setForeground(colorPrincipal);
         panelNorteIcono2.add(labelVacio, BorderLayout.EAST);
 
+        // Almacenar el JLabel en un atributo para poder actualizarlo
+        this.saldoLabel = stringDinero;
+
         return panelNorteIcono2;
     }
+
 
     private void llenarTablaIconos(DefaultTableModel modeloIcono, Usuario usuario) {
         ArrayList<Item> listaItems = BDs.obtenerItemsPorTipo("foto");
@@ -423,7 +427,6 @@ public class VentanaTienda2 extends JFrame {
             button.setFont(new Font("Arial", Font.BOLD, 24));
 
             button.addActionListener(e -> {
-
                 int selectedRow = table.getSelectedRow();
                 int selectedColumn = table.getSelectedColumn();
                 celda = new Point(selectedRow, selectedColumn);
@@ -453,11 +456,16 @@ public class VentanaTienda2 extends JFrame {
                         comprado.setVerticalAlignment(SwingConstants.CENTER);
                         System.out.println("Compra realizada.");
 
+                        // Restar dinero y actualizar el saldo
                         money -= precio;
                         usuario.setSaldo(money);
                         BDs.updateSaldo(usuario.getNombreUsuario(), usuario.getSaldo());
                         estadoCeldas.put(celda, true);
 
+                        // Actualizar visualmente el saldo en el header
+                        saldoLabel.setText(String.valueOf(money));
+
+                        // Registrar la compra en la base de datos
                         Item itemComprado = itemMap.get(selectedRow);
                         if (itemComprado != null) {
                             BDs.insertarCompra(
@@ -472,6 +480,7 @@ public class VentanaTienda2 extends JFrame {
                             System.err.println("Error: No se encontró el ítem correspondiente para la fila " + selectedRow);
                         }
 
+                        // Actualizar la celda visualmente
                         table.setValueAt(comprado, selectedRow, selectedColumn);
                         table.repaint();
 
@@ -490,6 +499,7 @@ public class VentanaTienda2 extends JFrame {
                 }
                 fireEditingStopped();
             });
+
 
             panel = new JPanel(new BorderLayout());
             panel.add(button, BorderLayout.CENTER);
