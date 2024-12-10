@@ -90,7 +90,7 @@ public class Notas extends JFrame {
         Color azulOscuro = new Color(50, 70, 90);
         
         
-        numero_vistas=0;
+        numero_vistas=1;
         // Boton para cambiar vista:
         JButton cambiarVista = new JButton("Cambiar vista");
         
@@ -446,9 +446,8 @@ public class Notas extends JFrame {
             // Actualizar el texto del botón asociado
             if (this.botonPagina != null) {
                 this.botonPagina.setText(this.titulo_editado);
-            } else {
-                System.err.println("Error: No se encontró un botón asociado a esta nota.");
             }
+            
         });
 
 
