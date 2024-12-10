@@ -244,7 +244,8 @@ public class RightSideBar extends JPanel {
                        
                     );
             	 if (confirm == JOptionPane.YES_OPTION) {
-                 	BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
+            		 BDs.updateSaldo(usuario.getNombreUsuario(), BDs.getSaldo(usuario.getNombreUsuario()+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
+                 	 BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
                      eliminarObjetivoDePantalla(objetivo, usuario);
                      JOptionPane.showMessageDialog(null, "¡Felicidades! ¡Sigue asi con tus objetivos!");
                      MainWindow mv = new MainWindow(usuario);
