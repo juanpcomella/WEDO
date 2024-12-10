@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.text.*;
 
@@ -23,6 +24,14 @@ public class Notas extends JFrame {
 	JButton botonPagina;
 	JTextPane apuntePane;
 	JTextField tituloL;
+	JPanel panelInferior;
+	JPanel panelCrear;
+	JPanel panelDcha;
+	JButton limpiarB;
+	JButton volver;
+	JComboBox fontComboBox;
+	JButton underlineButton;
+	JButton createN;
     public Notas(String titulo,String txt) {
         // Configuración de la ventana
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -45,7 +54,7 @@ public class Notas extends JFrame {
         add(new JScrollPane(apuntePane), BorderLayout.CENTER); // Añadir con scroll
         apuntePane.setPreferredSize(new Dimension(400, 700));
 
-        JButton limpiarB = new JButton("Limpiar");
+        limpiarB = new JButton("Limpiar");
         limpiarB.addActionListener(e -> {
         	apuntePane.setText(" ");
         	
@@ -53,7 +62,7 @@ public class Notas extends JFrame {
         
         
         // Botón para subrayar
-        JButton underlineButton = new JButton("(Des)Subrayar");
+        underlineButton = new JButton("(Des)Subrayar");
         underlineButton.addActionListener((ActionEvent e) -> {
             // Obtener texto seleccionado
             int start = apuntePane.getSelectionStart();
@@ -86,53 +95,262 @@ public class Notas extends JFrame {
         JButton cambiarVista = new JButton("Cambiar vista");
         
         cambiarVista.addActionListener(e -> {
-        	
-        if (numero_vistas==0) {
-        	apuntePane.setBackground(colorTurquesa);
-        	apuntePane.setForeground(azulOscuro);
-        	numero_vistas = numero_vistas+1;
-        } else if (numero_vistas==1) {
-        	apuntePane.setBackground(azulOscuro);
-        	apuntePane.setForeground(colorTurquesa);
-        	numero_vistas++;
-        } else if (numero_vistas==2) {
-        	apuntePane.setBackground(new Color(255, 192, 203));
-        	apuntePane.setForeground(new Color(147, 112, 219));
-        	numero_vistas++;
-        } else if (numero_vistas == 3) {
-            apuntePane.setBackground(new Color(152, 255, 152)); // Verde Menta
-            apuntePane.setForeground(new Color(47, 79, 79)); // Gris Oscuro
-            numero_vistas++;
-        } else if (numero_vistas == 4) {
-            apuntePane.setBackground(new Color(255, 255, 153)); // Amarillo Pastel
-            apuntePane.setForeground(new Color(169, 169, 169)); // Gris Claro
-            numero_vistas++;
-        } else if (numero_vistas == 5) {
-            apuntePane.setBackground(new Color(216, 191, 216)); // Lila Claro
-            apuntePane.setForeground(new Color(128, 0, 128)); // Morado Oscuro
-            numero_vistas++;
-        } else if (numero_vistas == 6) {
-            apuntePane.setBackground(new Color(255, 127, 80)); // Coral Claro
-            apuntePane.setForeground(new Color(0, 0, 128)); // Azul Marino
-            numero_vistas++;
-        } else if (numero_vistas == 7) {
-            apuntePane.setBackground(new Color(245, 245, 220)); // Beige Claro
-            apuntePane.setForeground(new Color(139, 69, 19)); // Marrón
-            numero_vistas++;
-        } else if (numero_vistas == 8) {
-            // Dark Mode: Fondo oscuro con texto claro
-            apuntePane.setBackground(new Color(51, 51, 51)); // Gris muy oscuro / Negro
-            apuntePane.setForeground(new Color(255, 255, 255)); // Gris Claro / Blanco
-            apuntePane.setCaretColor(new Color(255, 255, 255)); // Blanco (cursor)
-            numero_vistas++; // Reiniciar el contador para volver al inicio
-        } else if (numero_vistas==9) {
-        	apuntePane.setBackground(Color.WHITE);
-        	apuntePane.setForeground(Color.BLACK);
-            apuntePane.setCaretColor(Color.BLACK);
-        	numero_vistas=0;
-        }
-        
+
+            if (numero_vistas == 0) {
+                apuntePane.setBackground(colorTurquesa);
+                apuntePane.setForeground(azulOscuro);
+                tituloL.setBackground(colorTurquesa);
+                tituloL.setForeground(azulOscuro);
+                if (this.botonPagina != null) {
+                    botonPagina.setBackground(azulOscuro);
+                    botonPagina.setForeground(colorTurquesa);
+                }
+                limpiarB.setBackground(azulOscuro);
+                limpiarB.setForeground(colorTurquesa);
+                volver.setBackground(azulOscuro);
+                volver.setForeground(colorTurquesa);
+                underlineButton.setBackground(azulOscuro);
+                underlineButton.setForeground(colorTurquesa);
+                fontComboBox.setBackground(azulOscuro);
+                fontComboBox.setForeground(colorTurquesa);
+                cambiarVista.setBackground(azulOscuro);
+                cambiarVista.setForeground(colorTurquesa);
+                createN.setBackground(azulOscuro);
+                createN.setForeground(colorTurquesa);
+                panelInferior.setBackground(colorTurquesa);
+                panelCrear.setBackground(colorTurquesa);
+                panelDcha.setBackground(colorTurquesa);
+                numero_vistas++;
+            } else if (numero_vistas == 1) {
+                apuntePane.setBackground(azulOscuro);
+                apuntePane.setForeground(colorTurquesa);
+                tituloL.setBackground(azulOscuro);
+                tituloL.setForeground(colorTurquesa);
+                if (this.botonPagina != null) {
+                    botonPagina.setBackground(colorTurquesa);
+                    botonPagina.setForeground(azulOscuro);
+                }
+                limpiarB.setBackground(colorTurquesa);
+                limpiarB.setForeground(azulOscuro);
+                volver.setBackground(colorTurquesa);
+                volver.setForeground(azulOscuro);
+                underlineButton.setBackground(colorTurquesa);
+                underlineButton.setForeground(azulOscuro);
+                fontComboBox.setBackground(colorTurquesa);
+                fontComboBox.setForeground(azulOscuro);
+                cambiarVista.setBackground(colorTurquesa);
+                cambiarVista.setForeground(azulOscuro);
+                createN.setBackground(colorTurquesa);
+                createN.setForeground(azulOscuro);
+                panelInferior.setBackground(azulOscuro);
+                panelCrear.setBackground(azulOscuro);
+                panelDcha.setBackground(azulOscuro);
+                numero_vistas++;
+            } else if (numero_vistas == 2) {
+                Color bg = new Color(255, 192, 203);
+                Color fg = new Color(147, 112, 219);
+                apuntePane.setBackground(bg);
+                apuntePane.setForeground(fg);
+                tituloL.setBackground(bg);
+                tituloL.setForeground(fg);
+                if (this.botonPagina != null) {
+                    botonPagina.setBackground(fg);
+                    botonPagina.setForeground(bg);
+                }
+                limpiarB.setBackground(fg);
+                limpiarB.setForeground(bg);
+                volver.setBackground(fg);
+                volver.setForeground(bg);
+                underlineButton.setBackground(fg);
+                underlineButton.setForeground(bg);
+                fontComboBox.setBackground(fg);
+                fontComboBox.setForeground(bg);
+                cambiarVista.setBackground(fg);
+                cambiarVista.setForeground(bg);
+                createN.setBackground(fg);
+                createN.setForeground(bg);
+                panelInferior.setBackground(bg);
+                panelCrear.setBackground(bg);
+                panelDcha.setBackground(bg);
+                numero_vistas++;
+            } else if (numero_vistas == 3) {
+                Color bg = new Color(152, 255, 152);
+                Color fg = new Color(47, 79, 79);
+                apuntePane.setBackground(bg);
+                apuntePane.setForeground(fg);
+                tituloL.setBackground(bg);
+                tituloL.setForeground(fg);
+                if (this.botonPagina != null) {
+                    botonPagina.setBackground(fg);
+                    botonPagina.setForeground(bg);
+                }
+                limpiarB.setBackground(fg);
+                limpiarB.setForeground(bg);
+                volver.setBackground(fg);
+                volver.setForeground(bg);
+                underlineButton.setBackground(fg);
+                underlineButton.setForeground(bg);
+                fontComboBox.setBackground(fg);
+                fontComboBox.setForeground(bg);
+                cambiarVista.setBackground(fg);
+                cambiarVista.setForeground(bg);
+                createN.setBackground(fg);
+                createN.setForeground(bg);
+                panelInferior.setBackground(bg);
+                panelCrear.setBackground(bg);
+                panelDcha.setBackground(bg);
+                numero_vistas++;
+            } else if (numero_vistas == 4) {
+                Color bg = new Color(255, 255, 153);
+                Color fg = new Color(169, 169, 169);
+                apuntePane.setBackground(bg);
+                apuntePane.setForeground(fg);
+                tituloL.setBackground(bg);
+                tituloL.setForeground(fg);
+                if (this.botonPagina != null) {
+                    botonPagina.setBackground(fg);
+                    botonPagina.setForeground(bg);
+                }
+                limpiarB.setBackground(fg);
+                limpiarB.setForeground(bg);
+                volver.setBackground(fg);
+                volver.setForeground(bg);
+                underlineButton.setBackground(fg);
+                underlineButton.setForeground(bg);
+                fontComboBox.setBackground(fg);
+                fontComboBox.setForeground(bg);
+                cambiarVista.setBackground(fg);
+                cambiarVista.setForeground(bg);
+                createN.setBackground(fg);
+                createN.setForeground(bg);
+                panelInferior.setBackground(bg);
+                panelCrear.setBackground(bg);
+                panelDcha.setBackground(bg);
+                numero_vistas++;
+            } else if (numero_vistas == 5) {
+                Color bg = new Color(216, 191, 216);
+                Color fg = new Color(128, 0, 128);
+                apuntePane.setBackground(bg);
+                apuntePane.setForeground(fg);
+                tituloL.setBackground(bg);
+                tituloL.setForeground(fg);
+                if (this.botonPagina != null) {
+                    botonPagina.setBackground(fg);
+                    botonPagina.setForeground(bg);
+                }
+                limpiarB.setBackground(fg);
+                limpiarB.setForeground(bg);
+                volver.setBackground(fg);
+                volver.setForeground(bg);
+                underlineButton.setBackground(fg);
+                underlineButton.setForeground(bg);
+                fontComboBox.setBackground(fg);
+                fontComboBox.setForeground(bg);
+                cambiarVista.setBackground(fg);
+                cambiarVista.setForeground(bg);
+                createN.setBackground(fg);
+                createN.setForeground(bg);
+                panelInferior.setBackground(bg);
+                panelCrear.setBackground(bg);
+                panelDcha.setBackground(bg);
+                numero_vistas++;
+            } else if (numero_vistas == 6) {
+                Color bg = new Color(255, 127, 80);
+                Color fg = new Color(0, 0, 128);
+                apuntePane.setBackground(bg);
+                apuntePane.setForeground(fg);
+                tituloL.setBackground(bg);
+                tituloL.setForeground(fg);
+                if (this.botonPagina != null) {
+                    botonPagina.setBackground(fg);
+                    botonPagina.setForeground(bg);
+                }
+                limpiarB.setBackground(fg);
+                limpiarB.setForeground(bg);
+                volver.setBackground(fg);
+                volver.setForeground(bg);
+                underlineButton.setBackground(fg);
+                underlineButton.setForeground(bg);
+                fontComboBox.setBackground(fg);
+                fontComboBox.setForeground(bg);
+                cambiarVista.setBackground(fg);
+                cambiarVista.setForeground(bg);
+                createN.setBackground(fg);
+                createN.setForeground(bg);
+                panelInferior.setBackground(bg);
+                panelCrear.setBackground(bg);
+                panelDcha.setBackground(bg);
+                numero_vistas++;
+            } else if (numero_vistas == 7) {
+                Color bg = new Color(245, 245, 220);
+                Color fg = new Color(139, 69, 19);
+                apuntePane.setBackground(bg);
+                apuntePane.setForeground(fg);
+                tituloL.setBackground(bg);
+                tituloL.setForeground(fg);
+                if (this.botonPagina != null) {
+                    botonPagina.setBackground(fg);
+                    botonPagina.setForeground(bg);
+                }
+                limpiarB.setBackground(fg);
+                limpiarB.setForeground(bg);
+                volver.setBackground(fg);
+                volver.setForeground(bg);
+                underlineButton.setBackground(fg);
+                underlineButton.setForeground(bg);
+                fontComboBox.setBackground(fg);
+                fontComboBox.setForeground(bg);
+                cambiarVista.setBackground(fg);
+                cambiarVista.setForeground(bg);
+                createN.setBackground(fg);
+                createN.setForeground(bg);
+                panelInferior.setBackground(bg);
+                panelCrear.setBackground(bg);
+                panelDcha.setBackground(bg);
+                numero_vistas++;
+            } else if (numero_vistas == 8) {
+                Color bg = new Color(51, 51, 51);
+                Color fg = new Color(255, 255, 255);
+                apuntePane.setBackground(bg);
+                apuntePane.setForeground(fg);
+                apuntePane.setCaretColor(fg);
+                tituloL.setBackground(bg);
+                tituloL.setForeground(fg);
+                if (this.botonPagina != null) {
+                    botonPagina.setBackground(fg);
+                    botonPagina.setForeground(bg);
+                }
+                limpiarB.setBackground(fg);
+                limpiarB.setForeground(bg);
+                volver.setBackground(fg);
+                volver.setForeground(bg);
+                underlineButton.setBackground(fg);
+                underlineButton.setForeground(bg);
+                fontComboBox.setBackground(fg);
+                fontComboBox.setForeground(bg);
+                cambiarVista.setBackground(fg);
+                cambiarVista.setForeground(bg);
+                createN.setBackground(fg);
+                createN.setForeground(bg);
+                panelInferior.setBackground(bg);
+                panelCrear.setBackground(bg);
+                panelDcha.setBackground(bg);
+                numero_vistas++;
+            } else if (numero_vistas == 9) {
+                apuntePane.setBackground(Color.WHITE);
+                apuntePane.setForeground(Color.BLACK);
+                apuntePane.setCaretColor(Color.BLACK);
+                tituloL.setBackground(Color.WHITE);
+                tituloL.setForeground(Color.BLACK);
+                if (this.botonPagina != null) {
+                    botonPagina.setBackground(Color.BLACK);
+                    botonPagina.setForeground(Color.WHITE);
+                }
+                numero_vistas = 0;
+            }
         });
+
+
         
         underlineButton.setBackground(azulOscuro);
         underlineButton.setForeground(colorTurquesa);
@@ -155,7 +373,7 @@ public class Notas extends JFrame {
         fontList.add("Georgia");
 
         // Crear JComboBox con las fuentes
-        JComboBox<String> fontComboBox = new JComboBox<>(fontList.toArray(new String[0]));
+        fontComboBox = new JComboBox<>(fontList.toArray(new String[0]));
         
         fontComboBox.setBackground(azulOscuro);
         fontComboBox.setForeground(colorTurquesa);
@@ -171,7 +389,7 @@ public class Notas extends JFrame {
         });
 
         // Panel inferior para el botón
-        JPanel panelInferior = new JPanel();
+        panelInferior = new JPanel();
         panelInferior.setLayout(new FlowLayout(FlowLayout.CENTER));
         underlineButton.setPreferredSize(new Dimension(130,25));
         panelInferior.add(underlineButton);
@@ -188,18 +406,18 @@ public class Notas extends JFrame {
         txt=txt_editado;
         
         //Intento de crear notas dentro de notas:
-        JPanel panelCrear = new JPanel();
+        panelCrear = new JPanel();
         panelCrear.setLayout(new BoxLayout(panelCrear, BoxLayout.Y_AXIS));
-        JButton createN = new JButton("+");
+        createN = new JButton("+");
         createN.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelCrear.add(createN);
         panelCrear.setBackground(colorTurquesa);
         createN.setBackground(azulOscuro);
         createN.setForeground(colorTurquesa);
         
-        JPanel panelDcha = new JPanel (new BorderLayout());
+        panelDcha = new JPanel (new BorderLayout());
         panelDcha.setBackground(colorTurquesa);
-        JButton volver = new JButton("<<");
+        volver = new JButton("<<");
         volver.setBackground(azulOscuro);
         volver.setForeground(colorTurquesa);
         
@@ -235,14 +453,18 @@ public class Notas extends JFrame {
 
 
         // Acción para crear nuevas páginas
-        createN.addActionListener(e -> {
+        createN.addActionListener(a -> {
             String input = JOptionPane.showInputDialog(null, "Escribe el título de la página:", "Crear Página", JOptionPane.QUESTION_MESSAGE);
 
             if (input != null && !input.trim().isEmpty()) {
                 JButton nuevoBoton = new JButton(input);
+                nuevoBoton.setBackground(azulOscuro);
+                nuevoBoton.setForeground(colorTurquesa);
+                Border bordeBton = BorderFactory.createLineBorder(colorTurquesa,5);
+                nuevoBoton.setBorder(bordeBton);
                 String contenidoVacio = "";
 
-                nuevoBoton.addActionListener(a -> {
+                nuevoBoton.addActionListener(b -> {
                     Notas nuevaNota = notasMap.get(nuevoBoton);
 
                     if (nuevaNota == null) {
@@ -287,6 +509,7 @@ public class Notas extends JFrame {
                 notasMap.put(nuevoBoton, nuevaNota);
             }
         });
+            
 
       
             

@@ -6,6 +6,7 @@ import ProfileWindow.ProfileWindowSelf;
 import StartingWindows.Usuario;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 import java.awt.*;
@@ -55,67 +56,58 @@ public class LeftSideBar extends JPanel {
         // Acción para crear nuevas páginas
         button1.addActionListener(e -> {
             String input = JOptionPane.showInputDialog(null, "Escribe el título de la página:", "Crear Página", JOptionPane.QUESTION_MESSAGE);
-            
-            if (input != null && !input.trim().isEmpty()) {
-                JButton botonPagina = new JButton(input);
-                String strVacio = "";
-                botonPagina.addActionListener(a -> {
-                    nota = notasMap.get(botonPagina);
-                    if (nota == null) {
-                        nota = new Notas(input, strVacio);
-                        notasMap.put(botonPagina, nota);
-                    }
-                    nota.setVisible(true);
-                    nota.addWindowListener(new WindowAdapter() {
-                        @Override
-                        public void windowClosing(WindowEvent e) {
-                            nota.titulo_editado = nota.tituloL.getText();
-                            nota.txt_editado = nota.apuntePane.getText();
 
-                            // Asignar los valores actualizados a las variables externas
-                            botonPagina.setText(nota.titulo_editado);
-                            notasMap.put(botonPagina, nota);
-                        }
-                    });
+            if (input != null && !input.trim().isEmpty()) {
+                JButton nuevoBoton = new JButton(input);
+                nuevoBoton.setBackground(azulOscuro);
+                nuevoBoton.setForeground(colorTurquesa);
+                Border bordeBton = BorderFactory.createLineBorder(colorTurquesa,5);
+                nuevoBoton.setBorder(bordeBton);
+                String contenidoVacio = "";
+
+                nuevoBoton.addActionListener(a -> {
+                    Notas nuevaNota = notasMap.get(nuevoBoton);
+
+                    if (nuevaNota == null) {
+                        nuevaNota = new Notas(input, contenidoVacio);
+                        notasMap.put(nuevoBoton, nuevaNota);
+                        nuevaNota.botonPagina = nuevoBoton; // Vincular el boton con la nota actualizada
+                    }
+
+                    nuevaNota.setVisible(true);
                 });
-                
-                botonPagina.addMouseListener(new MouseAdapter() {
+
+                // Click derecho para eliminar
+                nuevoBoton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        // Detectar si se hizo clic derecho
                         if (SwingUtilities.isRightMouseButton(e)) {
-                            int respuesta = JOptionPane.showConfirmDialog(null, 
-                            		"¿Desea eliminar la nota seleccionada?", "Eliminar nota",
-                            		JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-                            if (respuesta==JOptionPane.YES_OPTION) {
-                            	panel.remove(botonPagina);
-                            	panel.repaint();
-                            	
+                            int respuesta = JOptionPane.showConfirmDialog(null,
+                                    "¿Desea eliminar la nota seleccionada?", "Eliminar nota",
+                                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            if (respuesta == JOptionPane.YES_OPTION) {
+                                panel.remove(nuevoBoton);
+                                panel.repaint();
+                                notasMap.remove(nuevoBoton); // Eliminar del mapa
                             }
-                            
                         }
                     }
                 });
-                
-                
-                // Diseño del botón
-                botonPagina.setPreferredSize(new Dimension(80, 30));
-                botonPagina.setMaximumSize(new Dimension(80, 30));
-                botonPagina.setMinimumSize(new Dimension(80, 30));
-                botonPagina.setBackground(azulOscuro);
-                botonPagina.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-                botonPagina.setBorder(new LineBorder(new Color(173, 216, 230), 5));
-                botonPagina.setForeground(colorTurquesa);
-                botonPagina.setAlignmentX(Component.CENTER_ALIGNMENT); // Centra el botón
 
-                // Añadir el botón creado al panel
-                panel.add(botonPagina);
-                panel.add(Box.createVerticalStrut(10)); // Espacio entre botones
+                // Añadir al panel y actualizar diseño
+                nuevoBoton.setPreferredSize(new Dimension(80, 30));
+                nuevoBoton.setMaximumSize(new Dimension(80, 30));
+                nuevoBoton.setMinimumSize(new Dimension(80, 30));
+                nuevoBoton.setAlignmentX(Component.CENTER_ALIGNMENT);
+                panel.add(nuevoBoton);
+                panel.add(Box.createVerticalStrut(10));
                 panel.revalidate();
                 panel.repaint();
-                
-                
-                
+
+                // Asocia el nuevo botón con la nueva nota en el mapa
+                Notas nuevaNota = new Notas(input, contenidoVacio);
+                nuevaNota.botonPagina = nuevoBoton;
+                notasMap.put(nuevoBoton, nuevaNota);
             }
         });
         
