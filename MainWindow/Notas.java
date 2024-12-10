@@ -97,10 +97,10 @@ public class Notas extends JFrame {
         cambiarVista.addActionListener(e -> {
 
             if (numero_vistas == 0) {
-                apuntePane.setBackground(colorTurquesa);
-                apuntePane.setForeground(azulOscuro);
-                tituloL.setBackground(colorTurquesa);
-                tituloL.setForeground(azulOscuro);
+                apuntePane.setBackground(Color.WHITE);
+                apuntePane.setForeground(Color.BLACK);
+                tituloL.setBackground(Color.WHITE);
+                tituloL.setForeground(Color.BLACK);
                 if (this.botonPagina != null) {
                     botonPagina.setBackground(azulOscuro);
                     botonPagina.setForeground(colorTurquesa);
