@@ -134,6 +134,17 @@ public class Notas extends JFrame {
         
         });
         
+        underlineButton.setBackground(azulOscuro);
+        underlineButton.setForeground(colorTurquesa);
+        
+        cambiarVista.setBackground(azulOscuro);
+        cambiarVista.setForeground(colorTurquesa);
+        
+        limpiarB.setBackground(azulOscuro);
+        limpiarB.setForeground(colorTurquesa);
+        
+        
+        
         ArrayList<String> fontList = new ArrayList<>();
         fontList.add("Arial");
         fontList.add("Calibri");
@@ -145,6 +156,9 @@ public class Notas extends JFrame {
 
         // Crear JComboBox con las fuentes
         JComboBox<String> fontComboBox = new JComboBox<>(fontList.toArray(new String[0]));
+        
+        fontComboBox.setBackground(azulOscuro);
+        fontComboBox.setForeground(colorTurquesa);
         
         fontComboBox.addActionListener(new ActionListener() {
             @Override
@@ -180,11 +194,14 @@ public class Notas extends JFrame {
         createN.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelCrear.add(createN);
         panelCrear.setBackground(colorTurquesa);
-        //createN.setBackground(azulOscuro);
-        //createN.setForeground(colorTurquesa);
+        createN.setBackground(azulOscuro);
+        createN.setForeground(colorTurquesa);
         
         JPanel panelDcha = new JPanel (new BorderLayout());
-        JButton volver = new JButton("Volver");
+        panelDcha.setBackground(colorTurquesa);
+        JButton volver = new JButton("<<");
+        volver.setBackground(azulOscuro);
+        volver.setForeground(colorTurquesa);
         
        
         
@@ -203,91 +220,74 @@ public class Notas extends JFrame {
         Map<JButton, Notas> notasMap = new HashMap<>();
         
         volver.addActionListener(b -> {
-        	this.setVisible(false);
-        	this.titulo_editado = this.tituloL.getText();
+            this.setVisible(false); 
+
+            this.titulo_editado = this.tituloL.getText();
             this.txt_editado = this.apuntePane.getText();
-            this.botonPagina.setText(this.titulo_editado);
-            notasMap.put(this.botonPagina, this);
-            
-            
+
+            // Actualizar el texto del botón asociado
+            if (this.botonPagina != null) {
+                this.botonPagina.setText(this.titulo_editado);
+            } else {
+                System.err.println("Error: No se encontró un botón asociado a esta nota.");
+            }
         });
+
 
         // Acción para crear nuevas páginas
         createN.addActionListener(e -> {
-String input = JOptionPane.showInputDialog(null, "Escribe el título de la página:", "Crear Página", JOptionPane.QUESTION_MESSAGE);
-            
-            if (input != null && !input.trim().isEmpty()) {
-            	
-            	
-            	
-                botonPagina = new JButton(input);
-                //botonPagina.setBackground(azulOscuro);
-                //botonPagina.setForeground(colorTurquesa);
-                String strVacio = "";
-                
-                botonPagina.addActionListener(a -> {
-                    nota = notasMap.get(botonPagina);
-                    if (nota == null) {
-                        nota = new Notas(input, strVacio);
-                        
-                        notasMap.put(botonPagina, nota);
-                        
-                        
-                    }
-                    nota.setVisible(true);
-                    
-                    
-                    nota.addWindowListener(new WindowAdapter() {
-                        @Override
-                        public void windowClosing(WindowEvent e) {
-                            nota.titulo_editado = nota.tituloL.getText();
-                            nota.txt_editado = nota.apuntePane.getText();
+            String input = JOptionPane.showInputDialog(null, "Escribe el título de la página:", "Crear Página", JOptionPane.QUESTION_MESSAGE);
 
-                            // Asignar los valores actualizados a las variables externas
-                            botonPagina.setText(nota.titulo_editado);
-                            notasMap.put(botonPagina, nota);
-                        }
-                    
-                    });
-                    
-                    
+            if (input != null && !input.trim().isEmpty()) {
+                JButton nuevoBoton = new JButton(input);
+                String contenidoVacio = "";
+
+                nuevoBoton.addActionListener(a -> {
+                    Notas nuevaNota = notasMap.get(nuevoBoton);
+
+                    if (nuevaNota == null) {
+                        nuevaNota = new Notas(input, contenidoVacio);
+                        notasMap.put(nuevoBoton, nuevaNota);
+                        nuevaNota.botonPagina = nuevoBoton; // Vincular el boton con la nota actualizada
+                    }
+
+                    nuevaNota.setVisible(true);
                 });
-                botonPagina.addMouseListener(new MouseAdapter() {
+
+                // Click derecho para eliminar
+                nuevoBoton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        // Detectar si se hizo clic derecho
                         if (SwingUtilities.isRightMouseButton(e)) {
-                            int respuesta = JOptionPane.showConfirmDialog(null, 
-                            		"¿Desea eliminar la nota seleccionada?", "Eliminar nota",
-                            		JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-                            if (respuesta==JOptionPane.YES_OPTION) {
-                            	panelCrear.remove(botonPagina);
-                            	panelCrear.repaint();
-                            	
+                            int respuesta = JOptionPane.showConfirmDialog(null,
+                                    "¿Desea eliminar la nota seleccionada?", "Eliminar nota",
+                                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            if (respuesta == JOptionPane.YES_OPTION) {
+                                panelCrear.remove(nuevoBoton);
+                                panelCrear.repaint();
+                                notasMap.remove(nuevoBoton); // Eliminar del mapa
                             }
-                            
                         }
                     }
                 });
-                
-                // Diseño del botón
-                botonPagina.setPreferredSize(new Dimension(80, 30));
-                botonPagina.setMaximumSize(new Dimension(80, 30));
-                botonPagina.setMinimumSize(new Dimension(80, 30));
-                botonPagina.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-                botonPagina.setAlignmentX(Component.CENTER_ALIGNMENT); // Centra el botón
 
-                // Añadir el botón creado al panel
-                panelCrear.add(botonPagina);
-                panelCrear.add(Box.createVerticalStrut(10)); // Espacio entre botones
+                // Añadir al panel y actualizar diseño
+                nuevoBoton.setPreferredSize(new Dimension(80, 30));
+                nuevoBoton.setMaximumSize(new Dimension(80, 30));
+                nuevoBoton.setMinimumSize(new Dimension(80, 30));
+                nuevoBoton.setAlignmentX(Component.CENTER_ALIGNMENT);
+                panelCrear.add(nuevoBoton);
+                panelCrear.add(Box.createVerticalStrut(10));
                 panelCrear.revalidate();
                 panelCrear.repaint();
-                
+
+                // Asocia el nuevo botón con la nueva nota en el mapa
+                Notas nuevaNota = new Notas(input, contenidoVacio);
+                nuevaNota.botonPagina = nuevoBoton;
+                notasMap.put(nuevoBoton, nuevaNota);
             }
-            
-          //panel de la derecha del todo:
-            
         });
+
       
             
         
