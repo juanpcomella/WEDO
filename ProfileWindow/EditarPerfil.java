@@ -48,11 +48,19 @@ public class EditarPerfil extends JFrame {
         cambiarDatos.setAlignmentX(Component.CENTER_ALIGNMENT);
         cambiarDatos.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10)); // Add margins
 
-        JButton cambiarApodo = new JButton("Cambiar foto");
-        cambiarApodo.setAlignmentX(Component.CENTER_ALIGNMENT);
-        cambiarApodo.setFont(new Font("Arial", Font.PLAIN, 16));
+        JButton cambiarFoto = new JButton("Cambiar foto");
+        cambiarFoto.setAlignmentX(Component.CENTER_ALIGNMENT);
+        cambiarFoto.setFont(new Font("Arial", Font.PLAIN, 16));
+        cambiarFoto.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Abrir la ventana de selección de íconos
+                SeleccionarIconoPerfil ventanaSeleccion = new SeleccionarIconoPerfil(usuario);
+                ventanaSeleccion.setVisible(true);
+            }
+        });
 
-        cambiarDatos.add(cambiarApodo);
+        cambiarDatos.add(cambiarFoto);
 
         JButton cambiarMoneda = new JButton("Cambiar moneda");
         cambiarMoneda.setAlignmentX(Component.CENTER_ALIGNMENT);

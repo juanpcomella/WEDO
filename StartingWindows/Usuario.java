@@ -6,6 +6,8 @@ public class Usuario {
 	String correo;
 	String contraseña;
 	int saldo;
+	String fotoPerfil;
+	String rutaMoneda;
 
 	public Usuario(String nombreUsuario, String correo, String contraseña) {
 		super();
@@ -47,6 +49,14 @@ public class Usuario {
 
 	public void setContraseña(String contraseña) {
 		this.contraseña = contraseña;
+	}
+
+	public String getFotoPerfil() {
+		return fotoPerfil;
+	}
+
+	public void setFotoPerfil(String fotoPerfil) {
+		this.fotoPerfil = fotoPerfil;
 	}
 
 	@Override
