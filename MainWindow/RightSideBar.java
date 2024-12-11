@@ -222,6 +222,13 @@ public class RightSideBar extends JPanel {
             int cuantoFalta = objetivo.getCuantoQueda();
             if (cuantoFalta < 0) {
                 JLabel objetivoLabel = new JLabel("Objetivo Expirado");
+	            objetivoLabel.setBackground(new Color(200,80,80));
+	            objetivoLabel.setForeground(Color.WHITE); 
+	            objetivoLabel.setOpaque(true); 
+	            objetivoLabel.setHorizontalAlignment(SwingConstants.CENTER); 
+	            objetivoLabel.setPreferredSize(new Dimension(getWidth(), 40));
+	            objetivoLabel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40)); 
+	            objetivoLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2)); 
 				
 	            objetivoLabel.addMouseListener(new MouseAdapter() {
 	                @Override
