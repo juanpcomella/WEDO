@@ -228,36 +228,36 @@ public class RightSideBar extends JPanel {
             objetivoLabel.setPreferredSize(new Dimension(getWidth(), 40));
             objetivoLabel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40)); 
             objetivoLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2)); 
-            if(cuantoFalta < 0) {
-
-            	try {           	
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            	int confirm = JOptionPane.showConfirmDialog(
-                        objetivosPanel,
-                        "Ha llegado el día, ¿has completado el objetivo:  "+ objetivo.getNombre()+ "?",
-                        "",
-                        JOptionPane.YES_NO_OPTION
-                       
-                    );
-            	 if (confirm == JOptionPane.YES_OPTION) {
-            		 BDs.updateSaldo(usuario.getNombreUsuario(), BDs.getSaldo(usuario.getNombreUsuario()+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
-                 	 BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
-                     eliminarObjetivoDePantalla(objetivo, usuario);
-                     JOptionPane.showMessageDialog(null, "¡Felicidades! ¡Sigue asi con tus objetivos!");
-                     MainWindow mv = new MainWindow(usuario);
-                     mv.setVisible(true);
-                 }else {
-                	 BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
-                     eliminarObjetivoDePantalla(objetivo, usuario);
-                     JOptionPane.showMessageDialog(null, "¡Animo! ¡No te desmotives y sigue adelante con tus objetivos!");
-                     MainWindow mv = new MainWindow(usuario);
-                     mv.setVisible(true);
-				}
-            }
+//            if(cuantoFalta < 0) {
+//
+//            	try {           	
+//					Thread.sleep(1000);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//            	int confirm = JOptionPane.showConfirmDialog(
+//                        objetivosPanel,
+//                        "Ha llegado el día, ¿has completado el objetivo:  "+ objetivo.getNombre()+ "?",
+//                        "",
+//                        JOptionPane.YES_NO_OPTION
+//                       
+//                    );
+//            	 if (confirm == JOptionPane.YES_OPTION) {
+//            		 BDs.updateSaldo(usuario.getNombreUsuario(), BDs.getSaldo(usuario.getNombreUsuario()+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
+//                 	 BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
+////                     eliminarObjetivoDePantalla(objetivo, usuario);
+//                     JOptionPane.showMessageDialog(null, "¡Felicidades! ¡Sigue asi con tus objetivos!");
+//                     MainWindow mv = new MainWindow(usuario);
+//                     mv.setVisible(true);
+//                 }else {
+//                	 BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
+////                     eliminarObjetivoDePantalla(objetivo, usuario);
+//                     JOptionPane.showMessageDialog(null, "¡Animo! ¡No te desmotives y sigue adelante con tus objetivos!");
+//                     MainWindow mv = new MainWindow(usuario);
+//                     mv.setVisible(true);
+//				}
+//            }
 
             String mensajeConTiempoRestante = "Quedan " + objetivo.getCuantoQueda() + " días";
             objetivoLabel.setText(objetivo.getNombre() + " - " + mensajeConTiempoRestante);
@@ -319,6 +319,28 @@ public class RightSideBar extends JPanel {
         contenidoPanel.add(Box.createVerticalStrut(20));
         contenidoPanel.add(fechaFinLabel);
         
+        JButton botonCompletado = new JButton("Completado");
+        botonCompletado.setBackground(new Color(200,80,80)); 
+        botonCompletado.setForeground(Color.WHITE);
+        botonCompletado.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(
+                dialog,
+                "¿Has completado el objetivo:" + objetivo.getNombre()+ "?",
+                "",
+                JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm == JOptionPane.YES_OPTION) {
+
+            	BDs.updateSaldo(usuario.getNombreUsuario(),(int) (BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
+            	usuario.setSaldo((int) (BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario())));
+            	System.out.println(BDs.getSaldo(usuario.getNombreUsuario())+70*BDs.getMultiplicador(usuario.getNombreUsuario()));
+            	BDs.eliminarObjetivos(usuario.getNombreUsuario(), objetivo.getNombre());
+                eliminarObjetivoDePantalla(objetivo, usuario);
+                dialog.dispose();
+            }
+        });
+        
         JButton eliminarButton = new JButton("Eliminar objetivo");
         eliminarButton.setBackground(new Color(200,80,80)); 
         eliminarButton.setForeground(Color.WHITE);
@@ -338,6 +360,7 @@ public class RightSideBar extends JPanel {
         });
 
         dialog.add(contenidoPanel, BorderLayout.CENTER);
+        dialog.add(botonCompletado, BorderLayout.EAST);
         dialog.add(eliminarButton, BorderLayout.SOUTH);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);

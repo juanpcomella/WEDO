@@ -477,7 +477,7 @@ public class BDs {
 			
 	        String sql = "UPDATE usuarios SET saldo = ? WHERE username = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
-	        preparedStatement.setInt(1, nuevoSaldo);
+	        preparedStatement.setDouble(1, nuevoSaldo);
 	        preparedStatement.setString(2, usuario);
 	        
 	        preparedStatement.executeUpdate();
