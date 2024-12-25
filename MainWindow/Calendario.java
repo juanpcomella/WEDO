@@ -413,7 +413,7 @@ public class Calendario extends JPanel {
                             } else if (evento.getCategoria().equals(Categorias.Deporte)) {
                                 eventoLabel.setBackground(new Color(200,160,210));
                             } else if (evento.getCategoria().equals(Categorias.Ocio)) {
-                                eventoLabel.setBackground(new Color(190, 230,180));
+                                eventoLabel.setBackground(new Color(190, 230,180));//VERDE
                             }
 
                             eventoLabel.setBounds(posicionX, posicionY, anchoPorEvento, altoEvento);

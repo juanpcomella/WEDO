@@ -9,6 +9,8 @@ import java.io.IOException;
 
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
@@ -26,7 +28,8 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class VentanaTienda2 extends JFrame {
-
+	
+	private JLabel stringDinero;
     private int hoveredColumn = -1;
     private int hoveredRow = -1;
     private Map<Point, Boolean> estadoCeldasIcono = new HashMap<>();
@@ -46,6 +49,7 @@ public class VentanaTienda2 extends JFrame {
         setTitle("Tienda2");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setBackground(new Color(173, 216, 230));
         setLayout(new BorderLayout());
 
         modeloIcono = new DefaultTableModel(new Object[]{"Icono", "Precio"}, 0) {
@@ -57,7 +61,7 @@ public class VentanaTienda2 extends JFrame {
         money = BDs.getSaldo(usuario.getNombreUsuario());
 
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.setBackground(new Color(255, 255, 180));
+//        tabbedPane.setBackground(new Color(173, 216, 230));
         tabbedPane.setFont(new Font("Arial", Font.BOLD, 14));
         tabbedPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -66,14 +70,15 @@ public class VentanaTienda2 extends JFrame {
         panelIconos.add(headerPanelIconos, BorderLayout.NORTH);
 
         JTable iconoT = new JTable(modeloIcono);
-        iconoT.setBackground(Color.BLUE);
+        iconoT.setBackground(new Color(50, 70, 90));
         iconoT.getTableHeader().setVisible(false);
         iconoT.getTableHeader().setPreferredSize(new Dimension(0, 0));
         iconoT.setRowHeight(100);
 
         JScrollPane scrollIconos = new JScrollPane(iconoT);
         JPanel panelIconoConMargen = agregarMargen(scrollIconos, 20, 250, 90, 250);
-        panelIconos.setBackground(Color.CYAN);
+        panelIconoConMargen.setBackground(new Color(173, 216, 230));
+        panelIconos.setBackground(new Color(173, 216, 230));
         panelIconos.add(panelIconoConMargen, BorderLayout.CENTER);
 
         tabbedPane.addTab("Iconos", panelIconos);
@@ -98,10 +103,11 @@ public class VentanaTienda2 extends JFrame {
                 iconoT.repaint();
             }
 
-            @Override
-            public void mouseDragged(MouseEvent e) {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				
+			}
 
-            }
         });
 
         iconoT.getColumnModel().getColumn(0).setCellRenderer(new ImageCellRenderer());
@@ -117,6 +123,7 @@ public class VentanaTienda2 extends JFrame {
 
         // Panel para las monedas
         JPanel panelMonedas = new JPanel(new BorderLayout());
+        panelMonedas.setBackground(new Color(173, 216, 230));
         tabbedPane.addTab("Monedas", panelMonedas);
 
         JPanel headerPanelMonedas = crearHeaderPanel(usuario);
@@ -134,14 +141,14 @@ public class VentanaTienda2 extends JFrame {
         monedasT.setRowHeight(100);
         monedasT.getTableHeader().setVisible(false);
         monedasT.getTableHeader().setPreferredSize(new Dimension(0, 0));
-        monedasT.setBackground(new Color(0, 100, 0));
+        monedasT.setBackground(new Color(50, 70, 90));
         monedasT.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
 
 
         JScrollPane scrollMonedas = new JScrollPane(monedasT);
         JPanel panelMonedaConMargen = agregarMargen(scrollMonedas, 20, 250, 90, 250);
-        panelMonedas.setBackground(Color.CYAN);
+        panelMonedaConMargen.setBackground(new Color(173, 216, 230));
         panelMonedas.add(panelMonedaConMargen, BorderLayout.CENTER);
 
         llenarTablaMonedas(modeloDinero);
@@ -183,7 +190,19 @@ public class VentanaTienda2 extends JFrame {
             Point celda_comprada = new Point(i, 1);
             estadoCeldasMoneda.put(celda_comprada, false);
         }
-
+        
+        tabbedPane.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                // Resetear colores para todas las pestañas
+                for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+                    tabbedPane.setBackgroundAt(i, Color.white); // Fondo no seleccionado
+                }
+                // Cambiar color de la pestaña seleccionada
+                int selectedIndex = tabbedPane.getSelectedIndex();
+                tabbedPane.setBackgroundAt(selectedIndex, new Color(173, 216, 230));
+            }
+        });
         add(tabbedPane,BorderLayout.CENTER);
         setVisible(true);
 
@@ -246,9 +265,8 @@ public class VentanaTienda2 extends JFrame {
         Color colorPrincipal = new Color(173, 216, 230);
 
         JLabel dineroL = new JLabel(cargarImagen("imagenes/coin_sin_fondo.png", 30, 30));
-        JLabel stringDinero = new JLabel(String.valueOf(money)); // Guardar referencia al saldo
+        stringDinero = new JLabel(String.valueOf(money)); // Guardar referencia al saldo
         stringDinero.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
-
         JPanel panelNorteIcono = new JPanel();
         panelNorteIcono.setBackground(colorPrincipal);
         panelNorteIcono.add(dineroL);
@@ -365,14 +383,16 @@ public class VentanaTienda2 extends JFrame {
             if (estadoCeldas.getOrDefault(celda_Render, false)) {
                 JLabel compradoL = new JLabel("Comprado");
                 compradoL.setFont(new Font("Arial", Font.BOLD, 24));
-                compradoL.setForeground(Color.green);
+                compradoL.setForeground(Color.black);
+                compradoL.setOpaque(true);
+                compradoL.setBackground(new Color(190, 230,180));
                 compradoL.setHorizontalAlignment(SwingConstants.CENTER);
                 compradoL.setVerticalAlignment(SwingConstants.CENTER);
                 return compradoL;
             } else {
                 if (column == hoveredColumn && row == hoveredRow) {
                     JButton boton = new JButton("Comprar");
-                    boton.setBackground(new Color(255, 215, 0));
+                    boton.setBackground(new Color(220, 240, 250));
                     boton.setFont(new Font("Arial", Font.BOLD, 24));
                     return boton;
                 } else {
@@ -423,7 +443,6 @@ public class VentanaTienda2 extends JFrame {
             this.usuario = usuario;
 
             button = new JButton("Comprar");
-            button.setBackground(new Color(220, 100, 80));
             button.setFont(new Font("Arial", Font.BOLD, 24));
 
             button.addActionListener(e -> {
@@ -459,6 +478,9 @@ public class VentanaTienda2 extends JFrame {
                         // Restar dinero y actualizar el saldo
                         money -= precio;
                         usuario.setSaldo(money);
+//                        crearHeaderPanel(usuario);
+//                        stringDinero.setText(Integer.toString(money));
+                        
                         BDs.updateSaldo(usuario.getNombreUsuario(), usuario.getSaldo());
                         estadoCeldas.put(celda, true);
 
