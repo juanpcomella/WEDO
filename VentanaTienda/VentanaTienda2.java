@@ -478,7 +478,7 @@ public class VentanaTienda2 extends JFrame {
                         // Restar dinero y actualizar el saldo
                         money -= precio;
                         usuario.setSaldo(money);
-//                        crearHeaderPanel(usuario);
+// g                       crearHeaderPanel(usuario);
 //                        stringDinero.setText(Integer.toString(money));
                         
                         BDs.updateSaldo(usuario.getNombreUsuario(), usuario.getSaldo());
