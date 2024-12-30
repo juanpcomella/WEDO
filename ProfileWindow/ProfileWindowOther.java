@@ -133,16 +133,25 @@ public class ProfileWindowOther extends JFrame {
         followButton.addActionListener(e -> {
             if (usuarioActual != null && usuarioBusqueda != null) {
                 try {
-                    crearTablaSeguimientos();
-                    insertarElementosSeguimientos(usuarioActual, usuarioBusqueda);
-
-                    JOptionPane.showMessageDialog(null,
-                            "¡Ahora sigues a " + usuarioBusqueda.getNombreUsuario() + "!",
-                            "Éxito",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    if (followButton.getText().equals("Seguir")) {
+                        crearTablaSeguimientos();
+                        insertarElementosSeguimientos(usuarioActual, usuarioBusqueda);
+                        followButton.setText("Siguiendo");
+                        JOptionPane.showMessageDialog(null,
+                                "¡Ahora sigues a " + usuarioBusqueda.getNombreUsuario() + "!",
+                                "Éxito",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        eliminarSeguimiento(usuarioActual, usuarioBusqueda);
+                        followButton.setText("Seguir");
+                        JOptionPane.showMessageDialog(null,
+                                "Has dejado de seguir a " + usuarioBusqueda.getNombreUsuario() + ".",
+                                "Información",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null,
-                            "Error al seguir al usuario: " + ex.getMessage(),
+                            "Error al actualizar el estado de seguimiento: " + ex.getMessage(),
                             "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }

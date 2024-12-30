@@ -1374,6 +1374,21 @@ public class BDs {
 		}
 	}
 
+	public static void eliminarSeguimiento(Usuario seguidor, Usuario seguido) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos/usuarioEventosYDemas");
+			String sql = "DELETE FROM seguimientos WHERE seguidor = ? AND seguido = ?";
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, seguidor.getNombreUsuario());
+			statement.setString(2, seguido.getNombreUsuario());
+			statement.executeUpdate();
+			connection.close();
+		} catch (Exception e) {
+			System.err.println("Error al eliminar seguimiento: " + e.getMessage());
+		}
+	}
+
 	public static boolean yaSigue(Usuario seguidor, Usuario seguido) {
 		boolean sigue = false;
 		try {
