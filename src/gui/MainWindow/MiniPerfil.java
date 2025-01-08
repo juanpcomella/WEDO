@@ -43,7 +43,7 @@ public class MiniPerfil extends JFrame {
         leftPanel.setBackground(new Color(173, 216, 230));
 
         try {
-            BufferedImage profileImage = ImageIO.read(new File("resources/resources.resources/imagenes/PERFIL.png"));
+            BufferedImage profileImage = ImageIO.read(new File("resources/imagenes/PERFIL.png"));
             ImageIcon profileIcon = new ImageIcon(getCircularImage(profileImage, 70)); 
             JLabel profileLabel = new JLabel(profileIcon);
             profileLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));

@@ -197,14 +197,14 @@ public class ProfileWindowSelf extends JFrame {
         streakGBC.gridx = 0;
         streakGBC.gridy = 0;
         streakGBC.anchor = GridBagConstraints.CENTER;
-        JLabel flameIcon = new JLabel("");
+        JLabel flameIcon = new JLabel("🔥");
         flameIcon.setFont(new Font("Arial", Font.PLAIN, 48));
         contentPanel.add(flameIcon, streakGBC);
 
         streakGBC.gridx = 1;
         streakGBC.gridy = 0;
         streakGBC.anchor = GridBagConstraints.WEST;
-        final int[] streakCount = {0};
+        final int[] streakCount = {53};
         JLabel streakCountLabel = new JLabel(streakCount[0] + "");
         streakCountLabel.setFont(new Font("Arial", Font.BOLD, 48));
         streakCountLabel.setForeground(new Color(255, 165, 0));

@@ -2188,7 +2188,7 @@ public class BDs {
 		}
 		Connection connection = null;
 		try {
-			connection = DriverManager.getConnection("jdbc:sqlite:resources/DB/suarioEventosYDemas");
+			connection = DriverManager.getConnection("jdbc:sqlite:resources/DB/usuarioEventosYDemas");
 			String sql = "INSERT INTO compras (username, nombreItem, precioItem, tipoItem, contenido) VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 

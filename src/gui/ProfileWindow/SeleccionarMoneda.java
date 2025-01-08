@@ -58,7 +58,7 @@ public class SeleccionarMoneda extends JFrame {
 
         // Crear un botón por cada ícono comprado
         for (Item item : iconosComprados) {
-            ImageIcon icono = new ImageIcon(item.getContenido());
+            ImageIcon icono = new ImageIcon(getClass().getResource(item.getContenido()));
             Image img = icono.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
             JButton botonIcono = new JButton(new ImageIcon(img));
             botonIcono.setToolTipText(item.getNombreItem()); // Nombre del ícono como tooltip

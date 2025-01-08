@@ -58,24 +58,28 @@ public class SeleccionarIconoPerfil extends JFrame {
 
         // Crear un botón por cada ícono comprado
         for (Item item : iconosComprados) {
-            ImageIcon icono = new ImageIcon(item.getContenido());
-            Image img = icono.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-            JButton botonIcono = new JButton(new ImageIcon(img));
-            botonIcono.setToolTipText(item.getNombreItem()); // Nombre del ícono como tooltip
-            botonIcono.setFocusPainted(false);
-            botonIcono.setContentAreaFilled(false);
-            botonIcono.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+            try{
+                ImageIcon icono = new ImageIcon(getClass().getResource(item.getContenido()));
+                Image img = icono.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+                JButton botonIcono = new JButton(new ImageIcon(img));
+                botonIcono.setToolTipText(item.getNombreItem()); // Nombre del ícono como tooltip
+                botonIcono.setFocusPainted(false);
+                botonIcono.setContentAreaFilled(false);
+                botonIcono.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-            // Añadir ActionListener para seleccionar el ícono
-            botonIcono.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    iconoSeleccionado = item.getNombreItem(); // Guardar el nombre del ícono seleccionado
-                    actualizarSeleccion(botonIcono); // Resaltar el ícono seleccionado
-                }
-            });
+                // Añadir ActionListener para seleccionar el ícono
+                botonIcono.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        iconoSeleccionado = item.getNombreItem(); // Guardar el nombre del ícono seleccionado
+                        actualizarSeleccion(botonIcono); // Resaltar el ícono seleccionado
+                    }
+                });
 
-            panelIconos.add(botonIcono);
+                panelIconos.add(botonIcono);
+            } catch (Exception e) {
+                System.out.println("Error al cargar el ícono: " + e.getMessage());
+            }
         }
 
         // Refrescar el panel
